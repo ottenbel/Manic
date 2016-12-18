@@ -13,7 +13,20 @@ class CreateImagesTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('images', function(Blueprint $table){
+			$table->uuid('id');
+			$table->string('name');
+			$table->string('hash')->unique();
+			$table->string('extension');
+			$table->unsignedInteger('usage_count');
+			$table->uuid('created_by');
+			$table->uuid('updated_by');
+			$table->timestamps();
+			$table->softDeletes();
+			$table->primary('id');
+			$table->foreign('created_by')->references('id')->on('users');
+			$table->foreign('updated_by')->references('id')->on('users');
+		});
     }
 
     /**
@@ -23,6 +36,6 @@ class CreateImagesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('images');
     }
 }

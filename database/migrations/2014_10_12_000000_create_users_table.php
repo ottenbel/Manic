@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-	    $table->softDeletes();
-	    $table->primary('id');
+			$table->softDeletes();
+			$table->primary('id');
         });
     }
 

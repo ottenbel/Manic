@@ -13,7 +13,22 @@ class CreateChaptersTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('chapters', function(Blueprint $table){
+			$table->uuid('id');
+			$table->uuid('volume_id');
+			$table->unsignedInteger('number');
+			$table->string('name');
+			$table->string('source');
+			$table->uuid('created_by');
+			$table->uuid('updated_by');
+			$table->timestamps();
+			$table->softDeletes();
+			$table->primary('id');
+			$table->foreign('created_by')->references('id')->on('users');
+			$table->foreign('updated_by')->references('id')->on('users');
+			$table->foreign('volume_id')->references('id')->on('volumes');
+			$table->unique(['volume_id', 'number']);
+		});
     }
 
     /**
@@ -23,6 +38,6 @@ class CreateChaptersTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('chapters');
     }
 }
