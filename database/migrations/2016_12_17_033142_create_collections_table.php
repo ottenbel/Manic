@@ -18,7 +18,9 @@ class CreateCollectionsTable extends Migration
 			$table->uuid('cover')->nullable();
 			$table->string('name');
 			$table->longText('description');
+			$table->boolean('canonical');
 			$table->uuid('parent_id')->nullable();
+			$table->uuid('language_id');
 			$table->uuid('created_by');
 			$table->uuid('updated_by');
 			$table->timestamps();
@@ -27,6 +29,7 @@ class CreateCollectionsTable extends Migration
 			$table->foreign('created_by')->references('id')->on('users');
 			$table->foreign('updated_by')->references('id')->on('users');
 			$table->foreign('cover')->references('id')->on('images');
+			$table->foreign('language_id')->references('id')->on('languages');
 		});
     }
 

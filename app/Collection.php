@@ -63,14 +63,10 @@ class Collection extends Model
 	 */
 	 
 	/*
-	 * To Do: Add mapping from rating to collections (one sided mapping).
+	 * To Do: Add mapping from rating to collections (one to many).
 	 */
 	 
 	/*
-	 * To Do: Add mapping from status to collections (one sided mapping).
+	 * To Do: Add mapping from status to collections (one many).
 	 */
-	 
-	 /*
-	  * To Do: Add mapping from canonicity to collections (one sided mapping).
-	  */
 }
