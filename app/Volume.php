@@ -7,8 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class Volume extends Model
 {
     use Uuids;
-    
+	use SoftDeletes;
+	
+	/*
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
 	public $incrementing = false;
+	
+	/*
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 	
 	/*
 	 * Get all chapters associated with the volume.

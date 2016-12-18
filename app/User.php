@@ -9,7 +9,8 @@ class User extends Authenticatable
 {
     use Notifiable;
     use Uuids;
-
+	use SoftDeletes;
+	
     /**
      * The attributes that are mass assignable.
      *
@@ -34,4 +35,15 @@ class User extends Authenticatable
      * @var bool
      */
     public $incrementing = false;
+	
+	/*
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 }

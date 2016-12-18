@@ -13,7 +13,21 @@ class CreateChapterScanalatorTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('chapter_scanalator', function (Blueprint $table) {
+			$table->uuid('id');
+			$table->uuid('chapter_id');
+			$table->uuid('scanalator_id');
+			$table->boolean('primary');
+			$table->uuid('created_by');
+			$table->uuid('updated_by');
+			$table->timestamps();
+			$table->softDeletes();
+			$table->primary('id');
+			$table->foreign('chapter_id')->references('id')->on('chapters');
+			$table->foreign('scanalator_id')->references('id')->on('scanalators');
+			$table->foreign('created_by')->references('id')->on('users');
+			$table->foreign('updated_by')->references('id')->on('users');
+		});
     }
 
     /**
@@ -23,6 +37,6 @@ class CreateChapterScanalatorTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('chapter_scanalator');
     }
 }

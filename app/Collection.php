@@ -6,6 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Collection extends Model
 {
+	use Uuids;  
+	use SoftDeletes;
+	
+	/*
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+	public $incrementing = false;
+	
+	/*
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+	
 	/*
 	 * Get all volumes associated with the collection.
 	 */
@@ -47,26 +68,50 @@ class Collection extends Model
 	}
 	
 	/*
-	 * To Do: Add mapping from artists to collections (many to many).
+	 * Get the mapping from collection to language.
 	 */
-	  
+	public function languages()
+	{
+		return $this->belongsTo('App\Language');
+	}
+	
 	/*
-	 * To Do: Add mapping from languages to collections (many to many).
-	 */
-	   
+	 * Get the mapping from collection to artists.
+	 */	 
+	public function artists()
+	{
+		return $this->belongsToMany('App\Artist')->withTimestamps()->withPivot('primary', 'created_by', 'updated_by', 'deleted_at');
+	}
+	
 	/*
-	 * To Do: Add mapping from series to collections (many to many).
+	 * Get the mapping from collection to artists.
 	 */
+	public function series()
+	{
+		return $this->belongsToMany('App\Series')->withTimestamps()->withPivot('primary', 'created_by', 'updated_by', 'deleted_at');
+	}
 		
 	/*
-	 * To Do: Add mapping from tags to collections (many to many).
-	 */
+	 * Get the mapping from collection to tags.
+	 */ 
+	public function tags()
+	{
+		return $this->belongsToMany('App\Tag')->withTimestamps()->withPivot('primary', 'created_by', 'updated_by', 'deleted_at');
+	}
 	 
 	/*
 	 * To Do: Add mapping from rating to collections (one to many).
 	 */
-	 
+	public function rating()
+	{
+		return $this->belongsTo('App\Rating');
+	}
+	
 	/*
-	 * To Do: Add mapping from status to collections (one many).
+	 * Get the mapping from collection to status.
 	 */
+	public function status()
+	{
+		return $this->belongsTo('App\Status');
+	}
 }
