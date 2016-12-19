@@ -16,7 +16,7 @@ class CreateCollectionsTable extends Migration
         Schema::create('collections', function(Blueprint $table){
 			$table->uuid('id');
 			$table->uuid('cover')->nullable();
-			$table->string('name');
+			$table->string('name')->unique();
 			$table->longText('description');
 			$table->boolean('canonical');
 			$table->uuid('parent_id')->nullable();

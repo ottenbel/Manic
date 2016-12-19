@@ -15,8 +15,8 @@ class CreateScanalatorsTable extends Migration
     {
         Schema::create('scanalators', function (Blueprint $table) {
             $table->uuid('id');
-			$table->string('name');
-			$table->longText('description')->nullable();
+			$table->string('name')->unique();
+			$table->longText('description');
 			$table->string('url');
             $table->uuid('created_by');
 			$table->uuid('updated_by');
