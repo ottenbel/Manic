@@ -37,10 +37,26 @@ class Page extends Model
 	}
 	
 	/*
-	 * Get the chapter that the page is associated with (one sided mapping).
+	 * Get the chapter that the page is associated with.
 	 */
 	public function chapter()
 	{
 		return $this->belongsTo('App\Chapter');
+	}
+	
+	/*
+	 * Get the mapping to the user that created the page.
+	 */
+	public function created_by()
+	{
+		return $this->belongsTo('App\User', 'id', 'created_by');
+	}
+	
+	/*
+	 * Get the mapping to the user that last updated the page.
+	 */
+	public function updated_by()
+	{
+		return $this->belongsTo('App\User', 'id', 'updated_by');
 	}
 }

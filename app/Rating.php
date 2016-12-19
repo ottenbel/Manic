@@ -35,4 +35,20 @@ class Rating extends Model
 	{
 		return $this->hasMany('App\Collection');
 	}
+	
+	/*
+	 * Get the mapping to the user that created the rating.
+	 */
+	public function created_by()
+	{
+		return $this->belongsTo('App\User', 'id', 'created_by');
+	}
+	
+	/*
+	 * Get the mapping to the user that last updated the rating.
+	 */
+	public function updated_by()
+	{
+		return $this->belongsTo('App\User', 'id', 'updated_by');
+	}
 }

@@ -35,4 +35,20 @@ class Language extends Model
 	{
 		return $this->hasMany('App\Collection');
 	}
+	
+	/*
+	 * Get the mapping to the user that created the language.
+	 */
+	public function created_by()
+	{
+		return $this->belongsTo('App\User', 'id', 'created_by');
+	}
+	
+	/*
+	 * Get the mapping to the user that last updated the language.
+	 */
+	public function updated_by()
+	{
+		return $this->belongsTo('App\User', 'id', 'updated_by');
+	}
 }

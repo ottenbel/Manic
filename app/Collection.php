@@ -101,7 +101,7 @@ class Collection extends Model
 	}
 	 
 	/*
-	 * To Do: Add mapping from rating to collections (one to many).
+	 * Get mapping from rating to collections.
 	 */
 	public function rating()
 	{
@@ -114,5 +114,21 @@ class Collection extends Model
 	public function status()
 	{
 		return $this->belongsTo('App\Status');
+	}
+	
+	/*
+	 * Get the mapping to the user that created the collection.
+	 */
+	public function created_by()
+	{
+		return $this->belongsTo('App\User', 'id', 'created_by');
+	}
+	
+	/*
+	 * Get the mapping to the user that last updated the collection.
+	 */
+	public function updated_by()
+	{
+		return $this->belongsTo('App\User', 'id', 'updated_by');
 	}
 }

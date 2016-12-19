@@ -35,4 +35,20 @@ class Artist extends Model
 	{
 		return $this->belongsToMany('App\Collection')->withTimestamps()->withPivot('primary', 'created_by', 'updated_by', 'deleted_at');
 	}
+	
+	/*
+	 * Get the mapping to the user that created the tag.
+	 */
+	public function created_by()
+	{
+		return $this->belongsTo('App\User', 'id', 'created_by');
+	}
+	
+	/*
+	 * Get the mapping to the user that last updated the tag.
+	 */
+	public function updated_by()
+	{
+		return $this->belongsTo('App\User', 'id', 'updated_by');
+	}
 }
