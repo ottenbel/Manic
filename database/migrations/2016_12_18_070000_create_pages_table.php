@@ -16,7 +16,7 @@ class CreatePagesTable extends Migration
         Schema::create('pages', function(Blueprint $table){
 			$table->uuid('id');
 			$table->uuid('chapter_id');
-			$table->unsignedInteger('page_number');
+			$table->unsignedInteger('number');
 			$table->uuid('image_id');
 			$table->uuid('created_by');
 			$table->uuid('updated_by');
@@ -27,7 +27,7 @@ class CreatePagesTable extends Migration
 			$table->foreign('updated_by')->references('id')->on('users');
 			$table->foreign('chapter_id')->references('id')->on('chapters');
 			$table->foreign('image_id')->references('id')->on('images');
-			$table->unique(['associated_chapter', 'page_number']);
+			$table->unique(['chapter_id', 'number']);
 		});
     }
 
