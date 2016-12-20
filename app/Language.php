@@ -2,31 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\BaseManicModel;
 
-class Language extends Model
+class Language extends BasicManicModel
 {
-    use Uuids;
-	use SoftDeletes;
-	
-	/*
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-	public $incrementing = false;
-	
-	/*
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at'
-    ];
+	//Manually set the table name as we are extending a custom model instead of the eloquent one
+    protected $table = 'languages';
 	
 	/*
 	 * Get the collections associated with the current language.
@@ -34,21 +15,5 @@ class Language extends Model
 	public function collections()
 	{
 		return $this->hasMany('App\Collection');
-	}
-	
-	/*
-	 * Get the mapping to the user that created the language.
-	 */
-	public function created_by()
-	{
-		return $this->belongsTo('App\User', 'id', 'created_by');
-	}
-	
-	/*
-	 * Get the mapping to the user that last updated the language.
-	 */
-	public function updated_by()
-	{
-		return $this->belongsTo('App\User', 'id', 'updated_by');
 	}
 }

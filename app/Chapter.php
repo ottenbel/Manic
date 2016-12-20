@@ -2,31 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\BaseManicModel;
 
-class Chapter extends Model
+class Chapter extends BaseManicModel
 {
-	use Uuids;
-	use SoftDeletes;
-    
-	/*
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-	public $incrementing = false;
-	
-	/*
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at'
-    ];
+	//Manually set the table name as we are extending a custom model instead of the eloquent one
+    protected $table = 'chapters';
 	
 	/*
 	 * Get the pages associated with the chapter.
@@ -50,21 +31,5 @@ class Chapter extends Model
 	public function scanalators()
 	{
 		return $this->belongsToMany('App\Scanalator')->withTimestamps()->withPivot('primary', 'created_by', 'updated_by', 'deleted_at');
-	}
-
-	/*
-	 * Get the mapping to the user that created the chapter.
-	 */
-	public function created_by()
-	{
-		return $this->belongsTo('App\User', 'id', 'created_by');
-	}
-	
-	/*
-	 * Get the mapping to the user that last updated the chapter.
-	 */
-	public function updated_by()
-	{
-		return $this->belongsTo('App\User', 'id', 'updated_by');
 	}
 }

@@ -2,31 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\BaseManicModel;
 
-class Page extends Model
+class Page extends BasicManicModel
 {
-    use Uuids;    
-	use SoftDeletes;
-	
-	/*
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-	public $incrementing = false;
-	
-	/*
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at'
-    ];
+    //Manually set the table name as we are extending a custom model instead of the eloquent one
+    protected $table = 'pages';
 	
 	/*
 	 * Get the image associated with the page.
@@ -44,19 +25,5 @@ class Page extends Model
 		return $this->belongsTo('App\Chapter');
 	}
 	
-	/*
-	 * Get the mapping to the user that created the page.
-	 */
-	public function created_by()
-	{
-		return $this->belongsTo('App\User', 'id', 'created_by');
-	}
 	
-	/*
-	 * Get the mapping to the user that last updated the page.
-	 */
-	public function updated_by()
-	{
-		return $this->belongsTo('App\User', 'id', 'updated_by');
-	}
 }

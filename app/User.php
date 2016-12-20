@@ -143,4 +143,84 @@ class User extends Authenticatable
 	{
 		return $this->hasMany('App\Rating', 'updated_by');
 	}
+	
+	/*
+	 * Get the list of scanalators created by the user.
+	 */
+	public function scanalators_created()
+	{
+		return $this->hasMany('App\Scanalator', 'created_by');
+	}
+	
+	/*
+	 * Get the list of scanalators last updated by the user.
+	 */
+	public function scanalators_last_updated()
+	{
+		return $this->hasMany('App\Scanalator', 'updated_by');
+	}
+	
+	/*
+	 * Get the list of series created by the user.
+	 */
+	public function series_created()
+	{
+		return $this->hasMany('App\Series', 'created_by');
+	}
+	
+	/*
+	 * Get the list of series last updated by the user.
+	 */
+	public function scanalators_last_updated()
+	{
+		return $this->hasMany('App\Series', 'updated_by');
+	}
+	
+	/*
+	 * Get the list of status created by the user.
+	 */
+	public function status_created()
+	{
+		return $this->hasMany('App\Status', 'created_by');
+	}
+	
+	/*
+	 * Get the list of status last updated by the user.
+	 */
+	public function status_last_updated()
+	{
+		return $this->hasMany('App\Status', 'updated_by');
+	}
+	
+	/*
+	 * Get the list of tags created by the user.
+	 */
+	public function tags_created()
+	{
+		return $this->hasMany('App\Tag', 'created_by');
+	}
+	
+	/*
+	 * Get the list of tags last updated by the user.
+	 */
+	public function tags_last_updated()
+	{
+		return $this->hasMany('App\Tag', 'updated_by');
+	}
+	
+	/*
+	 * Get the list of volumes created by the user.
+	 */
+	public function volumes_created()
+	{
+		return $this->hasMany('App\Volume', 'created_by');
+	}
+	
+	/*
+	 * Get the list of volumes last updated by the user.
+	 */
+	public function volumes_last_updated()
+	{
+		return $this->hasMany('App\Volume', 'updated_by');
+	}
 }

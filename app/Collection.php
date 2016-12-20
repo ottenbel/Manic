@@ -2,31 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\BaseManicModel;
 
-class Collection extends Model
+class Collection extends BaseManicModel
 {
-	use Uuids;  
-	use SoftDeletes;
-	
-	/*
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-	public $incrementing = false;
-	
-	/*
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at'
-    ];
+	//Manually set the table name as we are extending a custom model instead of the eloquent one
+    protected $table = 'collections';
 	
 	/*
 	 * Get all volumes associated with the collection.
@@ -114,21 +95,5 @@ class Collection extends Model
 	public function status()
 	{
 		return $this->belongsTo('App\Status');
-	}
-	
-	/*
-	 * Get the mapping to the user that created the collection.
-	 */
-	public function created_by()
-	{
-		return $this->belongsTo('App\User', 'id', 'created_by');
-	}
-	
-	/*
-	 * Get the mapping to the user that last updated the collection.
-	 */
-	public function updated_by()
-	{
-		return $this->belongsTo('App\User', 'id', 'updated_by');
 	}
 }

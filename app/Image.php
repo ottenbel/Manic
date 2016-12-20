@@ -2,31 +2,12 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\BaseManicModel;
 
-class Image extends Model
+class Image extends BaseManicModel
 {
-    use Uuids;
-	use SoftDeletes;
-	
-	/*
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-	public $incrementing = false;
-	
-	/*
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at'
-    ];
+	//Manually set the table name as we are extending a custom model instead of the eloquent one
+    protected $table = 'images';
 	
 	/*
 	 * Get any collections that use this image as a cover image.
@@ -43,20 +24,4 @@ class Image extends Model
 	 {
 		 $this->hasMany('App\Page', '')
 	 }
-	 
-	 /*
-	 * Get the mapping to the user that created the image.
-	 */
-	public function created_by()
-	{
-		return $this->belongsTo('App\User', 'id', 'created_by');
-	}
-	
-	/*
-	 * Get the mapping to the user that last updated the image.
-	 */
-	public function updated_by()
-	{
-		return $this->belongsTo('App\User', 'id', 'updated_by');
-	}
 }
