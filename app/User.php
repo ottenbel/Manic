@@ -171,7 +171,7 @@ class User extends Authenticatable
 	/*
 	 * Get the list of series last updated by the user.
 	 */
-	public function scanalators_last_updated()
+	public function series_last_updated()
 	{
 		return $this->hasMany('App\Series', 'updated_by');
 	}
