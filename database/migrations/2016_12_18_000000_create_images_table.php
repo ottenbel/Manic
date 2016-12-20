@@ -18,7 +18,6 @@ class CreateImagesTable extends Migration
 			$table->string('name');
 			$table->string('hash')->unique();
 			$table->string('extension');
-			$table->unsignedInteger('usage_count');
 			$table->uuid('created_by');
 			$table->uuid('updated_by');
 			$table->timestamps();
