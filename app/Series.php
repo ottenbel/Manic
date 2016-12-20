@@ -4,7 +4,7 @@ namespace App;
 
 use App\BaseManicModel;
 
-class Series extends BasicManicModel
+class Series extends BaseManicModel
 {
     //Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'series';

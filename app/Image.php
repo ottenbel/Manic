@@ -22,6 +22,6 @@ class Image extends BaseManicModel
 	  */
 	 public function pages()
 	 {
-		 $this->hasMany('App\Page', '')
+		 $this->hasMany('App\Page');
 	 }
 }
