@@ -33,7 +33,7 @@ class BaseManicModel extends Model
 	 */
 	public function created_by()
 	{
-		return $this->belongsTo('App\User', 'id', 'created_by');
+		return $this->belongsTo('App\User', 'created_by');
 	}
 	
 	/*
@@ -41,6 +41,6 @@ class BaseManicModel extends Model
 	 */
 	public function updated_by()
 	{
-		return $this->belongsTo('App\User', 'id', 'updated_by');
+		return $this->belongsTo('App\User', 'updated_by');
 	}
 }
