@@ -91,7 +91,7 @@ $factory->define(App\Rating::class, function (Faker\Generator $faker){
 	'created_by' => App\User::all()->random()->id,
 	'updated_by'=> App\User::all()->random()->id]
 	];
-)};
+});
 
 $factory->define(App\Status::class, function (Faker\Generator $faker){
 	return [
@@ -112,7 +112,7 @@ $factory->define(App\Status::class, function (Faker\Generator $faker){
 	'created_by' => App\User::all()->random()->id,
 	'updated_by'=> App\User::all()->random()->id]
 	];
-)};
+});
 
 $factory->define(App\Collection::class, function (Faker\Generator $faker){
 	return [
