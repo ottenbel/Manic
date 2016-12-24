@@ -29,7 +29,7 @@ $factory->define(App\Artist::class, function (Faker\Generator $faker){
 	'description'=> $faker->paragraph,
 	'url'=> $faker->url,
 	'created_by' => App\User::all()->random()->id,
-	'updated_by'=> App\User::all()->random()->id],
+	'updated_by'=> App\User::all()->random()->id];
 });
 
 $factory->define(App\Language::class, function (Faker\Generator $faker){
@@ -38,7 +38,7 @@ $factory->define(App\Language::class, function (Faker\Generator $faker){
 	'description'=> $faker->paragraph,
 	'url'=> $faker->url,
 	'created_by' => App\User::all()->random()->id,
-	'updated_by'=> App\User::all()->random()->id],
+	'updated_by'=> App\User::all()->random()->id];
 });
 
 $factory->define(App\Scanalator::class, function (Faker\Generator $faker){
@@ -47,7 +47,7 @@ $factory->define(App\Scanalator::class, function (Faker\Generator $faker){
 	'description'=> $faker->paragraph,
 	'url'=> $faker->url,
 	'created_by' => App\User::all()->random()->id,
-	'updated_by'=> App\User::all()->random()->id],
+	'updated_by'=> App\User::all()->random()->id];
 });
 
 $factory->define(App\Series::class, function (Faker\Generator $faker){
@@ -56,7 +56,7 @@ $factory->define(App\Series::class, function (Faker\Generator $faker){
 	'description'=> $faker->paragraph,
 	'url'=> $faker->url,
 	'created_by' => App\User::all()->random()->id,
-	'updated_by'=> App\User::all()->random()->id],
+	'updated_by'=> App\User::all()->random()->id];
 });
 
 $factory->define(App\Tag::class, function (Faker\Generator $faker){
@@ -65,7 +65,7 @@ $factory->define(App\Tag::class, function (Faker\Generator $faker){
 	'description'=> $faker->paragraph,
 	'url'=> $faker->url,
 	'created_by' => App\User::all()->random()->id,
-	'updated_by'=> App\User::all()->random()->id],
+	'updated_by'=> App\User::all()->random()->id];
 });
 
 $factory->define(App\Rating::class, function (Faker\Generator $faker){
@@ -77,20 +77,20 @@ $factory->define(App\Rating::class, function (Faker\Generator $faker){
 	['name' => 'General', 
 	'priority'=> 1,
 	'created_by' => App\User::all()->random()->id,
-	'updated_by'=> App\User::all()->random()->id],],
+	'updated_by'=> App\User::all()->random()->id],
 	['name' => 'Teen', 
 	'priority'=> 2,
 	'created_by' => App\User::all()->random()->id,
-	'updated_by'=> App\User::all()->random()->id],],
+	'updated_by'=> App\User::all()->random()->id],
 	['name' => 'Mature', 
 	'priority'=> 3,
 	'created_by' => App\User::all()->random()->id,
-	'updated_by'=> App\User::all()->random()->id],],
+	'updated_by'=> App\User::all()->random()->id],
 	['name' => 'Adult', 
 	'priority'=> 4,
 	'created_by' => App\User::all()->random()->id,
 	'updated_by'=> App\User::all()->random()->id]
-	],
+	];
 )};
 
 $factory->define(App\Status::class, function (Faker\Generator $faker){
@@ -111,7 +111,7 @@ $factory->define(App\Status::class, function (Faker\Generator $faker){
 	'priority'=>3,
 	'created_by' => App\User::all()->random()->id,
 	'updated_by'=> App\User::all()->random()->id]
-	],
+	];
 )};
 
 $factory->define(App\Collection::class, function (Faker\Generator $faker){
@@ -122,7 +122,7 @@ $factory->define(App\Collection::class, function (Faker\Generator $faker){
 	'language' => App\Language::all()->random()->id,
 	'created_by' => App\User::all()->random()->id,
 	'updated_by'=> App\User::all()->random()->id
-	],
+	];
 });
 
 $factory->define(App\Volume::class, function (Faker\Generator $faker){
@@ -161,12 +161,12 @@ $factory->define(App\Chapter::class, function (Faker\Generator $faker){
 	'name' => $faker->sentence,
 	'source' => $faker->url,
 	'created_by' => App\User::all()->random()->id,
-	'updated_by'=> App\User::all()->random()->id]
+	'updated_by'=> App\User::all()->random()->id],
 	['volume_id' => $volume->id,
 	'number' => 3,
 	'name' => $faker->sentence,
 	'source' => $faker->url,
 	'created_by' => App\User::all()->random()->id,
 	'updated_by'=> App\User::all()->random()->id]
-	],
+	];
 });
