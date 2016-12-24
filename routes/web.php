@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'Index@CollectionController');
+
+Route::resource('collection', 'CollectionController');
 
 Auth::routes();
 

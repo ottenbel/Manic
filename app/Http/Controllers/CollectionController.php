@@ -14,7 +14,10 @@ class CollectionController extends Controller
      */
     public function index()
     {
-        
+        //Get all relevant collections
+		$collections => Collection->paginate(25);
+		
+		return View('collections.index', compact('collections'));
     }
 
     /**
