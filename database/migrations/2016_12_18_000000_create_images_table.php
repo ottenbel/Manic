@@ -23,8 +23,8 @@ class CreateImagesTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 			$table->primary('id');
-			$table->foreign('created_by')->references('id')->on('users');
-			$table->foreign('updated_by')->references('id')->on('users');
+			$table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
 		});
     }
 

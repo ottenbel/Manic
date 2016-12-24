@@ -23,10 +23,10 @@ class CreatePagesTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 			$table->primary('id');
-			$table->foreign('created_by')->references('id')->on('users');
-			$table->foreign('updated_by')->references('id')->on('users');
-			$table->foreign('chapter_id')->references('id')->on('chapters');
-			$table->foreign('image_id')->references('id')->on('images');
+			$table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('chapter_id')->references('id')->on('chapters')->onDelete('cascade');
+			$table->foreign('image_id')->references('id')->on('images')->onDelete('cascade');
 			$table->unique(['chapter_id', 'number']);
 		});
     }

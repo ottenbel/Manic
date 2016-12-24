@@ -17,19 +17,19 @@ class CreateCollectionsTable extends Migration
 			$table->uuid('id');
 			$table->uuid('cover')->nullable();
 			$table->string('name')->unique();
-			$table->longText('description');
-			$table->boolean('canonical');
+			$table->longText('description')->nullable();
+			$table->boolean('canonical')->nullable();
 			$table->uuid('parent_id')->nullable();
-			$table->uuid('language_id');
+			$table->uuid('language_id')->nullable();
 			$table->uuid('created_by');
 			$table->uuid('updated_by');
 			$table->timestamps();
 			$table->softDeletes();
 			$table->primary('id');
-			$table->foreign('created_by')->references('id')->on('users');
-			$table->foreign('updated_by')->references('id')->on('users');
-			$table->foreign('cover')->references('id')->on('images');
-			$table->foreign('language_id')->references('id')->on('languages');
+			$table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('cover')->references('id')->on('images')->onDelete('set null');
+			$table->foreign('language_id')->references('id')->on('languages')->onDelete('set null');
 		});
     }
 

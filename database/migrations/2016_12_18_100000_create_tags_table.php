@@ -16,15 +16,15 @@ class CreateTagsTable extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->uuid('id');
 			$table->string('name')->unique();
-			$table->longText('description');
-			$table->string('url');
+			$table->longText('description')->nullable();
+			$table->string('url')->nullable();
             $table->uuid('created_by');
 			$table->uuid('updated_by');
 			$table->timestamps();
 			$table->softDeletes();
 			$table->primary('id');
-			$table->foreign('created_by')->references('id')->on('users');
-			$table->foreign('updated_by')->references('id')->on('users');
+			$table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
