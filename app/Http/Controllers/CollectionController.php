@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Collection;
+use App\Status;
+use App\Rating;
 
 class CollectionController extends Controller
 {
@@ -27,7 +29,10 @@ class CollectionController extends Controller
      */
     public function create()
     {
-        //
+		$ratings = Rating::all();
+		$status = Status::all();
+		
+		return View('collections.create', array('ratings' => $ratings, 'status' => $status));
     }
 
     /**

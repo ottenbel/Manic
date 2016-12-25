@@ -12,7 +12,6 @@
 */
 
 Route::get('/', 'CollectionController@Index');
-
 Route::resource('collection', 'CollectionController');
 
 Auth::routes();
