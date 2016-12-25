@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'Index@CollectionController');
+Route::get('/', 'CollectionController@Index');
 
 Route::resource('collection', 'CollectionController');
 

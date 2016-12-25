@@ -28,7 +28,7 @@ Page {{$results->currentPage()}}
 	</table>
 @endif
 
-{{ $users->links() }}
+{{ $collections->links() }}
 
 @endsection
 
