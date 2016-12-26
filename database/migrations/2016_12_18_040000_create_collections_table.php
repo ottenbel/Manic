@@ -21,6 +21,8 @@ class CreateCollectionsTable extends Migration
 			$table->boolean('canonical')->nullable();
 			$table->uuid('parent_id')->nullable();
 			$table->uuid('language_id')->nullable();
+			$table->uuid('rating_id')->nullable();
+			$table->uuid('status_id')->nullable();
 			$table->uuid('created_by');
 			$table->uuid('updated_by');
 			$table->timestamps();
@@ -30,6 +32,8 @@ class CreateCollectionsTable extends Migration
 			$table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
 			$table->foreign('cover')->references('id')->on('images')->onDelete('set null');
 			$table->foreign('language_id')->references('id')->on('languages')->onDelete('set null');
+			$table->foreign('rating_id')->references('id')->on('ratings')->onDelete('set null');
+			$table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
 		});
     }
 

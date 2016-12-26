@@ -16,11 +16,13 @@ Create a New Collection
 		<div class="form-group">
 			{{ Form::label('cover', 'Cover Image') }}
 			{{ Form::file('image') }}
+			#Handle error on failure
 		</div>
 		
 		<div class="form-group">
 			{{ Form::label('name', 'Name') }}
 			{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+			#Handle error on failure
 		</div>
 		
 		<div class="form-group">
@@ -34,8 +36,9 @@ Create a New Collection
 		<div>
 		
 		<div class="form-group">
-			{{ Form::label('parent_collection', 'Parent Collection') }}
-			{{ Form::text('parent_collection', Input::old('parent_collection'), array('class' => 'form-control')) }}
+			{{ Form::label('parent_id', 'Parent Collection') }}
+			{{ Form::text('parent_id', Input::old('parent_id'), array('class' => 'form-control')) }}
+			#Handle error on failure
 		</div>
 		
 		<div class="form-group">
@@ -65,6 +68,7 @@ Create a New Collection
 			
 			{{ Form::label('tag_secondary', 'Tags Secondary') }}
 			{{ Form::text('tag_secondary', Input::old('tag_secondary'), array('class' => 'form-control')) }}
+
 		</div>
 		
 		<div class="form-group">
@@ -75,9 +79,9 @@ Create a New Collection
 		<div>
 		
 		<div class="form-group">
-			{{ Form::label('status', 'Status') }}
-			@foreach($status as $stat)
-				{{ Form::radio('status', '$stat->name') }}
+			{{ Form::label('statuses', 'Status') }}
+			@foreach($statuses as $status)
+				{{ Form::radio('statuses', '$status->name') }}
 			@endforeach
 		<div>
 		
