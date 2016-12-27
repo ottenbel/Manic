@@ -91,7 +91,7 @@ class CollectionController extends Controller
 		{
 			$artist = Artist::where('name', '=', $artist_name)->first();
 			
-			if ($artist != null)
+			if ($artist->count())
 			{
 				$collection->artists()->attach($artist, ['primary' => $isPrimary]);
 			}
@@ -115,7 +115,7 @@ class CollectionController extends Controller
 		foreach ($series_array as $series_name)
 		{
 			$series = Series::where('name', '=', $series_name)->first()
-			if ($series != null)
+			if ($series->count())
 			{
 				$collection->series()->attach($series, ['primary' => $isPrimary]);
 			}
@@ -139,7 +139,7 @@ class CollectionController extends Controller
 		foreach ($tags_array as $tag_name)
 		{
 			$tag = Tag::where('name', '=', $tag_name)->first()
-			if ($tag != null)
+			if ($tag->count())
 			{
 				$collection->tags()->attach($tag, ['primary' => $isPrimary]);
 			}
