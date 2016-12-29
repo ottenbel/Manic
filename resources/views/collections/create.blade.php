@@ -16,13 +16,17 @@ Create a New Collection
 		<div class="form-group">
 			{{ Form::label('cover', 'Cover Image') }}
 			{{ Form::file('image') }}
-			#Handle error on failure
+			@if ($errors->has('image'))
+				<div id="image_errors">{{$errors->first('image')}}</div>
+			@endif
 		</div>
 		
 		<div class="form-group">
 			{{ Form::label('name', 'Name') }}
 			{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
-			#Handle error on failure
+			$if($errors->has('name'))
+				<div id="name_errors">{{$errors->first('name')}}</div>
+			@endif
 		</div>
 		
 		<div class="form-group">
@@ -72,16 +76,18 @@ Create a New Collection
 		</div>
 		
 		<div class="form-group">
-			{{ Form::label('rating', 'Rating') }}
+			{{ Form::label('rating', 'Rating: ') }}
 			@foreach($ratings as $rating)
-				{{ Form::radio('ratings', '$rating->name') }}
+				{{ Form::radio('ratings', $rating->id, false, array('id'=>"ratings-$rating->priority")) }}
+				{{ Form::label("ratings-$rating->priority", $rating->name }}
 			@endforeach
 		<div>
 		
 		<div class="form-group">
-			{{ Form::label('statuses', 'Status') }}
+			{{ Form::label('statuses', 'Status: ') }}
 			@foreach($statuses as $status)
-				{{ Form::radio('statuses', '$status->name') }}
+				{{ Form::radio('statuses', '$status->name', false, array('id'=>"ratings-$rating->priority")) }}
+				{{ Form::label("statuses-$statuses->priority", $status->name }}
 			@endforeach
 		<div>
 		

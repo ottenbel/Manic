@@ -29,8 +29,8 @@ class CollectionController extends Controller
      */
     public function create()
     {
-		$ratings = Rating::all()->orderBy('priority', 'asc');
-		$status = Status::all()->orderBy('priority', 'asc');
+		$ratings = Rating::orderBy('priority', 'asc')->get();
+		$status = Status::orderBy('priority', 'asc')->get();
 		
 		return View('collections.create', array('ratings' => $ratings, 'statuses' => $status));
     }
@@ -114,7 +114,7 @@ class CollectionController extends Controller
 		$collection->series()->detach();
 		foreach ($series_array as $series_name)
 		{
-			$series = Series::where('name', '=', $series_name)->first()
+			$series = Series::where('name', '=', $series_name)->first();
 			if ($series->count())
 			{
 				$collection->series()->attach($series, ['primary' => $isPrimary]);
@@ -138,7 +138,7 @@ class CollectionController extends Controller
 		$collection->tags()->detach();
 		foreach ($tags_array as $tag_name)
 		{
-			$tag = Tag::where('name', '=', $tag_name)->first()
+			$tag = Tag::where('name', '=', $tag_name)->first();
 			if ($tag->count())
 			{
 				$collection->tags()->attach($tag, ['primary' => $isPrimary]);

@@ -99,7 +99,7 @@ $factory->define(App\Status::class, function (Faker\Generator $faker){
 	'priority'=>0,
 	'created_by' => App\User::all()->random()->id,
 	'updated_by'=> App\User::all()->random()->id],
-	['name'=> 'Completed',
+	['name'=> 'Complete',
 	'priority'=>1,
 	'created_by' => App\User::all()->random()->id,
 	'updated_by'=> App\User::all()->random()->id],
