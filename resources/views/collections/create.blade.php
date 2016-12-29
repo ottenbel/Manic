@@ -17,7 +17,7 @@ Create a New Collection
 			{{ Form::label('cover', 'Cover Image') }}
 			{{ Form::file('image') }}
 			@if ($errors->has('image'))
-				<div id="image_errors">{{$errors->first('image')}}</div>
+				<div class ="alert alert-danger" id="image_errors">{{$errors->first('image')}}</div>
 			@endif
 		</div>
 		
@@ -25,7 +25,7 @@ Create a New Collection
 			{{ Form::label('name', 'Name') }}
 			{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
 			$if($errors->has('name'))
-				<div id="name_errors">{{$errors->first('name')}}</div>
+				<div class ="alert alert-danger" id="name_errors">{{$errors->first('name')}}</div>
 			@endif
 		</div>
 		
