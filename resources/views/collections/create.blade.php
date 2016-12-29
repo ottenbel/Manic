@@ -35,11 +35,6 @@ Create a New Collection
 		<div>
 		
 		<div class="form-group">
-			{{ Form::label('canonical', 'Canonical') }}
-			{{ Form::checkbox('canonical', Input::old('canonical'), array('class' => 'form-control')) }}
-		<div>
-		
-		<div class="form-group">
 			{{ Form::label('parent_id', 'Parent Collection') }}
 			{{ Form::text('parent_id', Input::old('parent_id'), array('class' => 'form-control')) }}
 			@if($errors->has('parent_id'))
@@ -76,6 +71,11 @@ Create a New Collection
 			{{ Form::text('tag_secondary', Input::old('tag_secondary'), array('class' => 'form-control')) }}
 
 		</div>
+		
+		<div class="form-group">
+			{{ Form::label('canonical', 'Canonical') }}
+			{{ Form::checkbox('canonical', Input::old('canonical'), array('class' => 'form-control')) }}
+		<div>
 		
 		<div class="form-group">
 			{{ Form::label('rating', 'Rating: ') }}
