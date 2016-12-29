@@ -12,7 +12,13 @@
 */
 
 Route::get('/', 'CollectionController@Index');
-Route::resource('collection', 'CollectionController');
+
+Route::group(['middleware' => 'auth'], function(){
+	Route::get('/collection/create', 'CollectionController@create');
+	Route::post('collection', 'CollectionController@store');
+});
+
+#Route::resource('collection', 'CollectionController');
 
 Auth::routes();
 

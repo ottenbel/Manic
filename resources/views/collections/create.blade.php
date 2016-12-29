@@ -24,7 +24,7 @@ Create a New Collection
 		<div class="form-group">
 			{{ Form::label('name', 'Name') }}
 			{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
-			$if($errors->has('name'))
+			@if($errors->has('name'))
 				<div class ="alert alert-danger" id="name_errors">{{$errors->first('name')}}</div>
 			@endif
 		</div>
@@ -42,7 +42,9 @@ Create a New Collection
 		<div class="form-group">
 			{{ Form::label('parent_id', 'Parent Collection') }}
 			{{ Form::text('parent_id', Input::old('parent_id'), array('class' => 'form-control')) }}
-			#Handle error on failure
+			@if($errors->has('parent_id'))
+				<div class ="alert alert-danger" id="parent_id_errors">{{$errors->first('parent_id')}}</div>
+			@endif
 		</div>
 		
 		<div class="form-group">
@@ -79,15 +81,15 @@ Create a New Collection
 			{{ Form::label('rating', 'Rating: ') }}
 			@foreach($ratings as $rating)
 				{{ Form::radio('ratings', $rating->id, false, array('id'=>"ratings-$rating->priority")) }}
-				{{ Form::label("ratings-$rating->priority", $rating->name }}
+				{{ Form::label("ratings-$rating->priority", $rating->name) }}
 			@endforeach
 		<div>
 		
 		<div class="form-group">
 			{{ Form::label('statuses', 'Status: ') }}
 			@foreach($statuses as $status)
-				{{ Form::radio('statuses', '$status->name', false, array('id'=>"ratings-$rating->priority")) }}
-				{{ Form::label("statuses-$statuses->priority", $status->name }}
+				{{ Form::radio('statuses', $status->id, false, array('id'=>"statuses-$status->priority")) }}
+				{{ Form::label("statuses-$status->priority", $status->name) }}
 			@endforeach
 		<div>
 		

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Collection;
 use App\Status;
 use App\Rating;
+use App\Image;
 
 class CollectionController extends Controller
 {
@@ -46,7 +47,8 @@ class CollectionController extends Controller
 			'name' => 'required|unique:collections,name',
 			'parent_collection' => 'nullable|exists:collections,id',
 			'rating' => 'nullable|exists:ratings,id',
-			'status' => 'nullable|exists:statuses,id'
+			'status' => 'nullable|exists:statuses,id',
+			'image' => 'nullable|image'
 		]);
 		
 		$collection = new Collection();
@@ -59,6 +61,38 @@ class CollectionController extends Controller
 		$collection->updated_by = Auth::user()->id;
 		
 		//Handle uploading cover here
+		if ($request->hasFile('image')) 
+		{
+			//Get posted image
+			$file = $request->file('image');
+			
+			//Calculate file hash
+			$hash = hash_file("sha256", $file->getPathName();
+			
+			//Does the image already exist?
+			$image = App\Image::where('hash', '=', $hash);
+			if ($image->count())
+			{
+				//File already exists (use existing mapping)
+				$collection->cover = $image->id;
+			}
+			else
+			{
+				$path = $file->store();
+				$file_extension = $file->guessExtension();
+				
+				$image = new App\Image;
+				$image->name = $path;
+				$image->hash = $hash;
+				$image->extension = $file_extension;
+				$image->created_by = Auth::user()->id;
+				$image->updated_by = Auth::user()->id;
+				
+				$image->save();
+				
+				$collection->cover = $image->id;
+			}
+		}
 		
 		//Explode the artists arrays to be processed (if commonalities exist force to primary)
 		$artist_primary_array = array_map('trim', explode(',', Input::get('artist_primary')));
@@ -82,6 +116,9 @@ class CollectionController extends Controller
 		map_tags($collection, $tags_secondary_array, false);
 		
 		$collection->save();
+		
+		//Redirect to the collection that was created
+		return redirect()->action('collection', [$collection])->with('status', 'Successfully created new collection.');
     }
 	
 	private function map_artists(&$collection, $artist_array, $isPrimary)
