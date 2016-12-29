@@ -67,7 +67,7 @@ class CollectionController extends Controller
 			$file = $request->file('image');
 			
 			//Calculate file hash
-			$hash = hash_file("sha256", $file->getPathName();
+			$hash = hash_file("sha256", $file->getPathName());
 			
 			//Does the image already exist?
 			$image = App\Image::where('hash', '=', $hash);
