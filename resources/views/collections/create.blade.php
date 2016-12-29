@@ -44,7 +44,7 @@ Create a New Collection
 		
 		<div class="form-group">
 			{{ Form::label('language', 'Language') }}
-			{{ Form::text('language', Input::old('language'), array('class' => 'form-control')) }}
+			{{ From::select('language', $languages) }}
 		</div>
 		
 		<div class="form-group">

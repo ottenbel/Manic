@@ -7,6 +7,7 @@ use App\Collection;
 use App\Status;
 use App\Rating;
 use App\Image;
+use App\Language;
 
 class CollectionController extends Controller
 {
@@ -32,8 +33,9 @@ class CollectionController extends Controller
     {
 		$ratings = Rating::orderBy('priority', 'asc')->get();
 		$status = Status::orderBy('priority', 'asc')->get();
+		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		
-		return View('collections.create', array('ratings' => $ratings, 'statuses' => $status));
+		return View('collections.create', array('ratings' => $ratings, 'statuses' => $status, 'languages' => $languages));
     }
 
     /**
@@ -48,6 +50,7 @@ class CollectionController extends Controller
 			'parent_collection' => 'nullable|exists:collections,id',
 			'rating' => 'nullable|exists:ratings,id',
 			'status' => 'nullable|exists:statuses,id',
+			'language' => 'nullabe|exists:languages,id',
 			'image' => 'nullable|image'
 		]);
 		
@@ -57,6 +60,7 @@ class CollectionController extends Controller
 		$collection->canonical = Input::get('canonical');
 		$collection->status = Input::get('status');
 		$collection->rating = Input::get('rating');
+		$collection->language_id = Input::get('language');
 		$collection->created_by = Auth::user()->id;
 		$collection->updated_by = Auth::user()->id;
 		
