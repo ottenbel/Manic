@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\User;
 
-class DatabaseSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,9 +13,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 		//Do the production seeding
-        $this->call(UserSeeder::class);		
-		$this->call(StatusSeeder::class);
-		$this->call(RatingSeeder::class);
-		$this->call(LanguageSeeder::class);
+		$user = new User;
+		$user->name = 'admin';
+		$user->email = 'admin@email.com';
+		$user->password = bcrypt('password');
+		$user->save();
     }
 }
