@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Input;
+use Auth;
 use App\Collection;
 use App\Status;
 use App\Rating;
 use App\Image;
 use App\Language;
+use App\Artist;
+use App\Series;
+use App\Tag;
 
 class CollectionController extends Controller
 {
@@ -50,13 +55,13 @@ class CollectionController extends Controller
 			'parent_collection' => 'nullable|exists:collections,id',
 			'rating' => 'nullable|exists:ratings,id',
 			'status' => 'nullable|exists:statuses,id',
-			'language' => 'nullabe|exists:languages,id',
+			'language' => 'nullable|exists:languages,id',
 			'image' => 'nullable|image'
 		]);
 		
 		$collection = new Collection();
-		$collection->name = Input::get('name')->trim();
-		$collection->description = Input::get('description')->trim();
+		$collection->name = trim(Input::get('name'));
+		$collection->description = trim(Input::get('description'));
 		$collection->canonical = Input::get('canonical');
 		$collection->status = Input::get('status');
 		$collection->rating = Input::get('rating');
@@ -74,8 +79,8 @@ class CollectionController extends Controller
 			$hash = hash_file("sha256", $file->getPathName());
 			
 			//Does the image already exist?
-			$image = App\Image::where('hash', '=', $hash);
-			if ($image->count())
+			$image = Image::where('hash', '=', $hash);
+			if (count($image))
 			{
 				//File already exists (use existing mapping)
 				$collection->cover = $image->id;
@@ -85,7 +90,7 @@ class CollectionController extends Controller
 				$path = $file->store();
 				$file_extension = $file->guessExtension();
 				
-				$image = new App\Image;
+				$image = new Image;
 				$image->name = $path;
 				$image->hash = $hash;
 				$image->extension = $file_extension;
@@ -102,22 +107,22 @@ class CollectionController extends Controller
 		$artist_primary_array = array_map('trim', explode(',', Input::get('artist_primary')));
 		$artist_secondary_array = array_diff(array_map('trim', explode(',', Input::get('artist_secondary'))), $artist_primary_array);
 		
-		map_artists($collection, $artist_primary_array, true);
-		map_artists($collection, $artist_secondary_array, false);
+		$this->map_artists($collection, $artist_primary_array, true);
+		$this->map_artists($collection, $artist_secondary_array, false);
 		
 		//Explode the series arrays to be processed (if commonalities exist force to primary)
 		$series_primary_array = array_map('trim', explode(',', Input::get('series_primary')));
 		$series_secondary_array = array_diff(array_map('trim', explode(',', Input::get('series_secondary'))), $series_primary_array);
 		
-		map_series($collection, $series_primary_array, true);
-		map_series($collection, $series_secondary_array, false);
+		$this->map_series($collection, $series_primary_array, true);
+		$this->map_series($collection, $series_secondary_array, false);
 		
 		//Explode the tags array to be processed (if commonalities exist force to primary)
 		$tags_primary_array = array_map('trim', explode(',', Input::get('tags_primary')));
 		$tags_secondary_array = array_diff(array_map('trim', explode(',', Input::get('tags_secondary'))), $tags_primary_array);
 		
-		map_tags($collection, $tags_primary_array, true);
-		map_tags($collection, $tags_secondary_array, false);
+		$this->map_tags($collection, $tags_primary_array, true);
+		$this->map_tags($collection, $tags_secondary_array, false);
 		
 		$collection->save();
 		
@@ -132,7 +137,7 @@ class CollectionController extends Controller
 		{
 			$artist = Artist::where('name', '=', $artist_name)->first();
 			
-			if ($artist->count())
+			if (count($artist))
 			{
 				$collection->artists()->attach($artist, ['primary' => $isPrimary]);
 			}
@@ -156,7 +161,7 @@ class CollectionController extends Controller
 		foreach ($series_array as $series_name)
 		{
 			$series = Series::where('name', '=', $series_name)->first();
-			if ($series->count())
+			if (count($series))
 			{
 				$collection->series()->attach($series, ['primary' => $isPrimary]);
 			}
@@ -180,7 +185,7 @@ class CollectionController extends Controller
 		foreach ($tags_array as $tag_name)
 		{
 			$tag = Tag::where('name', '=', $tag_name)->first();
-			if ($tag->count())
+			if (count($tag))
 			{
 				$collection->tags()->attach($tag, ['primary' => $isPrimary]);
 			}
