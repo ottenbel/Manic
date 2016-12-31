@@ -17,6 +17,7 @@ class CreateArtistCollectionTable extends Migration
 			$table->uuid('artist_id');
 			$table->uuid('collection_id');
 			$table->boolean('primary');
+			$table->timestamps();
 			$table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
 			$table->foreign('collection_id')->references('id')->on('collections')->onDelete('cascade');
 		});

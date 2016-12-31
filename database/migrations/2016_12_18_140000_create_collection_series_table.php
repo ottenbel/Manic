@@ -17,6 +17,7 @@ class CreateCollectionSeriesTable extends Migration
 			$table->uuid('collection_id');
 			$table->uuid('series_id');
 			$table->boolean('primary');
+			$table->timestamps();
 			$table->foreign('collection_id')->references('id')->on('collections')->onDelete('cascade');
 			$table->foreign('series_id')->references('id')->on('series')->onDelete('cascade');
 		});
