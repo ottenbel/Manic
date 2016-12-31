@@ -115,14 +115,16 @@ class CollectionController extends Controller
 		//Explode the artists arrays to be processed (if commonalities exist force to primary)
 		$artist_primary_array = array_map('trim', explode(',', Input::get('artist_primary')));
 		$artist_secondary_array = array_diff(array_map('trim', explode(',', Input::get('artist_secondary'))), $artist_primary_array);
-		
+	
+		$collection->artists()->detach();
 		$this->map_artists($collection, $artist_primary_array, true);
 		$this->map_artists($collection, $artist_secondary_array, false);
 		
 		//Explode the series arrays to be processed (if commonalities exist force to primary)
 		$series_primary_array = array_map('trim', explode(',', Input::get('series_primary')));
 		$series_secondary_array = array_diff(array_map('trim', explode(',', Input::get('series_secondary'))), $series_primary_array);
-		
+	
+		$collection->series()->detach();
 		$this->map_series($collection, $series_primary_array, true);
 		$this->map_series($collection, $series_secondary_array, false);
 		
@@ -130,6 +132,7 @@ class CollectionController extends Controller
 		$tags_primary_array = array_map('trim', explode(',', Input::get('tags_primary')));
 		$tags_secondary_array = array_diff(array_map('trim', explode(',', Input::get('tags_secondary'))), $tags_primary_array);
 		
+		$collection->tags()->detach();
 		$this->map_tags($collection, $tags_primary_array, true);
 		$this->map_tags($collection, $tags_secondary_array, false);
 		
@@ -139,73 +142,78 @@ class CollectionController extends Controller
 	
 	private function map_artists(&$collection, $artist_array, $isPrimary)
 	{
-		$collection->artists()->detach();
 		foreach ($artist_array as $artist_name)
 		{
-			$artist = Artist::where('name', '=', $artist_name)->first();
-			
-			if (count($artist))
+			if (trim($artist_name) != "")
 			{
-				$collection->artists()->attach($artist, ['primary' => $isPrimary]);
-			}
-			else
-			{
-				//Create a new artist
-				$artist = new Artist;
-				$artist->name = $artist_name;
-				$artist->created_by = Auth::user()->id;
-				$artist->updated_by = Auth::user()->id;
-				$artist->save();
-				
-				$collection->artists()->attach($artist, ['primary' => $isPrimary]);
+				$artist = Artist::where('name', '=', $artist_name)->first();			
+				if (count($artist))
+				{
+					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
+				}
+				else
+				{
+					//Create a new artist
+					$artist = new Artist;
+					$artist->name = $artist_name;
+					$artist->created_by = Auth::user()->id;
+					$artist->updated_by = Auth::user()->id;
+					$artist->save();
+					
+					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
+				}
 			}
 		}
 	}
 	
 	private function map_series(&$collection, $series_array, $isPrimary)
 	{
-		$collection->series()->detach();
 		foreach ($series_array as $series_name)
 		{
-			$series = Series::where('name', '=', $series_name)->first();
-			if (count($series))
+			if (trim($series_name) != "")
 			{
-				$collection->series()->attach($series, ['primary' => $isPrimary]);
-			}
-			else
-			{
-				//Create a new series
-				$series = new Series;
-				$series->name = $series_name;
-				$series->created_by = Auth::user()->id;
-				$series->updated_by = Auth::user()->id;
-				$series->save();
-				
-				$collection->series()->attach($series, ['primary' => $isPrimary]);
+				$series = Series::where('name', '=', $series_name)->first();
+				if (count($series))
+				{
+					$collection->series()->attach($series, ['primary' => $isPrimary]);
+				}
+				else
+				{
+					//Create a new series
+					$series = new Series;
+					$series->name = $series_name;
+					$series->created_by = Auth::user()->id;
+					$series->updated_by = Auth::user()->id;
+					$series->save();
+					
+					$collection->series()->attach($series, ['primary' => $isPrimary]);
+				}
 			}
 		}
 	}
 	
 	private function map_tags(&$collection, $tags_array, $isPrimary)
 	{
-		$collection->tags()->detach();
 		foreach ($tags_array as $tag_name)
 		{
-			$tag = Tag::where('name', '=', $tag_name)->first();
-			if (count($tag))
+			if (trim($tag_name) != "")
 			{
-				$collection->tags()->attach($tag, ['primary' => $isPrimary]);
-			}
-			else
-			{
-				//Create a new tag
-				$tag = new Tag;
-				$tag->name = $tag_name;
-				$tag->created_by = Auth::user()->id;
-				$tag->updated_by = Auth::user()->id;
-				$tag->save();
-				
-				$collection->tags()->attach($tag, ['primary' => $isPrimary]);
+				$tag = Tag::where('name', '=', $tag_name)->first();
+				if (count($tag))
+				{
+					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
+				}
+				else
+				{
+					//Create a new tag
+					$tag = new Tag;
+					$tag->name = $tag_name;
+					$tag->created_by = Auth::user()->id;
+					$tag->updated_by = Auth::user()->id;
+					$tag->save();
+					
+					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
+				}
 			}
 		}
 	}

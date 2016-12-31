@@ -31,7 +31,7 @@ class BaseManicModel extends Model
 	/*
 	 * Get the mapping to the user that created the rating.
 	 */
-	public function created_by()
+	public function created_by_user()
 	{
 		return $this->belongsTo('App\User', 'created_by');
 	}
@@ -39,7 +39,7 @@ class BaseManicModel extends Model
 	/*
 	 * Get the mapping to the user that last updated the rating.
 	 */
-	public function updated_by()
+	public function updated_by_user()
 	{
 		return $this->belongsTo('App\User', 'updated_by');
 	}
