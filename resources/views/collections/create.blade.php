@@ -12,7 +12,9 @@ Create a New Collection
 <div class="container">
 	<h1>Create a New Collection</h1>
 	
-	{{ Form::open(array('url' => 'collection', 'files' => true)) }}
+	#{{ Form::open(array('url' => 'collection', 'files' => true)) }}
+	<form method="POST" action="{{ url('/collection') }}" enctype="multipart/form-data">
+		{{ csrf_field() }}
 		<div class="form-group">
 			{{ Form::label('cover', 'Cover Image') }}
 			{{ Form::file('image') }}
@@ -95,7 +97,8 @@ Create a New Collection
 		
 		{{ Form::submit('Create Collection', array('class' => 'btn btn-primary')) }}
 		
-	{{ Form::close() }}
+	#{{ Form::close() }}
+	</form>
 	
 </div>
 @endsection
