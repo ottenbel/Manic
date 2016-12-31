@@ -52,7 +52,7 @@ class Collection extends BaseManicModel
 	/*
 	 * Get the mapping from collection to language.
 	 */
-	public function languages()
+	public function language()
 	{
 		return $this->belongsTo('App\Language');
 	}
@@ -62,7 +62,7 @@ class Collection extends BaseManicModel
 	 */	 
 	public function artists()
 	{
-		return $this->belongsToMany('App\Artist')->withTimestamps()->withPivot('primary', 'created_by', 'updated_by', 'deleted_at');
+		return $this->belongsToMany('App\Artist')->withTimestamps()->withPivot('primary');
 	}
 	
 	/*
@@ -70,7 +70,7 @@ class Collection extends BaseManicModel
 	 */
 	public function series()
 	{
-		return $this->belongsToMany('App\Series')->withTimestamps()->withPivot('primary', 'created_by', 'updated_by', 'deleted_at');
+		return $this->belongsToMany('App\Series')->withTimestamps()->withPivot('primary');
 	}
 		
 	/*
@@ -78,7 +78,7 @@ class Collection extends BaseManicModel
 	 */ 
 	public function tags()
 	{
-		return $this->belongsToMany('App\Tag')->withTimestamps()->withPivot('primary', 'created_by', 'updated_by', 'deleted_at');
+		return $this->belongsToMany('App\Tag')->withTimestamps()->withPivot('primary');
 	}
 	 
 	/*
