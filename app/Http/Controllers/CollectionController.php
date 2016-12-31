@@ -63,8 +63,8 @@ class CollectionController extends Controller
 		$collection->name = trim(Input::get('name'));
 		$collection->description = trim(Input::get('description'));
 		$collection->canonical = Input::get('canonical');
-		$collection->status = Input::get('status');
-		$collection->rating = Input::get('rating');
+		$collection->status_id = Input::get('status');
+		$collection->rating_id = Input::get('rating');
 		$collection->language_id = Input::get('language');
 		$collection->created_by = Auth::user()->id;
 		$collection->updated_by = Auth::user()->id;
