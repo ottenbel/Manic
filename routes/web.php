@@ -11,14 +11,14 @@
 |
 */
 
-Route::get('/', 'CollectionController@Index');
+Route::get('/', 'CollectionController@index');
+Route::get('collection/{id}', 'CollectionController@show');
 
 Route::group(['middleware' => 'auth'], function(){
 	Route::get('/collection/create', 'CollectionController@create');
+	Route::get('/collection/{id}/edit', 'CollectionController@edit');
 	Route::post('collection', 'CollectionController@store');
 });
-
-#Route::resource('collection', 'CollectionController');
 
 Auth::routes();
 
