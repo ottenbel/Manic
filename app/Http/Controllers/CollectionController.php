@@ -103,6 +103,8 @@ class CollectionController extends Controller
 			}
 		}
 		
+		$collection->save();
+		
 		//Explode the artists arrays to be processed (if commonalities exist force to primary)
 		$artist_primary_array = array_map('trim', explode(',', Input::get('artist_primary')));
 		$artist_secondary_array = array_diff(array_map('trim', explode(',', Input::get('artist_secondary'))), $artist_primary_array);
@@ -123,8 +125,6 @@ class CollectionController extends Controller
 		
 		$this->map_tags($collection, $tags_primary_array, true);
 		$this->map_tags($collection, $tags_secondary_array, false);
-		
-		$collection->save();
 		
 		//Redirect to the collection that was created
 		return redirect()->action('collection', [$collection])->with('status', 'Successfully created new collection.');
