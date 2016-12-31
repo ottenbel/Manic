@@ -25,7 +25,7 @@ Index - Page {{$collections->currentPage()}}
 						@endif
 						</td>
 						<td>
-							<div><a href="/collection/{{$collection->id)}}">{{$collection->name}}</a></div>
+							<div><a href="/collection/{{$collection->id}}">{{$collection->name}}</a></div>
 							<div>Summary/Tags?</div>
 						</td>
 					</tr>
