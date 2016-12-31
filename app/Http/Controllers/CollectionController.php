@@ -70,8 +70,8 @@ class CollectionController extends Controller
 		{
 			$collection->canonical = false;
 		}
-		$collection->status_id = Input::get('status');
-		$collection->rating_id = Input::get('rating');
+		$collection->status_id = Input::get('statuses');
+		$collection->rating_id = Input::get('ratings');
 		$collection->language_id = Input::get('language');
 		$collection->created_by = Auth::user()->id;
 		$collection->updated_by = Auth::user()->id;
@@ -134,7 +134,7 @@ class CollectionController extends Controller
 		$this->map_tags($collection, $tags_secondary_array, false);
 		
 		//Redirect to the collection that was created
-		return redirect()->action('collection', [$collection])->with('status', 'Successfully created new collection.');
+		return redirect()->action('CollectionController@show', [$collection])->with('status', 'Successfully created new collection.');
     }
 	
 	private function map_artists(&$collection, $artist_array, $isPrimary)
