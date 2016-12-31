@@ -62,7 +62,14 @@ class CollectionController extends Controller
 		$collection = new Collection();
 		$collection->name = trim(Input::get('name'));
 		$collection->description = trim(Input::get('description'));
-		$collection->canonical = Input::get('canonical');
+		if (Input::has('canonical'))
+		{
+			$collection->canonical = true;
+		}
+		else
+		{
+			$collection->canonical = false;
+		}
 		$collection->status_id = Input::get('status');
 		$collection->rating_id = Input::get('rating');
 		$collection->language_id = Input::get('language');
