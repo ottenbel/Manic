@@ -34,8 +34,8 @@ Index - Page {{$collections->currentPage()}}
 										<li><a href="/artist/{{$artist->id}}/list">{{{$artist->name}}}</a></li>
 									@endforeach
 									</ul>
-							@endif
 								</div>
+							@endif
 							
 							@if(count($collection->primary_tags()))
 								<div>Tags:
@@ -46,7 +46,6 @@ Index - Page {{$collections->currentPage()}}
 									</ul>
 								</div>
 							@endif
-							
 						</td>
 					</tr>
 				@endforeach
