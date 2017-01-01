@@ -46,6 +46,16 @@ Index - Page {{$collections->currentPage()}}
 									</ul>
 								</div>
 							@endif
+							<div>
+								@if($collection->rating != null)
+									{{{$collection->rating->name}}}
+								@endif
+							</div>
+							<div>
+								@if($collection->status != null)
+								{{{$collection->status->name}}}
+								@endif
+							</div>
 						</td>
 					</tr>
 				@endforeach
