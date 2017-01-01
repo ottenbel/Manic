@@ -66,19 +66,67 @@ class Collection extends BaseManicModel
 	}
 	
 	/*
-	 * Get the mapping from collection to artists.
+	 * Get mapping from collection to primary artists.
+	 */
+	public function primary_artists()
+	{
+		return $this->belongsToMany('App\Artist')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
+	}	
+	
+	/*
+	 * Get mapping from collection to secondary artists.
+	 */
+	public function secondary_artists()
+	{
+		return $this->belongsToMany('App\Artist')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
+	}	
+	
+	/*
+	 * Get the mapping from collection to series.
 	 */
 	public function series()
 	{
 		return $this->belongsToMany('App\Series')->withTimestamps()->withPivot('primary');
 	}
-		
+	
+	/*
+	 * Get the mapping from collection to primary series.
+	 */
+	public function primary_series()
+	{
+		return $this->belongsToMany('App\Series')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
+	}
+	
+	/*
+	 * Get the mapping from collection to secondary series.
+	 */
+	public function secondary_series()
+	{
+		return $this->belongsToMany('App\Series')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
+	}
+	
 	/*
 	 * Get the mapping from collection to tags.
 	 */ 
 	public function tags()
 	{
 		return $this->belongsToMany('App\Tag')->withTimestamps()->withPivot('primary');
+	}
+	
+	/*
+	 * Get the mapping from collection to primary tags.
+	 */
+	public function primary_tags()
+	{
+		return $this->belongsToMany('App\Tag')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
+	}
+	
+	/*
+	 * Get the mapping from collection to secondary tags.
+	 */
+	public function secondary_tags()
+	{
+		return $this->belongsToMany('App\Tag')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
 	}
 	 
 	/*
