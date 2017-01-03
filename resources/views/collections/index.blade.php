@@ -31,7 +31,7 @@ Index - Page {{$collections->currentPage()}}
 								<div>Artists:
 									<ul class="tags">
 									@foreach($collection->primary_artists()->take(10)->get as $artist)
-										<li><a href="/artist/{{$artist->id}}/list">{{{$artist->name}}}</a></li>
+										<li><a href="/artist/{{$artist->id}}">{{{$artist->name}}}</a></li>
 									@endforeach
 									</ul>
 								</div>
@@ -41,7 +41,7 @@ Index - Page {{$collections->currentPage()}}
 								<div>Tags:
 									<ul class="tags">
 									@foreach($collection->primary_tags()->take(10)->get() as $tag)
-										<li><a href="/tag/{{$tag->id}}/list">{{{$tag->name}}}</a></li>
+										<li><a href="/tag/{{$tag->id}}">{{{$tag->name}}}</a></li>
 									@endforeach
 									</ul>
 								</div>
@@ -53,7 +53,7 @@ Index - Page {{$collections->currentPage()}}
 							</div>
 							<div>
 								@if($collection->status != null)
-								{{{$collection->status->name}}}
+									{{{$collection->status->name}}}
 								@endif
 							</div>
 						</td>
