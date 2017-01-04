@@ -25,37 +25,34 @@ Index - Page {{$collections->currentPage()}}
 						@endif
 						</td>
 						<td>
-							<div><a href="/collection/{{$collection->id}}">{{{$collection->name}}}</a></div>
+							<div><a href="/collection/{{$collection->id}}"><h5>{{{$collection->name}}}</h5></a></div>
 							
-							@if(count($collection->primary_artists()))
-								<div>Artists:
-									<ul class="tags">
+							@if(count($collection->primary_artists))
+								<div class="tag_holder">Artists:
 									@foreach($collection->primary_artists()->take(10)->get() as $artist)
-										<li><a href="/artist/{{$artist->id}}">{{{$artist->name}}}</a></li>
+										<span class="tags"><a href="/artist/{{$artist->id}}">{{{$artist->name}}}</a></span>
 									@endforeach
-									</ul>
 								</div>
 							@endif
 							
-							@if(count($collection->primary_tags()))
-								<div>Tags:
-									<ul class="tags">
+							@if(count($collection->primary_tags))
+								<div><strong>Tags:</strong>
 									@foreach($collection->primary_tags()->take(10)->get() as $tag)
-										<li><a href="/tag/{{$tag->id}}">{{{$tag->name}}}</a></li>
+										<span class="tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}}</a></span>
 									@endforeach
-									</ul>
 								</div>
 							@endif
-							<div>
-								@if($collection->rating != null)
-									{{{$collection->rating->name}}}
-								@endif
-							</div>
-							<div>
-								@if($collection->status != null)
-									{{{$collection->status->name}}}
-								@endif
-							</div>
+							
+							@if($collection->rating != null || $collection->status != null)
+								<div>
+									@if($collection->rating != null)
+										<span><strong>Rating:</strong> {{{$collection->rating->name}}}</span>
+									@endif
+									@if($collection->status != null)
+										<span><strong>Status:</strong> {{{$collection->status->name}}}</span>
+									@endif
+								</div>
+							@endif
 						</td>
 					</tr>
 				@endforeach
