@@ -30,7 +30,7 @@ Index - Page {{$collections->currentPage()}}
 							@if(count($collection->primary_artists()))
 								<div>Artists:
 									<ul class="tags">
-									@foreach($collection->primary_artists()->take(10)->get as $artist)
+									@foreach($collection->primary_artists()->take(10)->get() as $artist)
 										<li><a href="/artist/{{$artist->id}}">{{{$artist->name}}}</a></li>
 									@endforeach
 									</ul>
