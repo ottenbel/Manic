@@ -32,7 +32,7 @@ Index - Page {{$collections->currentPage()}}
 									@foreach($collection->primary_artists()->take(10)->get() as $artist)
 										<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}}</a></span>
 									@endforeach
-									@if(count($collection->primary_artists) < 10)
+									@if(10 > count($collection->primary_artists))
 										@foreach($collection->secondary_artists()->take(10 - count($collection->primary_artists))->get() as $artist)
 											<span class="secondary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}}</a></span>
 										@endforeach
@@ -45,7 +45,7 @@ Index - Page {{$collections->currentPage()}}
 									@foreach($collection->primary_tags()->take(10)->get() as $tag)
 										<span class="primary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}}</a></span>
 									@endforeach
-									@if(count($collection->primary_tags) < 10)
+									@if(10 > count($collection->primary_tags))
 										@foreach($collection->secondary_tags()->take(10 - count($collection->primary_tags))->get as $tag)
 											<span class="secondary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}}</a></span>
 										@endforeach
