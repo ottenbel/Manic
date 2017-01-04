@@ -40,7 +40,7 @@ Index - Page {{$collections->currentPage()}}
 								</div>
 							@endif
 							
-							@if((count($collection->primary_tags)) || (count($collection->secondary_tags))
+							@if((count($collection->primary_tags)) || (count($collection->secondary_tags)))
 								<div><strong>Tags:</strong>
 									@foreach($collection->primary_tags()->take(10)->get() as $tag)
 										<span class="primary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}}</a></span>
