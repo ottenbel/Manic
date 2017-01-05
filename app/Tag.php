@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
 use App\BaseManicModel;
 
 class Tag extends BaseManicModel
@@ -14,6 +15,14 @@ class Tag extends BaseManicModel
 	 */
 	public function collections()
 	{
-		return $this->belongsToMany('App\Tag')->withTimestamps()->withPivot('primary', 'created_by', 'updated_by', 'deleted_at');
+		return $this->belongsToMany('App\Collection')->withTimestamps()->withPivot('primary');
+	}
+	
+	/*
+	 * Get the number of times the tag is used across the site.
+	 */
+	public function usage_count()
+	{
+		return $this->collections()->count();
 	}
 }

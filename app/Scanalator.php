@@ -14,6 +14,14 @@ class Scanalator extends BaseManicModel
 	 */
 	public function chapters()
 	{
-		return $this->belongsToMany('App\Chapter')->withTimestamps()->withPivot('primary', 'created_by', 'updated_by', 'deleted_at');
+		return $this->belongsToMany('App\Chapter')->withTimestamps()->withPivot('primary');
+	}
+	
+	/*
+	 * Get the number of times the scanalator is used across the site.
+	 */
+	public function usage_count()
+	{
+		return $this->chapters()->count();
 	}
 }
