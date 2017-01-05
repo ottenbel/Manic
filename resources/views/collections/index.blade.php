@@ -25,7 +25,7 @@ Index - Page {{$collections->currentPage()}}
 						@endif
 						</td>
 						<td>
-							<div><a href="/collection/{{$collection->id}}"><h5>{{{$collection->name}}}</h5></a></div>
+							<div><a href="/collection/{{$collection->id}}"><h4>{{{$collection->name}}}</h4></a></div>
 							
 							@if((count($collection->primary_artists)) || (count($collection->secondary_artists)))
 								<div class="tag_holder">Artists:
