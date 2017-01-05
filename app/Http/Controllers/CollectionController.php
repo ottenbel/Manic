@@ -129,8 +129,8 @@ class CollectionController extends Controller
 		$this->map_series($collection, $series_secondary_array, false);
 		
 		//Explode the tags array to be processed (if commonalities exist force to primary)
-		$tags_primary_array = array_map('trim', explode(',', Input::get('tags_primary')));
-		$tags_secondary_array = array_diff(array_map('trim', explode(',', Input::get('tags_secondary'))), $tags_primary_array);
+		$tags_primary_array = array_map('trim', explode(',', Input::get('tag_primary')));
+		$tags_secondary_array = array_diff(array_map('trim', explode(',', Input::get('tag_secondary'))), $tags_primary_array);
 		
 		$collection->tags()->detach();
 		$this->map_tags($collection, $tags_primary_array, true);

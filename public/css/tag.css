@@ -1,13 +1,4 @@
 #https://cssglobe.com/pure-css3-post-tags/
-.primary_tags{
-	margin:0;
-	padding:0;
-	position:absolute;
-	right:24px;
-	bottom:-12px;
-	list-style:none;
-}
-
 .primary_tags span, .primary_tags a{
 	display: inline-block;
 	height:24px;
@@ -16,7 +7,7 @@
 	
 .primary_tags a{
 	height:24px;
-	margin-left:20px;
+	margin-left:5px;
 	padding:0 10px 0 12px;
 	background:#0089e0;
 	color:#fff;
@@ -35,15 +26,6 @@
 	border-top-left-radius:4px;
 }
 	
-.secondary_tags{
-	margin:0;
-	padding:0;
-	position:absolute;
-	right:24px;
-	bottom:-12px;
-	list-style:none;
-}
-
 .secondary_tags span, .secondary_tags a{
 	display: inline-block;
 	height:24px;
@@ -52,7 +34,7 @@
 	
 .secondary_tags a{
 	height:24px;
-	margin-left:20px;
+	margin-left:5px;
 	padding:0 10px 0 12px;
 	background:#66b8ec;
 	color:#fff;
@@ -71,15 +53,6 @@
 	border-top-left-radius:4px;
 }
 
-.primary_artists{
-	margin:0;
-	padding:0;
-	position:absolute;
-	right:24px;
-	bottom:-12px;
-	list-style:none;
-}
-
 .primary_artists span, .primary_artists a{
 	display: inline-block;
 	height:24px;
@@ -88,7 +61,7 @@
 	
 .primary_artists a{
 	height:24px;
-	margin-left:20px;
+	margin-left:5px;
 	padding:0 10px 0 12px;
 	background:#7e7e7e;
 	color:#fff;
@@ -106,15 +79,6 @@
 	-webkit-border-top-left-radius:4px;	
 	border-top-left-radius:4px;
 }
-	
-.secondary_artists{
-	margin:0;
-	padding:0;
-	position:absolute;
-	right:24px;
-	bottom:-12px;
-	list-style:none;
-}
 
 .secondary_artists span, .secondary_artists a{
 	display: inline-block;
@@ -124,7 +88,7 @@
 	
 .secondary_artists a{
 	height:24px;
-	margin-left:20px;
+	margin-left:5px;
 	padding:0 10px 0 12px;
 	background:#b1b1b1;
 	color:#fff;
@@ -143,15 +107,6 @@
 	border-top-left-radius:4px;
 }
 
-.primary_series{
-	margin:0;
-	padding:0;
-	position:absolute;
-	right:24px;
-	bottom:-12px;
-	list-style:none;
-}
-
 .primary_series span, .primary_series a{
 	display: inline-block;
 	height:24px;
@@ -160,7 +115,7 @@
 	
 .primary_series a{
 	height:24px;
-	margin-left:20px;
+	margin-left:5px;
 	padding:0 10px 0 12px;
 	background:#51a700;
 	color:#fff;
@@ -179,15 +134,6 @@
 	border-top-left-radius:4px;
 }
 	
-.secondary_series{
-	margin:0;
-	padding:0;
-	position:absolute;
-	right:24px;
-	bottom:-12px;
-	list-style:none;
-}
-
 .secondary_series span, .secondary_series a{
 	display: inline-block;
 	height:24px;
@@ -196,7 +142,7 @@
 	
 .secondary_series a{
 	height:24px;
-	margin-left:20px;
+	margin-left:5px;
 	padding:0 10px 0 12px;
 	background:#96ca66;
 	color:#fff;
