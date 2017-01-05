@@ -160,7 +160,19 @@
 	-webkit-border-top-left-radius:4px;	
 	border-top-left-radius:4px;
 }
-	
+
+.tag_count{
+	color:#efefef;
+}
+
+.artist_count{
+	color:#efefef;
+}
+
+.series_count{
+	color:#efefef;
+}
+
 .tag_holder div{
 	display:block;
 	overflow:auto;
