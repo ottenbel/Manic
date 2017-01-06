@@ -56,10 +56,13 @@ Index - Page {{$collections->currentPage()}}
 							@if($collection->rating != null || $collection->status != null)
 								<div>
 									@if($collection->rating != null)
-										<span><strong>Rating:</strong> {{{$collection->rating->name}}}</span>
+										<span class="col-sm-4"><strong>Rating:</strong> {{{$collection->rating->name}}}</span>
 									@endif
 									@if($collection->status != null)
-										<span><strong>Status:</strong> {{{$collection->status->name}}}</span>
+										<span class="col-sm-4"><strong>Status:</strong> {{{$collection->status->name}}}</span>
+									@endif
+									@if($collection->language != null)
+										<span class="col-sm-4"><strong>Language:</strong> {{{$collection->language->name}}}<span>
 									@endif
 								</div>
 							@endif
