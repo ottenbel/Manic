@@ -10,6 +10,16 @@
 
 @section('content')
 <div class="container">
+	@if(Auth::user())
+		<div class="collapse navbar-collapse" id="page-app-navbar-collapse">
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="/collection/{{$collection->id}}/edit">Edit Collection</a><li>
+				<li><a href="/volume/create/{{$collection->id}}">Add New Volume</a><li>
+				<li><a href=""></a>Delete Collection</li>
+			</ul>
+		</div>
+	@endif	
+	
 	<div id="collection_summary">
 		@if($collection->cover != null)
 		<div id="cover" class="col-md-4">
@@ -61,7 +71,7 @@
 			
 			@if($collection->language != null)
 				<div>
-					<strong>Language:</strong> {{{$collection->language->name}}}<
+					<strong>Language:</strong> {{{$collection->language->name}}}
 				</div>
 			@endif
 				
@@ -76,20 +86,25 @@
 					<strong>Rating:</strong> {{{$collection->rating->name}}}
 				</div>	
 			@endif
+			
+			<div>
+				<strong>Created By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->created_by()->name}}}</a> @ {{$collection->created_at}}
+			</div>
+			
+			<div>
+				<strong>Updated By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->updated_by()->name}}}</a> @ {{$collection->updated_at}}
+			</div>
 	</div>
 	
-	<div id="collection_summary">
-		{{{$collection->description}}}
-	</div>
-
-	<div>Created By: <a href="/user/{{$collection->id}}">{{{$collection->created_by}}}</a> @ {{$collection->created_at}}</div>
-	<div>Updated By: <a href="/user/{{$collection->id}}">{{{$collection->updated_by}}}</a> @ {{$collection->updated_at}}</div>
+	<p id="collection_summary">
+		{{{nl2br($collection->description)}}}
+	</p>
 	
-	@if(Auth::user())
-		<div><a href="/collection/{{$collection->id}}/edit" class = "btn btn-default">Edit Collection</a></div>
-	@endif	
+	@if(count($collection->volumes()->get()))
 	
-	
+	@else
+		<div></div>
+	@endif
 </div>
 
 @endsection

@@ -32,4 +32,36 @@ class Volume extends BaseManicModel
 	{
 		return $this->belongsTo('App\Images');
 	}
+	
+	/*
+	 * Get the next volume in the collection.
+	 */
+	public function next_volume()
+	{
+		return $this->collection()->volumes()->where('number', '>', $this->number)->orderBy('number', 'asc')->take(1);
+	}
+	
+	/*
+	 * Get the previous volume in the collection.
+	 */
+	public function previous_volume()
+	{
+		return $this->collection()->volumes()->where('number', '<', $this->number)->orderBy('number', 'desc')->take(1);
+	}
+	
+	/*
+	 * Get the first chapter in the volume.
+	 */
+	public function first_chapter()
+	{
+		return $this->chapters()-orderBy('number', 'asc')->take(1);
+	}
+	
+	/*
+	 * Get the last chapter in the volume.
+	 */
+	public function last_chapter()
+	{
+		return $this->chapters()-orderBy('number', 'desc')->take(1);
+	}
 }
