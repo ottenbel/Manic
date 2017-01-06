@@ -28,7 +28,7 @@ Index - Page {{$collections->currentPage()}}
 							<div><a href="/collection/{{$collection->id}}"><h4>{{{$collection->name}}}</h4></a></div>
 							
 							@if((count($collection->primary_artists)) || (count($collection->secondary_artists)))
-								<div class="tag_holder">Artists:
+								<div class="tag_holder"><strong>Artists:</strong>
 									@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $artist)
 										<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 									@endforeach
@@ -41,7 +41,7 @@ Index - Page {{$collections->currentPage()}}
 							@endif
 							
 							@if((count($collection->primary_tags)) || (count($collection->secondary_tags)))
-								<div><strong>Tags:</strong>
+								<div class="tag_holder"><strong>Tags:</strong>
 									@foreach($collection->primary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $tag)
 										<span class="primary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count"> ({{$tag->usage_count()}})</span></a></span>
 									@endforeach
