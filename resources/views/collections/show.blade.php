@@ -58,13 +58,33 @@
 					@endforeach
 			@endif
 			</div>
-	
+			
+			@if($collection->language != null)
+				<div>
+					<strong>Language:</strong> {{{$collection->language->name}}}<
+				</div>
+			@endif
+				
+			@if($collection->status != null)
+				<div>
+					<strong>Status:</strong> {{{$collection->status->name}}}
+				</div>
+			@endif
+			
+			@if($collection->rating != null)
+				<div>
+					<strong>Rating:</strong> {{{$collection->rating->name}}}
+				</div>	
+			@endif
 	</div>
 	
 	<div id="collection_summary">
-		{{{$collection->summary}}}
+		{{{$collection->description}}}
 	</div>
 
+	<div>Created By: <a href="/user/{{$collection->id}}">{{{$collection->created_by}}}</a> @ {{$collection->created_at}}</div>
+	<div>Updated By: <a href="/user/{{$collection->id}}">{{{$collection->updated_by}}}</a> @ {{$collection->updated_at}}</div>
+	
 	@if(Auth::user())
 		<div><a href="/collection/{{$collection->id}}/edit" class = "btn btn-default">Edit Collection</a></div>
 	@endif	
