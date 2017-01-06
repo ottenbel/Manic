@@ -14,7 +14,7 @@ class Collection extends BaseManicModel
 	 */
     public function volumes()
 	{
-		return $this->hasMany('App\Volumes');
+		return $this->hasMany('App\Volume');
 	}
 	
 	/*
@@ -22,7 +22,7 @@ class Collection extends BaseManicModel
 	 */
 	public function chapters()
 	{
-		return $this->hasManyThrough('App\Chapters', 'App\Volumes');
+		return $this->hasManyThrough('App\Chapter', 'App\Volume');
 	}
 	
 	/*
@@ -30,7 +30,7 @@ class Collection extends BaseManicModel
 	 */
 	public function cover_image()
 	{
-		return $this->belongsTo('App\Images');
+		return $this->belongsTo('App\Image');
 	}
 	
 	/*

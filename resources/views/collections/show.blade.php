@@ -100,7 +100,7 @@
 		{{{nl2br($collection->description)}}}
 	</p>
 	
-	@if(count($collection->volumes()->get()))
+	@if(count($collection->volumes))
 	
 	@else
 		<div></div>
