@@ -86,7 +86,7 @@ class CollectionController extends Controller
 			$hash = hash_file("sha256", $file->getPathName());
 			
 			//Does the image already exist?
-			$image = Image::where('hash', '=', $hash);
+			$image = Image::where('hash', '=', $hash)->get();
 			if (count($image))
 			{
 				//File already exists (use existing mapping)
