@@ -88,11 +88,11 @@
 			@endif
 			
 			<div>
-				<strong>Created By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->created_by()->name}}}</a> @ {{$collection->created_at}}
+				<strong>Created By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->created_by_user()->name}}}</a> @ {{$collection->created_at}}
 			</div>
 			
 			<div>
-				<strong>Updated By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->updated_by()->name}}}</a> @ {{$collection->updated_at}}
+				<strong>Updated By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->updated_by_user()->name}}}</a> @ {{$collection->updated_at}}
 			</div>
 	</div>
 	
