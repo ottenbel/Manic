@@ -40,7 +40,7 @@ class CollectionController extends Controller
 		$status = Status::orderBy('priority', 'asc')->get();
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		
-		return View('collections.create', array('ratings' => $ratings, 'statuses' => $status, 'languages' => $languages));
+		return View('collections.create', compact('ratings', 'statuses', 'languages'));
     }
 
     /**
@@ -149,7 +149,7 @@ class CollectionController extends Controller
      */
     public function show(Collection $collection)
     {
-        return view('collections.show', compact($collection));
+        return view('collections.show', compact('collection'));
     }
 
     /**
