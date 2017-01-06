@@ -17,10 +17,10 @@ Route::get('/', 'CollectionController@index');
 Route::group(['middleware' => 'auth'], function(){
 	Route::get('/collection/create', 'CollectionController@create');
 	Route::post('/collection', 'CollectionController@store');
-	Route::get('/collection/{id}/edit', 'CollectionController@edit');
+	Route::get('/collection/{collection}/edit', 'CollectionController@edit');
 });
 
-Route::get('/collection/{id}', 'CollectionController@show');
+Route::get('/collection/{collection}', 'CollectionController@show');
 //End Collection controller routes
 
 Auth::routes();

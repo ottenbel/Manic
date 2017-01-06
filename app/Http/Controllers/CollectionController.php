@@ -224,9 +224,9 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show(Collection $collection)
     {
-        //
+        return view('collection.show', compact($collection));
     }
 
     /**
@@ -235,7 +235,7 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit(Collection $collection)
     {
         //
     }
@@ -246,7 +246,7 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update($id)
+    public function update(Collection $collection)
     {
         //
     }
@@ -257,7 +257,7 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Collection $collection)
     {
         //
     }
