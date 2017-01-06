@@ -10,16 +10,6 @@
 
 @section('content')
 <div class="container">
-	@if(Auth::user())
-		<div class="collapse navbar-collapse" id="page-app-navbar-collapse">
-			<ul class="dropdown-menu" role="menu">
-				<li><a href="/collection/{{$collection->id}}/edit">Edit Collection</a><li>
-				<li><a href="/volume/create/{{$collection->id}}">Add New Volume</a><li>
-				<li><a href=""></a>Delete Collection</li>
-			</ul>
-		</div>
-	@endif	
-	
 	<div id="collection_summary">
 		@if($collection->cover != null)
 		<div id="cover" class="col-md-4">
@@ -97,7 +87,7 @@
 	</div>
 	
 	<p id="collection_summary">
-		{{{nl2br($collection->description)}}}
+		{!nl2br($collection->description)!}
 	</p>
 	
 	@if(count($collection->volumes))

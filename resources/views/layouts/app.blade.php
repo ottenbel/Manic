@@ -57,7 +57,22 @@
                             <li><a href="{{ url('/login') }}">Login</a></li>
                             <li><a href="{{ url('/register') }}">Register</a></li>
                         @else
-							<li><a href="{{url('/collection/create')}}">Create Collection</a></li>
+							@if(Route::is('collections.show'))
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+										Collection <span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu" role="menu">
+										<li><a href="/collection/{{$collection->id}}/edit">Edit Collection</a><li>
+										<li><a href="/volume/create/{{$collection->id}}">Add New Volume</a><li>
+										<li><a href="">Delete Collection</a></li>
+									</ul>
+								</li>
+								
+							@else
+								<li><a href="{{url('/collection/create')}}">Create Collection</a></li>
+							@endif
+							
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
