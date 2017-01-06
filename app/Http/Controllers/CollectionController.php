@@ -138,6 +138,51 @@ class CollectionController extends Controller
 		
 		//Redirect to the collection that was created
 		return redirect()->action('CollectionController@show', [$collection])->with('status', 'Successfully created new collection.');
+	
+    }
+	
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function show(Collection $collection)
+    {
+        return view('collections.show', compact($collection));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function edit(Collection $collection)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function update(Collection $collection)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function destroy(Collection $collection)
+    {
+        //
     }
 	
 	private function map_artists(&$collection, $artist_array, $isPrimary)
@@ -217,48 +262,5 @@ class CollectionController extends Controller
 			}
 		}
 	}
-	
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show(Collection $collection)
-    {
-        return view('collection.show', compact($collection));
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit(Collection $collection)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Collection $collection)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy(Collection $collection)
-    {
-        //
-    }
 }
