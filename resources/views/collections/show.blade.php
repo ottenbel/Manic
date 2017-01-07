@@ -115,7 +115,7 @@
 			</div>
 		@endforeach
 	@else
-		<div><a href="/volume/create/{{$collection->id}}">>Add New Volume</a></div>
+		<div><a href="/volume/create/{{$collection->id}}">Add New Volume</a></div>
 	@endif
 </div>
 
