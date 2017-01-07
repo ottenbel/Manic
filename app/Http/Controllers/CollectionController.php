@@ -37,7 +37,7 @@ class CollectionController extends Controller
     public function create()
     {
 		$ratings = Rating::orderBy('priority', 'asc')->get();
-		$status = Status::orderBy('priority', 'asc')->get();
+		$statuses = Status::orderBy('priority', 'asc')->get();
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		
 		return View('collections.create', compact('ratings', 'statuses', 'languages'));
@@ -52,7 +52,7 @@ class CollectionController extends Controller
     {
 		$this->validate($request, [
 			'name' => 'required|unique:collections,name',
-			'parent_collection' => 'nullable|exists:collections,id',
+			'parent_id' => 'nullable|exists:collections,id',
 			'rating' => 'nullable|exists:ratings,id',
 			'status' => 'nullable|exists:statuses,id',
 			'language' => 'nullable|exists:languages,id',
@@ -61,6 +61,7 @@ class CollectionController extends Controller
 		
 		$collection = new Collection();
 		$collection->name = trim(Input::get('name'));
+		$collection->parent_id = trim(Input::get('parent_id'));
 		$collection->description = trim(Input::get('description'));
 		if (Input::has('canonical'))
 		{
@@ -149,7 +150,8 @@ class CollectionController extends Controller
      */
     public function show(Collection $collection)
     {
-        return view('collections.show', compact('collection'));
+		$alternative_collections = App\Collection::where('parent_id', '=', $collection->parent_id)->where('id', '!=', $collection->id)->get();
+        return view('collections.show', array('collection' => $collection, 'alternative_collections' => $alternative_collections));
     }
 
     /**

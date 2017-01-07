@@ -117,6 +117,23 @@
 	@else
 		<div><a href="/volume/create/{{$collection->id}}">Add New Volume</a></div>
 	@endif
+	
+	@if(count($alternative_collections))
+		<div>
+			Alternative Versions of this Collection:
+			@foreach($alternative_collections as $alt_collection)
+				@if($alt_collection->language != null)
+					<div>
+						<a href="/collection/{{$alt_collection->id}}">{{$alt_collection->name}}</a>  ({{$alt_collection->language->name}})
+					</div>	
+				@else
+					<div>
+						<a href="/collection/{{$alt_collection->id}}">{{$alt_collection->name}}</a>
+					</div>
+				@endif
+			@endforeach
+		</div>
+	@endif
 </div>
 
 @endsection
