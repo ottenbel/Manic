@@ -13,6 +13,7 @@
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
 	<link href="/css/tag.css" rel="stylesheet">
+	<link href="/css/volume.css" rel="stylesheet">
 	
     <!-- Scripts -->
     <script>
@@ -57,14 +58,14 @@
                             <li><a href="{{ url('/login') }}">Login</a></li>
                             <li><a href="{{ url('/register') }}">Register</a></li>
                         @else
-							@if(Route::is('collections.show'))
+							@if(Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\CollectionController@show")
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 										Collection <span class="caret"></span>
 									</a>
 									<ul class="dropdown-menu" role="menu">
+										<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
 										<li><a href="/collection/{{$collection->id}}/edit">Edit Collection</a><li>
-										<li><a href="/volume/create/{{$collection->id}}">Add New Volume</a><li>
 										<li><a href="">Delete Collection</a></li>
 									</ul>
 								</li>
@@ -108,5 +109,6 @@
 	
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+	<script src="/js/volume.js"></script>
 </body>
 </html>

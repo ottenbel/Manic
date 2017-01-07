@@ -64,12 +64,6 @@
 					<strong>Language:</strong> {{{$collection->language->name}}}
 				</div>
 			@endif
-				
-			@if($collection->status != null)
-				<div>
-					<strong>Status:</strong> {{{$collection->status->name}}}
-				</div>
-			@endif
 			
 			@if($collection->rating != null)
 				<div>
@@ -77,23 +71,51 @@
 				</div>	
 			@endif
 			
+			@if($collection->status != null)
+				<div>
+					<strong>Status:</strong> {{{$collection->status->name}}}
+				</div>
+			@endif
+			
 			<div>
 				<strong>Created By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->created_by_user->name}}}</a> @ {{$collection->created_at}}
 			</div>
 			
 			<div>
-				<strong>Updated By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->updated_by_user->name}}}</a> @ {{$collection->updated_at}}
+				<strong>Last Updated By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->updated_by_user->name}}}</a> @ {{$collection->updated_at}}
 			</div>
 	</div>
 	
+	<br/>
 	<p id="collection_summary">
-		{!nl2br($collection->description)!}
+			{!!html_entity_decode(nl2br($collection->description))!!}
 	</p>
+	<br/>
 	
 	@if(count($collection->volumes))
-	
+		@foreach($collection->volumes()->orderBy('number', 'asc')->get() as $volume)
+			<button class="accordion">
+				@if($volume->name != null && $volume->name != "")
+					Volume {{$volume->number}} - $volume->name
+				@else
+					Volume {{$volume->number}}
+				@endif 
+			</button>
+			<div class="panel">
+				@foreach($volume->chapters()->orderBy('number', 'asc')->get() as $chapter)
+					<div>
+						@if($chapter->name != null && $chapter->name != "")
+							<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->number}}</a> - {{{$chapter->name}}}
+						@else
+							<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->number}}</a>
+						@endif
+					</div>
+				@endforeach
+				<div><a href="/chapter/create/{{$volume->id}}">Add New Chapter</a></div>
+			</div>
+		@endforeach
 	@else
-		<div></div>
+		<div><a href="/volume/create/{{$collection->id}}">>Add New Volume</a></div>
 	@endif
 </div>
 

@@ -17,7 +17,7 @@ class CreateChaptersTable extends Migration
 			$table->uuid('id');
 			$table->uuid('volume_id');
 			$table->unsignedInteger('number');
-			$table->string('name');
+			$table->string('name')->nullable();
 			$table->string('source');
 			$table->uuid('created_by');
 			$table->uuid('updated_by');
