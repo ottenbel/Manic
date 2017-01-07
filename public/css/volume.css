@@ -27,7 +27,7 @@ button.accordion.active:after {
     content: "\2212";
 }
 
-div.panel {
+div.volume_panel {
     padding: 0 18px;
     background-color: white;
     max-height: 0;

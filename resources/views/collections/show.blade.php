@@ -101,7 +101,7 @@
 					Volume {{$volume->number}}
 				@endif 
 			</button>
-			<div class="panel">
+			<div class="volume_panel">
 				@foreach($volume->chapters()->orderBy('number', 'asc')->get() as $chapter)
 					<div>
 						@if($chapter->name != null && $chapter->name != "")
