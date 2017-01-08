@@ -71,7 +71,7 @@ class Collection extends BaseManicModel
 	public function primary_artists()
 	{
 		return $this->belongsToMany('App\Artist')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
-	}	
+	}
 	
 	/*
 	 * Get mapping from collection to secondary artists.
