@@ -84,14 +84,14 @@
 
 <div class="form-group">
 	{{ Form::label('tag_primary', 'Tags Primary') }}
-	@if(($collection->tag_primary != null) && (Input::old('tag_primary') == null))
+	@if(($collection != null) && ($collection->tag_primary != null) && (Input::old('tag_primary') == null))
 		{{ Form::text('tag_primary', implode(', ', $collection->tag_primary), array('class' => 'form-control')) }}
 	@else
 		{{ Form::text('tag_primary', Input::old('tag_primary'), array('class' => 'form-control')) }}
 	@endif
 	
 	{{ Form::label('tag_secondary', 'Tags Secondary') }}
-	@if(($collection->tag_secondary != null) && (Input::old('tag_secondary') == null))
+	@if(($collection != null) && ($collection->tag_secondary != null) && (Input::old('tag_secondary') == null))
 		{{ Form::text('tag_secondary', implode(', ', $collection->secondary), array('class' => 'form-control')) }}
 	@else
 		{{ Form::text('tag_secondary', Input::old('tag_secondary'), array('class' => 'form-control')) }}
@@ -100,7 +100,7 @@
 
 <div class="form-group">
 	{{ Form::label('canonical', 'Canonical') }}
-	@if(($collection->canonical != null) && (Input::old('canonical') == null))
+	@if(($collection != null) && ($collection->canonical != null) && (Input::old('canonical') == null))
 		{{ Form::checkbox('canonical', $collection->canonical, array('class' => 'form-control')) }}
 	@else
 		{{ Form::checkbox('canonical', Input::old('canonical'), array('class' => 'form-control')) }}
@@ -117,7 +117,7 @@
 				{{ Form::radio('ratings', $rating->id, false, array('id'=>"ratings-$rating->priority")) }}
 			@endif
 	
-		@elseif($collection->rating != null)
+		@elseif(($collection != null) && ($collection->rating != null))
 			@if($rating->id == $collection->rating)
 				{{ Form::radio('ratings', $rating->id, true, array('id'=>"ratings-$rating->priority")) }}
 			@else
@@ -140,7 +140,7 @@
 			@else
 				{{ Form::radio('statuses', $status->id, false, array('id'=>"statuses-$status->priority")) }}
 			@endif
-		@elseif($collection->status != null)
+		@elseif(($collection != null) && ($collection->status != null))
 			@if($status->id == $collection->status)
 				{{ Form::radio('statuses', $status->id, true, array('id'=>"statuses-$status->priority")) }}
 			@else
