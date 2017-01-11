@@ -15,7 +15,7 @@ Create a New Collection
 	<form method="POST" action="{{ url('/collection') }}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		
-		@include('partials.collection-input', array('ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages));
+		@include('partials.collection-input', array('ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))
 		
 		{{ Form::submit('Create Collection', array('class' => 'btn btn-primary')) }}
 	</form>

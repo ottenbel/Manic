@@ -43,9 +43,9 @@
 <div class="form-group">
 	{{ Form::label('language', 'Language') }}
 	@if((!empty($collection)) && ($collection->language != null) && (Input::old('language') == null))
-		{{ Form::select('language', $collection->language, $languages) }}
+		{{ Form::select('language', $languages, $collection->language) }}
 	@else
-		{{ Form::select('language', Input::old('language'), $languages) }}
+		{{ Form::select('language', $languages, Input::old('language')) }}
 	@endif
 </div>
 
