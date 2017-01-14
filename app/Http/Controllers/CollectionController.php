@@ -95,7 +95,7 @@ class CollectionController extends Controller
 			}
 			else
 			{
-				$path = $file->store();
+				$path = $file->store('files');
 				$file_extension = $file->guessExtension();
 				
 				$image = new Image;
