@@ -24,7 +24,7 @@ class CollectionController extends Controller
     public function index()
     {
         //Get all relevant collections
-		$collections = Collection::paginate(25);
+		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->paginate(25);
 		
 		return View('collections.index', compact('collections'));
     }
@@ -162,7 +162,12 @@ class CollectionController extends Controller
      */
     public function edit(Collection $collection)
     {
-        //
+        $ratings = Rating::orderBy('priority', 'asc')->get();
+		$statuses = Status::orderBy('priority', 'asc')->get();
+		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
+		$collection->load('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
+		
+		return View('collections.create', compact('collection', 'ratings', 'statuses', 'languages'));
     }
 
     /**
