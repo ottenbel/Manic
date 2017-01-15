@@ -19,9 +19,9 @@ Index - Page {{$collections->currentPage()}}
 			<table class="table table-striped">
 				@foreach($collections as $collection)
 					<tr>
-						<td class="col-xs-1">
+						<td class="col-xs-2">
 						@if($collection->cover_image != null)
-							<img src="{{asset($collection->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%">
+							<a href="/collection/{{$collection->id}}"><img src="{{asset($collection->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%"></a>
 						@endif
 						</td>
 						<td class="col-xs-11">
