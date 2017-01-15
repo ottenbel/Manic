@@ -24,7 +24,7 @@ Index - Page {{$collections->currentPage()}}
 							<a href="/collection/{{$collection->id}}"><img src="{{asset($collection->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%"></a>
 						@endif
 						</td>
-						<td class="col-xs-11">
+						<td class="col-xs-10">
 							<div><a href="/collection/{{$collection->id}}"><h4>{{{$collection->name}}}</h4></a></div>
 							
 							@if((count($collection->primary_artists)) || (count($collection->secondary_artists)))
@@ -64,21 +64,21 @@ Index - Page {{$collections->currentPage()}}
 									@endif
 								</div>
 							@endif
+							</td>
 							
-							@if($collection->rating != null || $collection->status != null)
-								<div>
-									@if($collection->rating != null)
-										<span class="col-sm-4"><strong>Rating:</strong> {{{$collection->rating->name}}}</span>
+							<td class="col-xs-10">
+								@if($collection->rating != null)
+										<strong>Rating:</strong> {{{$collection->rating->name}}}
 									@endif
+									
 									@if($collection->status != null)
-										<span class="col-sm-4"><strong>Status:</strong> {{{$collection->status->name}}}</span>
+										<strong>Status:</strong> {{{$collection->status->name}}}
 									@endif
+									
 									@if($collection->language != null)
-										<span class="col-sm-4"><strong>Language:</strong> {{{$collection->language->name}}}<span>
+										<strong>Language:</strong> {{{$collection->language->name}}}
 									@endif
-								</div>
-							@endif
-						</td>
+							</td>
 					</tr>
 				@endforeach
 			</table>
