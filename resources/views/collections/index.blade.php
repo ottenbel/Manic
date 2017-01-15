@@ -19,12 +19,12 @@ Index - Page {{$collections->currentPage()}}
 			<table class="table table-striped">
 				@foreach($collections as $collection)
 					<tr>
-						<td>
+						<td class="col-xs-1">
 						@if($collection->cover_image != null)
 							<img src="{{asset($collection->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%">
 						@endif
 						</td>
-						<td>
+						<td class="col-xs-11">
 							<div><a href="/collection/{{$collection->id}}"><h4>{{{$collection->name}}}</h4></a></div>
 							
 							@if((count($collection->primary_artists)) || (count($collection->secondary_artists)))
