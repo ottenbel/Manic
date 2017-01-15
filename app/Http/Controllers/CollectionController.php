@@ -150,7 +150,7 @@ class CollectionController extends Controller
      */
     public function show(Collection $collection)
     {
-		$alternative_collections = App\Collection::where('parent_id', '=', $collection->parent_id)->where('id', '!=', $collection->id)->get();
+		$alternative_collections = Collection::where('parent_id', '=', $collection->parent_id)->where('id', '!=', $collection->id)->get();
         return view('collections.show', array('collection' => $collection, 'alternative_collections' => $alternative_collections));
     }
 

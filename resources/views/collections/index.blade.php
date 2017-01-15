@@ -21,7 +21,7 @@ Index - Page {{$collections->currentPage()}}
 					<tr>
 						<td>
 						@if($collection->cover != null)
-							<img src="{{$collection->cover->name}}" class="img-thumbnail" height="100px" width="100%">
+							<img src="{{asset($collection->cover->name)}}" class="img-thumbnail" height="100px" width="100%">
 						@endif
 						</td>
 						<td>
