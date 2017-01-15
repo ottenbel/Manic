@@ -11,13 +11,13 @@
 @section('content')
 <div class="container">
 	<div id="collection_summary">
-		@if($collection->cover != null)
+		@if($collection->cover_image != null)
 		<div id="cover" class="col-md-4">
-			<img src="{{$collection->cover->name}}" class="img-fluid" alt="Responsive image">
+			<img src="{{asset($collection->cover_image->name)}}" class="img-fluid" alt="Responsive image">
 		</div>
 		@endif
 	
-		@if($collection->cover != null)
+		@if($collection->cover_image != null)
 			<div id="collection_info" class="col-md-8">
 		@else
 			<div id="collection_info">
