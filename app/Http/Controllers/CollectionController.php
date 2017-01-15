@@ -95,11 +95,11 @@ class CollectionController extends Controller
 			}
 			else
 			{
-				$path = $file->store('storage/images');
+				$path = $file->store('public/images');
 				$file_extension = $file->guessExtension();
 				
 				$image = new Image;
-				$image->name = $path;
+				$image->name = str_replace('public/', '', $path);
 				$image->hash = $hash;
 				$image->extension = $file_extension;
 				$image->created_by = Auth::user()->id;
