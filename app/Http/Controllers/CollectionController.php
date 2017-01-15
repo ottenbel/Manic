@@ -99,7 +99,7 @@ class CollectionController extends Controller
 				$file_extension = $file->guessExtension();
 				
 				$image = new Image;
-				$image->name = str_replace('public/', '', $path);
+				$image->name = str_replace('public', 'storage', $path);
 				$image->hash = $hash;
 				$image->extension = $file_extension;
 				$image->created_by = Auth::user()->id;
