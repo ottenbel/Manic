@@ -30,7 +30,7 @@ class Collection extends BaseManicModel
 	 */
 	public function cover_image()
 	{
-		return $this->belongsTo('App\Image');
+		return $this->belongsTo('App\Image', 'cover');
 	}
 	
 	/*

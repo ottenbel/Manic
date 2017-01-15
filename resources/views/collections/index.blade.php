@@ -20,8 +20,8 @@ Index - Page {{$collections->currentPage()}}
 				@foreach($collections as $collection)
 					<tr>
 						<td>
-						@if($collection->cover != null)
-							<img src="{{asset($collection->cover->name)}}" class="img-thumbnail" height="100px" width="100%">
+						@if($collection->cover_image != null)
+							<img src="{{asset($collection->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%">
 						@endif
 						</td>
 						<td>
