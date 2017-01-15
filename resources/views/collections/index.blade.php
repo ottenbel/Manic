@@ -40,13 +40,25 @@ Index - Page {{$collections->currentPage()}}
 								</div>
 							@endif
 							
+							@if((count($collection->primary_series)) || (count($collection->secondary_series)))
+								<div class="tag_holder"><strong>Series:</strong>
+									@foreach($collection->primary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
+										<span class="primary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
+									@endforeach
+									
+									@foreach($collection->secondary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
+										<span class="secondary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
+									@endforeach
+								</div>
+							@endif
+							
 							@if((count($collection->primary_tags)) || (count($collection->secondary_tags)))
 								<div class="tag_holder"><strong>Tags:</strong>
 									@foreach($collection->primary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $tag)
 										<span class="primary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count"> ({{$tag->usage_count()}})</span></a></span>
 									@endforeach
 									@if(10 > count($collection->primary_tags))
-										@foreach($collection->secondary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - count($collection->primary_tags))->get as $tag)
+										@foreach($collection->secondary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - count($collection->primary_tags))->get() as $tag)
 											<span class="secondary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count">({{$tag->usage_count()}})</span></a></span>
 										@endforeach
 									@endif
