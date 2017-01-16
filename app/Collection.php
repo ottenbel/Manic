@@ -46,7 +46,7 @@ class Collection extends BaseManicModel
 	 */
 	public function child_collections()
 	{
-		return $this->hasMany('App\Collection', 'id', 'parent_id');
+		return $this->hasMany('App\Collection', 'parent_id');
 	}
 	
 	/*

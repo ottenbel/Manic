@@ -118,21 +118,47 @@
 		<div><a href="/volume/create/{{$collection->id}}">Add New Volume</a></div>
 	@endif
 	
-	@if(count($alternative_collections))
-		<div>
+	@if(($collection->parent_collection != null) && (count($collection->child_collections)))
+		<p>
 			Alternative Versions of this Collection:
-			@foreach($alternative_collections as $alt_collection)
-				@if($alt_collection->language != null)
-					<div>
-						<a href="/collection/{{$alt_collection->id}}">{{$alt_collection->name}}</a>  ({{$alt_collection->language->name}})
-					</div>	
-				@else
-					<div>
-						<a href="/collection/{{$alt_collection->id}}">{{$alt_collection->name}}</a>
+			@if($collection->parent_collection != null)
+				<div id="parent_collection">
+				Parent Collection:
+					<a href="/collection/{{$collection->parent_collection->id}}">{{$collection->parent_collection->name}}</a>
+					@if($collection->parent_collection->language != null)
+						({{$collection->parent_collectionlanguage->name}})
+					@endif
+				</div>
+			@endif
+	
+			@if(count($sibling_collections))
+				<div id="sibling_collections">
+					Sibling Collection(s):
+					@foreach($sibling_collections as $sibling_collection)
+					<div id="sibling_collection">
+						<a href="/collection/{{$sibling_collection->id}}">{{$sibling_collection->name}}</a>
+						@if($sibling_collection->language != null)
+							({{$sibling_collection->language->name}})
+						@endif
 					</div>
-				@endif
-			@endforeach
-		</div>
+					@endforeach
+				</div>
+			@endif
+			
+			@if(count($sibling_collections))
+				<div id="child_collections">
+					Child Collection(s):
+					@foreach($collection->child_collections as $child_collection)
+						<div id="child_collection">
+							<a href="/collection/{{$child_collection->id}}">{{$child_collection->name}}</a>
+						@if($child_collection->language != null)
+							({{$child_collection->language->name}})
+						@endif
+						</div>
+					@endforeach
+				</div>
+			@endif
+		</p>
 	@endif
 </div>
 
