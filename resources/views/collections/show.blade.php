@@ -118,7 +118,7 @@
 		<div><a href="/volume/create/{{$collection->id}}">Add New Volume</a></div>
 	@endif
 	
-	@if(($collection->parent_collection != null) && (count($collection->child_collections)))
+	@if(($collection->parent_collection != null) || (count($collection->child_collections)))
 		<p>
 			Alternative Versions of this Collection:
 			@if($collection->parent_collection != null)
