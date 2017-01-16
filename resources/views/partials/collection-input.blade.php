@@ -1,6 +1,8 @@
 <div class="form-group">
 	@if(!empty($collection) && ($collection->cover_image != null))
-		<a href="/collection/{{$collection->id}}"><img src="{{asset($collection->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%"></a>
+		<div id="cover" class="col-md-4">
+			<a href="/collection/{{$collection->id}}"><img src="{{asset($collection->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%"></a>
+		</div>
 	@endif
 	{{ Form::label('cover', 'Cover Image') }}
 	{{ Form::file('image') }}

@@ -167,7 +167,7 @@ class CollectionController extends Controller
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		$collection->load('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
 		
-		return View('collections.create', compact('collection', 'ratings', 'statuses', 'languages'));
+		return View('collections.edit', compact('collection', 'ratings', 'statuses', 'languages'));
     }
 
     /**
