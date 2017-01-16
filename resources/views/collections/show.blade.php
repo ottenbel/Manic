@@ -118,6 +118,7 @@
 		<div><a href="/volume/create/{{$collection->id}}">Add New Volume</a></div>
 	@endif
 	
+	<br/>
 	@if(($collection->parent_collection != null) || (count($collection->child_collections)))
 		<p>
 			Alternative Versions of this Collection:
@@ -126,7 +127,7 @@
 				Parent Collection:
 					<a href="/collection/{{$collection->parent_collection->id}}">{{$collection->parent_collection->name}}</a>
 					@if($collection->parent_collection->language != null)
-						({{$collection->parent_collectionlanguage->name}})
+						({{$collection->parent_collection->language->name}})
 					@endif
 				</div>
 			@endif
