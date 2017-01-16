@@ -134,7 +134,7 @@
 	
 			@if(count($sibling_collections))
 				<div id="sibling_collections">
-					@if
+					@if(count($sibling_collections) == 1)
 						<h4>Sibling Collection:</h4>
 					@else
 						<h4>Sibling Collections:</h4>
@@ -153,7 +153,7 @@
 			
 			@if(count($collection->child_collections))
 				<div id="child_collections">
-					@if
+					@if(count($collection->child_collections) == 1)
 						<h4>Child Collection:</h4>
 					@else
 						<h4>Child Collections:</h4>
