@@ -145,7 +145,7 @@
 				</div>
 			@endif
 			
-			@if(count($sibling_collections))
+			@if(count($collection->child_collections))
 				<div id="child_collections">
 					Child Collection(s):
 					@foreach($collection->child_collections as $child_collection)
