@@ -150,8 +150,11 @@ class CollectionController extends Controller
      */
     public function show(Collection $collection)
     {
-		$sibling_collections = $collection->parent_collection->child_collections()->where('id', '!=', $collection->id)->get();
-		
+		$sibling_collections = null;
+		if($collection->parent_collection != null)
+		{
+			$sibling_collections = $collection->parent_collection->child_collections()->where('id', '!=', $collection->id)->get();
+		}
         return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections));
     }
 
