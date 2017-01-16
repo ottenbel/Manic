@@ -22,7 +22,7 @@
 		@else
 			<div id="collection_info">
 		@endif		
-			<h4>{{{$collection->name}}}</h4>
+			<h2>{{{$collection->name}}}</h2>
 			@if((count($collection->primary_artists)) || (count($collection->secondary_artists)))
 				<div class="tag_holder"><strong>Artists:</strong>
 					@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
@@ -121,10 +121,10 @@
 	<br/>
 	@if(($collection->parent_collection != null) || (count($collection->child_collections)))
 		<p>
-			Alternative Versions of this Collection:
+			<h3>Alternative Versions of this Collection:</h3>
 			@if($collection->parent_collection != null)
 				<div id="parent_collection">
-				Parent Collection:
+				<h4>Parent Collection:</h4>
 					<a href="/collection/{{$collection->parent_collection->id}}">{{$collection->parent_collection->name}}</a>
 					@if($collection->parent_collection->language != null)
 						({{$collection->parent_collection->language->name}})
@@ -134,7 +134,12 @@
 	
 			@if(count($sibling_collections))
 				<div id="sibling_collections">
-					Sibling Collection(s):
+					@if
+						<h4>Sibling Collection:</h4>
+					@else
+						<h4>Sibling Collections:</h4>
+					@endif
+					
 					@foreach($sibling_collections as $sibling_collection)
 					<div id="sibling_collection">
 						<a href="/collection/{{$sibling_collection->id}}">{{$sibling_collection->name}}</a>
@@ -148,7 +153,12 @@
 			
 			@if(count($collection->child_collections))
 				<div id="child_collections">
-					Child Collection(s):
+					@if
+						<h4>Child Collection:</h4>
+					@else
+						<h4>Child Collections:</h4>
+					@endif
+					
 					@foreach($collection->child_collections as $child_collection)
 						<div id="child_collection">
 							<a href="/collection/{{$child_collection->id}}">{{$child_collection->name}}</a>
