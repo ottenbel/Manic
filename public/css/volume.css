@@ -2,7 +2,7 @@ button.accordion {
     background-color: #eee;
     color: #444;
     cursor: pointer;
-    padding: 18px;
+    padding: 8px;
     width: 100%;
     border: none;
     text-align: left;
@@ -32,11 +32,5 @@ div.volume_panel {
     background-color: white;
     max-height: 0;
     overflow: hidden;
-    transition: 0.6s ease-in-out;
-    opacity: 0;
-}
-
-div.panel.show {
-    opacity: 1;
-    max-height: 500px;  
+    transition: max-height 0.2s ease-out;
 }
