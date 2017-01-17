@@ -121,10 +121,10 @@
 	<br/>
 	@if(($collection->parent_collection != null) || (count($collection->child_collections)))
 		<p>
-			<h3>Alternative Versions of this Collection:</h3>
+			<h3>Alternative Versions of This Collection</h3>
 			@if($collection->parent_collection != null)
-				<div id="parent_collection">
-				<h4>Parent Collection:</h4>
+				<button class="accordion">Parent Collection:</button>
+				<div class="volume_panel" id="parent_collection">
 					<a href="/collection/{{$collection->parent_collection->id}}">{{$collection->parent_collection->name}}</a>
 					@if($collection->parent_collection->language != null)
 						({{$collection->parent_collection->language->name}})
@@ -133,13 +133,12 @@
 			@endif
 	
 			@if(count($sibling_collections))
-				<div id="sibling_collections">
-					@if(count($sibling_collections) == 1)
-						<h4>Sibling Collection:</h4>
-					@else
-						<h4>Sibling Collections:</h4>
-					@endif
-					
+				@if(count($sibling_collections) == 1)
+					<button class="accordion">Sibling Collection</button>
+				@else
+					<button class="accordion">Sibling Collections</button>
+				@endif
+				<div class="volume_panel" id="sibling_collections">
 					@foreach($sibling_collections as $sibling_collection)
 					<div id="sibling_collection">
 						<a href="/collection/{{$sibling_collection->id}}">{{$sibling_collection->name}}</a>
@@ -152,13 +151,13 @@
 			@endif
 			
 			@if(count($collection->child_collections))
-				<div id="child_collections">
-					@if(count($collection->child_collections) == 1)
-						<h4>Child Collection:</h4>
-					@else
-						<h4>Child Collections:</h4>
-					@endif
-					
+				@if(count($collection->child_collections) == 1)
+					<button class="accordion">Child Collection:</button>
+				@else
+					<button class="accordion">Child Collections:</button>
+				@endif
+
+				<div class="volume_panel" id="child_collections">					
 					@foreach($collection->child_collections as $child_collection)
 						<div id="child_collection">
 							<a href="/collection/{{$child_collection->id}}">{{$child_collection->name}}</a>
