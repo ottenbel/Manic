@@ -125,10 +125,17 @@
 			@if($collection->parent_collection != null)
 				<button class="accordion">Parent Collection:</button>
 				<div class="volume_panel" id="parent_collection">
-					<a href="/collection/{{$collection->parent_collection->id}}">{{$collection->parent_collection->name}}</a>
-					@if($collection->parent_collection->language != null)
-						({{$collection->parent_collection->language->name}})
-					@endif
+					<span class="col-md-1">
+						@if($collection->parent_collection->cover_image != null)
+							<a href="/collection/{{$collection->parent_collection->id}}"><img src="{{asset($collection->cover_image->name)}}" class="img-fluid" alt="Responsive image"></a>
+						@endif
+					</span>
+					<span class="col-md-11">
+						<a href="/collection/{{$collection->parent_collection->id}}">{{$collection->parent_collection->name}}</a>
+						@if($collection->parent_collection->language != null)
+							({{$collection->parent_collection->language->name}})
+						@endif
+					</span>
 				</div>
 			@endif
 	
@@ -141,10 +148,17 @@
 				<div class="volume_panel" id="sibling_collections">
 					@foreach($sibling_collections as $sibling_collection)
 					<div id="sibling_collection">
-						<a href="/collection/{{$sibling_collection->id}}">{{$sibling_collection->name}}</a>
-						@if($sibling_collection->language != null)
-							({{$sibling_collection->language->name}})
-						@endif
+						<span class="col-md-1">
+							@if($sibling_collection->cover_image != null)
+								<a href="/collection/{{$sibling_collection->id}}"><img src="{{asset($sibling_collection->cover_image->name)}}" class="img-fluid" alt="Responsive image"></a>
+							@endif
+						</span>
+						<span class="col-md-11">
+							<a href="/collection/{{$sibling_collection->id}}">{{$sibling_collection->name}}</a>
+							@if($sibling_collection->language != null)
+								({{$sibling_collection->language->name}})
+							@endif
+						</span>
 					</div>
 					@endforeach
 				</div>
@@ -160,10 +174,17 @@
 				<div class="volume_panel" id="child_collections">					
 					@foreach($collection->child_collections as $child_collection)
 						<div id="child_collection">
-							<a href="/collection/{{$child_collection->id}}">{{$child_collection->name}}</a>
-						@if($child_collection->language != null)
-							({{$child_collection->language->name}})
-						@endif
+							<span class="col-md-1">
+								@if($child_collection->cover_image != null)
+									<a href="/collection/{{$child_collection->id}}"><img src="{{asset($child_collection->cover_image->name)}}" class="img-fluid" alt="Responsive image"></a>
+								@endif
+							</span>
+							<span class="col-md-11">
+								<a href="/collection/{{$child_collection->id}}">{{$child_collection->name}}</a>
+								@if($child_collection->language != null)
+									({{$child_collection->language->name}})
+								@endif
+							</span>
 						</div>
 					@endforeach
 				</div>
