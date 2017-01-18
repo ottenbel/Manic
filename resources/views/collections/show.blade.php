@@ -10,15 +10,15 @@
 
 @section('content')
 <div class="container">
-	<div id="collection_summary">
+	<div id="collection_summary" class="row">
 		@if($collection->cover_image != null)
-		<div id="cover" class="col-md-4">
+		<div id="cover" class="col-md-3">
 			<img src="{{asset($collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Responsive image">
 		</div>
 		@endif
 	
 		@if($collection->cover_image != null)
-			<div id="collection_info" class="col-md-8">
+			<div id="collection_info" class="col-md-9">
 		@else
 			<div id="collection_info">
 		@endif		
@@ -85,11 +85,11 @@
 				<strong>Last Updated By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->updated_by_user->name}}}</a> @ {{$collection->updated_at}}
 			</div>
 	</div>
-	
 	<br/>
-	<p id="collection_summary">
+	<br/>
+	<div id="collection_summary" class="row">
 			{!!html_entity_decode(nl2br($collection->description))!!}
-	</p>
+	</div>
 	<br/>
 	
 	@if(count($collection->volumes))
