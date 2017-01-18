@@ -21,7 +21,7 @@ Index - Page {{$collections->currentPage()}}
 					<tr>
 						<td class="col-xs-2">
 						@if($collection->cover_image != null)
-							<a href="/collection/{{$collection->id}}"><img src="{{asset($collection->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%"></a>
+							<a href="/collection/{{$collection->id}}"><img src="{{asset($collection->cover_image->name)}}" class="img-responsive img-rounded"></a>
 						@endif
 						</td>
 						<td class="col-xs-10">

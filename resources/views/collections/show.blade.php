@@ -13,7 +13,7 @@
 	<div id="collection_summary">
 		@if($collection->cover_image != null)
 		<div id="cover" class="col-md-4">
-			<img src="{{asset($collection->cover_image->name)}}" class="img-fluid" alt="Responsive image">
+			<img src="{{asset($collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Responsive image">
 		</div>
 		@endif
 	
@@ -127,7 +127,7 @@
 				<div class="volume_panel" id="parent_collection">
 					<span class="col-md-1">
 						@if($collection->parent_collection->cover_image != null)
-							<a href="/collection/{{$collection->parent_collection->id}}"><img src="{{asset($collection->parent_collection->cover_image->name)}}" class="img-fluid" alt="Responsive image"></a>
+							<a href="/collection/{{$collection->parent_collection->id}}"><img src="{{asset($collection->parent_collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Responsive image"></a>
 						@endif
 					</span>
 					<span class="col-md-11">
@@ -150,7 +150,7 @@
 					<div id="sibling_collection">
 						<span class="col-md-1">
 							@if($sibling_collection->cover_image != null)
-								<a href="/collection/{{$sibling_collection->id}}"><img src="{{asset($sibling_collection->cover_image->name)}}" class="img-fluid" alt="Responsive image"></a>
+								<a href="/collection/{{$sibling_collection->id}}"><img src="{{asset($sibling_collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Responsive image"></a>
 							@endif
 						</span>
 						<span class="col-md-11">
@@ -176,7 +176,7 @@
 						<div id="child_collection">
 							<span class="col-md-1">
 								@if($child_collection->cover_image != null)
-									<a href="/collection/{{$child_collection->id}}"><img src="{{asset($child_collection->cover_image->name)}}" class="img-fluid" alt="Responsive image"></a>
+									<a href="/collection/{{$child_collection->id}}"><img src="{{asset($child_collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Responsive image"></a>
 								@endif
 							</span>
 							<span class="col-md-11">
