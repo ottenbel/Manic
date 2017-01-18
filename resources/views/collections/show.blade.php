@@ -13,14 +13,14 @@
 	<div id="collection_summary" class="row">
 		@if($collection->cover_image != null)
 		<div id="cover" class="col-md-3">
-			<img src="{{asset($collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Responsive image">
+			<img src="{{asset($collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Responsive image" height="100%" width="100%">
 		</div>
 		@endif
 	
 		@if($collection->cover_image != null)
 			<div id="collection_info" class="col-md-9">
 		@else
-			<div id="collection_info">
+			<div id="collection_short_info">
 		@endif		
 			<h2>{{{$collection->name}}}</h2>
 			@if((count($collection->primary_artists)) || (count($collection->secondary_artists)))
@@ -84,10 +84,11 @@
 			<div>
 				<strong>Last Updated By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->updated_by_user->name}}}</a> @ {{$collection->updated_at}}
 			</div>
+		</div>
 	</div>
 	<br/>
 	<br/>
-	<div id="collection_summary" class="row">
+	<div id="collection_summary_text" class="row">
 			{!!html_entity_decode(nl2br($collection->description))!!}
 	</div>
 	<br/>
