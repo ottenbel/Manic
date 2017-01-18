@@ -127,7 +127,7 @@
 				<div class="volume_panel" id="parent_collection">
 					<span class="col-md-1">
 						@if($collection->parent_collection->cover_image != null)
-							<a href="/collection/{{$collection->parent_collection->id}}"><img src="{{asset($collection->cover_image->name)}}" class="img-fluid" alt="Responsive image"></a>
+							<a href="/collection/{{$collection->parent_collection->id}}"><img src="{{asset($collection->parent_collection->cover_image->name)}}" class="img-fluid" alt="Responsive image"></a>
 						@endif
 					</span>
 					<span class="col-md-11">
