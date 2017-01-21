@@ -24,7 +24,7 @@ class CollectionController extends Controller
     public function index(Request $request)
     {
         //Get all relevant collections
-		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->paginate(25);
+		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->orderBy('updated_at', 'desc')->paginate(25);
 		
 		$flashed_data = $request->session()->get('flashed_data');
 		
@@ -290,7 +290,9 @@ class CollectionController extends Controller
      */
     public function destroy(Collection $collection)
     {
-        //
+        $collection->delete();
+		
+		return redirect()->action()->with();
     }
 	
 	private function map_artists(&$collection, $artist_array, $isPrimary)
