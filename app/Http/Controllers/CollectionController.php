@@ -173,7 +173,7 @@ class CollectionController extends Controller
      */
     public function edit(Request $request, $id)
     {
-		$collection = Collection::where('id', '=', $id)->get();
+		$collection = Collection::where('id', '=', $id)->first();
 		
         $ratings = Rating::orderBy('priority', 'asc')->get();
 		$statuses = Status::orderBy('priority', 'asc')->get();
