@@ -21,7 +21,7 @@ class CollectionController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //Get all relevant collections
 		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->paginate(25);
