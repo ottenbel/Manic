@@ -77,6 +77,16 @@
 				</div>
 			@endif
 			
+			@if($collection->canonical)
+				<div>
+					<strong>Canonicity:</strong> Canonical
+				</div>
+			@else
+				<div>
+					<strong>Canonicity:</strong> Non-Canon
+				</div>
+			@endif
+			
 			<div>
 				<strong>Created By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->created_by_user->name}}}</a> @ {{$collection->created_at}}
 			</div>
@@ -112,11 +122,8 @@
 						@endif
 					</div>
 				@endforeach
-				<div><a href="/chapter/create/{{$volume->id}}">Add New Chapter</a></div>
 			</div>
 		@endforeach
-	@else
-		<div><a href="/volume/create/{{$collection->id}}">Add New Volume</a></div>
 	@endif
 	
 	<br/>
