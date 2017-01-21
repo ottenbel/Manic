@@ -279,7 +279,7 @@ class CollectionController extends Controller
 		$this->map_tags($collection, $tags_secondary_array, false);
 		
 		//Redirect to the collection that was created
-		return redirect()->action('CollectionController@show', [$collection])->with('flashed_data', 'Successfully created new collection.');
+		return redirect()->action('CollectionController@show', [$collection])->with('flashed_data', 'Successfully updated collection.');
     }
 
     /**
