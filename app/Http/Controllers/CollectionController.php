@@ -26,7 +26,9 @@ class CollectionController extends Controller
         //Get all relevant collections
 		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->paginate(25);
 		
-		return View('collections.index', compact('collections'));
+		$flashed_data = $request->session()->get('flashed_data');
+		
+		return View('collections.index', array('collections' => $collections, 'flashed_data' => $flashed_data));
     }
 
     /**
@@ -34,13 +36,13 @@ class CollectionController extends Controller
      *
      * @return Response
      */
-    public function create()
+    public function create(Request $request)
     {
 		$ratings = Rating::orderBy('priority', 'asc')->get();
 		$statuses = Status::orderBy('priority', 'asc')->get();
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		
-		return View('collections.create', compact('ratings', 'statuses', 'languages'));
+		return View('collections.create', array('ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages, ));
     }
 
     /**
@@ -152,7 +154,6 @@ class CollectionController extends Controller
 		$collection = Collection::where('id', '=', $id)->get();
 		
 		$sibling_collections = null;
-		$flashed_data = null;
 		
 		if($collection->parent_collection != null)
 		{
@@ -170,14 +171,18 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit(Collection $collection)
+    public function edit(Request $request, $id)
     {
+		$collection = Collection::where('id', '=', $id)->get();
+		
         $ratings = Rating::orderBy('priority', 'asc')->get();
 		$statuses = Status::orderBy('priority', 'asc')->get();
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		$collection->load('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
 		
-		return View('collections.edit', compact('collection', 'ratings', 'statuses', 'languages'));
+		$flashed_data = $request->session()->get('flashed_data');
+		
+		return View('collections.edit', array('collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages, 'flashed_data' => $flashed_data));
     }
 
     /**
