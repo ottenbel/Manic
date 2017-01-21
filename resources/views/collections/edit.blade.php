@@ -10,7 +10,7 @@ Edit Collection - {{{$collection->name}}}
 
 @section('content')
 <div class="container">
-	<h1>Create a New Collection</h1>
+	<h1>Edit Collection</h1>
 	
 	<form method="POST" action="/collection/{{$collection->id}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
@@ -18,7 +18,7 @@ Edit Collection - {{{$collection->name}}}
 		
 		@include('partials.collection-input', array('collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))
 		
-		{{ Form::submit('Create Collection', array('class' => 'btn btn-primary')) }}
+		{{ Form::submit('Update Collection', array('class' => 'btn btn-primary')) }}
 	</form>
 </div>
 @endsection

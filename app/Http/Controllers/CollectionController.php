@@ -138,8 +138,7 @@ class CollectionController extends Controller
 		$this->map_tags($collection, $tags_secondary_array, false);
 		
 		//Redirect to the collection that was created
-		return redirect()->action('CollectionController@show', [$collection])->with('status', 'Successfully created new collection.');
-	
+		return redirect()->action('CollectionController@show', [$collection])->with('flashed_data', 'Successfully created new collection.');
     }
 	
     /**
@@ -148,14 +147,21 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show(Collection $collection)
+    public function show(Request $request, $id)
     {
+		$collection = Collection::where('id', '=', $id)->get();
+		
 		$sibling_collections = null;
+		$flashed_data = null;
+		
 		if($collection->parent_collection != null)
 		{
 			$sibling_collections = $collection->parent_collection->child_collections()->where('id', '!=', $collection->id)->get();
 		}
-        return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections));
+		
+		$flashed_data = $request->session()->get('flashed_data');
+		
+        return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections, 'flashed_data' => $flashed_data));
     }
 
     /**
@@ -182,7 +188,93 @@ class CollectionController extends Controller
      */
     public function update(Collection $collection)
     {
-        //
+        $this->validate($request, [
+			'name' => 'required|unique:collections,name',
+			'parent_id' => 'nullable|exists:collections,id',
+			'rating' => 'nullable|exists:ratings,id',
+			'status' => 'nullable|exists:statuses,id',
+			'language' => 'nullable|exists:languages,id',
+			'image' => 'nullable|image'
+		]);
+		
+		$collection->name = trim(Input::get('name'));
+		$collection->parent_id = trim(Input::get('parent_id'));
+		$collection->description = trim(Input::get('description'));
+		if (Input::has('canonical'))
+		{
+			$collection->canonical = true;
+		}
+		else
+		{
+			$collection->canonical = false;
+		}
+		$collection->status_id = Input::get('statuses');
+		$collection->rating_id = Input::get('ratings');
+		$collection->language_id = Input::get('language');
+		$collection->updated_by = Auth::user()->id;
+		
+		//Handle uploading cover here
+		if ($request->hasFile('image')) 
+		{
+			//Get posted image
+			$file = $request->file('image');
+			
+			//Calculate file hash
+			$hash = hash_file("sha256", $file->getPathName());
+			
+			//Does the image already exist?
+			$image = Image::where('hash', '=', $hash)->get();
+			if (count($image))
+			{
+				//File already exists (use existing mapping)
+				$collection->cover = $image->id;
+			}
+			else
+			{
+				$path = $file->store('public/images');
+				$file_extension = $file->guessExtension();
+				
+				$image = new Image;
+				$image->name = str_replace('public', 'storage', $path);
+				$image->hash = $hash;
+				$image->extension = $file_extension;
+				$image->created_by = Auth::user()->id;
+				$image->updated_by = Auth::user()->id;
+				
+				$image->save();
+				
+				$collection->cover = $image->id;
+			}
+		}
+		
+		$collection->save();
+		
+		//Explode the artists arrays to be processed (if commonalities exist force to primary)
+		$artist_primary_array = array_map('trim', explode(',', Input::get('artist_primary')));
+		$artist_secondary_array = array_diff(array_map('trim', explode(',', Input::get('artist_secondary'))), $artist_primary_array);
+	
+		$collection->artists()->detach();
+		$this->map_artists($collection, $artist_primary_array, true);
+		$this->map_artists($collection, $artist_secondary_array, false);
+		
+		//Explode the series arrays to be processed (if commonalities exist force to primary)
+		$series_primary_array = array_map('trim', explode(',', Input::get('series_primary')));
+		$series_secondary_array = array_diff(array_map('trim', explode(',', Input::get('series_secondary'))), $series_primary_array);
+	
+		$collection->series()->detach();
+		$this->map_series($collection, $series_primary_array, true);
+		$this->map_series($collection, $series_secondary_array, false);
+		
+		//Explode the tags array to be processed (if commonalities exist force to primary)
+		$tags_primary_array = array_map('trim', explode(',', Input::get('tag_primary')));
+		$tags_secondary_array = array_diff(array_map('trim', explode(',', Input::get('tag_secondary'))), $tags_primary_array);
+		
+		$collection->tags()->detach();
+		$this->map_tags($collection, $tags_primary_array, true);
+		$this->map_tags($collection, $tags_secondary_array, false);
+		
+		//Redirect to the collection that was created
+		return redirect()->action('CollectionController@show', [$collection])->with('flashed_data', 'Successfully created new collection.');
     }
 
     /**

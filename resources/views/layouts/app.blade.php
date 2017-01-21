@@ -101,7 +101,14 @@
                 </div>
             </div>
         </nav>
-
+		
+		{{-- Add code so that any page can display data that has been flashed to session. --}}
+		@if(!empty($flashed_data))
+			<div class="alert alert-info" role="alert">
+			{{{$flashed_data}}}
+			</div>
+		@endif
+		
         @yield('content')
     </div>
 
