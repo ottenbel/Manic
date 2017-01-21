@@ -14,7 +14,7 @@ Edit Collection - {{{$collection->name}}}
 	
 	<form method="POST" action="/collection/{{$collection->id}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
-		{{method_field('UPDATE')}}
+		{{method_field('PATCH')}}
 		
 		@include('partials.collection-input', array('collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))
 		
