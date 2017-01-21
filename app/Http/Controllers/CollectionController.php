@@ -191,7 +191,7 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Collection $collection)
+    public function update(Request $request, $id)
     {
         $this->validate($request, [
 			'name' => 'required|unique:collections,name',
@@ -201,6 +201,8 @@ class CollectionController extends Controller
 			'language' => 'nullable|exists:languages,id',
 			'image' => 'nullable|image'
 		]);
+		
+		$collection = Collection::where('id', '=', $id)->first();
 		
 		$collection->name = trim(Input::get('name'));
 		$collection->parent_id = trim(Input::get('parent_id'));
