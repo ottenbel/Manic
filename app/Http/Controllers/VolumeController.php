@@ -3,25 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
+use App\Volume;
 
 class VolumeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        //
-    }
-
     /**
      * Show the form for creating a new resource.
      *
      * @return Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
     }
@@ -37,23 +29,12 @@ class VolumeController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         //
     }

@@ -24,6 +24,12 @@ Route::group(['middleware' => 'auth'], function(){
 Route::get('/collection/{collection}', 'CollectionController@show');
 //End Collection controller routes
 
+//Volume controller routes
+Route::group(['middleware' => 'auth'], function(){
+	Route::get('/volume/create/{collection}', 'VolumeController@create');
+});
+//End Volume controller routes
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
