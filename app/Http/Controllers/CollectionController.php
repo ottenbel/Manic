@@ -89,7 +89,7 @@ class CollectionController extends Controller
 			$hash = hash_file("sha256", $file->getPathName());
 			
 			//Does the image already exist?
-			$image = Image::where('hash', '=', $hash)->get();
+			$image = Image::where('hash', '=', $hash)->first();
 			if (count($image))
 			{
 				//File already exists (use existing mapping)
@@ -151,7 +151,7 @@ class CollectionController extends Controller
      */
     public function show(Request $request, $id)
     {
-		$collection = Collection::where('id', '=', $id)->get();
+		$collection = Collection::where('id', '=', $id)->first();
 		
 		$sibling_collections = null;
 		
@@ -228,7 +228,7 @@ class CollectionController extends Controller
 			$hash = hash_file("sha256", $file->getPathName());
 			
 			//Does the image already exist?
-			$image = Image::where('hash', '=', $hash)->get();
+			$image = Image::where('hash', '=', $hash)->first();
 			if (count($image))
 			{
 				//File already exists (use existing mapping)
