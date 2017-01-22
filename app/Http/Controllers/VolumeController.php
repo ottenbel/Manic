@@ -38,7 +38,7 @@ class VolumeController extends Controller
 		
 		$collection_id = trim(Input::get('collection_id'));
 		
-		$collection = Collection::where('id', '=', $collection_id);
+		$collection = Collection::where('id', '=', $collection_id)->first();
 		
 		$volume = new Volume();
 		$volume->collection_id = $collection_id;
