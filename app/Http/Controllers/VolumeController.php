@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Input;
 use Auth;
 use App\Collection;
 use App\Volume;
@@ -29,7 +30,7 @@ class VolumeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'number' => 'required',
+			'number' => 'required|integer',
 			'collection_id' => 'required|exists:collections,id',
 			'image' => 'nullable|image'
 		]);
