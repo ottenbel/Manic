@@ -103,28 +103,26 @@
 	</div>
 	<br/>
 	
-	@if(count($collection->volumes))
-		@foreach($collection->volumes()->orderBy('number', 'asc')->get() as $volume)
-			<button class="accordion">
-				@if($volume->name != null && $volume->name != "")
-					Volume {{$volume->number}} - $volume->name
-				@else
-					Volume {{$volume->number}}
-				@endif 
-			</button>
-			<div class="volume_panel">
-				@foreach($volume->chapters()->orderBy('number', 'asc')->get() as $chapter)
-					<div>
-						@if($chapter->name != null && $chapter->name != "")
-							<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->number}}</a> - {{{$chapter->name}}}
-						@else
-							<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->number}}</a>
-						@endif
-					</div>
-				@endforeach
-			</div>
-		@endforeach
-	@endif
+	@foreach($collection->volumes()->orderBy('number', 'asc')->get() as $volume)
+		<button class="accordion">
+			@if($volume->name != null && $volume->name != "")
+				Volume {{$volume->number}} - {{{$volume->name}}}
+			@else
+				Volume {{$volume->number}}
+			@endif 
+		</button>
+		<div class="volume_panel">
+			@foreach($volume->chapters()->orderBy('number', 'asc')->get() as $chapter)
+				<div>
+					@if($chapter->name != null && $chapter->name != "")
+						<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->number}}</a> - {{{$chapter->name}}}
+					@else
+						<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->number}}</a>
+					@endif
+				</div>
+			@endforeach
+		</div>
+	@endforeach
 	
 	<br/>
 	@if(($collection->parent_collection != null) || (count($collection->child_collections)))
