@@ -26,9 +26,65 @@ class VolumeController extends Controller
      *
      * @return Response
      */
-    public function store()
+    public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+			'number' => 'required',
+			'collection_id' => 'required|exists:collections,id',
+			'image' => 'nullable|image'
+		]);
+		
+		$collection_id = trim(Input::get('collection_id'));
+		
+		$collection = Collection::where('id', '=', $collection_id);
+		
+		$volume = new Volume();
+		$volume->collection_id = $collection_id;
+		$volume->number = trim(Input::get('number'));
+		$volume->name = trim(Input::get('name'));
+		$volume->created_by = Auth::user()->id;
+		$volume->updated_by = Auth::user()->id;
+		
+		//Handle uploading cover here
+		if ($request->hasFile('image')) 
+		{
+			//Get posted image
+			$file = $request->file('image');
+			
+			//Calculate file hash
+			$hash = hash_file("sha256", $file->getPathName());
+			
+			//Does the image already exist?
+			$image = Image::where('hash', '=', $hash)->first();
+			if (count($image))
+			{
+				//File already exists (use existing mapping)
+				$volume->cover = $image->id;
+			}
+			else
+			{
+				$path = $file->store('public/images');
+				$file_extension = $file->guessExtension();
+				
+				$image = new Image;
+				$image->name = str_replace('public', 'storage', $path);
+				$image->hash = $hash;
+				$image->extension = $file_extension;
+				$image->created_by = Auth::user()->id;
+				$image->updated_by = Auth::user()->id;
+				
+				$image->save();
+				
+				$volume->cover = $image->id;
+			}
+		}
+		
+		$volume->save();
+		
+		$collection->updated_by = Auth::user()->id;
+		$collection->save();
+		
+		return redirect()->action('CollectionController@show', [$collection])->with('flashed_data', 'Successfully created new volume on collection.');
     }
 
     /**
