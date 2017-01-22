@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use App\Collection;
 use App\Volume;
 
 class VolumeController extends Controller
@@ -13,9 +14,11 @@ class VolumeController extends Controller
      *
      * @return Response
      */
-    public function create(Request $request)
+    public function create(Request $request, Collection $collection)
     {
-        //
+		$flashed_data = $request->session()->get('flashed_data');
+		
+        return View('volumes.create', array('collection' => $collection, 'flashed_data' => $flashed_data));
     }
 
     /**
