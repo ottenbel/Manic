@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Input;
 use App\Collection;
-use App\Image
+use App\Image;
 use App\Volume;
 
 class VolumeController extends Controller
