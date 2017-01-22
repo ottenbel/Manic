@@ -95,9 +95,11 @@ class VolumeController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, Volume $volume)
     {
-        //
+        $flashed_data = $request->session()->get('flashed_data');
+		
+        return View('volumes.edit', array('volume' => $volume, 'flashed_data' => $flashed_data));
     }
 
     /**
