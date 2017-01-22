@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Input;
 use Auth;
+use Input;
 use App\Collection;
+use App\Image
 use App\Volume;
 
 class VolumeController extends Controller

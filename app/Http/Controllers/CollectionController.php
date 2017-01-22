@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Input;
 use Auth;
+use Input;
+use App\Artist;
 use App\Collection;
-use App\Status;
-use App\Rating;
 use App\Image;
 use App\Language;
-use App\Artist;
+use App\Rating;
 use App\Series;
+use App\Status;
 use App\Tag;
 
 class CollectionController extends Controller
