@@ -29,7 +29,8 @@ Edit Collection - {{{$collection->name}}}
 				</div>
 			</div>
 		@endforeach
-		
+		<br/>
+		<br/>
 		{{ Form::submit('Update Collection', array('class' => 'btn btn-primary')) }}
 	</form>
 	

@@ -100,7 +100,7 @@ class CollectionController extends Controller
 				$path = $file->store('public/images');
 				$file_extension = $file->guessExtension();
 				
-				$image = new Image;
+				$image = new Image();
 				$image->name = str_replace('public', 'storage', $path);
 				$image->hash = $hash;
 				$image->extension = $file_extension;
@@ -111,6 +111,10 @@ class CollectionController extends Controller
 				
 				$collection->cover = $image->id;
 			}
+		}
+		else if (Input::has('delete_cover'))
+		{
+			$collection->cover = null;
 		}
 		
 		$collection->save();
@@ -140,7 +144,7 @@ class CollectionController extends Controller
 		$this->map_tags($collection, $tags_secondary_array, false);
 		
 		//Redirect to the collection that was created
-		return redirect()->action('CollectionController@show', [$collection])->with('flashed_data', 'Successfully created new collection.');
+		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully created collection $collection->name.");
     }
 	
     /**
@@ -149,10 +153,8 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, Collection $collection)
     {
-		$collection = Collection::where('id', '=', $id)->first();
-		
 		$sibling_collections = null;
 		
 		if($collection->parent_collection != null)
@@ -171,10 +173,8 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, Collection $collection)
     {
-		$collection = Collection::where('id', '=', $id)->first();
-		
         $ratings = Rating::orderBy('priority', 'asc')->get();
 		$statuses = Status::orderBy('priority', 'asc')->get();
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
@@ -191,7 +191,7 @@ class CollectionController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Collection $collection)
     {
         $this->validate($request, [
 			'name' => 'required|unique:collections,name',
@@ -201,8 +201,6 @@ class CollectionController extends Controller
 			'language' => 'nullable|exists:languages,id',
 			'image' => 'nullable|image'
 		]);
-		
-		$collection = Collection::where('id', '=', $id)->first();
 		
 		$collection->name = trim(Input::get('name'));
 		$collection->parent_id = trim(Input::get('parent_id'));
@@ -241,7 +239,7 @@ class CollectionController extends Controller
 				$path = $file->store('public/images');
 				$file_extension = $file->guessExtension();
 				
-				$image = new Image;
+				$image = new Image();
 				$image->name = str_replace('public', 'storage', $path);
 				$image->hash = $hash;
 				$image->extension = $file_extension;
@@ -281,7 +279,7 @@ class CollectionController extends Controller
 		$this->map_tags($collection, $tags_secondary_array, false);
 		
 		//Redirect to the collection that was created
-		return redirect()->action('CollectionController@show', [$collection])->with('flashed_data', 'Successfully updated collection.');
+		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully updated collection $collection->name.");
     }
 
     /**
