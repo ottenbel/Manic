@@ -32,13 +32,13 @@ class VolumeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+			'collection_id' => 'required|exists:collections,id',
 			'number' => ['required',
 						'integer',
 						'min:0',
 						Rule::unique('volumes')->where(function ($query){
-							$query->where('collection_id', Input::get('collection_id'));
+							$query->where('collection_id', trim(Input::get('collection_id')));
 						})],
-			'collection_id' => 'required|exists:collections,id',
 			'image' => 'nullable|image'
 		]);
 		
@@ -117,11 +117,12 @@ class VolumeController extends Controller
     public function update(Request $request, Volume $volume)
     {
         $this->validate($request, [
+			'collection_id' => 'required|exists:collections,id',
 			'number' => ['required',
 						'integer',
 						'min:0',
 						Rule::unique('volumes')->where(function ($query){
-							$query->where('collection_id', $volume->collection->id);
+							$query->where('collection_id', trim(Input::get('collection_id')));
 						})],
 			'image' => 'nullable|image'
 		]);

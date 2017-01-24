@@ -16,6 +16,8 @@ Edit Volume - {{{$volume->name}}}
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
 		
+		{{ Form::hidden('collection_id', $volume->collection_id) }}
+		
 		@include('partials.volume-input', array('volume' => $volume))
 		
 		{{ Form::submit('Update Volume', array('class' => 'btn btn-primary')) }}
