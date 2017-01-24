@@ -34,8 +34,8 @@ class VolumeController extends Controller
 			'number' => ['required',
 						'integer',
 						'min:0',
-						Rule::unique('volumes')->where(function ($query)){
-							$query->where('collection_id', Input::get('collection_id'));
+						Rule::unique('volumes')->where(function ($query){
+							$query->where('collection_id', Input::get('collection_id')));
 						}],
 			'collection_id' => 'required|exists:collections,id',
 			'image' => 'nullable|image'
@@ -119,8 +119,8 @@ class VolumeController extends Controller
 			'number' => ['required',
 						'integer',
 						'min:0',
-						Rule::unique('volumes')->where(function ($query)){
-							$query->where('collection_id', Input::get('collection_id'));
+						Rule::unique('volumes')->where(function ($query){
+							$query->where('collection_id', Input::get('collection_id')));
 						}],
 			'collection_id' => 'required|exists:collections,id',
 			'image' => 'nullable|image'
