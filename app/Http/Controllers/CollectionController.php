@@ -24,7 +24,7 @@ class CollectionController extends Controller
     public function index(Request $request)
     {
         //Get all relevant collections
-		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->orderBy('updated_at', 'desc')->paginate(25);
+		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->orderBy('updated_at', 'desc')->paginate(10);
 		
 		$flashed_data = $request->session()->get('flashed_data');
 		
