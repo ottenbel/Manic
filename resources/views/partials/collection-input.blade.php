@@ -68,7 +68,7 @@
 	
 	{{ Form::label('artist_secondary', 'Secondary Artists') }}
 	@if((!empty($collection)) && ($collection->secondary_artists != null) && (Input::old('artist_secondary') == null))
-		{{ Form::text('artist_primary', collect($collection->secondary_artists->pluck('name'))->implode(', '), array('class' => 'form-control')) }}
+		{{ Form::text('artist_secondary', collect($collection->secondary_artists->pluck('name'))->implode(', '), array('class' => 'form-control')) }}
 	@else
 		{{ Form::text('artist_secondary', Input::old('artist_secondary'), array('class' => 'form-control')) }}
 	@endif
