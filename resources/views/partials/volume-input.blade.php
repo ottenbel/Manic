@@ -16,7 +16,7 @@
 </div>
 
 <div class="form-group">
-	{{ Form::label('number', 'Namber') }}
+	{{ Form::label('number', 'Number') }}
 	@if((!empty($volume)) && ($volume->number != null) && (Input::old('number') == null))
 		{{ Form::text('number', $volume->number, array('class' => 'form-control')) }}
 	@else
