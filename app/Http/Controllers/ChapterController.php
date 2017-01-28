@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Auth;
 use Input;
 use App\Chapter;
@@ -22,8 +23,12 @@ class ChapterController extends Controller
     public function create(Request $request, Collection $collection)
     {
         $flashed_data = $request->session()->get('flashed_data');
+		$volumes = $collection->volumes()->orderBy('number', 'asc')->get()->pluck('number', 'id')->map(function($item, $key)
+		{
+			return "Volume $item";
+		});
 		
-        return View('chapters.create', array('collection' => $collection, 'volumes' => $collection->volumes, 'flashed_data' => $flashed_data));
+        return View('chapters.create', array('collection' => $collection, 'volumes' => $volumes, 'flashed_data' => $flashed_data));
     }
 
     /**
