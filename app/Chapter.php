@@ -14,7 +14,7 @@ class Chapter extends BaseManicModel
 	 */
 	public function pages()
 	{
-		return $this->hasMany('App\Page');
+		return $this->hasMany('App\Image')->withTimestamps()->withPivot('page_number');
 	}
 	
 	/*
@@ -26,10 +26,42 @@ class Chapter extends BaseManicModel
 	}
 	
 	/*
-	 * Get mapping from chapter to scanalators.
-	 */
+	 * Get the mapping from collection to scanalators.
+	 */	 
 	public function scanalators()
 	{
-		return $this->belongsToMany('App\Scanalator')->withTimestamps()->withPivot('primary', 'created_by', 'updated_by', 'deleted_at');
+		return $this->belongsToMany('App\Scanalator')->withTimestamps()->withPivot('primary');
+	}
+	
+	/*
+	 * Get mapping from collection to primary scanalators.
+	 */
+	public function primary_scanalators()
+	{
+		return $this->belongsToMany('App\Scanalator')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
+	}
+	
+	/*
+	 * Get mapping from collection to secondary scanalators.
+	 */
+	public function secondary_scanalators()
+	{
+		return $this->belongsToMany('App\Scanalator')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
+	}
+	
+	/*
+	 * Get the next chapter in the collection.
+	 */
+	public function next_chapter()
+	{
+		return $this->volume()->chapters()->where('number', '>', $this->number)->orderBy('number', 'asc')->take(1);
+	}
+	
+	/*
+	 * Get the previous chapter in the collection.
+	 */
+	public function previous_chapter()
+	{
+		return $this->volume()->chapters()->where('number', '<', $this->number)->orderBy('number', 'desc')->take(1);
 	}
 }

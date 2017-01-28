@@ -33,6 +33,16 @@ Route::group(['middleware' => 'auth'], function(){
 });
 //End Volume controller routes
 
+//Chapter controller routes
+Route::group(['middleware' => 'auth'], function(){
+	Route::get('/chapter/create/{collection}', 'ChapterController@create');
+	Route::post('/chapter', 'ChapterController@store');
+	Route::get('/chapter/{chapter}/edit', 'ChapterController@edit');
+	Route::patch('/chapter/{chapter}', 'ChapterController@update');
+});
+
+Route::get('/chapter/{chapter}', 'ChapterController@show');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
