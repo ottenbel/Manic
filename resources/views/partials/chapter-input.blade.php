@@ -51,12 +51,19 @@
 	@else
 		{{ Form::text('source', Input::old('source'), array('class' => 'form-control')) }}
 	@endif
+	@if($errors->has('source'))
+		<div class ="alert alert-danger" id="name_errors">{{$errors->first('source')}}</div>
+	@endif
 </div>
 
 <div class="form-group">
-	{{ Form::label('pages', 'Pages') }}
-	{{ Form::file('pages[]', ['multiple' => 'multiple']) }}
-	@if ($errors->has('pages[]'))
-		<div class ="alert alert-danger" id="image_errors">{{$errors->first('pages[]')}}</div>
+	{{ Form::label('images', 'Pages') }}
+	{{ Form::file('images[]', ['multiple' => 'multiple']) }}
+	@if ($errors->has('images'))
+		<div class ="alert alert-danger" id="image_errors">{{$errors->first('images')}}</div>
 	@endif
+	@if (count($errors->get('images.*')))
+		<div class ="alert alert-danger" id="image_errors">All pages must be an image.</div>
+	@endif
+	
 </div>
