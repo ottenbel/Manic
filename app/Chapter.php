@@ -8,6 +8,7 @@ class Chapter extends BaseManicModel
 {
 	//Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'chapters';
+	protected $touches = ['volume'];
 	
 	/*
 	 * Get the pages associated with the chapter.

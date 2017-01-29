@@ -133,6 +133,12 @@ class ChapterController extends Controller
 		
 		$collection = $volume->collection;
 		
+		$volume->updated_by = Auth::user()->id;
+		$volume->save();
+		
+		$collection->updated_by = Auth::user()->id;
+		$collection->save();
+		
 		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully created new chapter #$chapter->number on collection $collection->name.");
     }
 

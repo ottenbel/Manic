@@ -8,6 +8,7 @@ class Volume extends BaseManicModel
 {
     //Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'volumes';
+	protected $touches = ['collection'];
 	
 	/*
 	 * Get all chapters associated with the volume.
