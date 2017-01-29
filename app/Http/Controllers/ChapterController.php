@@ -52,12 +52,38 @@ class ChapterController extends Controller
 		
 		$volume = Volume::where('id', '=', trim(Input::get('volume_id')))->first();
 		
-		$lower_chapter_limit = $volume->previous_volume()->last_chapter->number;
-		$upper_chapter_limit = $volume->next_volume()->first_chapter->number;
+		$lower_chapter_limit = 0;
+		$upper_chapter_limit = 0;
 		
-		$this->validate($request, [
-		'number' => 'required|integer|between:$lower_chapter_limit,$upper_chapter_limit'
-		]);
+		if (count($volume->previous_volume()->last_chapter))
+		{
+			$lower_chapter_limit = $volume->previous_volume()->last_chapter->number;
+		}
+		if (count($volume->next_volume()->first_chapter))
+		{
+			$upper_chapter_limit = $volume->next_volume()->first_chapter->number;
+		}
+		
+		if (($lower_chapter_limit != 0) && ($upper_chapter_limit != 0))
+		{
+			$this->validate($request, [
+				'number' => 'required|integer|between:$lower_chapter_limit,$upper_chapter_limit'
+			]);
+		}
+		else if ($lower_chapter_limit != 0)
+		{
+			$lower_chapter_limit = $lower_chapter_limit + 1;
+			$this->validate($request, [
+				'number' => 'required|integer|min:$lower_chapter_limit'
+			]);
+		}
+		else if ($upper_chapter_limit != 0)
+		{
+			$upper_chapter_limit = $upper_chapter_limit - 1;
+			$this->validate($request, [
+				'number' => 'required|integer|max:$upper_chapter_limit'
+			]);
+		}
 		
 		$chapter = new Chapter();
 		$chapter->volume_id = $volume->id;
