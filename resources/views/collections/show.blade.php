@@ -122,7 +122,6 @@
 			@endif
 					<table>
 						@foreach($volume->chapters()->orderBy('number', 'asc')->get() as $chapter)
-							@endif
 							<tr>
 								@if($chapter->name != null && $chapter->name != "")
 									<td>

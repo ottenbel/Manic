@@ -55,13 +55,13 @@ class ChapterController extends Controller
 		$lower_chapter_limit = 0;
 		$upper_chapter_limit = 0;
 		
-		if (!empty($volume->previous_volume()->last_chapter))
+		if (count($volume->previous_volume()->first()) && count($volume->previous_volume()->first()->last_chapter()))
 		{
-			$lower_chapter_limit = $volume->previous_volume()->last_chapter->number;
+			$lower_chapter_limit = $volume->previous_volume()->first()->last_chapter()->first()->number;
 		}
-		if (!empty($volume->next_volume()->first_chapter))
+		if (count($volume->next_volume()->first()) && count($volume->next_volume()->first()->first_chapter()))
 		{
-			$upper_chapter_limit = $volume->next_volume()->first_chapter->number;
+			$upper_chapter_limit = $volume->next_volume()->first()->first_chapter()->first()->number;
 		}
 		
 		if (($lower_chapter_limit != 0) && ($upper_chapter_limit != 0))
