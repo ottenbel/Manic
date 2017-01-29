@@ -55,11 +55,11 @@ class ChapterController extends Controller
 		$lower_chapter_limit = 0;
 		$upper_chapter_limit = 0;
 		
-		if (count($volume->previous_volume()->last_chapter))
+		if (!empty($volume->previous_volume()->last_chapter))
 		{
 			$lower_chapter_limit = $volume->previous_volume()->last_chapter->number;
 		}
-		if (count($volume->next_volume()->first_chapter))
+		if (!empty($volume->next_volume()->first_chapter))
 		{
 			$upper_chapter_limit = $volume->next_volume()->first_chapter->number;
 		}
@@ -93,6 +93,8 @@ class ChapterController extends Controller
 		$chapter->created_by = Auth::user()->id;
 		$chapter->updated_by = Auth::user()->id;
 		
+		$chapter->save();
+		
 		//Explode the scanalators arrays to be processed (if commonalities exist force to primary)
 		$scanalator_primary_array = array_map('trim', explode(',', Input::get('scanalator_primary')));
 		$scanalator_secondary_array = array_diff(array_map('trim', explode(',', Input::get('scanalator_secondary'))), $scanalator_primary_array);
@@ -124,7 +126,7 @@ class ChapterController extends Controller
 				$image->save();
 			}
 			
-			$this->pages()->attach($image, ['page_number' => $page_number]);
+			$chapter->pages()->attach($image, ['page_number' => $page_number]);
 			
 			$page_number++;
 		}
