@@ -14,14 +14,14 @@ class Image extends BaseManicModel
 	 */
 	 public function collections()
 	 {
-		$this->hasMany('App\Collection', 'cover'); 
+		return $this->hasMany('App\Collection', 'cover'); 
 	 }
 	 
 	 /*
-	  * Get any pages that use this image as a page image.
+	  * Get any chapters that use this image as a page image.
 	  */
-	 public function pages()
+	 public function chapters()
 	 {
-		 $this->hasMany('App\Page');
+		 return $this->belongsToMany('App\Chapter')->withTimestamps()->withPivot('page_number');
 	 }
 }

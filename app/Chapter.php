@@ -14,7 +14,7 @@ class Chapter extends BaseManicModel
 	 */
 	public function pages()
 	{
-		return $this->hasMany('App\Image')->withTimestamps()->withPivot('page_number');
+		return $this->belongsToMany('App\Image')->withTimestamps()->withPivot('page_number');
 	}
 	
 	/*
