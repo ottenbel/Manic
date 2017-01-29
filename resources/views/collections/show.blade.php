@@ -13,7 +13,7 @@
 	<div id="collection_summary" class="row">
 		@if($collection->cover_image != null)
 		<div id="cover" class="col-md-3">
-			<img src="{{asset($collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Responsive image" height="100%" width="100%">
+			<img src="{{asset($collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Collection Cover" height="100%" width="100%">
 		</div>
 		@endif
 	
@@ -112,15 +112,49 @@
 			@endif 
 		</button>
 		<div class="volume_panel">
-			@foreach($volume->chapters()->orderBy('number', 'asc')->get() as $chapter)
-				<div>
-					@if($chapter->name != null && $chapter->name != "")
-						<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->number}}</a> - {{{$chapter->name}}}
-					@else
-						<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->number}}</a>
-					@endif
+			@if($volume->cover_image != null)
+				<div id="cover" class="col-md-2">
+					<img src="{{asset($volume->cover_image->name)}}" class="img-responsive img-rounded" alt="Volume Cover" height="100%" width="100%">
 				</div>
-			@endforeach
+				<div id="cover" class="col-md-10">
+			@else
+				<div>
+			@endif
+					<table>
+						@foreach($volume->chapters()->orderBy('number', 'asc')->get() as $chapter)
+							@endif
+							<tr>
+								@if($chapter->name != null && $chapter->name != "")
+									<td>
+										<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->number}}</a> - {{{$chapter->name}}}
+									</td>
+								@else
+									<td>
+										<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->number}}</a>
+									</td>
+								@endif
+								<td>
+									@if((count($chapter->primary_scanalators)) || (count($chapter->secondary_scanalators)))
+										<div class="scanalator_holder">			
+										@foreach($chapter->primary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
+												<span class="primary_scanalators"><a href="/scanalator/{{$scanalator->id}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+											@endforeach
+											
+											@foreach($chapter->secondary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
+												<span class="secondary_scanalators"><a href="/scanalator/{{$scanalator->id}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+											@endforeach
+										</div>
+									@endif
+								</td>
+								@if($chapter->source != null)
+									<td>
+										<a href="{{$chapter->source}}">Source</a>
+									</td>
+								@endif
+							</tr>
+						@endforeach
+					</table>
+				</div>
 		</div>
 	@endforeach
 	
@@ -133,7 +167,7 @@
 				<div class="volume_panel" id="parent_collection">
 					<span class="col-md-1">
 						@if($collection->parent_collection->cover_image != null)
-							<a href="/collection/{{$collection->parent_collection->id}}"><img src="{{asset($collection->parent_collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Responsive image"></a>
+							<a href="/collection/{{$collection->parent_collection->id}}"><img src="{{asset($collection->parent_collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Collection Cover"></a>
 						@endif
 					</span>
 					<span class="col-md-11">
