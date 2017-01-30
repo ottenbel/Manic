@@ -38,28 +38,16 @@ class ChapterController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-			'volume_id' => 'required|exists:volumes,id',
-			'number' => ['required',
-						'integer',
-						'min:0',
-						Rule::unique('chapters')->where(function ($query){
-							$query->where('volume_id', trim(Input::get('volume_id')));})
-						],
-				'source' => 'URL',
-				'images' => 'required',
-				'images.*' => 'image']);
-		
 		$volume = Volume::where('id', '=', trim(Input::get('volume_id')))->first();
 		
 		$lower_chapter_limit = 0;
 		$upper_chapter_limit = 0;
 		
-		if (count($volume->previous_volume()->first()) && count($volume->previous_volume()->first()->last_chapter()))
+		if (count($volume) && count($volume->previous_volume()->first()) && count($volume->previous_volume()->first()->last_chapter()))
 		{
 			$lower_chapter_limit = $volume->previous_volume()->first()->last_chapter()->first()->number;
 		}
-		if (count($volume->next_volume()->first()) && count($volume->next_volume()->first()->first_chapter()))
+		if (count($volume) && count($volume->next_volume()->first()) && count($volume->next_volume()->first()->first_chapter()))
 		{
 			$upper_chapter_limit = $volume->next_volume()->first()->first_chapter()->first()->number;
 		}
@@ -67,22 +55,60 @@ class ChapterController extends Controller
 		if (($lower_chapter_limit != 0) && ($upper_chapter_limit != 0))
 		{
 			$this->validate($request, [
-				'number' => 'required|integer|between:$lower_chapter_limit,$upper_chapter_limit'
-			]);
+			'volume_id' => 'required|exists:volumes,id',
+			'number' => ['required',
+						'integer',
+						"between:$lower_chapter_limit,$upper_chapter_limit",
+						Rule::unique('chapters')->where(function ($query){
+							$query->where('volume_id', trim(Input::get('volume_id')));})
+						],
+			'source' => 'URL',
+			'images' => 'required',
+			'images.*' => 'image']);
 		}
 		else if ($lower_chapter_limit != 0)
 		{
 			$lower_chapter_limit = $lower_chapter_limit + 1;
 			$this->validate($request, [
-				'number' => 'required|integer|min:$lower_chapter_limit'
-			]);
+			'volume_id' => 'required|exists:volumes,id',
+			'number' => ['required',
+						'integer',
+						"min:$lower_chapter_limit",
+						Rule::unique('chapters')->where(function ($query){
+							$query->where('volume_id', trim(Input::get('volume_id')));})
+						],
+			'source' => 'URL',
+			'images' => 'required',
+			'images.*' => 'image']);
 		}
 		else if ($upper_chapter_limit != 0)
 		{
 			$upper_chapter_limit = $upper_chapter_limit - 1;
 			$this->validate($request, [
-				'number' => 'required|integer|max:$upper_chapter_limit'
-			]);
+			'volume_id' => 'required|exists:volumes,id',
+			'number' => ['required',
+						'integer',
+						"between:0,$upper_chapter_limit",
+						Rule::unique('chapters')->where(function ($query){
+							$query->where('volume_id', trim(Input::get('volume_id')));})
+						],
+			'source' => 'URL',
+			'images' => 'required',
+			'images.*' => 'image']);
+		}
+		else
+		{
+			$this->validate($request, [
+			'volume_id' => 'required|exists:volumes,id',
+			'number' => ['required',
+						'integer',
+						'min:0',
+						Rule::unique('chapters')->where(function ($query){
+							$query->where('volume_id', trim(Input::get('volume_id')));})
+						],
+			'source' => 'URL',
+			'images' => 'required',
+			'images.*' => 'image']);
 		}
 		
 		$chapter = new Chapter();
