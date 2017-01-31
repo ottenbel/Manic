@@ -21,8 +21,8 @@
 
 <div class="form-group">
 	{{ Form::label('name', 'Name') }}
-	@if((!empty($volume)) && ($volume->name != null) && (Input::old('name') == null))
-		{{ Form::text('name', $volume->name, array('class' => 'form-control')) }}
+	@if((!empty($chapter)) && ($chapter->name != null) && (Input::old('name') == null))
+		{{ Form::text('name', $chapter->name, array('class' => 'form-control')) }}
 	@else
 		{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
 	@endif

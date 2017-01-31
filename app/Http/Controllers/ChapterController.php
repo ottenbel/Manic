@@ -185,9 +185,15 @@ class ChapterController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit(Request $request, Chapter $chapter)
     {
-        //
+        $flashed_data = $request->session()->get('flashed_data');
+		$volumes = $chapter->volume->collection->volumes()->orderBy('number', 'asc')->get()->pluck('number', 'id')->map(function($item, $key)
+		{
+			return "Volume $item";
+		});
+		
+        return View('chapters.edit', array('chapter' => $chapter, 'volumes' => $volumes, 'flashed_data' => $flashed_data));
     }
 
     /**

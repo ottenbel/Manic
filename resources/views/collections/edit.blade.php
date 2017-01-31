@@ -17,18 +17,17 @@ Edit Collection - {{{$collection->name}}}
 		{{method_field('PATCH')}}
 		
 		@include('partials.collection-input', array('collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))
-		
-		@foreach($collection->volumes()->orderBy('number', 'asc')->get() as $volume)
-			<div id = "volumes">
+		<div id = "volumes">
+			@foreach($collection->volumes()->orderBy('number', 'asc')->get() as $volume)
 				<div id="volume">
 					@if($volume->name != null && $volume->name != "")
-							<a href="/volume/{{$volume->id}}/edit">Volume {{$volume->number}} - {{{$volume->name}}}</a>
-						@else
-							<a href="/volume/{{$volume->id}}/edit">Volume {{$volume->number}}</a>
-						@endif 
+						<a href="/volume/{{$volume->id}}/edit">Volume {{$volume->number}} - {{{$volume->name}}}</a>
+					@else
+						<a href="/volume/{{$volume->id}}/edit">Volume {{$volume->number}}</a>
+					@endif 
 				</div>
-			</div>
-		@endforeach
+			@endforeach
+		</div>
 		<br/>
 		<br/>
 		{{ Form::submit('Update Collection', array('class' => 'btn btn-primary')) }}
