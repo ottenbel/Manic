@@ -16,12 +16,14 @@ Edit Chapter # {{$chapter->number}} {{{$chapter->name}}}
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
 		
-		@include('partials.chapter-input', array('chapter' => $chapter, 'volumes' => $volumes))
+		{{ Form::hidden('volume_id', $chapter->volume_id) }}
+		{{ Form::hidden('chapter_id', $chapter->id) }}
 		
+		@include('partials.chapter-input', array('chapter' => $chapter, 'volumes' => $volumes))		
 		
 		<table class="table table-responsive">
 			@foreach($chapter->pages()->orderBy('page_number', 'asc')->get() as $page)
-				@if(($loop->index % 3) == 0)
+				@if(($loop->index % 4) == 0)
 					<tr>
 				@endif
 					<td>
@@ -30,26 +32,48 @@ Edit Chapter # {{$chapter->number}} {{{$chapter->name}}}
 						</div>
 						
 						<div>
-							{{ Form::checkbox('delete_pages[]', null, Input::old("delete_page-$page->pivot->page_number"), array('id' => "delete_page-".$page->pivot->page_number)) }}
-							{{ Form::label("delete_page-".$page->pivot->page_number, 'Delete Page') }}
+							<input type="checkbox" name="delete_pages[{{$page->id}}]" id = "delete_pages[{{$page->id}}]" value="{{Input::old('delete_pages.'.$page->id)}}"/>
+							{{ Form::label("delete_pages[$page->id]", 'Delete Page') }}
 						</div>
 						
-						@if(Input::old("chap_page[$page->pivot->page_number]") == null)
+						@if(Input::old('chapter_pages.'.$page->id) == null)
 							<div>
-								{{ Form::text("chap_page[$page->pivot->page_number]", $page->pivot->page_number) }}
+								<input type="text" name="chapter_pages[{{$page->id}}]" id = "chapter_page[{{$page->id}}]" value="{{$page->pivot->page_number}}"/>
 							</div>
 						@else
 							<div>
-								{{ Form::text("chap_page[$page->pivot->page_number]", Input::old("chap_page[$page->pivot->page_number]")) }}
+								<input type="text" name="chapter_pages[{{$page->id}}]" id = "chapter_pages[{{$page->id}}]" value="{{Input::old('chapter_pages.'.$page->id)}}"/>
+							</div>
+						@endif
+						
+						@if($errors->has('chapter_pages.'.$page->id))
+							<div class ="alert alert-danger" id="page_errors">			{{$errors->first('chapter_pages.'.$page->id)}}
+							</div>
+						@endif
+						
+						@if($errors->has('delete_pages.'.$page->id))
+							<div class ="alert alert-danger" id="delete_errors">			{{$errors->first('delete_pages.'.$page->id)}}
 							</div>
 						@endif
 						
 					</td>
-				@if(($loop->index % 3) == 2)
+				@if(($loop->index % 4) == 3)
 					</tr>
 				@endif			
 			@endforeach
 		</table>
+		
+		@if($errors->has('page_uniqueness'))
+			<div class ="alert alert-danger" id="delete_errors">
+				{{$errors->first('page_uniqueness')}}
+			</div>
+		@endif
+		
+		@if($errors->has('page_requirement'))
+			<div class ="alert alert-danger" id="delete_errors">
+				{{$errors->first('page_requirement')}}
+			</div>
+		@endif
 		
 		{{ Form::submit('Update Chapter', array('class' => 'btn btn-primary')) }}
 	</form>

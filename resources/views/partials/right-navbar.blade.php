@@ -16,6 +16,37 @@
 										<li><a href="">Delete Collection</a></li>
 									</ul>
 								</li>
+							@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\CollectionController@edit")
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+										Collection <span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu" role="menu">
+										<li><a href="/collection/{{$collection->id}}/">View Collection</a><li>
+										<li><a href="/chapter/create/{{$collection->id}}">Add Chapter</a></li>
+										<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
+										<li><a href="">Delete Collection</a></li>
+									</ul>
+								</li>
+							@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\VolumeController@edit")
+							<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+										Volume <span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu" role="menu">
+										<li><a href="">Delete Volume</a></li>
+									</ul>
+								</li>
+							@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\ChapterController@edit")
+							<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+										Chapter <span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu" role="menu">
+										<li><a href="/chapter/{{$chapter->id}}/">View Chapter</a><li>
+										<li><a href="">Delete Chapter</a></li>
+									</ul>
+								</li>
 							@else
 								<li><a href="{{url('/collection/create')}}">Create Collection</a></li>
 							@endif

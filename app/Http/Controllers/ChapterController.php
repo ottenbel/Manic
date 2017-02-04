@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Redirect;
 use Auth;
 use Input;
 use App\Chapter;
@@ -202,9 +203,187 @@ class ChapterController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update($id)
+    public function update(Request $request, Chapter $chapter)
     {
-        //
+		$delete_pages_array = Input::get('delete_pages');
+		$update_pages_array = Input::get('chapter_pages');	
+		
+		if(($update_pages_array != null) && (count(array_unique($update_pages_array)) != count($update_pages_array)))
+		{
+			//Duplicate page number provided throw an error
+			return Redirect::back()->withErrors(['page_uniqueness' => 'All page numbers must be unique.'])->withInput();
+		}
+		
+		if (($delete_pages_array != null) && (count($delete_pages_array) == count($update_pages_array)) && (count(Input::file('images')) == 0))
+		{
+			return Redirect::back()->withErrors(['page_requirement' => 'A chapter must have at least one page associated with it.'])->withInput();
+		}
+		
+        $volume = Volume::where('id', '=', trim(Input::get('volume_id')))->first();
+		
+		$lower_chapter_limit = 0;
+		$upper_chapter_limit = 0;
+		
+		if (count($volume) && count($volume->previous_volume()->first()) && count($volume->previous_volume()->first()->last_chapter()))
+		{
+			$lower_chapter_limit = $volume->previous_volume()->first()->last_chapter()->first()->number;
+		}
+		if (count($volume) && count($volume->next_volume()->first()) && count($volume->next_volume()->first()->first_chapter()))
+		{
+			$upper_chapter_limit = $volume->next_volume()->first()->first_chapter()->first()->number;
+		}
+		
+		if (($lower_chapter_limit != 0) && ($upper_chapter_limit != 0))
+		{
+			$this->validate($request, [
+			'volume_id' => 'required|exists:volumes,id',
+			'number' => ['required',
+						'integer',
+						"between:$lower_chapter_limit,$upper_chapter_limit",
+						Rule::unique('chapters')->where(function ($query){
+							$query->where('volume_id', trim(Input::get('volume_id')))
+								->where('id', '!=', trim(Input::get('chapter_id')));
+							})
+						],
+			'source' => 'URL',
+			'images.*' => 'image',
+			'chapter_pages.*' => 'required|integer|min:0',
+			'delete_pages.*' => 'boolean']);
+		}
+		else if ($lower_chapter_limit != 0)
+		{
+			$lower_chapter_limit = $lower_chapter_limit + 1;
+			$this->validate($request, [
+			'volume_id' => 'required|exists:volumes,id',
+			'number' => ['required',
+						'integer',
+						"min:$lower_chapter_limit",
+						Rule::unique('chapters')->where(function ($query){
+							$query->where('volume_id', trim(Input::get('volume_id')))
+								->where('id', '!=', trim(Input::get('chapter_id')));
+							})
+						],
+			'source' => 'URL',
+			'images.*' => 'image',
+			'chapter_pages.*' => 'required|integer|min:0',
+			'delete_pages.*' => 'boolean']);
+		}
+		else if ($upper_chapter_limit != 0)
+		{
+			$upper_chapter_limit = $upper_chapter_limit - 1;
+			$this->validate($request, [
+			'volume_id' => 'required|exists:volumes,id',
+			'number' => ['required',
+						'integer',
+						"between:0,$upper_chapter_limit",
+						Rule::unique('chapters')->where(function ($query){
+							$query->where('volume_id', trim(Input::get('volume_id')))
+								->where('id', '!=', trim(Input::get('chapter_id')));
+							})
+						],
+			'source' => 'URL',
+			'images.*' => 'image',
+			'chapter_pages.*' => 'required|integer|min:0',
+			'delete_pages.*' => 'boolean']);
+		}
+		else
+		{
+			$this->validate($request, [
+			'volume_id' => 'required|exists:volumes,id',
+			'number' => ['required',
+						'integer',
+						'min:0',
+						Rule::unique('chapters')->where(function ($query){
+							$query->where('volume_id', trim(Input::get('volume_id')))
+								->where('id', '!=', trim(Input::get('chapter_id')));
+							})
+						],
+			'source' => 'URL',
+			'images.*' => 'image',
+			'chapter_pages.*' => 'required|integer|min:0',
+			'delete_pages.*' => 'boolean']);
+		}
+		
+		$chapter->volume_id = $volume->id;
+		$chapter->number = trim(Input::get('number'));
+		$chapter->name = trim(Input::get('name'));
+		$chapter->source = trim(Input::get('source'));
+		$chapter->created_by = Auth::user()->id;
+		$chapter->updated_by = Auth::user()->id;
+		
+		$chapter->save();
+		
+		//Explode the scanalators arrays to be processed (if commonalities exist force to primary)
+		$scanalator_primary_array = array_map('trim', explode(',', Input::get('scanalator_primary')));
+		$scanalator_secondary_array = array_diff(array_map('trim', explode(',', Input::get('scanalator_secondary'))), $scanalator_primary_array);
+		
+		$chapter->scanalators()->detach();
+		$this->map_scanalators($chapter, $scanalator_primary_array, true);
+		$this->map_scanalators($chapter, $scanalator_secondary_array, false);
+		
+		$pages = $chapter->pages;
+
+		//Detach all existing pages
+		$chapter->pages()->detach();
+		
+		$highest_page_number = 0;
+		//Update the existing pages depending on user input
+		foreach ($pages as $page)
+		{
+			//If page has not been marked for deletion re-add it to the chapter.
+			if (array_key_exists("$page->id", $delete_pages_array))
+			{
+				$image = Image::where('id', '=', $page->id)->first();
+				$page_number = $update_pages_array["$page->id"];
+				
+				$chapter->pages()->attach($image, ['page_number' => $page_number]);
+				
+				if ($page_number > $highest_page_number)
+				{
+					$highest_page_number = $page_number;
+				}
+			}
+		}
+		if (Input::file('images') != null)
+		{
+			$page_number = $highest_page_number + 1;
+			foreach(Input::file('images') as $file)
+			{
+				//Calculate file hash
+				$hash = hash_file("sha256", $file->getPathName());
+				
+				//Does the image already exist?
+				$image = Image::where('hash', '=', $hash)->first();
+				if (!count($image))
+				{
+					$path = $file->store('public/images');
+					$file_extension = $file->guessExtension();
+					
+					$image = new Image();
+					$image->name = str_replace('public', 'storage', $path);
+					$image->hash = $hash;
+					$image->extension = $file_extension;
+					$image->created_by = Auth::user()->id;
+					$image->updated_by = Auth::user()->id;
+					
+					$image->save();
+				}
+				
+				$chapter->pages()->attach($image, ['page_number' => $page_number]);
+				
+				$page_number++;
+			}
+		}
+		
+		$collection = $volume->collection;
+		
+		$volume->updated_by = Auth::user()->id;
+		$volume->save();
+		
+		$collection->updated_by = Auth::user()->id;
+		$collection->save();
+		
+		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully updated  chapter #$chapter->number on collection $collection->name.");
     }
 
     /**
