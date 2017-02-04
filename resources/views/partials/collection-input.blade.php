@@ -8,7 +8,7 @@
 	{{ Form::file('image') }}
 	@if(!empty($collection) && ($collection->cover_image != null))
 		{{ Form::label('delete_cover', 'Remove Cover Image') }}
-		{{ Form::checkbox('delete_cover', Input::old('delete_cover'), array('class' => 'form-control')) }}
+		{{ Form::checkbox('delete_cover', null, Input::old('delete_cover')) }}
 	@endif
 	@if ($errors->has('image'))
 		<div class ="alert alert-danger" id="image_errors">{{$errors->first('image')}}</div>
@@ -112,7 +112,7 @@
 	@if((!empty($collection)) && ($collection->canonical != null) && (Input::old('canonical') == null))
 		{{ Form::checkbox('canonical', $collection->canonical, array('class' => 'form-control')) }}
 	@else
-		{{ Form::checkbox('canonical', Input::old('canonical'), array('class' => 'form-control')) }}
+		{{ Form::checkbox('canonical', null, Input::old('canonical')) }}
 	@endif
 </div>
 
