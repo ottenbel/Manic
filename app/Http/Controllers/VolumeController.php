@@ -122,7 +122,8 @@ class VolumeController extends Controller
 						'integer',
 						'min:0',
 						Rule::unique('volumes')->where(function ($query){
-							$query->where('collection_id', trim(Input::get('collection_id')));
+							$query->where('collection_id', trim(Input::get('collection_id')))
+							->where('id', '!=', trim(Input::get('volume_id')));
 						})],
 			'image' => 'nullable|image'
 		]);

@@ -17,6 +17,7 @@ Edit Volume - {{{$volume->name}}}
 		{{method_field('PATCH')}}
 		
 		{{ Form::hidden('collection_id', $volume->collection_id) }}
+		{{ Form::hidden('volume_id', $volume->id) }}
 		
 		@include('partials.volume-input', array('volume' => $volume))
 		

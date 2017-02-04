@@ -16,6 +16,8 @@ Edit Collection - {{{$collection->name}}}
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
 		
+		{{ Form::hidden('collection_id', $collection->id) }}
+		
 		@include('partials.collection-input', array('collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))
 		<div id = "volumes">
 			@foreach($collection->volumes()->orderBy('number', 'asc')->get() as $volume)

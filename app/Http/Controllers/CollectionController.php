@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Auth;
 use Input;
 use App\Artist;
@@ -42,7 +43,7 @@ class CollectionController extends Controller
 		$statuses = Status::orderBy('priority', 'asc')->get();
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		
-		return View('collections.create', array('ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages, ));
+		return View('collections.create', array('ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages));
     }
 
     /**
@@ -193,8 +194,12 @@ class CollectionController extends Controller
      */
     public function update(Request $request, Collection $collection)
     {
+		$collection_id = $collection->id;
         $this->validate($request, [
-			'name' => 'required|unique:collections,name',
+			'name' => ['required',
+						Rule::unique('collections')->where(function ($query){
+							$query->where('id', '!=', trim(Input::get('collection_id')));
+						})],
 			'parent_id' => 'nullable|exists:collections,id',
 			'rating' => 'nullable|exists:ratings,id',
 			'status' => 'nullable|exists:statuses,id',
