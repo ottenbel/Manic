@@ -32,6 +32,7 @@ Edit Volume - {{{$volume->name}}}
 				</div>
 			@endforeach
 		</div>
+		<br/>
 		
 		{{ Form::submit('Update Volume', array('class' => 'btn btn-primary')) }}
 	</form>

@@ -31,7 +31,6 @@ Edit Collection - {{{$collection->name}}}
 			@endforeach
 		</div>
 		<br/>
-		<br/>
 		{{ Form::submit('Update Collection', array('class' => 'btn btn-primary')) }}
 	</form>
 	

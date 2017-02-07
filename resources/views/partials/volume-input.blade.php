@@ -1,15 +1,22 @@
 <div class="form-group">
-	@if(!empty($volume) && ($volume->cover_image != null))
-		<div id="cover" class="col-md-4">
-			<a href="/volume/{{$volume->id}}"><img src="{{asset($volume->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%"></a>
+	<div class="row">
+		@if(!empty($volume) && ($volume->cover_image != null))
+			<div id="cover" class="col-md-4">
+				<a href="/volume/{{$volume->id}}"><img src="{{asset($volume->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%"></a>
+			</div>
+		@endif
+		
+		<div id="cover_edit" class="col-md-8">
+			{{ Form::label('cover', 'Cover Image') }}
+			{{ Form::file('image') }}
+			@if(!empty($volume) && ($volume->cover_image != null))
+				{{ Form::label('delete_cover', 'Remove Cover Image') }}
+				{{ Form::checkbox('delete_cover', null, Input::old('delete_cover')) }}
+			@endif
 		</div>
-	@endif
-	{{ Form::label('cover', 'Cover Image') }}
-	{{ Form::file('image') }}
-	@if(!empty($volume) && ($volume->cover_image != null))
-		{{ Form::label('delete_cover', 'Remove Cover Image') }}
-		{{ Form::checkbox('delete_cover', null, Input::old('delete_cover')) }}
-	@endif
+	</div>
+	
+	
 	@if ($errors->has('image'))
 		<div class ="alert alert-danger" id="image_errors">{{$errors->first('image')}}</div>
 	@endif
