@@ -15,7 +15,7 @@ class Chapter extends BaseManicModel
 	 */
 	public function pages()
 	{
-		return $this->belongsToMany('App\Image')->withTimestamps()->withPivot('page_number');
+		return $this->belongsToMany('App\Image')->withTimestamps()->withPivot('page_number')->orderBy('page_number');
 	}
 	
 	/*
@@ -24,6 +24,14 @@ class Chapter extends BaseManicModel
 	public function volume()
 	{
 		return $this->belongsTo('App\Volume');
+	}
+	
+	/*
+	 * Get the parent collection associated with the chapter.
+	 */
+	public function collection()
+	{
+		return $this->volume->collection();
 	}
 	
 	/*
@@ -55,7 +63,18 @@ class Chapter extends BaseManicModel
 	 */
 	public function next_chapter()
 	{
-		return $this->volume->chapters()->where('number', '>', $this->number)->orderBy('number', 'asc')->take(1);
+		if (count($this->volume->chapters()->where('number', '>', $this->number)->orderBy('number', 'asc')->get()))
+		{
+			return $this->volume->chapters()->where('number', '>', $this->number)->orderBy('number', 'asc')->take(1);
+		}
+		else if (count($this->volume->next_volume()->first()) && (count($this->volume->next_volume()->first()->chapters()->where('number', '>', $this->number)->orderBy('number', 'asc')->get())))
+		{
+			return $this->volume->next_volume()->first()->chapters()->where('number', '>', $this->number)->orderBy('number', 'asc')->take(1);
+		}
+		else
+		{
+			return $this->volume->chapters()->where('number', '>', $this->number)->orderBy('number', 'asc')->take(1);
+		}
 	}
 	
 	/*
@@ -63,6 +82,17 @@ class Chapter extends BaseManicModel
 	 */
 	public function previous_chapter()
 	{
-		return $this->volume->chapters()->where('number', '<', $this->number)->orderBy('number', 'desc')->take(1);
+		if (count($this->volume->chapters()->where('number', '<', $this->number)->orderBy('number', 'desc')->get()))
+		{
+			return $this->volume->chapters()->where('number', '<', $this->number)->orderBy('number', 'desc')->take(1);
+		}
+		else if (count($this->volume->previous_volume()->first()) && ($this->volume->previous_volume()->first()->chapters()->where('number', '<', $this->number)->orderBy('number', 'desc')->get()))
+		{
+			return $this->volume->previous_volume()->first()->chapters()->where('number', '<', $this->number)->orderBy('number', 'desc')->take(1);
+		}
+		else
+		{
+			$this->volume->chapters()->where('number', '<', $this->number)->orderBy('number', 'desc')->take(1);
+		}
 	}
 }

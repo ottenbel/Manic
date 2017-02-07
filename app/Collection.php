@@ -14,7 +14,7 @@ class Collection extends BaseManicModel
 	 */
     public function volumes()
 	{
-		return $this->hasMany('App\Volume');
+		return $this->hasMany('App\Volume')->orderBy('number');
 	}
 	
 	/*
@@ -22,7 +22,7 @@ class Collection extends BaseManicModel
 	 */
 	public function chapters()
 	{
-		return $this->hasManyThrough('App\Chapter', 'App\Volume');
+		return $this->hasManyThrough('App\Chapter', 'App\Volume')->orderBy('number');
 	}
 	
 	/*

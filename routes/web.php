@@ -41,7 +41,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::patch('/chapter/{chapter}', 'ChapterController@update');
 });
 
-Route::get('/chapter/{chapter}', 'ChapterController@show');
+Route::get('/chapter/{chapter}/{page?}', 'ChapterController@show');
 
 Auth::routes();
 

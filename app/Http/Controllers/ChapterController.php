@@ -175,9 +175,58 @@ class ChapterController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show(Request $request, Chapter $chapter, int $page = 0)
     {
-        //
+        $flashed_data = $request->session()->get('flashed_data');
+		
+		if (is_int($page))
+		{
+			if ($page < 0)
+			{
+				$page = 0;
+			}
+		}
+		else
+		{
+			$page = 0;
+		}
+		
+		$previous_chapter_id;
+		$next_chapter_id;
+		$last_page_of_previous_chapter;
+		
+		$collection = $chapter->collection()->first();
+	
+		$pages_array = json_encode($chapter->pages()->pluck('name'));
+		
+		if (count($chapter->previous_chapter()->first()))
+		{
+			$previous_chapter_id = $chapter->previous_chapter()->first()->id;
+		}
+		else
+		{
+			$previous_chapter_id = null;
+		}
+		
+		if(count($chapter->next_chapter()->first()))
+		{
+			$next_chapter_id = $chapter->next_chapter()->first()->id;
+		}
+		else
+		{
+			$next_chapter_id = null;
+		}
+		
+		if($previous_chapter_id != null)
+		{
+			$last_page_of_previous_chapter = count(Chapter::where('id', '=', $previous_chapter_id)->first()->pages) - 1;
+		}
+		else
+		{
+			$last_page_of_previous_chapter = null;
+		}
+		
+		return view('chapters.show', array('collection' => $collection, 'chapter' => $chapter, 'page_number' => $page, 'pages_array' => $pages_array, 'previous_chapter_id' => $previous_chapter_id, 'next_chapter_id' => $next_chapter_id, 'last_page_of_previous_chapter' => $last_page_of_previous_chapter, 'flashed_data' => $flashed_data));
     }
 
     /**

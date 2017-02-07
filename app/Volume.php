@@ -15,7 +15,7 @@ class Volume extends BaseManicModel
 	 */
 	public function chapters()
 	{
-		return $this->hasMany('App\Chapter');
+		return $this->hasMany('App\Chapter')->orderBy('number');
 	}
 	
 	/*
