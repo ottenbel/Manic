@@ -8,14 +8,14 @@
 </div>
 
 <div class="form-group">
-	{{ Form::label('number', 'Number') }}
-	@if((!empty($chapter)) && ($chapter->number != null) && (Input::old('number') == null))
-		{{ Form::text('number', $chapter->number, array('class' => 'form-control')) }}
+	{{ Form::label('chapter_number', 'Number') }}
+	@if((!empty($chapter)) && ($chapter->chapter_number != null) && (Input::old('chapter_number') == null))
+		{{ Form::text('chapter_number', $chapter->chapter_number, array('class' => 'form-control')) }}
 	@else
-		{{ Form::text('number', Input::old('number'), array('class' => 'form-control')) }}
+		{{ Form::text('chapter_number', Input::old('chapter_number'), array('class' => 'form-control')) }}
 	@endif
-	@if($errors->has('number'))
-		<div class ="alert alert-danger" id="name_errors">{{$errors->first('number')}}</div>
+	@if($errors->has('chapter_number'))
+		<div class ="alert alert-danger" id="name_errors">{{$errors->first('chapter_number')}}</div>
 	@endif
 </div>
 

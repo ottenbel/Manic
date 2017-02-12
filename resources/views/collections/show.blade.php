@@ -103,12 +103,12 @@
 	</div>
 	<br/>
 	
-	@foreach($collection->volumes()->orderBy('number', 'asc')->get() as $volume)
+	@foreach($collection->volumes()->orderBy('volume_number', 'asc')->get() as $volume)
 		<button class="accordion">
 			@if($volume->name != null && $volume->name != "")
-				Volume {{$volume->number}} - {{{$volume->name}}}
+				Volume {{$volume->volume_number}} - {{{$volume->name}}}
 			@else
-				Volume {{$volume->number}}
+				Volume {{$volume->volume_number}}
 			@endif 
 		</button>
 		<div class="volume_panel">
@@ -121,15 +121,15 @@
 				<div>
 			@endif
 					<table>
-						@foreach($volume->chapters()->orderBy('number', 'asc')->get() as $chapter)
+						@foreach($volume->chapters()->orderBy('chapter_number', 'asc')->get() as $chapter)
 							<tr>
 								@if($chapter->name != null && $chapter->name != "")
 									<td>
-										<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->number}}</a> - {{{$chapter->name}}}
+										<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->chapter_number}}</a> - {{{$chapter->name}}}
 									</td>
 								@else
 									<td>
-										<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->number}}</a>
+										<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->chapter_number}}</a>
 									</td>
 								@endif
 								<td>

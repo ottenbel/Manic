@@ -63,18 +63,7 @@ class Chapter extends BaseManicModel
 	 */
 	public function next_chapter()
 	{
-		if (count($this->volume->chapters()->where('number', '>', $this->number)->orderBy('number', 'asc')->get()))
-		{
-			return $this->volume->chapters()->where('number', '>', $this->number)->orderBy('number', 'asc')->take(1);
-		}
-		else if (count($this->volume->next_volume()->first()) && (count($this->volume->next_volume()->first()->chapters()->where('number', '>', $this->number)->orderBy('number', 'asc')->get())))
-		{
-			return $this->volume->next_volume()->first()->chapters()->where('number', '>', $this->number)->orderBy('number', 'asc')->take(1);
-		}
-		else
-		{
-			return $this->volume->chapters()->where('number', '>', $this->number)->orderBy('number', 'asc')->take(1);
-		}
+		return $this->volume->collection->chapters()->where('chapter_number', '>', $this->chapter_number)->orderBy('chapter_number', 'asc')->take(1);
 	}
 	
 	/*
@@ -82,17 +71,6 @@ class Chapter extends BaseManicModel
 	 */
 	public function previous_chapter()
 	{
-		if (count($this->volume->chapters()->where('number', '<', $this->number)->orderBy('number', 'desc')->get()))
-		{
-			return $this->volume->chapters()->where('number', '<', $this->number)->orderBy('number', 'desc')->take(1);
-		}
-		else if (count($this->volume->previous_volume()->first()) && ($this->volume->previous_volume()->first()->chapters()->where('number', '<', $this->number)->orderBy('number', 'desc')->get()))
-		{
-			return $this->volume->previous_volume()->first()->chapters()->where('number', '<', $this->number)->orderBy('number', 'desc')->take(1);
-		}
-		else
-		{
-			$this->volume->chapters()->where('number', '<', $this->number)->orderBy('number', 'desc')->take(1);
-		}
+		return $this->volume->collection->chapters()->where('chapter_number', '<', $this->chapter_number)->orderBy('chapter_number', 'desc')->take(1);
 	}
 }

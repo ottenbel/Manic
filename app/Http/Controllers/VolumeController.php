@@ -33,7 +33,7 @@ class VolumeController extends Controller
     {
         $this->validate($request, [
 			'collection_id' => 'required|exists:collections,id',
-			'number' => ['required',
+			'volume_number' => ['required',
 						'integer',
 						'min:0',
 						Rule::unique('volumes')->where(function ($query){
@@ -48,7 +48,7 @@ class VolumeController extends Controller
 		
 		$volume = new Volume();
 		$volume->collection_id = $collection_id;
-		$volume->number = trim(Input::get('number'));
+		$volume->volume_number = trim(Input::get('volume_number'));
 		$volume->name = trim(Input::get('name'));
 		$volume->created_by = Auth::user()->id;
 		$volume->updated_by = Auth::user()->id;
@@ -92,7 +92,7 @@ class VolumeController extends Controller
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully created new volume #$volume->number on collection $collection->name.");
+		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully created new volume #$volume->volume_number on collection $collection->name.");
     }
 
     /**
@@ -118,7 +118,7 @@ class VolumeController extends Controller
     {
         $this->validate($request, [
 			'collection_id' => 'required|exists:collections,id',
-			'number' => ['required',
+			'volume_number' => ['required',
 						'integer',
 						'min:0',
 						Rule::unique('volumes')->where(function ($query){
@@ -130,7 +130,7 @@ class VolumeController extends Controller
 		
 		$collection = $volume->collection;
 		
-		$volume->number = trim(Input::get('number'));
+		$volume->volume_number = trim(Input::get('volume_number'));
 		$volume->name = trim(Input::get('name'));
 		$volume->created_by = Auth::user()->id;
 		$volume->updated_by = Auth::user()->id;
@@ -178,7 +178,7 @@ class VolumeController extends Controller
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully updated volume #$volume->number on collection $collection->name.");
+		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully updated volume #$volume->volume_number on collection $collection->name.");
     }
 
     /**

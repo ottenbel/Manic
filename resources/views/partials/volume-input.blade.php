@@ -23,14 +23,14 @@
 </div>
 
 <div class="form-group">
-	{{ Form::label('number', 'Number') }}
-	@if((!empty($volume)) && ($volume->number != null) && (Input::old('number') == null))
-		{{ Form::text('number', $volume->number, array('class' => 'form-control')) }}
+	{{ Form::label('volume_number', 'Number') }}
+	@if((!empty($volume)) && ($volume->volume_number != null) && (Input::old('volume_number') == null))
+		{{ Form::text('volume_number', $volume->volume_number, array('class' => 'form-control')) }}
 	@else
-		{{ Form::text('number', Input::old('number'), array('class' => 'form-control')) }}
+		{{ Form::text('volume_number', Input::old('volume_number'), array('class' => 'form-control')) }}
 	@endif
-	@if($errors->has('number'))
-		<div class ="alert alert-danger" id="name_errors">{{$errors->first('number')}}</div>
+	@if($errors->has('volume_number'))
+		<div class ="alert alert-danger" id="name_errors">{{$errors->first('volume_number')}}</div>
 	@endif
 </div>
 

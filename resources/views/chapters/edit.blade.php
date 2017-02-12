@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Edit Chapter # {{$chapter->number}} {{{$chapter->name}}}
+Edit Chapter # {{$chapter->chapter_number}} {{{$chapter->name}}}
 @endsection
 
 @section('header')

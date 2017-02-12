@@ -15,7 +15,7 @@ class Volume extends BaseManicModel
 	 */
 	public function chapters()
 	{
-		return $this->hasMany('App\Chapter')->orderBy('number');
+		return $this->hasMany('App\Chapter')->orderBy('chapter_number');
 	}
 	
 	/*
@@ -39,7 +39,7 @@ class Volume extends BaseManicModel
 	 */
 	public function next_volume()
 	{
-		return $this->collection->volumes()->where('number', '>', $this->number)->orderBy('number', 'asc')->take(1);
+		return $this->collection->volumes()->where('volume_number', '>', $this->volume_number)->orderBy('volume_number', 'asc')->take(1);
 	}
 	
 	/*
@@ -47,7 +47,7 @@ class Volume extends BaseManicModel
 	 */
 	public function previous_volume()
 	{
-		return $this->collection->volumes()->where('number', '<', $this->number)->orderBy('number', 'desc')->take(1);
+		return $this->collection->volumes()->where('volume_number', '<', $this->volume_number)->orderBy('volume_number', 'desc')->take(1);
 	}
 	
 	/*
@@ -55,7 +55,7 @@ class Volume extends BaseManicModel
 	 */
 	public function first_chapter()
 	{
-		return $this->chapters()->orderBy('number', 'asc')->take(1);
+		return $this->chapters()->orderBy('chapter_number', 'asc')->take(1);
 	}
 	
 	/*
@@ -63,6 +63,6 @@ class Volume extends BaseManicModel
 	 */
 	public function last_chapter()
 	{
-		return $this->chapters()->orderBy('number', 'desc')->take(1);
+		return $this->chapters()->orderBy('chapter_number', 'desc')->take(1);
 	}
 }

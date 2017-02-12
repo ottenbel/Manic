@@ -16,7 +16,7 @@ class CreateChaptersTable extends Migration
         Schema::create('chapters', function(Blueprint $table){
 			$table->uuid('id');
 			$table->uuid('volume_id');
-			$table->unsignedInteger('number');
+			$table->unsignedInteger('chapter_number');
 			$table->string('name')->nullable();
 			$table->string('source');
 			$table->uuid('created_by');
@@ -27,7 +27,7 @@ class CreateChaptersTable extends Migration
 			$table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
 			$table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
 			$table->foreign('volume_id')->references('id')->on('volumes')->onDelete('cascade');
-			$table->unique(['volume_id', 'number']);
+			$table->unique(['volume_id', 'chapter_number']);
 		});
     }
 

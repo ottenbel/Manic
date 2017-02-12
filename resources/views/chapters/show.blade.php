@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-	{{$collection->name}} - Chapter {{$chapter->number}} {{$chapter->name}}
+	{{$collection->name}} - Chapter {{$chapter->chapter_number}} {{$chapter->name}}
 @endsection
 
 @section('head')
@@ -23,12 +23,13 @@
 			var updated_url = "/chapter/" + chapter_id + "/" + page_number;
 			$("#viewer_current_page").attr("src", image_url);
 			history.replaceState(null, '', updated_url);
-			$('#page_count').innerHTML(page_number + " / " + pages.length);
+			
 			if((page_number + 1) < pages.length)
 			{
 				var next_page_number = page_number + 1;
 				var next_page_url = "/chapter/" + chapter_id + "/" + next_page_number;
 				$('#next_page_link').attr("href", next_page_url);
+				$('#page_count').innerHTML(next_page_number + " / " + pages.length);
 			}
 			else if(next_chapter_id != "")
 			{
@@ -61,13 +62,13 @@
 			var updated_url = "/chapter/" + chapter_id + "/" + page_number;
 			$("#viewer_current_page").attr("src", image_url); 
 			history.replaceState(null, '', updated_url);
-			$('#page_count').innerHTML(page_number + " / " + pages.length);
 			
 			if((page_number - 1) > 0)
 			{
 				var next_page_number = page_number - 1;
 				var previous_page_url = "/chapter/" + chapter_id + "/" + previous_page_number;
 				$('#previous_page_link').attr("href", previous_page_url);
+				$('#page_count').innerHTML(previous_page_number + " / " + pages.length);
 			}
 			else if (previous_chapter_id != "")
 			{
@@ -91,6 +92,13 @@
 		}
 	}
 	
+	function jump()
+	{
+		var page_number = $('#jump_selected_page').val;
+		var jump_url = "/chapter/" + previous_chapter_id + "/" + page_number;
+		window.location.href = jump_url;
+	}
+	
 	document.onkeydown = function(key_press)
 	{
 		//Catch user pressing the B key
@@ -105,6 +113,21 @@
 			next_page();
 		}
 	}
+	
+	window.onload = function () {
+		$('#previous_page_link').click(function(){
+			previous_page(); return false; 
+		});
+		
+		$('#next_page_link').click(function(){
+			next_page(); return false; 
+		});
+		
+		$('#jump_button').click(function (){
+			jump();
+		});
+	}
+	
 </script>
 @endsection
 
@@ -113,11 +136,11 @@
 	<div>
 		@if($chapter->name)
 			<div class="col-md-4">
-				<b><a href="">{{{$collection->name}}}</a></b> - Ch {{$chapter->number}} - {{{$chapter->name}}}
+				<b><a href="/collection/{{$chapter->collection_id}}">{{{$collection->name}}}</a></b> - Ch {{$chapter->chapter_number}} - {{{$chapter->name}}}
 			</div>
 		@else
 			<div class="col-md-4">
-				<b><a href="">{{{$collection->name}}}</a></b> - Ch {{$chapter->number}}
+				<b><a href="/collection/{{$chapter->collection_id}}">{{{$collection->name}}}</a></b> - Ch {{$chapter->chapter_number}}
 			</div>
 		@endif
 		
@@ -138,6 +161,11 @@
 				<a href="{{$chapter->source}}" class="btn-link">Source</button>
 			</div>
 		@endif
+		
+		<div class="col-md-2">
+			{{Form::selectRange('jump_selected_page', 0, count($chapter->pages))}}
+			{{ Form::submit('Jump', array('id' => 'jump_button')) }}
+		</div>
 	</div>
 </div>
 <br/>
@@ -165,10 +193,6 @@
 				<li id="previous_chapter_link_container">
 					<a id="previous_chapter_link" href="/chapter/{{$chapter->previous_chapter()->first()->id}}"><i class="fa fa-chevron-left" aria-hidden="true"></i><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
 				</li>
-			@else
-				<li id="previous_chapter_link_container">
-					<a id="previous_chapter_link" href="/collection/{{$collection->id}}"><i class="fa fa-chevron-left" aria-hidden="true"></i><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
-				</li>
 			@endif
 			  
 			@if($page_number > 0)
@@ -181,23 +205,19 @@
 				</li>
 			@endif
 			
-			@if(count($chapter->pages()) > $page_number)
+			@if(count($chapter->pages) > $page_number)
 				<li id="next_page_link_container">
 					<a id="next_page_link" href="/chapter/{{$chapter->id}}/{{$page_number + 1}}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 				</li>
 			@elseif(count($chapter->next_chapter()->first()))
 				<li id="next_page_link_container">
-					<a id="next_page_link" href="/chapter/{{$chapter->previous_chapter()->first()->id}}/0"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+					<a id="next_page_link" href="/chapter/{{$chapter->next_chapter()->first()->id}}/0"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 				</li>
 			@endif
 			
 			@if(count($chapter->next_chapter()->first()))
 				<li id="next_chapter_link_container">
-					<a id="next_chapter_link" href="/chapter/{{$chapter->previous_chapter()->first()->id}}/0"><i class="fa fa-chevron-right" aria-hidden="true"></i><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-				</li>
-			@else
-				<li id="next_chapter_link_container">
-					<a id="next_chapter_link" href="/collection/{{$collection->id}}"><i class="fa fa-chevron-right" aria-hidden="true"></i><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+					<a id="next_chapter_link" href="/chapter/{{$chapter->next_chapter()->first()->id}}/0"><i class="fa fa-chevron-right" aria-hidden="true"></i><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 				</li>
 			@endif
 			

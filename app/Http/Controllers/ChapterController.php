@@ -24,7 +24,7 @@ class ChapterController extends Controller
     public function create(Request $request, Collection $collection)
     {
         $flashed_data = $request->session()->get('flashed_data');
-		$volumes = $collection->volumes()->orderBy('number', 'asc')->get()->pluck('number', 'id')->map(function($item, $key)
+		$volumes = $collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
 		{
 			return "Volume $item";
 		});
@@ -46,18 +46,18 @@ class ChapterController extends Controller
 		
 		if (count($volume) && count($volume->previous_volume()->first()) && count($volume->previous_volume()->first()->last_chapter()))
 		{
-			$lower_chapter_limit = $volume->previous_volume()->first()->last_chapter()->first()->number;
+			$lower_chapter_limit = $volume->previous_volume()->first()->last_chapter()->first()->chapter_number;
 		}
 		if (count($volume) && count($volume->next_volume()->first()) && count($volume->next_volume()->first()->first_chapter()))
 		{
-			$upper_chapter_limit = $volume->next_volume()->first()->first_chapter()->first()->number;
+			$upper_chapter_limit = $volume->next_volume()->first()->first_chapter()->first()->chapter_number;
 		}
 		
 		if (($lower_chapter_limit != 0) && ($upper_chapter_limit != 0))
 		{
 			$this->validate($request, [
 			'volume_id' => 'required|exists:volumes,id',
-			'number' => ['required',
+			'chapter_number' => ['required',
 						'integer',
 						"between:$lower_chapter_limit,$upper_chapter_limit",
 						Rule::unique('chapters')->where(function ($query){
@@ -72,7 +72,7 @@ class ChapterController extends Controller
 			$lower_chapter_limit = $lower_chapter_limit + 1;
 			$this->validate($request, [
 			'volume_id' => 'required|exists:volumes,id',
-			'number' => ['required',
+			'chapter_number' => ['required',
 						'integer',
 						"min:$lower_chapter_limit",
 						Rule::unique('chapters')->where(function ($query){
@@ -87,7 +87,7 @@ class ChapterController extends Controller
 			$upper_chapter_limit = $upper_chapter_limit - 1;
 			$this->validate($request, [
 			'volume_id' => 'required|exists:volumes,id',
-			'number' => ['required',
+			'chapter_number' => ['required',
 						'integer',
 						"between:0,$upper_chapter_limit",
 						Rule::unique('chapters')->where(function ($query){
@@ -101,7 +101,7 @@ class ChapterController extends Controller
 		{
 			$this->validate($request, [
 			'volume_id' => 'required|exists:volumes,id',
-			'number' => ['required',
+			'chapter_number' => ['required',
 						'integer',
 						'min:0',
 						Rule::unique('chapters')->where(function ($query){
@@ -114,7 +114,7 @@ class ChapterController extends Controller
 		
 		$chapter = new Chapter();
 		$chapter->volume_id = $volume->id;
-		$chapter->number = trim(Input::get('number'));
+		$chapter->chapter_number = trim(Input::get('chapter_number'));
 		$chapter->name = trim(Input::get('name'));
 		$chapter->source = trim(Input::get('source'));
 		$chapter->created_by = Auth::user()->id;
@@ -166,7 +166,7 @@ class ChapterController extends Controller
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully created new chapter #$chapter->number on collection $collection->name.");
+		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully created new chapter #$chapter->chapter_number on collection $collection->name.");
     }
 
     /**
@@ -238,7 +238,7 @@ class ChapterController extends Controller
     public function edit(Request $request, Chapter $chapter)
     {
         $flashed_data = $request->session()->get('flashed_data');
-		$volumes = $chapter->volume->collection->volumes()->orderBy('number', 'asc')->get()->pluck('number', 'id')->map(function($item, $key)
+		$volumes = $chapter->volume->collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
 		{
 			return "Volume $item";
 		});
@@ -275,18 +275,18 @@ class ChapterController extends Controller
 		
 		if (count($volume) && count($volume->previous_volume()->first()) && count($volume->previous_volume()->first()->last_chapter()))
 		{
-			$lower_chapter_limit = $volume->previous_volume()->first()->last_chapter()->first()->number;
+			$lower_chapter_limit = $volume->previous_volume()->first()->last_chapter()->first()->chapter_number;
 		}
 		if (count($volume) && count($volume->next_volume()->first()) && count($volume->next_volume()->first()->first_chapter()))
 		{
-			$upper_chapter_limit = $volume->next_volume()->first()->first_chapter()->first()->number;
+			$upper_chapter_limit = $volume->next_volume()->first()->first_chapter()->first()->chapter_number;
 		}
 		
 		if (($lower_chapter_limit != 0) && ($upper_chapter_limit != 0))
 		{
 			$this->validate($request, [
 			'volume_id' => 'required|exists:volumes,id',
-			'number' => ['required',
+			'chapter_number' => ['required',
 						'integer',
 						"between:$lower_chapter_limit,$upper_chapter_limit",
 						Rule::unique('chapters')->where(function ($query){
@@ -304,7 +304,7 @@ class ChapterController extends Controller
 			$lower_chapter_limit = $lower_chapter_limit + 1;
 			$this->validate($request, [
 			'volume_id' => 'required|exists:volumes,id',
-			'number' => ['required',
+			'chapter_number' => ['required',
 						'integer',
 						"min:$lower_chapter_limit",
 						Rule::unique('chapters')->where(function ($query){
@@ -322,7 +322,7 @@ class ChapterController extends Controller
 			$upper_chapter_limit = $upper_chapter_limit - 1;
 			$this->validate($request, [
 			'volume_id' => 'required|exists:volumes,id',
-			'number' => ['required',
+			'chapter_number' => ['required',
 						'integer',
 						"between:0,$upper_chapter_limit",
 						Rule::unique('chapters')->where(function ($query){
@@ -339,7 +339,7 @@ class ChapterController extends Controller
 		{
 			$this->validate($request, [
 			'volume_id' => 'required|exists:volumes,id',
-			'number' => ['required',
+			'chapter_number' => ['required',
 						'integer',
 						'min:0',
 						Rule::unique('chapters')->where(function ($query){
@@ -354,7 +354,7 @@ class ChapterController extends Controller
 		}
 		
 		$chapter->volume_id = $volume->id;
-		$chapter->number = trim(Input::get('number'));
+		$chapter->chapter_number = trim(Input::get('chapter_number'));
 		$chapter->name = trim(Input::get('name'));
 		$chapter->source = trim(Input::get('source'));
 		$chapter->created_by = Auth::user()->id;
@@ -432,7 +432,7 @@ class ChapterController extends Controller
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully updated  chapter #$chapter->number on collection $collection->name.");
+		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully updated  chapter #$chapter->chapter_number on collection $collection->name.");
     }
 
     /**

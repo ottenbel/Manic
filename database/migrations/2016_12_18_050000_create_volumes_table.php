@@ -17,7 +17,7 @@ class CreateVolumesTable extends Migration
 			$table->uuid('id');
 			$table->uuid('collection_id');
 			$table->uuid('cover')->nullable();
-			$table->unsignedInteger('number');
+			$table->unsignedInteger('volume_number');
 			$table->string('name')->nullable();
 			$table->uuid('created_by');
 			$table->uuid('updated_by');
@@ -28,7 +28,7 @@ class CreateVolumesTable extends Migration
 			$table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
 			$table->foreign('collection_id')->references('id')->on('collections')->onDelete('cascade');
 			$table->foreign('cover')->references('id')->on('images')->onDelete('set null');
-			$table->unique(['collection_id', 'number']);
+			$table->unique(['collection_id', 'volume_number']);
 		});
     }
 

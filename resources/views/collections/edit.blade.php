@@ -20,12 +20,12 @@ Edit Collection - {{{$collection->name}}}
 		
 		@include('partials.collection-input', array('collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))
 		<div id = "volumes">
-			@foreach($collection->volumes()->orderBy('number', 'asc')->get() as $volume)
+			@foreach($collection->volumes()->orderBy('volume_number', 'asc')->get() as $volume)
 				<div id="volume">
 					@if($volume->name != null && $volume->name != "")
-						<a href="/volume/{{$volume->id}}/edit">Volume {{$volume->number}} - {{{$volume->name}}}</a>
+						<a href="/volume/{{$volume->id}}/edit">Volume {{$volume->volume_number}} - {{{$volume->name}}}</a>
 					@else
-						<a href="/volume/{{$volume->id}}/edit">Volume {{$volume->number}}</a>
+						<a href="/volume/{{$volume->id}}/edit">Volume {{$volume->volume_number}}</a>
 					@endif 
 				</div>
 			@endforeach
