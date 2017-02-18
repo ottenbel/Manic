@@ -16,20 +16,34 @@
 	
 	function next_page()
 	{	
-		page_number = page_number + 1;	
+		var current_page_number = page_number;
+		page_number = +page_number + 1;	
 		if (page_number < pages.length)
 		{	
 			var image_url = "//" + window.location.hostname + ":" + window.location.port + "/" + pages[page_number];
 			var updated_url = "/chapter/" + chapter_id + "/" + page_number;
+			var number_of_pages = pages.length - 1;
 			$("#viewer_current_page").attr("src", image_url);
 			history.replaceState(null, '', updated_url);
+			$('html, body').animate({scrollTop:$('#page_viewer_container').position().top}, 'fast');
+			$('#page_count').html(page_number + " / " + number_of_pages);
 			
-			if((page_number + 1) < pages.length)
+			$('#jump_selected_page').val(page_number);
+			
+			var previous_page_url = "/chapter/" + chapter_id + "/" + current_page_number;
+			$('#previous_page_link').attr("href", previous_page_url);
+			$('#previous_page_link_container').show();
+			
+			if ((page_number + 1) >= pages.length)
+			{
+				$('#next_page_link_container').hide();
+			}
+			
+			if((page_number + 1) <= pages.length)
 			{
 				var next_page_number = page_number + 1;
 				var next_page_url = "/chapter/" + chapter_id + "/" + next_page_number;
 				$('#next_page_link').attr("href", next_page_url);
-				$('#page_count').innerHTML(next_page_number + " / " + pages.length);
 			}
 			else if(next_chapter_id != "")
 			{
@@ -54,21 +68,30 @@
 	}
 	
 	function previous_page()
-	{	
-		page_number = page_number - 1;
+	{
+		var current_page_number = page_number;
+		page_number = +page_number - 1;
 		if (page_number >= 0)
 		{
 			var image_url = "//" + window.location.hostname + ":" + window.location.port + "/" + pages[page_number];
 			var updated_url = "/chapter/" + chapter_id + "/" + page_number;
+			var number_of_pages = pages.length - 1;
 			$("#viewer_current_page").attr("src", image_url); 
 			history.replaceState(null, '', updated_url);
+			$('html, body').animate({scrollTop:$('#page_viewer_container').position().top}, 'fast');
+			$('#page_count').html(page_number + " / " + number_of_pages);
+			
+			$('#jump_selected_page').val(page_number);
+			
+			var next_page_url = "/chapter/" + chapter_id + "/" + current_page_number;
+			$('#next_page_link').attr("href", next_page_url);
+			$('#next_page_link_container').show();
 			
 			if((page_number - 1) > 0)
 			{
-				var next_page_number = page_number - 1;
+				var previous_page_number = page_number - 1;
 				var previous_page_url = "/chapter/" + chapter_id + "/" + previous_page_number;
-				$('#previous_page_link').attr("href", previous_page_url);
-				$('#page_count').innerHTML(previous_page_number + " / " + pages.length);
+				$('#previous_page_link').attr("href", previous_page_url);	
 			}
 			else if (previous_chapter_id != "")
 			{
@@ -78,6 +101,11 @@
 			else
 			{
 				$('#previous_chapter_link_container').hide();
+				
+				if ((page_number - 1) < 0)
+				{
+					$('#previous_page_link_container').hide();
+				}			
 			}
 		}
 		else if (previous_chapter_id != "")
@@ -94,9 +122,39 @@
 	
 	function jump()
 	{
-		var page_number = $('#jump_selected_page').val;
-		var jump_url = "/chapter/" + previous_chapter_id + "/" + page_number;
-		window.location.href = jump_url;
+		var number_of_pages = pages.length - 1;
+		page_number = $('#jump_selected_page').val();
+		var jump_url = "/chapter/" + chapter_id + "/" + page_number;
+		var image_url = "//" + window.location.hostname + ":" + window.location.port + "/" + pages[page_number];
+		$("#viewer_current_page").attr("src", image_url);
+		history.replaceState(null, '', jump_url);
+		$('#page_count').html(page_number + " / " + number_of_pages);
+		
+		if (page_number == 0)
+		{
+			$('#previous_page_link').attr("href", "#");
+			$('#previous_page_link_container').hide();
+		}
+		else if ((page_number + 1) == pages.length)
+		{
+			$('#next_page_link').attr("href", "#");
+			$('#next_page_link_container').hide();
+		}
+		else
+		{
+			var previous_page_number = page_number - 1;
+			var next_page_number = page_number + 1;
+			
+			var previous_page_url = "/chapter/" + chapter_id + "/" + previous_page_number;
+			var next_page_url = "/chapter/" + chapter_id + "/" + next_page_number;
+			
+			
+			$('#previous_page_link').attr("href", previous_page_url);
+			$('#previous_page_link_container').show();
+			
+			$('#next_page_link').attr("href", next_page_url);
+			$('#next_page_link_container').show();
+		}
 	}
 	
 	document.onkeydown = function(key_press)
@@ -136,11 +194,11 @@
 	<div>
 		@if($chapter->name)
 			<div class="col-md-4">
-				<b><a href="/collection/{{$chapter->collection_id}}">{{{$collection->name}}}</a></b> - Ch {{$chapter->chapter_number}} - {{{$chapter->name}}}
+				<b><a href="/collection/{{$collection->id}}">{{{$collection->name}}}</a></b> - Ch {{$chapter->chapter_number}} - {{{$chapter->name}}}
 			</div>
 		@else
 			<div class="col-md-4">
-				<b><a href="/collection/{{$chapter->collection_id}}">{{{$collection->name}}}</a></b> - Ch {{$chapter->chapter_number}}
+				<b><a href="/collection/{{$collection->id}}">{{{$collection->name}}}</a></b> - Ch {{$chapter->chapter_number}}
 			</div>
 		@endif
 		
@@ -163,7 +221,7 @@
 		@endif
 		
 		<div class="col-md-2">
-			{{Form::selectRange('jump_selected_page', 0, count($chapter->pages))}}
+			{{Form::selectRange('jump_selected_page', 0, count($chapter->pages) - 1, $page_number, ['id' => 'jump_selected_page'])}}
 			{{ Form::submit('Jump', array('id' => 'jump_button')) }}
 		</div>
 	</div>
@@ -171,7 +229,7 @@
 <br/>
 
 @if (count($chapter->pages) > 0)
-	<div class="container" align="center">
+	<div class="container" align="center" id='page_viewer_container'>
 		@if(($page_number >= count($chapter->pages)) && ($page_number > 0))
 			<img id="viewer_current_page" src="{{asset($chapter->pages[count($chapter->pages)-1]->name)}}" class="img-responsive" alt="Page {{$chapter->pages[count($chapter->pages)-1]->number}}">
 		@elseif($page_number <= 0)
@@ -183,7 +241,7 @@
 	<br/>
 
 	<div id="page_count" class="container" align="center">
-		{{$page_number}} / {{count($chapter->pages)}}
+		{{$page_number}} / {{count($chapter->pages) - 1}}
 	</div>
 	<br/>
 	
@@ -203,15 +261,19 @@
 				<li id="previous_page_link_container">
 					<a id="previous_page_link" href="/chapter/{{$chapter->previous_chapter()->first()->id}}/{{count($chapter->previous_chapter()->first()->pages) -1}}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
 				</li>
+			@else
+				<li id="previous_page_link_container" style="display: none;">
+					<a id="previous_page_link" href="#"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+				</li>
 			@endif
 			
-			@if(count($chapter->pages) > $page_number)
+			@if($page_number < (count($chapter->pages) - 1))
 				<li id="next_page_link_container">
 					<a id="next_page_link" href="/chapter/{{$chapter->id}}/{{$page_number + 1}}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 				</li>
-			@elseif(count($chapter->next_chapter()->first()))
-				<li id="next_page_link_container">
-					<a id="next_page_link" href="/chapter/{{$chapter->next_chapter()->first()->id}}/0"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+			@else
+				<li id="next_page_link_container" style="display: none;">
+					<a id="next_page_link" href="#"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 				</li>
 			@endif
 			
