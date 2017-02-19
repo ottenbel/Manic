@@ -193,17 +193,17 @@
 <div class="container">
 	<div>
 		@if($chapter->name)
-			<div class="col-md-4">
+			<div class="col-md-5">
 				<b><a href="/collection/{{$collection->id}}">{{{$collection->name}}}</a></b> - Ch {{$chapter->chapter_number}} - {{{$chapter->name}}}
 			</div>
 		@else
-			<div class="col-md-4">
+			<div class="col-md-5">
 				<b><a href="/collection/{{$collection->id}}">{{{$collection->name}}}</a></b> - Ch {{$chapter->chapter_number}}
 			</div>
 		@endif
 		
 		@if((count($chapter->primary_scanalators)) || (count($chapter->secondary_scanalators)))
-			<div class="scanalator_holder col-md-5">			
+			<div class="scanalator_holder col-md-4">			
 			@foreach($chapter->primary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
 					<span class="primary_scanalators"><a href="/scanalator/{{$scanalator->id}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
 				@endforeach
@@ -216,7 +216,7 @@
 		
 		@if($chapter->source != null)
 			<div class="col-md-1">
-				<a href="{{$chapter->source}}" class="btn-link">Source</button>
+				<span class="source_tag"><a href="{{$chapter->source}}">Source</a></source>
 			</div>
 		@endif
 		

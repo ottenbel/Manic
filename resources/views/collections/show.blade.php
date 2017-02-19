@@ -120,7 +120,7 @@
 			@else
 				<div>
 			@endif
-					<table>
+					<table width="100%">
 						@foreach($volume->chapters()->orderBy('chapter_number', 'asc')->get() as $chapter)
 							<tr>
 								@if($chapter->name != null && $chapter->name != "")
@@ -147,7 +147,7 @@
 								</td>
 								@if($chapter->source != null)
 									<td>
-										<a href="{{$chapter->source}}">Source</a>
+										<span class="source_tag"><a href="{{$chapter->source}}">Source</a></span>
 									</td>
 								@endif
 							</tr>
