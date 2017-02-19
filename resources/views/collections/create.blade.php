@@ -4,7 +4,7 @@
 Create a New Collection
 @endsection
 
-@section('header')
+@section('head')
 
 @endsection
 

@@ -4,7 +4,7 @@
 Edit Chapter # {{$chapter->chapter_number}} {{{$chapter->name}}}
 @endsection
 
-@section('header')
+@section('head')
 
 @endsection
 

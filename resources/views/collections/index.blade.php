@@ -4,7 +4,7 @@
 Index - Page {{$collections->currentPage()}}
 @endsection
 
-@section('header')
+@section('head')
 
 @endsection
 

@@ -4,7 +4,7 @@
 Edit Volume - {{{$volume->name}}}
 @endsection
 
-@section('header')
+@section('head')
 
 @endsection
 

@@ -4,7 +4,7 @@
 Create a New Volume 
 @endsection
 
-@section('header')
+@section('head')
 
 @endsection
 

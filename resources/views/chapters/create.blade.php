@@ -4,7 +4,7 @@
 Create a New Chapter 
 @endsection
 
-@section('header')
+@section('head')
 
 @endsection
 

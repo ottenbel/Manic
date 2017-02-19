@@ -4,7 +4,7 @@
 	{{$collection->name}}
 @endsection
 
-@section('header')
+@section('head')
 
 @endsection
 
