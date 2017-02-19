@@ -10,7 +10,9 @@
 				Collection <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/chapter/create/{{$collection->id}}">Add Chapter</a></li>
+				@if(count($collection->volumes))
+					<li><a href="/chapter/create/{{$collection->id}}">Add Chapter</a></li>
+				@endif
 				<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
 				<li><a href="/collection/{{$collection->id}}/edit">Edit Collection</a><li>
 				<li><a href="">Delete Collection</a></li>
@@ -33,7 +35,9 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				<li><a href="/collection/{{$collection->id}}/">View Collection</a><li>
-				<li><a href="/chapter/create/{{$collection->id}}">Add Chapter</a></li>
+				@if(count($collection->volumes))
+					<li><a href="/chapter/create/{{$collection->id}}">Add Chapter</a></li>
+				@endif
 				<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
 				<li><a href="">Delete Collection</a></li>
 			</ul>
