@@ -29,7 +29,24 @@ class ChapterController extends Controller
 			return "Volume $item";
 		});
 		
-        return View('chapters.create', array('collection' => $collection, 'volumes' => $volumes, 'flashed_data' => $flashed_data));
+		if (count($volumes) == 0)
+		{
+			//If collection doesn't have any associated volumes prompt the user to create a volume before they create a chapter.
+			if ($flashed_data == "")
+			{
+				$flashed_data = "Creating a chapter on a collection requires a volume for the chapter to belong to.  Create a volume to associate the chapter to before trying to create a chapter.";
+			}
+			else
+			{
+				$flashed_data = "<br/>Creating a chapter on a collection requires a volume for the chapter to belong to.    Create a volume to associate the chapter to before trying to create a chapter.";
+			}
+			
+			return View('volumes.create', array('collection' => $collection, 'flashed_data' => $flashed_data));
+		}
+		else
+		{
+			return View('chapters.create', array('collection' => $collection, 'volumes' => $volumes, 'flashed_data' => $flashed_data));
+		}
     }
 
     /**
