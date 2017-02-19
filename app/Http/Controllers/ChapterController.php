@@ -380,7 +380,7 @@ class ChapterController extends Controller
 		foreach ($pages as $page)
 		{
 			//If page has not been marked for deletion re-add it to the chapter.
-			if (array_key_exists("$page->id", $delete_pages_array))
+			if (!(array_key_exists("$page->id", $delete_pages_array)))
 			{
 				$image = Image::where('id', '=', $page->id)->first();
 				$page_number = $update_pages_array["$page->id"];
