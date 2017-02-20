@@ -23,6 +23,22 @@ class Tag extends BaseManicModel
 	 */
 	public function usage_count()
 	{
-		return $this->collections()->count();
+		return $this->collections();
+	}
+	
+	/*
+	 * Get the number of times the tag is used as a primary tag across the site.
+	 */
+	public function primary_usage_count()
+	{
+		return $this->collections()->where('primary', '=', true);
+	}
+	
+	/*
+	 * Get the number of times the tag is used as a secondary tag across the site.
+	 */
+	public function secondary_usage_count()
+	{
+		return $this->collections()->where('primary', '=', false);
 	}
 }

@@ -1,3 +1,15 @@
+<li class="dropdown">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+		Tags<span class="caret"></span>
+	</a>
+	<ul class="dropdown-menu" role="menu">
+		<li><a href="{{ url('/artist') }}">Artist</a><li>
+		<li><a href="{{ url('/tag') }}">Tag</a><li>
+		<li><a href="{{ url('/scanalator') }}">Scanalator</a><li>
+		<li><a href="{{ url('/series') }}">Series</a><li>
+	</ul>
+</li>
+
 <!-- Authentication Links -->
 @if (Auth::guest())
 	<li><a href="{{ url('/login') }}">Login</a></li>
@@ -61,8 +73,41 @@
 				<li><a href="">Delete Chapter</a></li>
 			</ul>
 		</li>
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagController@show")	
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+				Tag <span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="/tag/{{$tag->id}}/edit/">Edit</a><li>
+				<li><a href="">Delete Tag</a></li>
+			</ul>
+		</li>
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagController@edit")
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+				Tag <span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="/tag/{{$tagObject->id}}/">View Tag</a><li>
+				<li><a href="">Delete Tag</a></li>
+			</ul>
+		</li>
 	@else
-		<li><a href="{{url('/collection/create')}}">Create Collection</a></li>
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+				Create <span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="{{url('/collection/create')}}">Collection</a></li>
+				<div class="dropdown-divider"></div>
+				<h6 class="dropdown-header">Tags</h6>
+				<li><a href="{{ url('/artist/create') }}">Artist</a><li>
+				<li><a href="{{ url('/tag/create') }}">Tag</a><li>
+				<li><a href="{{ url('/scanalator/create') }}">Scanalator</a><li>
+				<li><a href="{{ url('/series/create') }}">Series</a><li>	
+			</ul>
+		</li>
 	@endif
 	
 	<li class="dropdown">

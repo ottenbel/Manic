@@ -42,6 +42,20 @@ Route::group(['middleware' => 'auth'], function(){
 });
 
 Route::get('/chapter/{chapter}/{page?}', 'ChapterController@show');
+//End Chapter controller routes
+
+//Tag controller routes
+Route::group(['middleware' => 'auth'], function(){
+	Route::get('/tag/create', 'TagController@create');
+	Route::post('/tag', 'TagController@store');
+	Route::get('/tag/{tag}/edit', 'TagController@edit');
+	Route::patch('/tag/{tag}', 'TagController@update');
+});
+
+Route::get('/tag', 'TagController@index');
+Route::get('/tag/{tag}', 'TagController@show');
+
+//End tag controller routes
 
 Auth::routes();
 

@@ -22,6 +22,6 @@ class Series extends BaseManicModel
 	 */
 	public function usage_count()
 	{
-		return $this->collections()->count();
+		return $this->collections();
 	}
 }
