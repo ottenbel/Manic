@@ -55,6 +55,19 @@ Route::group(['middleware' => 'auth'], function(){
 Route::get('/tag', 'TagController@index');
 Route::get('/tag/{tag}', 'TagController@show');
 
+//Artist controller routes
+Route::group(['middleware' => 'auth'], function(){
+	Route::get('/artist/create', 'ArtistController@create');
+	Route::post('/artist', 'ArtistController@store');
+	Route::get('/artist/{artist}/edit', 'ArtistController@edit');
+	Route::patch('/artist/{artist}', 'ArtistController@update');
+});
+
+Route::get('/artist', 'ArtistController@index');
+Route::get('/artist/{artist}', 'ArtistController@show');
+
+//End artist controller routes
+
 //End tag controller routes
 
 Auth::routes();

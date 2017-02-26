@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Auth;
+use DB;
+use Input;
+use App\Artist;
 
 class ArtistController extends Controller
 {
@@ -11,9 +16,53 @@ class ArtistController extends Controller
      *
      * @return Response
      */
-    public function index()
-    {
-        //
+    public function index(Request $request)
+    {			
+		$artists = null;
+		$artist_list_type = trim(strtolower($request->input('type')));
+		$artist_list_order = trim(strtolower($request->input('order')));
+		
+		if (($artist_list_type != "usage") && ($artist_list_type != "alphabetic"))
+		{
+			$artist_list_type = "usage";
+		}
+		
+		if (($artist_list_order != "asc") && ($artist_list_order != "desc"))
+		{
+			if($artist_list_type == "usage")
+			{
+				$artist_list_order = "asc";
+			}
+			else
+			{
+				$artist_list_order = "desc";
+			}
+		}
+		
+		if ($artist_list_type == "alphabetic")
+		{
+			$artists = new artist();
+			$artist_output = $artists->orderBy('name', $artist_list_order)->paginate(30);
+			
+			$artists = $artist_output;
+		}
+		else
+		{	
+			$artists = new artist();
+			$artists_used = $artists->join('artist_collection', 'artists.id', '=', 'artist_collection.artist_id')->select('artists.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $artist_list_order)->orderBy('name', 'desc')->paginate(30);
+			
+			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds artists that aren't used into the dataset used for popularity)
+			
+			/*$artists_not_used = $artists->leftjoin('artist_collection', 'artists.id', '=', 'artist_collection.artist_id')->where('collection_id', '=', null)->select('artists.*', DB::raw('0 as total'))->groupBy('name');
+			
+			$artist_output = $artists_used->union($artists_not_used)->orderBy('total', $artist_list_order)->orderBy('name', 'desc')->get();*/
+			
+			$artists = $artists_used;
+		}		
+				
+		$flashed_data = $request->session()->get('flashed_data');
+		
+		return View('artists.index', array('artists' => $artists->appends(Input::except('page')), 'list_type' => $artist_list_type, 'list_order' => $artist_list_order, 'flashed_data' => $flashed_data));
     }
 
     /**
@@ -21,9 +70,11 @@ class ArtistController extends Controller
      *
      * @return Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $flashed_data = $request->session()->get('flashed_data');
+		
+		return View('artists.create', array('flashed_data' => $flashed_data));
     }
 
     /**
@@ -31,9 +82,24 @@ class ArtistController extends Controller
      *
      * @return Response
      */
-    public function store()
+    public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+			'name' => 'required|unique:artists',
+			'url' => 'URL',
+		]);
+		
+		$artist = new Artist();
+		$artist->name = trim(Input::get('name'));
+		$artist->description = trim(Input::get('description'));
+		$artist->url = trim(Input::get('url'));
+		$artist->created_by = Auth::user()->id;
+		$artist->updated_by = Auth::user()->id;
+		
+		$artist->save();
+		
+		//Redirect to the artist that was created
+		return redirect()->action('ArtistController@show', [$artist])->with("flashed_data", "Successfully created artist $artist->name.");
     }
 
     /**
@@ -42,9 +108,11 @@ class ArtistController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show(Request $request, Artist $artist)
     {
-        //
+        $flashed_data = $request->session()->get('flashed_data');
+		
+		return View('artists.show', array('artist' => $artist, 'flashed_data' => $flashed_data));
     }
 
     /**
@@ -53,9 +121,11 @@ class ArtistController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function edit($id)
+    public function edit(Request $request, Artist $artist)
     {
-        //
+        $flashed_data = $request->session()->get('flashed_data');
+		
+		return View('artists.edit', array('tagObject' => $artist, 'flashed_data' => $flashed_data));
     }
 
     /**
@@ -64,9 +134,25 @@ class ArtistController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update($id)
+    public function update(Request $request, Artist $artist)
     {
-        //
+		$this->validate($request, [
+		'name' => ['required',
+					Rule::unique('artists')->where(function ($query){
+						$query->where('id', '!=', trim(Input::get('artist_id')));
+					})],
+				'url' => 'URL',
+		]);
+		
+		$artist->name = trim(Input::get('name'));
+		$artist->description = trim(Input::get('description'));
+		$artist->url = trim(Input::get('url'));
+		$artist->updated_by = Auth::user()->id;
+		
+		$artist->save();
+		
+		//Redirect to the artist that was created
+		return redirect()->action('ArtistController@show', [$artist])->with("flashed_data", "Successfully updated artist $artist->name.");
     }
 
     /**
