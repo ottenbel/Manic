@@ -22,7 +22,7 @@ class Scanalator extends BaseManicModel
 	 */
 	public function usage_count()
 	{
-		return $this->chapters();
+		return $this->chapters()->count();
 	}
 	
 	/*
@@ -30,7 +30,7 @@ class Scanalator extends BaseManicModel
 	 */
 	public function primary_usage_count()
 	{
-		return $this->chapters()->where('primary', '=', true);
+		return $this->chapters()->where('primary', '=', true)->count();
 	}
 	
 	/*
@@ -38,6 +38,6 @@ class Scanalator extends BaseManicModel
 	 */
 	public function secondary_usage_count()
 	{
-		return $this->chapters()->where('primary', '=', false);
+		return $this->chapters()->where('primary', '=', false)->count();
 	}
 }
