@@ -83,6 +83,19 @@ Route::get('/series/{series}', 'SeriesController@show');
 
 //End series controller routes
 
+//Scanalator controller routes
+Route::group(['middleware' => 'auth'], function(){
+	Route::get('/scanalator/create', 'ScanalatorController@create');
+	Route::post('/scanalator', 'ScanalatorController@store');
+	Route::get('/scanalator/{scanalator}/edit', 'ScanalatorController@edit');
+	Route::patch('/scanalator/{scanalator}', 'ScanalatorController@update');
+});
+
+Route::get('/scanalator', 'ScanalatorController@index');
+Route::get('/scanalator/{scanalator}', 'ScanalatorController@show');
+
+//End scanalator controller routes
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
