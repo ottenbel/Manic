@@ -62,7 +62,7 @@ class TagController extends Controller
 				
 		$flashed_data = $request->session()->get('flashed_data');
 		
-		return View('tags.index', array('tags' => $tags, 'list_type' => $tag_list_type, 'list_order' => $tag_list_order, 'flashed_data' => $flashed_data));
+		return View('tags.index', array('tags' => $tags->appends(Input::except('page')), 'list_type' => $tag_list_type, 'list_order' => $tag_list_order, 'flashed_data' => $flashed_data));
     }
 
     /**
