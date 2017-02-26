@@ -23,7 +23,7 @@
 			<div id="collection_short_info">
 		@endif		
 			<h2>{{{$collection->name}}}</h2>
-			@if((count($collection->primary_artists)) || (count($collection->secondary_artists)))
+			@if(($collection->primary_artists()->count()) || ($collection->secondary_artists()->count()))
 				<div class="tag_holder"><strong>Artists:</strong>
 					@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
 						<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()->count()}})</span></a></span>
@@ -35,7 +35,7 @@
 				</div>
 			@endif
 			
-			@if((count($collection->primary_series)) || (count($collection->secondary_series)))
+			@if(($collection->primary_series()->count()) || ($collection->secondary_series()->count()))
 				<div class="tag_holder"><strong>Series:</strong>
 					@foreach($collection->primary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
 						<span class="primary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()->count()}})</span></a></span>
@@ -47,7 +47,7 @@
 				</div>
 			@endif
 			
-			@if((count($collection->primary_tags)) || (count($collection->secondary_tags)))
+			@if(($collection->primary_tags()->count()) || ($collection->secondary_tags()->count()))
 				<div class="tag_holder"><strong>Tags:</strong>
 					@foreach($collection->primary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $tag)
 						<span class="primary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count"> ({{$tag->usage_count()->count()}})</span></a></span>
@@ -133,7 +133,7 @@
 									</td>
 								@endif
 								<td>
-									@if((count($chapter->primary_scanalators)) || (count($chapter->secondary_scanalators)))
+									@if(($chapter->primary_scanalators()->count()) || ($chapter->secondary_scanalators()->count()))
 										<div class="scanalator_holder">			
 										@foreach($chapter->primary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
 												<span class="primary_scanalators"><a href="/scanalator/{{$scanalator->id}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()->count()}})</span></a></span>
