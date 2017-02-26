@@ -25,7 +25,7 @@ class Artist extends BaseManicModel
 		return $this->collections();
 	}
 	
-		/*
+	/*
 	 * Get the number of times the tag is used as a primary tag across the site.
 	 */
 	public function primary_usage_count()

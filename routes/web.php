@@ -55,6 +55,8 @@ Route::group(['middleware' => 'auth'], function(){
 Route::get('/tag', 'TagController@index');
 Route::get('/tag/{tag}', 'TagController@show');
 
+//End tag controller routes
+
 //Artist controller routes
 Route::group(['middleware' => 'auth'], function(){
 	Route::get('/artist/create', 'ArtistController@create');
@@ -68,7 +70,18 @@ Route::get('/artist/{artist}', 'ArtistController@show');
 
 //End artist controller routes
 
-//End tag controller routes
+//Series controller routes
+Route::group(['middleware' => 'auth'], function(){
+	Route::get('/series/create', 'SeriesController@create');
+	Route::post('/series', 'SeriesController@store');
+	Route::get('/series/{series}/edit', 'SeriesController@edit');
+	Route::patch('/series/{series}', 'SeriesController@update');
+});
+
+Route::get('/series', 'SeriesController@index');
+Route::get('/series/{series}', 'SeriesController@show');
+
+//End series controller routes
 
 Auth::routes();
 

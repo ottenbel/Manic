@@ -113,6 +113,26 @@
 				<li><a href="">Delete Artist</a></li>
 			</ul>
 		</li>
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\SeriesController@show")	
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+				Series <span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="/series/{{$series->id}}/edit/">Edit</a><li>
+				<li><a href="">Delete Series</a></li>
+			</ul>
+		</li>
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\SeriesController@edit")
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+				Series <span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu" role="menu">
+				<li><a href="/series/{{$tagObject->id}}/">View Series</a><li>
+				<li><a href="">Delete Series</a></li>
+			</ul>
+		</li>
 	@else
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
