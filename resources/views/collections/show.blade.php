@@ -35,14 +35,14 @@
 				</div>
 			@endif
 			
-			@if(($collection->primary_series()->count()) || ($collection->secondary_series()->count()))
+			@if((count($collection->primary_series())) || (count($collection->secondary_series())))
 				<div class="tag_holder"><strong>Series:</strong>
 					@foreach($collection->primary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
-						<span class="primary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()->count()}})</span></a></span>
+						<span class="primary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
 					@endforeach
 					
 					@foreach($collection->secondary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
-						<span class="secondary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()->count()}})</span></a></span>
+						<span class="secondary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
 					@endforeach
 				</div>
 			@endif

@@ -37,7 +37,7 @@
 			@endif
 			
 			<div class="col-xs-4">
-				<span class="primary_series"><a href="/series/{{$ser->id}}">{{{$ser->name}}} <span class="series_count">({{$ser->usage_count()->count()}})</span></a></span>
+				<span class="primary_series"><a href="/series/{{$ser->id}}">{{{$ser->name}}} <span class="series_count">({{$ser->usage_count()}})</span></a></span>
 			</div>
 			
 			@if((($loop->iteration - 1) % 3) == 2)			
