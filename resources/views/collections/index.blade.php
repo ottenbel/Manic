@@ -30,11 +30,11 @@ Index - Page {{$collections->currentPage()}}
 							@if((count($collection->primary_artists)) || (count($collection->secondary_artists)))
 								<div class="tag_holder"><strong>Artists:</strong>
 									@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $artist)
-										<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()->count()}})</span></a></span>
+										<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 									@endforeach
 									@if(10 > count($collection->primary_artists))
 										@foreach($collection->secondary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - count($collection->primary_artists))->get() as $artist)
-											<span class="secondary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()->count()}})</span></a></span>
+											<span class="secondary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 										@endforeach
 									@endif
 								</div>

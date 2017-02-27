@@ -37,7 +37,7 @@
 			@endif
 			
 			<div class="col-xs-4">
-				<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()->count()}})</span></a></span>
+				<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 			</div>
 			
 			@if((($loop->iteration - 1) % 3) == 2)			

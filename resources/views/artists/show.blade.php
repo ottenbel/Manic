@@ -12,14 +12,14 @@
 <div class="container">
 	<h2>{{{$artist->name}}}</h2>
 	
-	@if($artist->usage_count()->count())
+	@if($artist->usage_count())
 		<div>
-			@if(($artist->primary_usage_count()->count() > 0) && ($artist->secondary_usage_count()->count() > 0))
-				{{$artist->name}} is used a total of <b>{{$artist->usage_count()->count()}}</b> times across the site.  <b>{{$artist->primary_usage_count()->count()}}</b> times as a <b>primary artist</b> and <b>{{$artist->secondary_usage_count()->count()}}</b> times as a <b>secondary artist</b>.
-			@elseif($artist->primary_usage_count()->count() > 0)
-				{{$artist->name}} is used a total of <b>{{$artist->primary_usage_count()->count()}}</b> times across the site as a primary artist.
-			@elseif($artist->secondary_usage_count()->count() > 0)
-				{{$artist->name}} is used a total of <b>{{$artist->secondary_usage_count()->count()}}</b> times across the site as a secondary artist.
+			@if(($artist->primary_usage_count() > 0) && ($artist->secondary_usage_count() > 0))
+				{{$artist->name}} is used a total of <b>{{$artist->usage_count()}}</b> times across the site.  <b>{{$artist->primary_usage_count()}}</b> times as a <b>primary artist</b> and <b>{{$artist->secondary_usage_count()}}</b> times as a <b>secondary artist</b>.
+			@elseif($artist->primary_usage_count() > 0)
+				{{$artist->name}} is used a total of <b>{{$artist->primary_usage_count()}}</b> times across the site as a primary artist.
+			@elseif($artist->secondary_usage_count() > 0)
+				{{$artist->name}} is used a total of <b>{{$artist->secondary_usage_count()}}</b> times across the site as a secondary artist.
 			@else
 				{{$artist->name}} is not associated with any collections.  
 			@endif	

@@ -23,14 +23,14 @@
 			<div id="collection_short_info">
 		@endif		
 			<h2>{{{$collection->name}}}</h2>
-			@if(($collection->primary_artists()->count()) || ($collection->secondary_artists()->count()))
+			@if(($collection->primary_artists()) || ($collection->secondary_artists()))
 				<div class="tag_holder"><strong>Artists:</strong>
 					@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
-						<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()->count()}})</span></a></span>
+						<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 					@endforeach
 					
 					@foreach($collection->secondary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
-						<span class="secondary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()->count()}})</span></a></span>
+						<span class="secondary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 					@endforeach
 				</div>
 			@endif

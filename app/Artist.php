@@ -22,7 +22,7 @@ class Artist extends BaseManicModel
 	 */
 	public function usage_count()
 	{
-		return $this->collections();
+		return $this->collections()->count();
 	}
 	
 	/*
@@ -30,7 +30,7 @@ class Artist extends BaseManicModel
 	 */
 	public function primary_usage_count()
 	{
-		return $this->collections()->where('primary', '=', true);
+		return $this->collections()->where('primary', '=', true)->count();
 	}
 	
 	/*
@@ -38,6 +38,6 @@ class Artist extends BaseManicModel
 	 */
 	public function secondary_usage_count()
 	{
-		return $this->collections()->where('primary', '=', false);
+		return $this->collections()->where('primary', '=', false)->count();
 	}
 }
