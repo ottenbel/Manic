@@ -55,11 +55,11 @@ Index - Page {{$collections->currentPage()}}
 							@if((count($collection->primary_tags)) || (count($collection->secondary_tags)))
 								<div class="tag_holder"><strong>Tags:</strong>
 									@foreach($collection->primary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $tag)
-										<span class="primary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count"> ({{$tag->usage_count()->count()}})</span></a></span>
+										<span class="primary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count"> ({{$tag->usage_count()}})</span></a></span>
 									@endforeach
 									@if(10 > count($collection->primary_tags))
 										@foreach($collection->secondary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - count($collection->primary_tags))->get() as $tag)
-											<span class="secondary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count">({{$tag->usage_count()->count()}})</span></a></span>
+											<span class="secondary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count">({{$tag->usage_count()}})</span></a></span>
 										@endforeach
 									@endif
 								</div>

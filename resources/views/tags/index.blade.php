@@ -37,7 +37,7 @@
 			@endif
 			
 			<div class="col-xs-4">
-				<span class="primary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count">({{$tag->usage_count()->count()}})</span></a></span>
+				<span class="primary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count">({{$tag->usage_count()}})</span></a></span>
 			</div>
 			
 			@if((($loop->iteration - 1) % 3) == 2)			
