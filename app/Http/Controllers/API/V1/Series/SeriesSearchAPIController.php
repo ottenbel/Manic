@@ -18,7 +18,7 @@ class SeriesSearchAPIController extends Controller
 		$searchString = trim(Input::get('searchString'));
 		$series = Series::where('name', 'like', '%' . $searchString . '%')->leftjoin('collection_series', 'series.id', '=', 'collection_series.series_id')->select('series.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', 'desc')->take(5)->pluck('name');
 		
-		$series = $series->sort();
+		$series = $series->sortBy('name');
 		
 		return $series;
 	}

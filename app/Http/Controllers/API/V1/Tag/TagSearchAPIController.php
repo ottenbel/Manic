@@ -18,7 +18,7 @@ class TagSearchAPIController extends Controller
 		$searchString = trim(Input::get('searchString'));
 		$tags = Tag::where('name', 'like', '%' . $searchString . '%')->leftjoin('collection_tag', 'tags.id', '=', 'collection_tag.tag_id')->select('tags.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', 'desc')->take(5)->pluck('name');
 		
-		$tags = $tags->sort();
+		$tags = $tags->sortBy('name');
 		
 		return $tags;
 	}    

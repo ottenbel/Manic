@@ -18,7 +18,7 @@ class ArtistSearchAPIController extends Controller
 		$searchString = trim(Input::get('searchString'));
 		$artists = Artist::where('name', 'like', '%' . $searchString . '%')->leftjoin('artist_collection', 'artists.id', '=', 'artist_collection.artist_id')->select('artists.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', 'desc')->take(5)->pluck('name');
 		
-		$artists = $artists->sort();
+		$artists = $artists->sortBy('name');
 		
 		return $artists;
 	}
