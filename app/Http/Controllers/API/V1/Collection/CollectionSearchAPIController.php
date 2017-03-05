@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\V1\Collection;
 use App\Http\Controllers\Controller;
 use App\Collection;
 use Illuminate\Http\Request;
+use Input;
 
 class CollectionSearchAPIController extends Controller
 {
@@ -13,6 +14,9 @@ class CollectionSearchAPIController extends Controller
 	 */
 	public function SearchByName(Request $request)
 	{
-		return "Collection";
+		$searchString = trim(Input::get('searchString'));
+		$collections = Collection::where('name', 'like', '%' . $searchString . '%')->orderBy('name', 'asc')->take(5)->pluck('name');
+		
+		return $collections;
 	}
 }
