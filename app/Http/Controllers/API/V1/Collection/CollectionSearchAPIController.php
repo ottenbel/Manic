@@ -15,8 +15,16 @@ class CollectionSearchAPIController extends Controller
 	public function SearchByName(Request $request)
 	{
 		$searchString = trim(Input::get('searchString'));
-		$collections = Collection::where('name', 'like', '%' . $searchString . '%')->orderBy('name', 'asc')->take(5)->pluck('name');
+		$collections = Collection::where('name', 'like', '%' . $searchString . '%')->orderBy('name', 'asc')->take(5)->pluck('name', 'id');
 		
-		return $collections;
+		$collections = $collections->sortBy('name');
+		
+		$collectionList = array();
+		foreach ($collections as $key => $collection)
+		{
+			array_push($collectionList, ['value' => $key, 'label' => $collection]);
+		}
+		
+		return $collectionList;
 	}
 }
