@@ -5,7 +5,9 @@ Create a New Collection
 @endsection
 
 @section('head')
-
+<script src="/js/autocomplete/artist.js"></script>
+<script src="/js/autocomplete/series.js"></script>
+<script src="/js/autocomplete/tag.js"></script>
 @endsection
 
 @section('content')

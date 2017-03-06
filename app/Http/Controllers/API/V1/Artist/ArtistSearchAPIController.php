@@ -20,6 +20,12 @@ class ArtistSearchAPIController extends Controller
 		
 		$artists = $artists->sortBy('name');
 		
-		return $artists;
+		$artistList = array();
+		foreach ($artists as $artist)
+		{
+			array_push($artistList, ['value' => $artist, 'label' => $artist]);
+		}
+		
+		return $artistList;
 	}
 }

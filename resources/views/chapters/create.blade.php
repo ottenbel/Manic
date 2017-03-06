@@ -5,7 +5,7 @@ Create a New Chapter
 @endsection
 
 @section('head')
-
+<script src="/js/autocomplete/scanalator.js"></script>
 @endsection
 
 @section('content')

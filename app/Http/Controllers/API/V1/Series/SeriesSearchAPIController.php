@@ -20,6 +20,12 @@ class SeriesSearchAPIController extends Controller
 		
 		$series = $series->sortBy('name');
 		
-		return $series;
+		$seriesList = array();
+		foreach ($series as $ser)
+		{
+			array_push($seriesList, ['value' => $ser, 'label' => $ser]);
+		}
+		
+		return $seriesList;
 	}
 }

@@ -20,6 +20,12 @@ class TagSearchAPIController extends Controller
 		
 		$tags = $tags->sortBy('name');
 		
-		return $tags;
+		$tagsList = array();
+		foreach ($tags as $tag)
+		{
+			array_push($tagsList, ['value' => $tag, 'label' => $tag]);
+		}
+		
+		return $tagsList;
 	}    
 }

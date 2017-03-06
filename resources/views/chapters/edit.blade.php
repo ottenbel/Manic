@@ -5,7 +5,7 @@ Edit Chapter # {{$chapter->chapter_number}} {{{$chapter->name}}}
 @endsection
 
 @section('head')
-
+<script src="/js/autocomplete/scanalator.js"></script>
 @endsection
 
 @section('content')

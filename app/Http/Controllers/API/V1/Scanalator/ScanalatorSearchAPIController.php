@@ -20,6 +20,12 @@ class ScanalatorSearchAPIController extends Controller
 		
 		$scanalators = $scanalators->sortBy('name');
 		
-		return $scanalators;
+		$scanalatorList = array();
+		foreach ($scanalators as $scanalator)
+		{
+			array_push($scanalatorList, ['value' => $scanalator, 'label' => $scanalator]);
+		}
+		
+		return $scanalatorList;
 	}
 }
