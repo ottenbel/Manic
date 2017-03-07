@@ -54,7 +54,6 @@ Route::group(['middleware' => 'auth'], function(){
 
 Route::get('/tag', 'TagController@index');
 Route::get('/tag/{tag}', 'TagController@show');
-
 //End tag controller routes
 
 //Artist controller routes
@@ -67,7 +66,6 @@ Route::group(['middleware' => 'auth'], function(){
 
 Route::get('/artist', 'ArtistController@index');
 Route::get('/artist/{artist}', 'ArtistController@show');
-
 //End artist controller routes
 
 //Series controller routes
@@ -80,7 +78,6 @@ Route::group(['middleware' => 'auth'], function(){
 
 Route::get('/series', 'SeriesController@index');
 Route::get('/series/{series}', 'SeriesController@show');
-
 //End series controller routes
 
 //Scanalator controller routes
@@ -93,8 +90,19 @@ Route::group(['middleware' => 'auth'], function(){
 
 Route::get('/scanalator', 'ScanalatorController@index');
 Route::get('/scanalator/{scanalator}', 'ScanalatorController@show');
-
 //End scanalator controller routes
+
+//Character controller routes
+Route::group(['middleware' => 'auth'], function(){
+	Route::get('/character/create/{series?}', 'CharacterController@create');
+	Route::post('/character', 'CharacterController@store');
+	Route::get('/character/{character}/edit', 'CharacterController@edit');
+	Route::patch('/character/{character}', 'CharacterController@update');
+});
+
+Route::get('/character', 'CharacterController@index');
+Route::get('/character/{character}', 'CharacterController@show');
+//End Character controller routes
 
 Auth::routes();
 
