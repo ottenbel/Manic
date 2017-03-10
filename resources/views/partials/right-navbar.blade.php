@@ -4,6 +4,7 @@
 	</a>
 	<ul class="dropdown-menu" role="menu">
 		<li><a href="{{ url('/artist') }}">Artist</a><li>
+		<li><a href="{{ url('/character') }}">Character</a><li>
 		<li><a href="{{ url('/tag') }}">Tag</a><li>
 		<li><a href="{{ url('/scanalator') }}">Scanalator</a><li>
 		<li><a href="{{ url('/series') }}">Series</a><li>
@@ -79,7 +80,7 @@
 				Tag <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/tag/{{$tag->id}}/edit/">Edit</a><li>
+				<li><a href="/tag/{{$tag->id}}/edit/">Edit Tag</a><li>
 				<li><a href="">Delete Tag</a></li>
 			</ul>
 		</li>
@@ -99,7 +100,7 @@
 				Artist <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/artist/{{$artist->id}}/edit/">Edit</a><li>
+				<li><a href="/artist/{{$artist->id}}/edit/">Edit Artist</a><li>
 				<li><a href="">Delete Artist</a></li>
 			</ul>
 		</li>
@@ -119,7 +120,8 @@
 				Series <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/series/{{$series->id}}/edit/">Edit</a><li>
+				<li><a href="/character/create/{{$series->id}}">Add Character</a><li>
+				<li><a href="/series/{{$series->id}}/edit/">Edit Series</a><li>
 				<li><a href="">Delete Series</a></li>
 			</ul>
 		</li>
@@ -129,6 +131,7 @@
 				Series <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
+				<li><a href="/character/create/{{$series->id}}">Add Character</a><li>
 				<li><a href="/series/{{$tagObject->id}}/">View Series</a><li>
 				<li><a href="">Delete Series</a></li>
 			</ul>
@@ -139,7 +142,7 @@
 				Scanalator <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/scanalator/{{$scanalator->id}}/edit/">Edit</a><li>
+				<li><a href="/scanalator/{{$scanalator->id}}/edit/">Edit Scanalator</a><li>
 				<li><a href="">Delete Scanalator</a></li>
 			</ul>
 		</li>
@@ -163,6 +166,7 @@
 				<div class="dropdown-divider"></div>
 				<h6 class="dropdown-header">Tags</h6>
 				<li><a href="{{ url('/artist/create') }}">Artist</a><li>
+				<li><a href="{{ url('/character/create') }}">Character</a><li>
 				<li><a href="{{ url('/tag/create') }}">Tag</a><li>
 				<li><a href="{{ url('/scanalator/create') }}">Scanalator</a><li>
 				<li><a href="{{ url('/series/create') }}">Series</a><li>	
