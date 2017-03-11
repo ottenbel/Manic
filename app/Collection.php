@@ -79,7 +79,31 @@ class Collection extends BaseManicModel
 	public function secondary_artists()
 	{
 		return $this->belongsToMany('App\Artist')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
-	}	
+	}
+
+	/*
+	 * Get the mapping from collection to characters.
+	 */	 
+	public function characters()
+	{
+		return $this->belongsToMany('App\Character')->withTimestamps()->withPivot('primary');
+	}
+	
+	/*
+	 * Get mapping from collection to primary characters.
+	 */
+	public function primary_characters()
+	{
+		return $this->belongsToMany('App\Character')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
+	}
+	
+	/*
+	 * Get mapping from collection to secondary characters.
+	 */
+	public function secondary_characters()
+	{
+		return $this->belongsToMany('App\Character')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
+	}
 	
 	/*
 	 * Get the mapping from collection to series.
