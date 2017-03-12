@@ -125,3 +125,34 @@ $(document).ready(function(){
 	  } );
 	}
 });
+
+//Include autocomplete for parent series
+$(document).ready(function(){
+	if ($("#parent_series").length)
+	{
+		$( "#parent_series" ).autocomplete({
+		  source: function( request, response ) 
+		  {
+			  $.ajax({
+					url: "/api/v1/series/namesearch",
+					type: "POST",
+					data: {searchString: request.term },
+					success: function (data)
+					{
+						console.log(data);
+						response(data);
+					},
+					error: function()
+					{
+						console.log("Error retrieving series list from API.");
+					}
+			});
+		  },
+		  minLength: 2,
+		  focus: function() {
+			  // prevent value inserted on focus
+			  return false;
+			}
+		});
+	}
+});

@@ -19,18 +19,6 @@ Edit Character - {{{$tagObject->name}}}
 		
 		{{ Form::hidden('character_id', $tagObject->id) }}
 		
-		<div class="form-group">
-			{{ Form::label('series', 'Series') }}
-			@if((!empty($tagObject)) && ($tagObject->series != null) && (Input::old('series') == null))
-				{{ Form::text('series', $tagObject->series->name, array('class' => 'form-control')) }}
-			@else
-				{{ Form::text('series', Input::old('series'), array('class' => 'form-control')) }}
-			@endif
-			@if($errors->has('series'))
-				<div class ="alert alert-danger" id="name_errors">{{$errors->first('series')}}</div>
-			@endif
-		</div>
-		
 		@include('partials.tag-object-input')
 		
 		{{ Form::submit('Update Character', array('class' => 'btn btn-primary')) }}

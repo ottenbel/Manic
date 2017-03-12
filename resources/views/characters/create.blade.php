@@ -5,7 +5,7 @@ Create a New Character
 @endsection
 
 @section('head')
-
+<script src="/js/autocomplete/series.js"></script>
 @endsection
 
 @section('content')
@@ -16,14 +16,14 @@ Create a New Character
 		{{ csrf_field() }}
 		
 		<div class="form-group">
-			{{ Form::label('series', 'Series') }}
-			@if(($series != null) && (Input::old('series') == null))
-				{{ Form::text('series', $series->name, array('class' => 'form-control')) }}
+			{{ Form::label('parent_series', 'Series') }}
+			@if(($series != null) && (Input::old('parent_series') == null))
+				{{ Form::text('parent_series', $series->name, array('class' => 'form-control')) }}
 			@else
-				{{ Form::text('series', Input::old('series'), array('class' => 'form-control')) }}
+				{{ Form::text('parent_series', Input::old('parent_series'), array('class' => 'form-control')) }}
 			@endif
-			@if($errors->has('series'))
-				<div class ="alert alert-danger" id="name_errors">{{$errors->first('series')}}</div>
+			@if($errors->has('parent_series'))
+				<div class ="alert alert-danger" id="name_errors">{{$errors->first('parent_series')}}</div>
 			@endif
 		</div>
 		
