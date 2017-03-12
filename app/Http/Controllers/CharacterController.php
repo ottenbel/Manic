@@ -8,6 +8,7 @@ use Auth;
 use DB;
 use Input;
 use App\Character;
+use App\Series;
 
 class CharacterController extends Controller
 {
@@ -26,9 +27,11 @@ class CharacterController extends Controller
      *
      * @return Response
      */
-    public function create(Request $request)
+    public function create(Request $request, Series $series = null)
     {
-        
+        $flashed_data = $request->session()->get('flashed_data');
+		
+		return View('characters.create', array('flashed_data' => $flashed_data, 'series' => $series));
     }
 
     /**

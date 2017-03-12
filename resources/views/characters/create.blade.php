@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Create a New Collection
+Create a New Character
 @endsection
 
 @section('head')
@@ -10,15 +10,15 @@ Create a New Collection
 
 @section('content')
 <div class="container">
-	<h1>Create a New Collection</h1>
+	<h1>Create a New Character</h1>
 	
-	<form method="POST" action="/collection" enctype="multipart/form-data">
+	<form method="POST" action="/character" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		
 		<div class="form-group">
 			{{ Form::label('series', 'Series') }}
-			@if((!empty($tagObject)) && ($tagObject->series != null) && (Input::old('series') == null))
-				{{ Form::text('series', $tagObject->series->name, array('class' => 'form-control')) }}
+			@if(($series != null) && (Input::old('series') == null))
+				{{ Form::text('series', $series->name, array('class' => 'form-control')) }}
 			@else
 				{{ Form::text('series', Input::old('series'), array('class' => 'form-control')) }}
 			@endif
@@ -29,7 +29,7 @@ Create a New Collection
 		
 		@include('partials.tag-object-input')
 		
-		{{ Form::submit('Create Collection', array('class' => 'btn btn-primary')) }}
+		{{ Form::submit('Create Character', array('class' => 'btn btn-primary')) }}
 	</form>
 </div>
 @endsection
