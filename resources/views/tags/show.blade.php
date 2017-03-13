@@ -12,19 +12,19 @@
 <div class="container">
 	<h2>{{{$tag->name}}}</h2>
 	
-	@if($tag->usage_count())
-		<div>
+	<div>
+		@if($tag->usage_count())		
 			@if(($tag->primary_usage_count() > 0) && ($tag->secondary_usage_count() > 0))
 				{{$tag->name}} is used a total of <b>{{$tag->usage_count()}}</b> times across the site.  <b>{{$tag->primary_usage_count()}}</b> times as a <b>primary tag</b> and <b>{{$tag->secondary_usage_count()}}</b> times as a <b>secondary tag</b>.
 			@elseif($tag->primary_usage_count() > 0)
 				{{$tag->name}} is used a total of <b>{{$tag->primary_usage_count()}}</b> times across the site as a primary tag.
 			@elseif($tag->secondary_usage_count() > 0)
-				{{$tag->name}} is used a total of <b>{{$tag->secondary_usage_count()}}</b> times across the site as a secondary tag.
-			@else
-				{{$tag->name}} is not associated with any collections.  
+				{{$tag->name}} is used a total of <b>{{$tag->secondary_usage_count()}}</b> times across the site as a secondary tag.  
 			@endif	
-		</div>
-	@endif
+		@else
+			{{$tag->name}} is not associated with any collections.
+		@endif
+	</div>
 	
 	@if(($tag->description != null) && ($tag->description != ""))
 		<br/>	

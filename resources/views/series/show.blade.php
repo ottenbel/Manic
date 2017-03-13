@@ -12,19 +12,19 @@
 <div class="container">
 	<h2>{{{$series->name}}}</h2>
 	
-	@if($series->usage_count())
-		<div>
+	<div>
+		@if($series->usage_count())
 			@if(($series->primary_usage_count() > 0) && ($series->secondary_usage_count() > 0))
 				{{$series->name}} is used a total of <b>{{$series->usage_count()}}</b> times across the site.  <b>{{$series->primary_usage_count()}}</b> times as a <b>primary series</b> and <b>{{$series->secondary_usage_count()}}</b> times as a <b>secondary series</b>.
 			@elseif($series->primary_usage_count() > 0)
 				{{$series->name}} is used a total of <b>{{$series->primary_usage_count()}}</b> times across the site as a primary series.
 			@elseif($series->secondary_usage_count() > 0)
-				{{$series->name}} is used a total of <b>{{$series->secondary_usage_count()}}</b> times across the site as a secondary series.
-			@else
-				{{$series->name}} is not associated with any collections.  
+				{{$series->name}} is used a total of <b>{{$series->secondary_usage_count()}}</b> times across the site as a secondary series.  
 			@endif	
-		</div>
-	@endif
+		@else
+			{{$series->name}} is not associated with any collections.
+		@endif
+	</div>
 	
 	@if(($series->description != null) && ($series->description != ""))
 		<br/>	

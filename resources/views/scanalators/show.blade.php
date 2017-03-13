@@ -12,19 +12,19 @@
 <div class="container">
 	<h2>{{{$scanalator->name}}}</h2>
 	
-	@if($scanalator->usage_count())
-		<div>
+	<div>
+		@if($scanalator->usage_count())
 			@if(($scanalator->primary_usage_count() > 0) && ($scanalator->secondary_usage_count() > 0))
 				{{$scanalator->name}} is used a total of <b>{{$scanalator->usage_count()}}</b> times across the site.  <b>{{$scanalator->primary_usage_count()}}</b> times as a <b>primary scanalator</b> and <b>{{$scanalator->secondary_usage_count()}}</b> times as a <b>secondary scanalator</b>.
 			@elseif($scanalator->primary_usage_count() > 0)
 				{{$scanalator->name}} is used a total of <b>{{$scanalator->primary_usage_count()}}</b> times across the site as a primary scanalator.
 			@elseif($scanalator->secondary_usage_count() > 0)
-				{{$scanalator->name}} is used a total of <b>{{$scanalator->secondary_usage_count()}}</b> times across the site as a secondary scanalator.
-			@else
-				{{$scanalator->name}} is not associated with any collections.  
+				{{$scanalator->name}} is used a total of <b>{{$scanalator->secondary_usage_count()}}</b> times across the site as a secondary scanalator.  
 			@endif	
-		</div>
-	@endif
+		@else
+			{{$scanalator->name}} is not associated with any collections.
+		@endif
+	</div>
 	
 	@if(($scanalator->description != null) && ($scanalator->description != ""))
 		<br/>	
