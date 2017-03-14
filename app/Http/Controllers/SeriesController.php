@@ -112,9 +112,50 @@ class SeriesController extends Controller
     {
         $flashed_data = $request->session()->get('flashed_data');
 		
-		return View('series.show', array('series' => $series, 'flashed_data' => $flashed_data));
-    }
+		$characters_list_type = trim(strtolower($request->input('character_type')));
+		$characters_list_order = trim(strtolower($request->input('character_order')));
+		
+		if (($characters_list_type != "usage") && ($characters_list_type != "alphabetic"))
+		{
+			$characters_list_type = "usage";
+		}
+		
+		if (($characters_list_order != "asc") && ($characters_list_order != "desc"))
+		{
+			if($characters_list_type == "usage")
+			{
+				$characters_list_order = "asc";
+			}
+			else
+			{
+				$characters_list_order = "desc";
+			}
+		}
+		
+		if ($characters_list_type == "alphabetic")
+		{
+			$characters = $series->characters();
+			$characters_output = $characters->orderBy('name', $characters_list_order)->paginate(12, ['*'], 'character_page');
 
+			$characters = $characters_output;
+		}
+		else
+		{	
+			$characters = $series->characters()	;
+			$characters_used = $characters->join('character_collection', 'characters.id', '=', 'character_collection.character_id')->select('characters.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $characters_list_order)->orderBy('name', 'desc')->paginate(12, ['*'], 'character_page');
+			
+			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds series that aren't used into the dataset used for popularity)
+			
+			/*$characters_not_used = $characters->leftjoin('character_collection', 'characters.id', '=', 'character_collection.character_id')->where('collection_id', '=', null)->select('characters.*', DB::raw('0 as total'))->groupBy('name');
+			
+			$characters_output = $characters_used->union($characters_not_used)->orderBy('total', $characters_list_order)->orderBy('name', 'desc')->get();*/
+			
+			$characters = $characters_used;
+		}
+		
+		return View('series.show', array('series' => $series, 'characters' => $characters->appends(Input::except('character_page')), 'character_list_type' => $characters_list_type, 'character_list_order' => $characters_list_order, 'flashed_data' => $flashed_data));
+    }
+	
     /**
      * Show the form for editing the specified resource.
      *

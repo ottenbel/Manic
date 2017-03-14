@@ -10,7 +10,6 @@
 
 @section('content')
 	<div class="container">
-		
 		<div>
 			<div>
 				<b>Sort By:</b>
@@ -30,24 +29,24 @@
 				@endif
 			</div>
 		</div>
+
+	@foreach($characters as $character)
+		@if((($loop->iteration - 1) % 3) == 0)
+			<div class="row">
+		@endif
 		
-		@foreach($characters as $character)
-			@if((($loop->iteration - 1) % 3) == 0)
-				<div class="row">
-			@endif
-			
-			<div class="col-xs-4">
-				<span class="primary_characters"><a href="/character/{{$character->id}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+		<div class="col-xs-4">
+			<span class="primary_characters"><a href="/character/{{$character->id}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+		</div>
+		
+		@if((($loop->iteration - 1) % 3) == 2)			
 			</div>
-			
-			@if((($loop->iteration - 1) % 3) == 2)			
-				</div>
-			@endif
-		@endforeach
-	</div>
+		@endif
+	@endforeach
 	<br/>
 	<br/>
 	{{ $characters->links() }}
+</div>
 @endsection
 
 @section('footer')

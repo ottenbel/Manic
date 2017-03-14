@@ -32,13 +32,54 @@
 			{!!html_entity_decode(nl2br($series->description))!!}
 		</div>
 	@endif
-	
-	
+		
 	@if($series->url != null)
 		<br/>
 		<div>
 			<span class="source_tag"><a href="{{$series->url}}">Link to additional information</a></span>
 		</div>
+	@endif
+	
+	@if($series->characters->count())
+		<h3>Associated Characters</h3>
+		<div>
+			<div>
+				<div>
+					<b>Sort By:</b>
+					@if($character_list_type == "usage")
+						<b><a href="/series/{{$series->id}}?character_type=usage&character_order={{$character_list_order}}">Character Usage</a></b> <a href="/series/{{$series->id}}?character_type=alphabetic&character_order={{$character_list_order}}">Alphabetic</a>
+					@elseif ($character_list_type == "alphabetic")
+						<a href="/series/{{$series->id}}?character_type=usage&character_order={{$character_list_order}}">Character Usage</a> <b><a href="/series/{{$series->id}}?character_type=alphabetic&character_order={{$character_list_order}}">Alphabetic</a></b>
+					@endif
+				</div>
+				
+				<div>
+					<b>Display Order:</b>
+					@if($character_list_order == "asc")
+						<b><a href="/series/{{$series->id}}?character_type={{$character_list_type}}&character_order=asc">Ascending</a></b> <a href="/series/{{$series->id}}?character_type={{$character_list_type}}&character_order=desc">Descending</a>
+					@elseif($character_list_order == "desc")
+						<a href="/series/{{$series->id}}?character_type={{$character_list_type}}&character_order=asc">Ascending</a> <b><a href="/series/{{$series->id}}?character_type={{$character_list_type}}&character_order=desc">Descending</a></b>
+					@endif
+				</div>
+			</div>
+			
+			@foreach($characters as $character)
+				@if((($loop->iteration - 1) % 3) == 0)
+					<div class="row">
+				@endif
+				
+				<div class="col-xs-4">
+					<span class="primary_characters"><a href="/character/{{$character->id}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+				</div>
+				
+				@if((($loop->iteration - 1) % 3) == 2)			
+					</div>
+				@endif
+		@endforeach
+		<br/>
+		<br/>
+		{{ $characters->links() }}
+	</div>		
 	@endif
 </div>
 @endsection
