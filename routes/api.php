@@ -19,6 +19,7 @@ Route::get('/user', function (Request $request) {
 
 //Internally used API's
 Route::post('/v1/artist/namesearch', 'API\V1\Artist\ArtistSearchAPIController@SearchByName');
+Route::post('/v1/character/namesearch', 'API\V1\Character\CharacterSearchAPIController@SearchByName');
 Route::post('/v1/collection/namesearch', 'API\V1\Collection\CollectionSearchAPIController@SearchByName');
 Route::post('/v1/scanalator/namesearch', 'API\V1\Scanalator\ScanalatorSearchAPIController@SearchByName');
 Route::post('/v1/series/namesearch', 'API\V1\Series\SeriesSearchAPIController@SearchByName');
