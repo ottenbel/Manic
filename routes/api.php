@@ -17,7 +17,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
-//Internally used API's
+//Internally used public API's
 Route::post('/v1/artist/namesearch', 'API\V1\Artist\ArtistSearchAPIController@SearchByName');
 Route::post('/v1/character/namesearch', 'API\V1\Character\CharacterSearchAPIController@SearchByName');
 Route::post('/v1/collection/namesearch', 'API\V1\Collection\CollectionSearchAPIController@SearchByName');

@@ -96,6 +96,30 @@
 </div>
 
 <div class="form-group">
+	{{ Form::label('character_primary', 'Characters Primary') }}
+	@if((!empty($collection)) && ($collection->primary_characters != null) && (Input::old('character_primary') == null))
+		{{ Form::text('character_primary', collect($collection->primary_characters->pluck('name'))->implode(', '), array('class' => 'form-control')) }}
+	@else
+		{{ Form::text('character_primary', Input::old('character_primary'), array('class' => 'form-control')) }}
+	@endif
+	
+	@if($errors->has('character_primary'))
+		<div class ="alert alert-danger" id="character_primary_errors">{{$errors->first('character_primary')}}</div>
+	@endif
+	
+	{{ Form::label('character_secondary', 'Characters Secondary') }}
+	@if((!empty($collection)) && ($collection->secondary_characters != null) && (Input::old('character_secondary') == null))
+		{{ Form::text('character_secondary', collect($collection->secondary_characters->pluck('name'))->implode(', '), array('class' => 'form-control')) }}
+	@else
+		{{ Form::text('character_secondary', Input::old('character_secondary'), array('class' => 'form-control')) }}
+	@endif
+	
+	@if($errors->has('character_secondary'))
+		<div class ="alert alert-danger" id="character_secondary_errors">{{$errors->first('character_secondary')}}</div>
+	@endif
+</div>
+
+<div class="form-group">
 	{{ Form::label('tag_primary', 'Tags Primary') }}
 	@if((!empty($collection)) && ($collection->primary_tags != null) && (Input::old('tag_primary') == null))
 		{{ Form::text('tag_primary', collect($collection->primary_tags->pluck('name'))->implode(', '), array('class' => 'form-control')) }}
