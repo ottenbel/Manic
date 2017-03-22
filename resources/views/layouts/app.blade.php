@@ -69,6 +69,12 @@
             </div>
         </nav>
 		
+		@if(!empty($flashed_warning))
+			<div class="alert alert-warning" role="alert">
+			{{{$flashed_warning}}}
+			</div>
+		@endif
+		
 		{{-- Add code so that any page can display data that has been flashed to session. --}}
 		@if(!empty($flashed_data))
 			<div class="alert alert-info" role="alert">
