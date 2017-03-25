@@ -25,12 +25,14 @@ class CollectionController extends Controller
      */
     public function index(Request $request)
     {
+		$flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
+		
         //Get all relevant collections
 		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->orderBy('updated_at', 'desc')->paginate(10);
 		
-		$flashed_data = $request->session()->get('flashed_data');
-		
-		return View('collections.index', array('collections' => $collections, 'flashed_data' => $flashed_data));
+		return View('collections.index', array('collections' => $collections, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -158,25 +160,27 @@ class CollectionController extends Controller
 		//Redirect to the collection that was created
 		if (count($missing_characters))
 		{
-			$missing_primary_characters_string = "";
-			$missing_secondary_characters_string = "";
+			$flashed_warning_array = array();
+			
 			if (count($missing_primary_characters))
 			{
-				$missing_primary_characters_string = "Missing primary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " + implode(", ", $missing_primary_characters) + ". ";
+				$missing_primary_characters_string = "Missing primary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " + implode(", ", $missing_primary_characters) + ".";
+				
+				$flashed_warning_array = array_push($flashed_warning_array, $missing_primary_characters_string);
 			}
 			
 			if (count($missing_secondary_characters))
 			{
-				$missing_secondary_characters_string = "Missing secondary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " + implode(", ", $missing_secondary_characters) + ". ";
+				$missing_secondary_characters_string = "Missing secondary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " + implode(", ", $missing_secondary_characters) + ".";
+				
+				$flashed_warning_array = array_push($flashed_warning_array, $missing_secondary_characters_string);
 			}
 			
-			$missing_characters_string = $missing_primary_characters_string + $missing_secondary_characters_string;
-			
-			return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully created collection $collection->name.")->with("flashed_warning", $missing_characters_string);
+			return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", array("Partially created collection $collection->name."))->with("flashed_warning", $flashed_warning_array);
 		}
 		else
 		{
-			return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully created collection $collection->name.");
+			return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully created collection $collection->name."));
 		}
     }
 	
@@ -188,6 +192,10 @@ class CollectionController extends Controller
      */
     public function show(Request $request, Collection $collection)
     {
+		$flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
+		
 		$sibling_collections = null;
 		
 		if($collection->parent_collection != null)
@@ -195,9 +203,7 @@ class CollectionController extends Controller
 			$sibling_collections = $collection->parent_collection->child_collections()->where('id', '!=', $collection->id)->get();
 		}
 		
-		$flashed_data = $request->session()->get('flashed_data');
-		
-        return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections, 'flashed_data' => $flashed_data));
+        return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -208,14 +214,16 @@ class CollectionController extends Controller
      */
     public function edit(Request $request, Collection $collection)
     {
+		$flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
+		
         $ratings = Rating::orderBy('priority', 'asc')->get();
 		$statuses = Status::orderBy('priority', 'asc')->get();
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		$collection->load('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
 		
-		$flashed_data = $request->session()->get('flashed_data');
-		
-		return View('collections.edit', array('collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages, 'flashed_data' => $flashed_data));
+		return View('collections.edit', array('collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -328,26 +336,28 @@ class CollectionController extends Controller
 		//Redirect to the collection that was created
 		if (count($missing_characters))
 		{
-			$missing_primary_characters_string = "";
-			$missing_secondary_characters_string = "";
+			$flashed_warning_array = array();
+			
 			if (count($missing_primary_characters))
 			{
 				$missing_primary_characters_string = "Missing primary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missing_primary_characters) . ". ";
+				
+				array_push($flashed_warning_array, $missing_primary_characters_string);
 			}
 			
 			if (count($missing_secondary_characters))
 			{
 				$missing_secondary_characters_string = "Missing secondary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missing_secondary_characters) . ". ";
+				
+				array_push($flashed_warning_array, $missing_secondary_characters_string);
 			}
-			
-			$missing_characters_string = $missing_primary_characters_string . $missing_secondary_characters_string;
 		
 			//Redirect to the collection that was created
-			return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully updated collection $collection->name.")->with("flashed_warning", $missing_characters_string);
+			return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", array("Partially updated collection $collection->name."))->with("flashed_warning", $flashed_warning_array);
 		}
 		else
 		{
-			return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully created collection $collection->name.");
+			return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully updated collection $collection->name."));
 		}
 	}
 

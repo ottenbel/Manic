@@ -17,7 +17,11 @@ class ScanalatorController extends Controller
      * @return Response
      */
     public function index(Request $request)
-    {			
+    {
+		$flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
+	
 		$scanalators = null;
 		$scanalator_list_type = trim(strtolower($request->input('type')));
 		$scanalator_list_order = trim(strtolower($request->input('order')));
@@ -59,10 +63,8 @@ class ScanalatorController extends Controller
 			
 			$scanalators = $scanalators_used;
 		}		
-				
-		$flashed_data = $request->session()->get('flashed_data');
 		
-		return View('scanalators.index', array('scanalators' => $scanalators->appends(Input::except('page')), 'list_type' => $scanalator_list_type, 'list_order' => $scanalator_list_order, 'flashed_data' => $flashed_data));
+		return View('scanalators.index', array('scanalators' => $scanalators->appends(Input::except('page')), 'list_type' => $scanalator_list_type, 'list_order' => $scanalator_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -72,9 +74,11 @@ class ScanalatorController extends Controller
      */
     public function create(Request $request)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('scanalators.create', array('flashed_data' => $flashed_data));
+		return View('scanalators.create', array('flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -99,7 +103,7 @@ class ScanalatorController extends Controller
 		$scanalator->save();
 		
 		//Redirect to the scanalator that was created
-		return redirect()->action('ScanalatorController@show', [$scanalator])->with("flashed_data", "Successfully created scanalator $scanalator->name.");
+		return redirect()->action('ScanalatorController@show', [$scanalator])->with("flashed_success", array("Successfully created scanalator $scanalator->name."));
     }
 
     /**
@@ -110,9 +114,11 @@ class ScanalatorController extends Controller
      */
     public function show(Request $request, Scanalator $scanalator)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('scanalators.show', array('scanalator' => $scanalator, 'flashed_data' => $flashed_data));
+		return View('scanalators.show', array('scanalator' => $scanalator, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -123,9 +129,11 @@ class ScanalatorController extends Controller
      */
     public function edit(Request $request, Scanalator $scanalator)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('scanalators.edit', array('tagObject' => $scanalator, 'flashed_data' => $flashed_data));
+		return View('scanalators.edit', array('tagObject' => $scanalator, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -152,7 +160,7 @@ class ScanalatorController extends Controller
 		$scanalator->save();
 		
 		//Redirect to the scanalator that was created
-		return redirect()->action('ScanalatorController@show', [$scanalator])->with("flashed_data", "Successfully updated scanalator $scanalator->name.");
+		return redirect()->action('ScanalatorController@show', [$scanalator])->with("flashed_success", array("Successfully updated scanalator $scanalator->name."));
     }
 
     /**

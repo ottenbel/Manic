@@ -17,7 +17,11 @@ class TagController extends Controller
      * @return Response
      */
     public function index(Request $request)
-    {			
+    {
+		$flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
+	
 		$tags = null;
 		$tag_list_type = trim(strtolower($request->input('type')));
 		$tag_list_order = trim(strtolower($request->input('order')));
@@ -60,9 +64,7 @@ class TagController extends Controller
 			$tags = $tags_used;
 		}		
 				
-		$flashed_data = $request->session()->get('flashed_data');
-		
-		return View('tags.index', array('tags' => $tags->appends(Input::except('page')), 'list_type' => $tag_list_type, 'list_order' => $tag_list_order, 'flashed_data' => $flashed_data));
+		return View('tags.index', array('tags' => $tags->appends(Input::except('page')), 'list_type' => $tag_list_type, 'list_order' => $tag_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -72,9 +74,11 @@ class TagController extends Controller
      */
     public function create(Request $request)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('tags.create', array('flashed_data' => $flashed_data));
+		return View('tags.create', array('flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -99,7 +103,7 @@ class TagController extends Controller
 		$tag->save();
 		
 		//Redirect to the tag that was created
-		return redirect()->action('TagController@show', [$tag])->with("flashed_data", "Successfully created tag $tag->name.");
+		return redirect()->action('TagController@show', [$tag])->with("flashed_success", array("Successfully created tag $tag->name."));
     }
 
     /**
@@ -110,9 +114,11 @@ class TagController extends Controller
      */
     public function show(Request $request, Tag $tag)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('tags.show', array('tag' => $tag, 'flashed_data' => $flashed_data));
+		return View('tags.show', array('tag' => $tag, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -123,9 +129,11 @@ class TagController extends Controller
      */
     public function edit(Request $request, Tag $tag)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('tags.edit', array('tagObject' => $tag, 'flashed_data' => $flashed_data));
+		return View('tags.edit', array('tagObject' => $tag, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -152,7 +160,7 @@ class TagController extends Controller
 		$tag->save();
 		
 		//Redirect to the tag that was created
-		return redirect()->action('TagController@show', [$tag])->with("flashed_data", "Successfully updated tag $tag->name.");
+		return redirect()->action('TagController@show', [$tag])->with("flashed_success", array("Successfully updated tag $tag->name."));
     }
 
     /**

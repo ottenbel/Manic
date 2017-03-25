@@ -20,6 +20,10 @@ class CharacterController extends Controller
      */
     public function index(Request $request)
     {
+		$flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
+		
 		$characters = null;
 		$character_list_type = trim(strtolower($request->input('type')));
 		$character_list_order = trim(strtolower($request->input('order')));
@@ -61,10 +65,8 @@ class CharacterController extends Controller
 			
 			$characters = $characters_used;
 		}		
-				
-		$flashed_data = $request->session()->get('flashed_data');
 		
-		return View('characters.index', array('characters' => $characters->appends(Input::except('page')), 'list_type' => $character_list_type, 'list_order' => $character_list_order, 'flashed_data' => $flashed_data));
+		return View('characters.index', array('characters' => $characters->appends(Input::except('page')), 'list_type' => $character_list_type, 'list_order' => $character_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -74,9 +76,11 @@ class CharacterController extends Controller
      */
     public function create(Request $request, Series $series = null)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('characters.create', array('flashed_data' => $flashed_data, 'series' => $series));
+		return View('characters.create', array('series' => $series, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -115,7 +119,7 @@ class CharacterController extends Controller
 		$parent_series->save();
 		
 		//Redirect to the character that was created
-		return redirect()->action('CharacterController@show', [$character])->with("flashed_data", "Successfully created character $character->name under series $parent_series->name.");
+		return redirect()->action('CharacterController@show', [$character])->with("flashed_success", array("Successfully created character $character->name under series $parent_series->name."));
     }
 
     /**
@@ -126,9 +130,11 @@ class CharacterController extends Controller
      */
     public function show(Request $request, Character $character)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('characters.show', array('character' => $character, 'flashed_data' => $flashed_data));
+		return View('characters.show', array('character' => $character, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -139,9 +145,11 @@ class CharacterController extends Controller
      */
     public function edit(Request $request, Character $character)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('characters.edit', array('tagObject' => $character, 'flashed_data' => $flashed_data));
+		return View('characters.edit', array('tagObject' => $character, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -168,7 +176,7 @@ class CharacterController extends Controller
 		$character->save();
 		
 		//Redirect to the character that was created
-		return redirect()->action('CharacterController@show', [$character])->with("flashed_data", "Successfully updated character $character->name.");
+		return redirect()->action('CharacterController@show', [$character])->with("flashed_success", array("Successfully updated character $character->name."));
     }
 
     /**

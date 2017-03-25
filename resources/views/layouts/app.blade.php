@@ -69,17 +69,29 @@
             </div>
         </nav>
 		
-		@if(!empty($flashed_warning))
-			<div class="alert alert-warning" role="alert">
-			{{{$flashed_warning}}}
-			</div>
+		{{-- Add code so that any page can display data that has been flashed to session. --}}
+		@if(!empty($flashed_success))
+			@foreach($flashed_success as $success)
+				<div class="alert alert-success" role="alert">
+					{{{$success}}}
+				</div>
+			@endforeach
 		@endif
 		
-		{{-- Add code so that any page can display data that has been flashed to session. --}}
 		@if(!empty($flashed_data))
-			<div class="alert alert-info" role="alert">
-			{{{$flashed_data}}}
-			</div>
+			@foreach($flashed_data as $data)
+				<div class="alert alert-info" role="alert">
+					{{{$data}}}
+				</div>
+			@endforeach
+		@endif
+		
+		@if(!empty($flashed_warning))
+			@foreach($flashed_warning as $warning)
+				<div class="alert alert-warning" role="alert">
+					{{{$warning}}}
+				</div>
+			@endforeach
 		@endif
 		
         @yield('content')

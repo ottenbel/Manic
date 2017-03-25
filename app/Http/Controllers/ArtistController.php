@@ -17,7 +17,11 @@ class ArtistController extends Controller
      * @return Response
      */
     public function index(Request $request)
-    {			
+    {		
+		$flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
+	
 		$artists = null;
 		$artist_list_type = trim(strtolower($request->input('type')));
 		$artist_list_order = trim(strtolower($request->input('order')));
@@ -59,10 +63,8 @@ class ArtistController extends Controller
 			
 			$artists = $artists_used;
 		}		
-				
-		$flashed_data = $request->session()->get('flashed_data');
 		
-		return View('artists.index', array('artists' => $artists->appends(Input::except('page')), 'list_type' => $artist_list_type, 'list_order' => $artist_list_order, 'flashed_data' => $flashed_data));
+		return View('artists.index', array('artists' => $artists->appends(Input::except('page')), 'list_type' => $artist_list_type, 'list_order' => $artist_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -72,9 +74,11 @@ class ArtistController extends Controller
      */
     public function create(Request $request)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('artists.create', array('flashed_data' => $flashed_data));
+		return View('artists.create', array('flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -99,7 +103,7 @@ class ArtistController extends Controller
 		$artist->save();
 		
 		//Redirect to the artist that was created
-		return redirect()->action('ArtistController@show', [$artist])->with("flashed_data", "Successfully created artist $artist->name.");
+		return redirect()->action('ArtistController@show', [$artist])->with("flashed_success", array("Successfully created artist $artist->name."));
     }
 
     /**
@@ -110,9 +114,11 @@ class ArtistController extends Controller
      */
     public function show(Request $request, Artist $artist)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('artists.show', array('artist' => $artist, 'flashed_data' => $flashed_data));
+		return View('artists.show', array('artist' => $artist, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -123,9 +129,11 @@ class ArtistController extends Controller
      */
     public function edit(Request $request, Artist $artist)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('artists.edit', array('tagObject' => $artist, 'flashed_data' => $flashed_data));
+		return View('artists.edit', array('tagObject' => $artist, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -152,7 +160,7 @@ class ArtistController extends Controller
 		$artist->save();
 		
 		//Redirect to the artist that was created
-		return redirect()->action('ArtistController@show', [$artist])->with("flashed_data", "Successfully updated artist $artist->name.");
+		return redirect()->action('ArtistController@show', [$artist])->with("flashed_success", array("Successfully updated artist $artist->name."));
     }
 
     /**

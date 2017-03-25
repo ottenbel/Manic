@@ -19,9 +19,11 @@ class VolumeController extends Controller
      */
     public function create(Request $request, Collection $collection)
     {
+		$flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-        return View('volumes.create', array('collection' => $collection, 'flashed_data' => $flashed_data));
+        return View('volumes.create', array('collection' => $collection, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -92,7 +94,7 @@ class VolumeController extends Controller
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully created new volume #$volume->volume_number on collection $collection->name.");
+		return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully created new volume #$volume->volume_number on collection $collection->name."));
     }
 
     /**
@@ -103,9 +105,11 @@ class VolumeController extends Controller
      */
     public function edit(Request $request, Volume $volume)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
-        return View('volumes.edit', array('volume' => $volume, 'flashed_data' => $flashed_data));
+        return View('volumes.edit', array('volume' => $volume, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -178,7 +182,7 @@ class VolumeController extends Controller
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully updated volume #$volume->volume_number on collection $collection->name.");
+		return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully updated volume #$volume->volume_number on collection $collection->name."));
     }
 
     /**

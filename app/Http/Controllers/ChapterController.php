@@ -23,29 +23,34 @@ class ChapterController extends Controller
      */
     public function create(Request $request, Collection $collection)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
+		
 		$volumes = $collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
 		{
-			return "Volume $item";
+			return "Volume $item";	
 		});
 		
-		if (count($volumes) == 0)
+		if ($collection->volumes()->count() == 0)
 		{
 			//If collection doesn't have any associated volumes prompt the user to create a volume before they create a chapter.
-			if ($flashed_data == "")
+			$missing_volume_warning = "Creating a chapter on a collection requires a volume for the chapter to belong to.  Create a volume to associate the chapter to before trying to create a chapter.";
+			
+			if ($flashed_warning != null)
 			{
-				$flashed_data = "Creating a chapter on a collection requires a volume for the chapter to belong to.  Create a volume to associate the chapter to before trying to create a chapter.";
+				array_push($flashed_warning, $missing_volume_warning);
 			}
 			else
 			{
-				$flashed_data = "<br/>Creating a chapter on a collection requires a volume for the chapter to belong to.    Create a volume to associate the chapter to before trying to create a chapter.";
+				$flashed_warning = array($missing_volume_warning);
 			}
 			
-			return View('volumes.create', array('collection' => $collection, 'flashed_data' => $flashed_data));
+			return View('volumes.create', array('collection' => $collection, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
 		}
 		else
 		{
-			return View('chapters.create', array('collection' => $collection, 'volumes' => $volumes, 'flashed_data' => $flashed_data));
+			return View('chapters.create', array('collection' => $collection, 'volumes' => $volumes, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
 		}
     }
 
@@ -183,7 +188,7 @@ class ChapterController extends Controller
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully created new chapter #$chapter->chapter_number on collection $collection->name.");
+		return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully created new chapter #$chapter->chapter_number on collection $collection->name."));
     }
 
     /**
@@ -194,7 +199,9 @@ class ChapterController extends Controller
      */
     public function show(Request $request, Chapter $chapter, int $page = 0)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
 		
 		if (is_int($page))
 		{
@@ -243,7 +250,7 @@ class ChapterController extends Controller
 			$last_page_of_previous_chapter = null;
 		}
 		
-		return view('chapters.show', array('collection' => $collection, 'chapter' => $chapter, 'page_number' => $page, 'pages_array' => $pages_array, 'previous_chapter_id' => $previous_chapter_id, 'next_chapter_id' => $next_chapter_id, 'last_page_of_previous_chapter' => $last_page_of_previous_chapter, 'flashed_data' => $flashed_data));
+		return view('chapters.show', array('collection' => $collection, 'chapter' => $chapter, 'page_number' => $page, 'pages_array' => $pages_array, 'previous_chapter_id' => $previous_chapter_id, 'next_chapter_id' => $next_chapter_id, 'last_page_of_previous_chapter' => $last_page_of_previous_chapter, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -254,13 +261,16 @@ class ChapterController extends Controller
      */
     public function edit(Request $request, Chapter $chapter)
     {
-        $flashed_data = $request->session()->get('flashed_data');
+        $flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
+		
 		$volumes = $chapter->volume->collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
 		{
 			return "Volume $item";
 		});
 		
-        return View('chapters.edit', array('chapter' => $chapter, 'volumes' => $volumes, 'flashed_data' => $flashed_data));
+        return View('chapters.edit', array('chapter' => $chapter, 'volumes' => $volumes, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -449,7 +459,7 @@ class ChapterController extends Controller
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully updated  chapter #$chapter->chapter_number on collection $collection->name.");
+		return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully updated  chapter #$chapter->chapter_number on collection $collection->name."));
     }
 
     /**

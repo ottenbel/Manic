@@ -151,7 +151,7 @@
 				Series <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/character/create/{{$series->id}}">Add Character</a><li>
+				<li><a href="/character/create/{{$tagObject->id}}">Add Character</a><li>
 				<li><a href="/series/{{$tagObject->id}}/">View Series</a><li>
 				<li><a href="">Delete Series</a></li>
 			</ul>
