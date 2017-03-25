@@ -52,6 +52,18 @@ Index - Page {{$collections->currentPage()}}
 								</div>
 							@endif
 							
+							@if((count($collection->primary_characters)) || (count($collection->secondary_characters)))
+								<div class="tag_holder"><strong>Characters:</strong>
+									@foreach($collection->primary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $character)
+										<span class="primary_characters"><a href="/characters/{{$character->id}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+									@endforeach
+									
+									@foreach($collection->secondary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $character)
+										<span class="secondary_characters"><a href="/characters/{{$character->id}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+									@endforeach
+								</div>
+							@endif
+							
 							@if((count($collection->primary_tags)) || (count($collection->secondary_tags)))
 								<div class="tag_holder"><strong>Tags:</strong>
 									@foreach($collection->primary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $tag)
