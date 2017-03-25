@@ -307,6 +307,16 @@ class CollectionController extends Controller
 		$this->map_series($collection, $series_primary_array, true);
 		$this->map_series($collection, $series_secondary_array, false);
 		
+		//Explode the character arrays to be processed (if commonalities exist force to primary)
+		$characters_primary_array = array_map('trim', explode(',', Input::get('character_primary')));
+		$characters_secondary_array = array_diff(array_map('trim', explode(',', Input::get('character_secondary'))), $characters_primary_array);
+		
+		$collection->characters()->detach();
+		$missing_primary_characters = $this->map_characters($collection, $characters_primary_array, true);
+		$missing_secondary_characters = $this->map_characters($collection, $characters_secondary_array, false);
+		
+		$missing_characters = array_unique(array_merge($missing_primary_characters, $missing_secondary_characters));
+		
 		//Explode the tags array to be processed (if commonalities exist force to primary)
 		$tags_primary_array = array_map('trim', explode(',', Input::get('tag_primary')));
 		$tags_secondary_array = array_diff(array_map('trim', explode(',', Input::get('tag_secondary'))), $tags_primary_array);
@@ -316,8 +326,30 @@ class CollectionController extends Controller
 		$this->map_tags($collection, $tags_secondary_array, false);
 		
 		//Redirect to the collection that was created
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully updated collection $collection->name.");
-    }
+		if (count($missing_characters))
+		{
+			$missing_primary_characters_string = "";
+			$missing_secondary_characters_string = "";
+			if (count($missing_primary_characters))
+			{
+				$missing_primary_characters_string = "Missing primary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missing_primary_characters) . ". ";
+			}
+			
+			if (count($missing_secondary_characters))
+			{
+				$missing_secondary_characters_string = "Missing secondary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missing_secondary_characters) . ". ";
+			}
+			
+			$missing_characters_string = $missing_primary_characters_string . $missing_secondary_characters_string;
+		
+			//Redirect to the collection that was created
+			return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully updated collection $collection->name.")->with("flashed_warning", $missing_characters_string);
+		}
+		else
+		{
+			return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", "Successfully created collection $collection->name.");
+		}
+	}
 
     /**
      * Remove the specified resource from storage.
