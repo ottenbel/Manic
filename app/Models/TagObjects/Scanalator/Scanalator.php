@@ -2,7 +2,7 @@
 
 namespace App\Models\TagObjects\Scanalator;
 
-use App\Models\TagObjects\CollectionAssociatedTagObjectModel;
+use App\Models\BaseManicModel;
 
 class Scanalator extends BaseManicModel
 {

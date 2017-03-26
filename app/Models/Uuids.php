@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace App\Models;
 
 use Webpatser\Uuid\Uuid;
 
@@ -14,7 +14,7 @@ trait Uuids
         parent::boot();
 
         static::creating(function ($model) {
-			if (empty($model->{$key}))
+			if (empty($model->{$model->getKeyName()}))
 			{
 				$model->{$model->getKeyName()} = Uuid::generate()->string;
 			}
