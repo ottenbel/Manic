@@ -40,4 +40,12 @@ class Scanalator extends BaseManicModel
 	{
 		return $this->chapters()->where('primary', '=', false)->count();
 	}
+	
+	/*
+	 * Get the aliases associated with the character.
+	 */
+	public function aliases()
+	{
+		return $this->hasMany('App\ModelsTagObjects\Scanalator\ScanalatorAlias')->->withTimestamps();
+	}
 }

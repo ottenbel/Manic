@@ -16,4 +16,12 @@ class Character extends CollectionAssociatedTagObjectModel
 	{
 		return $this->belongsTo('App\Models\TagObjects\Series\Series');
 	}
+	
+	/*
+	 * Get the aliases associated with the character.
+	 */
+	public function aliases()
+	{
+		return $this->hasMany('App\ModelsTagObjects\Character\CharacterAlias')->->withTimestamps();
+	}
 }

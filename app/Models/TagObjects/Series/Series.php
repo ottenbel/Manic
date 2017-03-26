@@ -16,4 +16,9 @@ class Series extends CollectionAssociatedTagObjectModel
 	{
 		return $this->hasMany('App\Models\TagObjects\Character\Character');
 	}
+	
+	public function aliases()
+	{
+		return $this->hasMany('App\ModelsTagObjects\Series\SeriesAlias')->->withTimestamps();
+	}
 }

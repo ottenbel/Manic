@@ -8,4 +8,9 @@ class Tag extends CollectionAssociatedTagObjectModel
 {
     //Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'tags';
+	
+	public function aliases()
+	{
+		return $this->hasMany('App\ModelsTagObjects\Tag\TagAlias')->->withTimestamps();
+	}
 }
