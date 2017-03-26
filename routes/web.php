@@ -46,62 +46,62 @@ Route::get('/chapter/{chapter}/{page?}', 'ChapterController@show');
 
 //Tag controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/tag/create', 'TagController@create');
-	Route::post('/tag', 'TagController@store');
-	Route::get('/tag/{tag}/edit', 'TagController@edit');
-	Route::patch('/tag/{tag}', 'TagController@update');
+	Route::get('/tag/create', '\TagObjects\Tag\TagController@create');
+	Route::post('/tag', '\TagObjects\Tag\TagController@store');
+	Route::get('/tag/{tag}/edit', '\TagObjects\Tag\TagController@edit');
+	Route::patch('/tag/{tag}', '\TagObjects\Tag\TagController@update');
 });
 
-Route::get('/tag', 'TagController@index');
-Route::get('/tag/{tag}', 'TagController@show');
+Route::get('/tag', '\TagObjects\Tag\TagController@index');
+Route::get('/tag/{tag}', '\TagObjects\Tag\TagController@show');
 //End tag controller routes
 
 //Artist controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/artist/create', 'ArtistController@create');
-	Route::post('/artist', 'ArtistController@store');
-	Route::get('/artist/{artist}/edit', 'ArtistController@edit');
-	Route::patch('/artist/{artist}', 'ArtistController@update');
+	Route::get('/artist/create', '\TagObjects\Artist\ArtistController@create');
+	Route::post('/artist', '\TagObjects\Artist\ArtistController@store');
+	Route::get('/artist/{artist}/edit', '\TagObjects\Artist\ArtistController@edit');
+	Route::patch('/artist/{artist}', '\TagObjects\Artist\ArtistController@update');
 });
 
-Route::get('/artist', 'ArtistController@index');
-Route::get('/artist/{artist}', 'ArtistController@show');
+Route::get('/artist', '\TagObjects\Artist\ArtistController@index');
+Route::get('/artist/{artist}', '\TagObjects\Artist\ArtistController@show');
 //End artist controller routes
 
 //Series controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/series/create', 'SeriesController@create');
-	Route::post('/series', 'SeriesController@store');
-	Route::get('/series/{series}/edit', 'SeriesController@edit');
-	Route::patch('/series/{series}', 'SeriesController@update');
+	Route::get('/series/create', '\TagObjects\Series\SeriesController@create');
+	Route::post('/series', '\TagObjects\Series\SeriesController@store');
+	Route::get('/series/{series}/edit', '\TagObjects\Series\SeriesController@edit');
+	Route::patch('/series/{series}', '\TagObjects\Series\SeriesController@update');
 });
 
-Route::get('/series', 'SeriesController@index');
-Route::get('/series/{series}', 'SeriesController@show');
+Route::get('/series', '\TagObjects\Series\SeriesController@index');
+Route::get('/series/{series}', '\TagObjects\Series\SeriesController@show');
 //End series controller routes
 
 //Scanalator controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/scanalator/create', 'ScanalatorController@create');
-	Route::post('/scanalator', 'ScanalatorController@store');
-	Route::get('/scanalator/{scanalator}/edit', 'ScanalatorController@edit');
-	Route::patch('/scanalator/{scanalator}', 'ScanalatorController@update');
+	Route::get('/scanalator/create', '\TagObjects\Scanalator\ScanalatorController@create');
+	Route::post('/scanalator', '\TagObjects\Scanalator\ScanalatorController@store');
+	Route::get('/scanalator/{scanalator}/edit', '\TagObjects\Scanalator\ScanalatorController@edit');
+	Route::patch('/scanalator/{scanalator}', '\TagObjects\Scanalator\ScanalatorController@update');
 });
 
-Route::get('/scanalator', 'ScanalatorController@index');
-Route::get('/scanalator/{scanalator}', 'ScanalatorController@show');
+Route::get('/scanalator', '\TagObjects\Scanalator\ScanalatorController@index');
+Route::get('/scanalator/{scanalator}', '\TagObjects\Scanalator\ScanalatorController@show');
 //End scanalator controller routes
 
 //Character controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/character/create/{series?}', 'CharacterController@create');
-	Route::post('/character', 'CharacterController@store');
-	Route::get('/character/{character}/edit', 'CharacterController@edit');
-	Route::patch('/character/{character}', 'CharacterController@update');
+	Route::get('/character/create/{series?}', '\TagObjects\Character\CharacterController@create');
+	Route::post('/character', '\TagObjects\Character\CharacterController@store');
+	Route::get('/character/{character}/edit', '\TagObjects\Character\CharacterController@edit');
+	Route::patch('/character/{character}', '\TagObjects\Character\CharacterController@update');
 });
 
-Route::get('/character', 'CharacterController@index');
-Route::get('/character/{character}', 'CharacterController@show');
+Route::get('/character', '\TagObjects\Character\CharacterController@index');
+Route::get('/character/{character}', '\TagObjects\Character\CharacterController@show');
 //End Character controller routes
 
 Auth::routes();
