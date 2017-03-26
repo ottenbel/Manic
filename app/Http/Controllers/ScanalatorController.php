@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 use Auth;
 use DB;
 use Input;
-use App\Scanalator;
+use App\Models\TagObjects\Scanalator\Scanalator;
 
 class ScanalatorController extends Controller
 {

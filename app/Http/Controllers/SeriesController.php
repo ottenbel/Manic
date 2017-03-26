@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 use Auth;
 use DB;
 use Input;
-use App\Series;
+use App\Models\TagObjects\Series\Series;
 
 class SeriesController extends Controller
 {

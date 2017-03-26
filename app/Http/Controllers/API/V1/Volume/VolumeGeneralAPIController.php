@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
 use Input;
-use App\Collection;
-use App\Image;
-use App\Volume;
+use App\Models\Collection;
+use App\Models\Image;
+use App\Models\Volume;
 
 class VolumeGeneralAPIController extends Controller
 {

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1\Tag;
 
 use App\Http\Controllers\Controller;
-use App\Tag;
+use App\Models\TagObjects\Tag\Tag;
 use Illuminate\Http\Request;
 use DB;
 use Input;

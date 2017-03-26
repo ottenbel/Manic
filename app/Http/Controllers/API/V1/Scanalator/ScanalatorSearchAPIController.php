@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1\Scanalator;
 
 use App\Http\Controllers\Controller;
-use App\Scanalator;
+use App\Models\TagObjects\Scanalator\Scanalator;
 use Illuminate\Http\Request;
 use DB;
 use Input;

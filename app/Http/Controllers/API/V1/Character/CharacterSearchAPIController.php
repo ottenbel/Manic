@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API\V1\Character;
 
 use App\Http\Controllers\Controller;
-use App\Character;
-use App\Series;
+use App\Models\TagObjects\Character\Character;
+use App\Models\TagObjects\Series\Series;
 use Illuminate\Http\Request;
 use DB;
 use Input;

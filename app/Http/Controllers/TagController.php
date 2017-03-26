@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 use Auth;
 use DB;
 use Input;
-use App\Tag;
+use App\Models\TagObjects\Tag\Tag;
 
 class TagController extends Controller
 {

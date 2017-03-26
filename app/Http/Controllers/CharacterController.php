@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Redirect;
 use Auth;
 use DB;
 use Input;
-use App\Character;
-use App\Series;
+use App\Models\TagObjects\Character\Character;
+use App\Models\TagObjects\Series\Series;
 
 class CharacterController extends Controller
 {

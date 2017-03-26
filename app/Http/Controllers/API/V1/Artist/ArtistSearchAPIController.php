@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1\Artist;
 
 use App\Http\Controllers\Controller;
-use App\Artist;
+use App\Models\TagObjects\Artist\Artist;
 use Illuminate\Http\Request;
 use DB;
 use Input;

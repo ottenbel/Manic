@@ -8,12 +8,12 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Redirect;
 use Auth;
 use Input;
-use App\Chapter;
-use App\Collection;
-use App\Image;
-use App\Page;
-use App\Scanalator;
-use App\Volume;
+use App\Models\Chapter;
+use App\Models\Collection;
+use App\Models\Image;
+use App\Models\Page;
+use App\Models\Scanalator;
+use App\Models\Volume;
 
 class ChapterGeneralAPIController extends Controller
 {

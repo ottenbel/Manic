@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 use Auth;
 use DB;
 use Input;
-use App\Character;
+use App\Models\TagObjects\Character\Character;
 
 class CharacterGeneralAPIController extends Controller
 {

@@ -7,14 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
 use Input;
-use App\Artist;
-use App\Collection;
-use App\Image;
-use App\Language;
-use App\Rating;
-use App\Series;
-use App\Status;
-use App\Tag;
+use App\Models\TagObjects\Artist\Artist;
+use App\Models\TagObjects\Character\Character;
+use App\Models\Collection;
+use App\Models\Image;
+use App\Models\Language;
+use App\Models\Rating;
+use App\Models\TagObjects\Series\Series;
+use App\Models\Status;
+use App\Models\TagObjects\Tag\Tag;
 
 class CollectionGeneralAPIController extends Controller
 {

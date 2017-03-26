@@ -7,7 +7,7 @@ use Illuminate\Validation\Rule;
 use Auth;
 use DB;
 use Input;
-use App\Artist;
+use App\Models\TagObjects\Artist\Artist;
 
 class ArtistController extends Controller
 {

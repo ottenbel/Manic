@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1\Series;
 
 use App\Http\Controllers\Controller;
-use App\Series;
+use App\Models\TagObjects\Series\Series;
 use Illuminate\Http\Request;
 use DB;
 use Input;
