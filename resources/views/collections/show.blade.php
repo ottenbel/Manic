@@ -23,7 +23,7 @@
 			<div id="collection_short_info">
 		@endif		
 			<h2>{{{$collection->name}}}</h2>
-			@if(($collection->primary_artists()) || ($collection->secondary_artists()))
+			@if(($collection->primary_artists()->count()) || ($collection->secondary_artists()->count()))
 				<div class="tag_holder"><strong>Artists:</strong>
 					@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
 						<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
@@ -35,7 +35,7 @@
 				</div>
 			@endif
 			
-			@if((count($collection->primary_series())) || (count($collection->secondary_series())))
+			@if(($collection->primary_series()->count()) || ($collection->secondary_series()->count()))
 				<div class="tag_holder"><strong>Series:</strong>
 					@foreach($collection->primary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
 						<span class="primary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
@@ -47,7 +47,7 @@
 				</div>
 			@endif
 			
-			@if((count($collection->primary_characters())) || (count($collection->secondary_characters())))
+			@if(($collection->primary_characters()->count()) || ($collection->secondary_characters()->count()))
 				<div class="tag_holder"><strong>Characters:</strong>
 					@foreach($collection->primary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $character)
 						<span class="primary_characters"><a href="/characters/{{$character->id}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
