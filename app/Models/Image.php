@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\BaseManicModel;
+use App\Models\BaseManicModel;
 
 class Image extends BaseManicModel
 {
@@ -14,7 +14,7 @@ class Image extends BaseManicModel
 	 */
 	 public function collections()
 	 {
-		return $this->hasMany('App\Collection', 'cover'); 
+		return $this->hasMany('App\Models\Collection', 'cover'); 
 	 }
 	 
 	 /*
@@ -22,6 +22,6 @@ class Image extends BaseManicModel
 	  */
 	 public function chapters()
 	 {
-		 return $this->belongsToMany('App\Chapter')->withTimestamps()->withPivot('page_number');
+		 return $this->belongsToMany('App\Models\Chapter')->withTimestamps()->withPivot('page_number');
 	 }
 }

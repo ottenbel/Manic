@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models\TagObjects\Artist;
 
-use App\CollectionAssociatedTagObjectModel;
+use App\Models\TagObjects\CollectionAssociatedTagObjectModel;
 
 class Artist extends CollectionAssociatedTagObjectModel
 {

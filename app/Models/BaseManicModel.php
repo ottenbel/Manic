@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,7 +33,7 @@ class BaseManicModel extends Model
 	 */
 	public function created_by_user()
 	{
-		return $this->belongsTo('App\User', 'created_by');
+		return $this->belongsTo('App\Models\User', 'created_by');
 	}
 	
 	/*
@@ -41,6 +41,6 @@ class BaseManicModel extends Model
 	 */
 	public function updated_by_user()
 	{
-		return $this->belongsTo('App\User', 'updated_by');
+		return $this->belongsTo('App\Models\User', 'updated_by');
 	}
 }

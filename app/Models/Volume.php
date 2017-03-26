@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\BaseManicModel;
+use App\Models\BaseManicModel;
 
 class Volume extends BaseManicModel
 {
@@ -15,7 +15,7 @@ class Volume extends BaseManicModel
 	 */
 	public function chapters()
 	{
-		return $this->hasMany('App\Chapter')->orderBy('chapter_number');
+		return $this->hasMany('App\Models\Chapter')->orderBy('chapter_number');
 	}
 	
 	/*
@@ -23,7 +23,7 @@ class Volume extends BaseManicModel
 	 */
 	public function collection()
 	{
-		return $this->belongsTo('App\Collection');
+		return $this->belongsTo('App\Models\Collection');
 	}
 	
 	/*
@@ -31,7 +31,7 @@ class Volume extends BaseManicModel
 	 */
 	public function cover_image()
 	{
-		return $this->belongsTo('App\Image', 'cover');
+		return $this->belongsTo('App\Models\Image', 'cover');
 	}
 	
 	/*

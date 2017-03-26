@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\BaseManicModel;
+use App\Models\BaseManicModel;
 
 class Language extends BaseManicModel
 {
@@ -14,6 +14,6 @@ class Language extends BaseManicModel
 	 */
 	public function collections()
 	{
-		return $this->hasMany('App\Collection');
+		return $this->hasMany('App\Models\Collection');
 	}
 }

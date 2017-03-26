@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models\TagObjects;
 
-use App\BaseManicModel;
+use App\Models\BaseManicModel;
 
 class CollectionAssociatedTagObjectModel extends BaseManicModel
 {
@@ -11,7 +11,7 @@ class CollectionAssociatedTagObjectModel extends BaseManicModel
 	 */
 	public function collections()
 	{
-		return $this->belongsToMany('App\Collection')->withTimestamps()->withPivot('primary');
+		return $this->belongsToMany('App\Models\Collection')->withTimestamps()->withPivot('primary');
 	}
 	
 	/*

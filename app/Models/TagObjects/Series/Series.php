@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models\TagObjects\Series;
 
-use App\CollectionAssociatedTagObjectModel;
+use App\Models\TagObjects\CollectionAssociatedTagObjectModel;
 
 class Series extends CollectionAssociatedTagObjectModel
 {
@@ -14,6 +14,6 @@ class Series extends CollectionAssociatedTagObjectModel
 	 */
 	public function characters()
 	{
-		return $this->hasMany('App\Character');
+		return $this->hasMany('App\Models\Character');
 	}
 }

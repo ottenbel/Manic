@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\BaseManicModel;
+use App\Models\BaseManicModel;
 
 class Collection extends BaseManicModel
 {
@@ -14,7 +14,7 @@ class Collection extends BaseManicModel
 	 */
     public function volumes()
 	{
-		return $this->hasMany('App\Volume')->orderBy('volume_number');
+		return $this->hasMany('App\Models\Volume')->orderBy('volume_number');
 	}
 	
 	/*
@@ -22,7 +22,7 @@ class Collection extends BaseManicModel
 	 */
 	public function chapters()
 	{
-		return $this->hasManyThrough('App\Chapter', 'App\Volume');
+		return $this->hasManyThrough('App\Models\Chapter', 'App\Models\Volume');
 	}
 	
 	/*
@@ -30,7 +30,7 @@ class Collection extends BaseManicModel
 	 */
 	public function cover_image()
 	{
-		return $this->belongsTo('App\Image', 'cover');
+		return $this->belongsTo('App\Models\Image', 'cover');
 	}
 	
 	/*
@@ -38,7 +38,7 @@ class Collection extends BaseManicModel
 	 */
 	public function parent_collection()
 	{
-		 return $this->belongsTo('App\Collection', 'parent_id');
+		 return $this->belongsTo('App\Models\Collection', 'parent_id');
 	}
 	 
 	/*
@@ -46,7 +46,7 @@ class Collection extends BaseManicModel
 	 */
 	public function child_collections()
 	{
-		return $this->hasMany('App\Collection', 'parent_id');
+		return $this->hasMany('App\Models\Collection', 'parent_id');
 	}
 	
 	/*
@@ -54,7 +54,7 @@ class Collection extends BaseManicModel
 	 */
 	public function language()
 	{
-		return $this->belongsTo('App\Language');
+		return $this->belongsTo('App\Models\Language');
 	}
 	
 	/*
@@ -62,7 +62,7 @@ class Collection extends BaseManicModel
 	 */	 
 	public function artists()
 	{
-		return $this->belongsToMany('App\Artist')->withTimestamps()->withPivot('primary');
+		return $this->belongsToMany('App\Models\TagObjects\Artist\Artist')->withTimestamps()->withPivot('primary');
 	}
 	
 	/*
@@ -70,7 +70,7 @@ class Collection extends BaseManicModel
 	 */
 	public function primary_artists()
 	{
-		return $this->belongsToMany('App\Artist')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
+		return $this->belongsToMany('App\Models\TagObjects\Artist\Artist')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
 	}
 	
 	/*
@@ -78,7 +78,7 @@ class Collection extends BaseManicModel
 	 */
 	public function secondary_artists()
 	{
-		return $this->belongsToMany('App\Artist')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
+		return $this->belongsToMany('App\Models\TagObjects\Artist\Artist')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
 	}
 
 	/*
@@ -86,7 +86,7 @@ class Collection extends BaseManicModel
 	 */	 
 	public function characters()
 	{
-		return $this->belongsToMany('App\Character')->withTimestamps()->withPivot('primary');
+		return $this->belongsToMany('App\Models\TagObjects\Character\Character')->withTimestamps()->withPivot('primary');
 	}
 	
 	/*
@@ -94,7 +94,7 @@ class Collection extends BaseManicModel
 	 */
 	public function primary_characters()
 	{
-		return $this->belongsToMany('App\Character')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
+		return $this->belongsToMany('App\Models\TagObjects\Character\Character')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
 	}
 	
 	/*
@@ -102,7 +102,7 @@ class Collection extends BaseManicModel
 	 */
 	public function secondary_characters()
 	{
-		return $this->belongsToMany('App\Character')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
+		return $this->belongsToMany('App\Models\TagObjects\Character\Character')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
 	}
 	
 	/*
@@ -110,7 +110,7 @@ class Collection extends BaseManicModel
 	 */
 	public function series()
 	{
-		return $this->belongsToMany('App\Series')->withTimestamps()->withPivot('primary');
+		return $this->belongsToMany('App\Models\TagObjects\Series\Series')->withTimestamps()->withPivot('primary');
 	}
 	
 	/*
@@ -118,7 +118,7 @@ class Collection extends BaseManicModel
 	 */
 	public function primary_series()
 	{
-		return $this->belongsToMany('App\Series')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
+		return $this->belongsToMany('App\Models\TagObjects\Series\Series')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
 	}
 	
 	/*
@@ -126,7 +126,7 @@ class Collection extends BaseManicModel
 	 */
 	public function secondary_series()
 	{
-		return $this->belongsToMany('App\Series')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
+		return $this->belongsToMany('App\Models\TagObjects\Series\Series')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
 	}
 	
 	/*
@@ -134,7 +134,7 @@ class Collection extends BaseManicModel
 	 */ 
 	public function tags()
 	{
-		return $this->belongsToMany('App\Tag')->withTimestamps()->withPivot('primary');
+		return $this->belongsToMany('App\Models\TagObjects\Tag\Tag')->withTimestamps()->withPivot('primary');
 	}
 	
 	/*
@@ -142,7 +142,7 @@ class Collection extends BaseManicModel
 	 */
 	public function primary_tags()
 	{
-		return $this->belongsToMany('App\Tag')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
+		return $this->belongsToMany('App\Models\TagObjects\Tag\Tag')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
 	}
 	
 	/*
@@ -150,7 +150,7 @@ class Collection extends BaseManicModel
 	 */
 	public function secondary_tags()
 	{
-		return $this->belongsToMany('App\Tag')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
+		return $this->belongsToMany('App\Models\TagObjects\Tag\Tag')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
 	}
 	 
 	/*
@@ -158,7 +158,7 @@ class Collection extends BaseManicModel
 	 */
 	public function rating()
 	{
-		return $this->belongsTo('App\Rating');
+		return $this->belongsTo('App\Models\Rating');
 	}
 	
 	/*
@@ -166,6 +166,6 @@ class Collection extends BaseManicModel
 	 */
 	public function status()
 	{
-		return $this->belongsTo('App\Status');
+		return $this->belongsTo('App\Models\Status');
 	}
 }

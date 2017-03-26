@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models\TagObjects\Scanalator;
 
-use App\BaseManicModel;
+use App\Models\TagObjects\CollectionAssociatedTagObjectModel;
 
 class Scanalator extends BaseManicModel
 {
@@ -14,7 +14,7 @@ class Scanalator extends BaseManicModel
 	 */
 	public function chapters()
 	{
-		return $this->belongsToMany('App\Chapter')->withTimestamps()->withPivot('primary');
+		return $this->belongsToMany('App\Models\Chapter')->withTimestamps()->withPivot('primary');
 	}
 	
 	/*

@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\BaseManicModel;
+use App\Models\BaseManicModel;
 
 class Chapter extends BaseManicModel
 {
@@ -15,7 +15,7 @@ class Chapter extends BaseManicModel
 	 */
 	public function pages()
 	{
-		return $this->belongsToMany('App\Image')->withTimestamps()->withPivot('page_number')->orderBy('page_number');
+		return $this->belongsToMany('App\Models\Image')->withTimestamps()->withPivot('page_number')->orderBy('page_number');
 	}
 	
 	/*
@@ -23,7 +23,7 @@ class Chapter extends BaseManicModel
 	 */
 	public function volume()
 	{
-		return $this->belongsTo('App\Volume');
+		return $this->belongsTo('App\Models\Volume');
 	}
 	
 	/*
@@ -39,7 +39,7 @@ class Chapter extends BaseManicModel
 	 */	 
 	public function scanalators()
 	{
-		return $this->belongsToMany('App\Scanalator')->withTimestamps()->withPivot('primary');
+		return $this->belongsToMany('App\Models\TagObjects\Scanalator\Scanalator')->withTimestamps()->withPivot('primary');
 	}
 	
 	/*
@@ -47,7 +47,7 @@ class Chapter extends BaseManicModel
 	 */
 	public function primary_scanalators()
 	{
-		return $this->belongsToMany('App\Scanalator')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
+		return $this->belongsToMany('App\Models\TagObjects\Scanalator\Scanalator')->withTimestamps()->withPivot('primary')->where('primary', '=', true);
 	}
 	
 	/*
@@ -55,7 +55,7 @@ class Chapter extends BaseManicModel
 	 */
 	public function secondary_scanalators()
 	{
-		return $this->belongsToMany('App\Scanalator')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
+		return $this->belongsToMany('App\Models\TagObjects\Scanalator\Scanalator')->withTimestamps()->withPivot('primary')->where('primary', '=', false);
 	}
 	
 	/*

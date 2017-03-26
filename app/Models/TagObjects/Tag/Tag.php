@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models\TagObjects\Tag;
 
-use App\CollectionAssociatedTagObjectModel;
+use App\Models\TagObjects\CollectionAssociatedTagObjectModel;
 
 class Tag extends CollectionAssociatedTagObjectModel
 {
