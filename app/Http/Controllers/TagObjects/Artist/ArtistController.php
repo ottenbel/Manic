@@ -9,6 +9,7 @@ use Auth;
 use DB;
 use Input;
 use App\Models\TagObjects\Artist\Artist;
+use App\Models\TagObjects\Artist\ArtistAlias;
 
 class ArtistController extends Controller
 {
@@ -119,7 +120,18 @@ class ArtistController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('artists.show', array('artist' => $artist, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		$global_aliases = $artist->aliases()->where('user_id', '=', null)->orderBy('alias', 'asc')->paginate(10, ['*'], 'global_alias_page');
+		$global_aliases->appends(Input::except('global_alias_page'));
+		
+		$personal_aliases = null;
+		
+		if (Auth::check())
+		{
+			$personal_aliases = $artist->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', 'asc')->paginate(10, ['*'], 'personal_alias_page');
+			$personal_aliases->appends(Input::except('personal_alias_page'));
+		}
+		
+		return View('artists.show', array('artist' => $artist, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -134,7 +146,19 @@ class ArtistController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('artists.edit', array('tagObject' => $artist, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		//Add auth check here
+		$global_aliases = $artist->aliases()->where('user_id', '=', null)->orderBy('alias', 'asc')->paginate(10, ['*'], 'global_alias_page');
+		$global_aliases->appends(Input::except('global_alias_page'));
+		
+		$personal_aliases = null;
+		
+		if (Auth::check())
+		{
+			$personal_aliases = $artist->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', 'asc')->paginate(10, ['*'], 'personal_alias_page');
+			$personal_aliases->appends(Input::except('personal_alias_page'));
+		}
+		
+		return View('artists.edit', array('tagObject' => $artist, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**

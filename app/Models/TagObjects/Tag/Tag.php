@@ -11,6 +11,6 @@ class Tag extends CollectionAssociatedTagObjectModel
 	
 	public function aliases()
 	{
-		return $this->hasMany('App\ModelsTagObjects\Tag\TagAlias')->->withTimestamps();
+		return $this->hasMany('App\Models\TagObjects\Tag\TagAlias');
 	}
 }

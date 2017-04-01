@@ -8,6 +8,8 @@ class Character extends CollectionAssociatedTagObjectModel
 {
 	//Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'characters';
+	//Update the corresponding series when creating/updating a character (use function name).
+	protected $touches = ['series'];
 	
 	/*
 	 * Get the series that the character is associated with.
@@ -22,6 +24,6 @@ class Character extends CollectionAssociatedTagObjectModel
 	 */
 	public function aliases()
 	{
-		return $this->hasMany('App\ModelsTagObjects\Character\CharacterAlias')->->withTimestamps();
+		return $this->hasMany('App\Models\TagObjects\Character\CharacterAlias');
 	}
 }

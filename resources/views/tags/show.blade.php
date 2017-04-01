@@ -40,6 +40,49 @@
 			<span class="source_tag"><a href="{{$tag->url}}">Link to additional information</a></span>
 		</div>
 	@endif
+	
+	<h3>Global Aliases</h3>
+	
+	<form method="POST" action="/tag_alias" enctype="multipart/form-data">
+		{{ csrf_field() }}
+		{{ Form::hidden('global_alias', true) }}
+		
+		@include('partials.global-alias-input')
+		
+		{{ Form::submit('Create Global Tag Alias', array('class' => 'btn btn-primary')) }}
+	</form>
+	
+	@foreach($global_aliases as $global_alias)
+		<div class="row">
+			<div class="col-xs-12">
+				<span class="alias_tag"><a>{{$global_alias->alias}}</a></span>
+			</div>
+		</div>
+	@endforeach
+	
+	{{ $global_aliases->links() }}
+	
+	<h3>Personal Aliases</h3>
+	
+	<form method="POST" action="/tag_alias" enctype="multipart/form-data">
+		{{ csrf_field() }}
+		{{ Form::hidden('global_alias', false) }}
+		
+		@include('partials.personal-alias-input')
+		
+		{{ Form::submit('Create Personal Tag Alias', array('class' => 'btn btn-primary')) }}
+	</form>
+	
+	@foreach($personal_aliases as $personal_alias)
+		<div class="row">
+			<div class="col-xs-12">
+				<span class="alias_tag"><a>{{$personal_alias->alias}}</a></span>
+			</div>
+		</div>
+	@endforeach
+	
+	{{ $personal_aliases->links() }}
+	
 </div>
 @endsection
 

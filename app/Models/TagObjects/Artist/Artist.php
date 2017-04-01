@@ -14,6 +14,6 @@ class Artist extends CollectionAssociatedTagObjectModel
 	 */
 	public function aliases()
 	{
-		return $this->hasMany('App\ModelsTagObjects\Artist\ArtistAlias')->->withTimestamps();
+		return $this->hasMany('App\Models\TagObjects\Artist\ArtistAlias');
 	}
 }

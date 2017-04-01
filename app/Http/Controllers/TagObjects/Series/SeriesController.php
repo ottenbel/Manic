@@ -9,6 +9,7 @@ use Auth;
 use DB;
 use Input;
 use App\Models\TagObjects\Series\Series;
+use App\Models\TagObjects\Series\SeriesAlias;
 
 class SeriesController extends Controller
 {
@@ -160,7 +161,18 @@ class SeriesController extends Controller
 			$characters = $characters_used;
 		}
 		
-		return View('series.show', array('series' => $series, 'characters' => $characters->appends(Input::except('character_page')), 'character_list_type' => $characters_list_type, 'character_list_order' => $characters_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		$global_aliases = $series->aliases()->where('user_id', '=', null)->orderBy('alias', 'asc')->paginate(10, ['*'], 'global_alias_page');
+		$global_aliases->appends(Input::except('global_alias_page'));
+		
+		$personal_aliases = null;
+		
+		if (Auth::check())
+		{
+			$personal_aliases = $series->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', 'asc')->paginate(10, ['*'], 'personal_alias_page');
+			$personal_aliases->appends(Input::except('personal_alias_page'));
+		}
+		
+		return View('series.show', array('series' => $series, 'characters' => $characters->appends(Input::except('character_page')), 'character_list_type' => $characters_list_type, 'character_list_order' => $characters_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 	
     /**
@@ -175,7 +187,18 @@ class SeriesController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('series.edit', array('tagObject' => $series, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		$global_aliases = $series->aliases()->where('user_id', '=', null)->orderBy('alias', 'asc')->paginate(10, ['*'], 'global_alias_page');
+		$global_aliases->appends(Input::except('global_alias_page'));
+		
+		$personal_aliases = null;
+		
+		if (Auth::check())
+		{
+			$personal_aliases = $series->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', 'asc')->paginate(10, ['*'], 'personal_alias_page');
+			$personal_aliases->appends(Input::except('personal_alias_page'));
+		}
+		
+		return View('series.edit', array('tagObject' => $series, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**

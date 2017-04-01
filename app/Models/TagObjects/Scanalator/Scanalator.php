@@ -46,6 +46,6 @@ class Scanalator extends BaseManicModel
 	 */
 	public function aliases()
 	{
-		return $this->hasMany('App\ModelsTagObjects\Scanalator\ScanalatorAlias')->->withTimestamps();
+		return $this->hasMany('App\Models\TagObjects\Scanalator\ScanalatorAlias');
 	}
 }
