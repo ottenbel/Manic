@@ -105,7 +105,7 @@ class TagController extends Controller
 		$tag->save();
 		
 		//Redirect to the tag that was created
-		return redirect()->action('TagController@show', [$tag])->with("flashed_success", array("Successfully created tag $tag->name."));
+		return redirect()->action('TagObjects\Tag\TagController@show', [$tag])->with("flashed_success", array("Successfully created tag $tag->name."));
     }
 
     /**
@@ -181,7 +181,7 @@ class TagController extends Controller
 		$tag->save();
 		
 		//Redirect to the tag that was created
-		return redirect()->action('TagController@show', [$tag])->with("flashed_success", array("Successfully updated tag $tag->name."));
+		return redirect()->action('TagObjects\Tag\TagController@show', [$tag])->with("flashed_success", array("Successfully updated tag $tag->name."));
     }
 
     /**

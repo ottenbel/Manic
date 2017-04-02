@@ -122,7 +122,7 @@ class CharacterController extends Controller
 		$parent_series->save();
 		
 		//Redirect to the character that was created
-		return redirect()->action('CharacterController@show', [$character])->with("flashed_success", array("Successfully created character $character->name under series $parent_series->name."));
+		return redirect()->action('TagObjects\Character\CharacterController@show', [$character])->with("flashed_success", array("Successfully created character $character->name under series $parent_series->name."));
     }
 
     /**
@@ -201,7 +201,7 @@ class CharacterController extends Controller
 		$character->save();
 		
 		//Redirect to the character that was created
-		return redirect()->action('CharacterController@show', [$character])->with("flashed_success", array("Successfully updated character $character->name."));
+		return redirect()->action('TagObjects\Character\CharacterController@show', [$character])->with("flashed_success", array("Successfully updated character $character->name."));
     }
 
     /**

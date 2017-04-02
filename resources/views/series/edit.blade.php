@@ -29,7 +29,7 @@
 		@if(Auth::user())
 			<form method="POST" action="/series_alias" enctype="multipart/form-data">
 				{{ csrf_field() }}
-				{{ Form::hidden('global_alias', true) }}
+				{{ Form::hidden('is_global_alias', true) }}
 				
 				@include('partials.global-alias-input')
 				
@@ -53,7 +53,7 @@
 		
 		<form method="POST" action="/series_alias" enctype="multipart/form-data">
 			{{ csrf_field() }}
-			{{ Form::hidden('global_alias', false) }}
+			{{ Form::hidden('is_global_alias', false) }}
 			
 			@include('partials.personal-alias-input')
 			

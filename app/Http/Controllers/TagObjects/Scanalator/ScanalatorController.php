@@ -105,7 +105,7 @@ class ScanalatorController extends Controller
 		$scanalator->save();
 		
 		//Redirect to the scanalator that was created
-		return redirect()->action('ScanalatorController@show', [$scanalator])->with("flashed_success", array("Successfully created scanalator $scanalator->name."));
+		return redirect()->action('TagObjects\Scanalator\ScanalatorController@show', [$scanalator])->with("flashed_success", array("Successfully created scanalator $scanalator->name."));
     }
 
     /**
@@ -184,7 +184,7 @@ class ScanalatorController extends Controller
 		$scanalator->save();
 		
 		//Redirect to the scanalator that was created
-		return redirect()->action('ScanalatorController@show', [$scanalator])->with("flashed_success", array("Successfully updated scanalator $scanalator->name."));
+		return redirect()->action('TagObjects\Scanalator\ScanalatorController@show', [$scanalator])->with("flashed_success", array("Successfully updated scanalator $scanalator->name."));
     }
 
     /**

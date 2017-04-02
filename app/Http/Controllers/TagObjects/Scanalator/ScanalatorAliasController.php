@@ -11,7 +11,7 @@ use Input;
 use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 use App\Models\TagObjects\Scanalator\Scanalator;
 
-class ScanalatorController extends Controller
+class ScanalatorAliasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,20 +28,43 @@ class ScanalatorController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Scanalator $scanalator)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, ScanalatorAlias $scanalatorAlias)
-    {
-		//
+        $isGlobalAlias = Input::get('is_global_alias');
+		if ($isGlobalAlias)
+		{
+			$this->validate($request, [
+				'global_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias',
+			]);
+		}
+		else
+		{
+			$this->validate($request, [
+				'personal_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias',
+			]);
+		}
+		
+		$scanalatorAlias = new ScanalatorAlias();
+		$scanalatorAlias->scanalator_id = $scanalator->id;
+		 
+        if ($isGlobalAlias)
+		{
+			$scanalatorAlias->alias = Input::get('global_alias');
+			$scanalatorAlias->user_id = null;
+		}
+		else
+		{
+			$scanalatorAlias->alias = Input::get('personal_alias');
+			$scanalatorAlias->user_id = Auth::user()->id;
+		}
+		
+		$scanalatorAlias->created_by = Auth::user()->id;
+		$scanalatorAlias->updated_by = Auth::user()->id;
+		
+		$scanalatorAlias->save();
+		
+		//Redirect to the scanalator that the alias was created for
+		return redirect()->action('TagObjects\Scanalator\ScanalatorController@show', [$scanalator])->with("flashed_success", array("Successfully created alias $scanalatorAlias->alias on scanalator $scanalator->name."));
     }
 
     /**

@@ -14,7 +14,7 @@ use App\Models\TagObjects\Character\CharacterAlias;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
 
-class CharacterController extends Controller
+class CharacterAliasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,20 +31,43 @@ class CharacterController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Character $character)
     {	
-		//
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, CharacterAlias $characterAlias)
-    {
-		//
+		$isGlobalAlias = Input::get('is_global_alias');
+		if ($isGlobalAlias)
+		{
+			$this->validate($request, [
+				'global_alias' => 'required|unique:characters,name|unique:character_alias,alias',
+			]);
+		}
+		else
+		{
+			$this->validate($request, [
+				'personal_alias' => 'required|unique:characters,name|unique:character_alias,alias',
+			]);
+		}
+		
+		$characterAlias = new CharacterAlias();
+		$characterAlias->character_id = $character->id;
+		 
+        if ($isGlobalAlias)
+		{
+			$characterAlias->alias = Input::get('global_alias');
+			$characterAlias->user_id = null;
+		}
+		else
+		{
+			$characterAlias->alias = Input::get('personal_alias');
+			$characterAlias->user_id = Auth::user()->id;
+		}
+		
+		$characterAlias->created_by = Auth::user()->id;
+		$characterAlias->updated_by = Auth::user()->id;
+		
+		$characterAlias->save();
+		
+		//Redirect to the character that the alias was created for
+		return redirect()->action('TagObjects\Character\CharacterController@show', [$character])->with("flashed_success", array("Successfully created alias $characterAlias->alias on character $character->name."));
     }
 
     /**

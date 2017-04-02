@@ -57,7 +57,7 @@ Route::get('/tag/{tag}', 'TagObjects\Tag\TagController@show');
 
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::post('/tag_alias', 'TagObjects\Tag\TagAliasController@store');
+	Route::post('/tag_alias/{tag}', 'TagObjects\Tag\TagAliasController@store');
 	Route::patch('/tag_alias/{tagAlias}', 'TagObjects\Tag\TagAliasController@update');
 });
 
@@ -79,7 +79,7 @@ Route::get('/artist/{artist}', 'TagObjects\Artist\ArtistController@show');
 
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::post('/artist_alias', 'TagObjects\Artist\ArtistAliasController@store');
+	Route::post('/artist_alias/{artist}', 'TagObjects\Artist\ArtistAliasController@store');
 	Route::patch('/artist_alias/{artistAlias}', 'TagObjects\Artist\ArtistAliasController@update');
 });
 
@@ -101,7 +101,7 @@ Route::get('/series/{series}', 'TagObjects\Series\SeriesController@show');
 
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::post('/series_alias', 'TagObjects\Series\SeriesAliasController@store');
+	Route::post('/series_alias/{series}', 'TagObjects\Series\SeriesAliasController@store');
 	Route::patch('/series_alias/{seriesAlias}', 'TagObjects\Series\SeriesAliasController@update');
 });
 
@@ -123,7 +123,7 @@ Route::get('/scanalator/{scanalator}', 'TagObjects\Scanalator\ScanalatorControll
 
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::post('/scanalator_alias', 'TagObjects\Scanalator\ScanalatorAliasController@store');
+	Route::post('/scanalator_alias/{scanalator}', 'TagObjects\Scanalator\ScanalatorAliasController@store');
 	Route::patch('/scanalator_alias/{scanalatorAlias}', 'TagObjects\Scanalator\ScanalatorAliasController@update');
 });
 
@@ -145,7 +145,7 @@ Route::get('/character/{character}', 'TagObjects\Character\CharacterController@s
 
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::post('/character_alias', 'TagObjects\Character\CharacterAliasController@store');
+	Route::post('/character_alias/{character}', 'TagObjects\Character\CharacterAliasController@store');
 	Route::patch('/character_alias/{characterAlias}', 'TagObjects\Character\CharacterAliasController@update');
 });
 

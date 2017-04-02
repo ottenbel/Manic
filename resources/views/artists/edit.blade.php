@@ -27,9 +27,9 @@ Edit Artist - {{{$tagObject->name}}}
 		<h3>Global Aliases</h3>
 		
 		@if(Auth::user())
-			<form method="POST" action="/artist_alias" enctype="multipart/form-data">
+			<form method="POST" action="/artist_alias/{{$tagObject->id}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
-				{{ Form::hidden('global_alias', true) }}
+				{{ Form::hidden('is_global_alias', true) }}
 				
 				@include('partials.global-alias-input')
 				
@@ -51,9 +51,9 @@ Edit Artist - {{{$tagObject->name}}}
 	@if(Auth::user())
 		<h3>Personal Aliases</h3>
 		
-		<form method="POST" action="/artist_alias" enctype="multipart/form-data">
+		<form method="POST" action="/artist_alias/{{$tagObject->id}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
-			{{ Form::hidden('global_alias', false) }}
+			{{ Form::hidden('is_global_alias', false) }}
 			
 			@include('partials.personal-alias-input')
 			
