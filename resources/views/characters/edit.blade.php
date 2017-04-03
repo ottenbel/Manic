@@ -24,6 +24,8 @@ Edit Character - {{{$tagObject->name}}}
 		{{ Form::submit('Update Character', array('class' => 'btn btn-primary')) }}
 	</form>
 	
+	<br/>
+	
 	@if(($global_aliases->count() > 0) || (Auth::user()))
 		<h3>Global Aliases</h3>
 		
@@ -34,19 +36,30 @@ Edit Character - {{{$tagObject->name}}}
 				
 				@include('partials.global-alias-input')
 				
-				{{ Form::submit('Create Global Artist Alias', array('class' => 'btn btn-primary')) }}
+				{{ Form::submit('Create Global Character Alias', array('class' => 'btn btn-primary')) }}
 			</form>
 		@endif
 		
-		@foreach($global_aliases as $global_alias)
-			<div class="row">
-				<div class="col-xs-12">
-					<span class="alias_tag"><a>{{$global_alias->alias}}</a></span>
-				</div>
+		@if($global_aliases->count() > 0)
+			<div>
+				<b>Display Order:</b>
+				@if($global_list_order == "asc")
+					<b><a href="/character/{{$tagObject->id}}?global_order=asc">Ascending</a></b> <a href="/character/{{$tagObject->id}}?global_order=desc">Descending</a>
+				@elseif($global_list_order == "desc")
+					<a href="/character/{{$tagObject->id}}?global_order=asc">Ascending</a> <b><a href="/character/{{$tagObject->id}}?global_order=desc">Descending</a></b>
+				@endif
 			</div>
-		@endforeach
 		
-		{{ $global_aliases->links() }}
+			@foreach($global_aliases as $global_alias)
+				<div class="row">
+					<div class="col-xs-12">
+						<span class="alias_tag"><a>{{$global_alias->alias}}</a></span>
+					</div>
+				</div>
+			@endforeach
+			
+			{{ $global_aliases->links() }}
+		@endif
 	@endif
 	
 	@if(Auth::user())
@@ -58,18 +71,29 @@ Edit Character - {{{$tagObject->name}}}
 			
 			@include('partials.personal-alias-input')
 			
-			{{ Form::submit('Create Personal Artist Alias', array('class' => 'btn btn-primary')) }}
+			{{ Form::submit('Create Personal Character Alias', array('class' => 'btn btn-primary')) }}
 		</form>
-	
-		@foreach($personal_aliases as $personal_alias)
-			<div class="row">
-				<div class="col-xs-12">
-					<span class="alias_tag"><a>{{$personal_alias->alias}}</a></span>
-				</div>
+		
+		@if($personal_aliases->count() > 0)
+			<div>
+				<b>Display Order:</b>
+				@if($personal_list_order == "asc")
+					<b><a href="/character/{{$tagObject->id}}?personal_order=asc">Ascending</a></b> <a href="/character/{{$tagObject->id}}?personal_order=desc">Descending</a>
+				@elseif($personal_list_order == "desc")
+					<a href="/character/{{$tagObject->id}}?personal_order=asc">Ascending</a> <b><a href="/character/{{$tagObject->id}}?personal_order=desc">Descending</a></b>
+				@endif
 			</div>
-		@endforeach
-	
-		{{ $personal_aliases->links() }}
+		
+			@foreach($personal_aliases as $personal_alias)
+				<div class="row">
+					<div class="col-xs-12">
+						<span class="alias_tag"><a>{{$personal_alias->alias}}</a></span>
+					</div>
+				</div>
+			@endforeach
+		
+			{{ $personal_aliases->links() }}
+		@endif
 	@endif
 </div>
 @endsection

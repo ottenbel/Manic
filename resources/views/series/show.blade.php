@@ -82,6 +82,8 @@
 	</div>		
 	@endif
 	
+	<br/>
+	
 	@if(($global_aliases->count() > 0) || (Auth::user()))
 		<h3>Global Aliases</h3>
 		
@@ -96,15 +98,26 @@
 			</form>
 		@endif
 		
-		@foreach($global_aliases as $global_alias)
-			<div class="row">
-				<div class="col-xs-12">
-					<span class="alias_tag"><a>{{$global_alias->alias}}</a></span>
-				</div>
+		@if($global_aliases->count() > 0)
+			<div>
+				<b>Display Order:</b>
+				@if($global_list_order == "asc")
+					<b><a href="/series/{{$series->id}}?global_order=asc">Ascending</a></b> <a href="/series/{{$series->id}}?global_order=desc">Descending</a>
+				@elseif($global_list_order == "desc")
+					<a href="/series/{{$series->id}}?global_order=asc">Ascending</a> <b><a href="/series/{{$series->id}}?global_order=desc">Descending</a></b>
+				@endif
 			</div>
-		@endforeach
 		
-		{{ $global_aliases->links() }}
+			@foreach($global_aliases as $global_alias)
+				<div class="row">
+					<div class="col-xs-12">
+						<span class="alias_tag"><a>{{$global_alias->alias}}</a></span>
+					</div>
+				</div>
+			@endforeach
+			
+			{{ $global_aliases->links() }}
+		@endif
 	@endif
 	
 	@if(Auth::user())
@@ -119,15 +132,26 @@
 			{{ Form::submit('Create Personal Series Alias', array('class' => 'btn btn-primary')) }}
 		</form>
 	
-		@foreach($personal_aliases as $personal_alias)
-			<div class="row">
-				<div class="col-xs-12">
-					<span class="alias_tag"><a>{{$personal_alias->alias}}</a></span>
-				</div>
+		@if($personal_aliases->count() > 0)
+			<div>
+				<b>Display Order:</b>
+				@if($personal_list_order == "asc")
+					<b><a href="/series/{{$series->id}}?personal_order=asc">Ascending</a></b> <a href="/series/{{$series->id}}?personal_order=desc">Descending</a>
+				@elseif($personal_list_order == "desc")
+					<a href="/series/{{$series->id}}?personal_order=asc">Ascending</a> <b><a href="/series/{{$series->id}}?personal_order=desc">Descending</a></b>
+				@endif
 			</div>
-		@endforeach
 		
-		{{ $personal_aliases->links() }}
+			@foreach($personal_aliases as $personal_alias)
+				<div class="row">
+					<div class="col-xs-12">
+						<span class="alias_tag"><a>{{$personal_alias->alias}}</a></span>
+					</div>
+				</div>
+			@endforeach
+			
+			{{ $personal_aliases->links() }}
+		@endif
 	@endif
 </div>
 @endsection

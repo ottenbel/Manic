@@ -161,18 +161,31 @@ class SeriesController extends Controller
 			$characters = $characters_used;
 		}
 		
-		$global_aliases = $series->aliases()->where('user_id', '=', null)->orderBy('alias', 'asc')->paginate(10, ['*'], 'global_alias_page');
+		$global_list_order = trim(strtolower($request->input('global_order')));
+		$personal_list_order = trim(strtolower($request->input('personal_order')));
+		
+		if (($global_list_order != 'asc') && ($global_list_order != 'desc'))
+		{
+			$global_list_order = 'asc';
+		}
+		
+		if (($personal_list_order != 'asc') && ($personal_list_order != 'desc'))
+		{
+			$personal_list_order = 'asc';
+		}
+		
+		$global_aliases = $series->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(10, ['*'], 'global_alias_page');
 		$global_aliases->appends(Input::except('global_alias_page'));
 		
 		$personal_aliases = null;
 		
 		if (Auth::check())
 		{
-			$personal_aliases = $series->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', 'asc')->paginate(10, ['*'], 'personal_alias_page');
+			$personal_aliases = $series->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(10, ['*'], 'personal_alias_page');
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('series.show', array('series' => $series, 'characters' => $characters->appends(Input::except('character_page')), 'character_list_type' => $characters_list_type, 'character_list_order' => $characters_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('series.show', array('series' => $series, 'characters' => $characters->appends(Input::except('character_page')), 'character_list_type' => $characters_list_type, 'character_list_order' => $characters_list_order, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 	
     /**
@@ -187,18 +200,31 @@ class SeriesController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		$global_aliases = $series->aliases()->where('user_id', '=', null)->orderBy('alias', 'asc')->paginate(10, ['*'], 'global_alias_page');
+		$global_list_order = trim(strtolower($request->input('global_order')));
+		$personal_list_order = trim(strtolower($request->input('personal_order')));
+		
+		if (($global_list_order != 'asc') && ($global_list_order != 'desc'))
+		{
+			$global_list_order = 'asc';
+		}
+		
+		if (($personal_list_order != 'asc') && ($personal_list_order != 'desc'))
+		{
+			$personal_list_order = 'asc';
+		}
+		
+		$global_aliases = $series->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(10, ['*'], 'global_alias_page');
 		$global_aliases->appends(Input::except('global_alias_page'));
 		
 		$personal_aliases = null;
 		
 		if (Auth::check())
 		{
-			$personal_aliases = $series->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', 'asc')->paginate(10, ['*'], 'personal_alias_page');
+			$personal_aliases = $series->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(10, ['*'], 'personal_alias_page');
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('series.edit', array('tagObject' => $series, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('series.edit', array('tagObject' => $series, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
