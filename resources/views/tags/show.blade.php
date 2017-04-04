@@ -47,7 +47,7 @@
 		<h3>Global Aliases</h3>
 		
 		@if(Auth::user())
-			<form method="POST" action="/tag_alias" enctype="multipart/form-data">
+			<form method="POST" action="/tag_alias/{{$tag->id}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ Form::hidden('is_global_alias', true) }}
 				
@@ -82,7 +82,7 @@
 	@if(Auth::user())
 		<h3>Personal Aliases</h3>
 		
-		<form method="POST" action="/tag_alias" enctype="multipart/form-data">
+		<form method="POST" action="/tag_alias/{{$tag->id}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			{{ Form::hidden('is_global_alias', false) }}
 			
@@ -102,7 +102,7 @@
 			</div>
 		
 			@foreach($personal_aliases as $personal_alias)
-				<div class="row">
+				<div class="row">	
 					<div class="col-xs-12">
 						<span class="alias_tag"><a>{{$personal_alias->alias}}</a></span>
 					</div>

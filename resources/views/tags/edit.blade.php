@@ -29,7 +29,7 @@ Edit Tag - {{{$tagObject->name}}}
 		<h3>Global Aliases</h3>
 		
 		@if(Auth::user())
-			<form method="POST" action="/tag_alias" enctype="multipart/form-data">
+			<form method="POST" action="/tag_alias/{{$tagObject->id}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ Form::hidden('is_global_alias', true) }}
 				
@@ -64,7 +64,7 @@ Edit Tag - {{{$tagObject->name}}}
 	@if(Auth::user())
 		<h3>Personal Aliases</h3>
 		
-		<form method="POST" action="/tag_alias" enctype="multipart/form-data">
+		<form method="POST" action="/tag_alias/{{$tagObject->id}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			{{ Form::hidden('is_global_alias', false) }}
 			
