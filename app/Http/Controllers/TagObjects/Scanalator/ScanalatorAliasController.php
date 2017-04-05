@@ -34,14 +34,12 @@ class ScanalatorAliasController extends Controller
 		if ($isGlobalAlias)
 		{
 			$this->validate($request, [
-				'global_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias',
-			]);
+				'global_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias,null,null,user_id,NULL']);
 		}
 		else
 		{
 			$this->validate($request, [
-				'personal_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias',
-			]);
+				'personal_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias,null,null,user_id,'.Auth::user()->id]);
 		}
 		
 		$scanalatorAlias = new ScanalatorAlias();
