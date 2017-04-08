@@ -70,7 +70,7 @@
 			@foreach($global_aliases as $global_alias)
 				<div class="row">
 					<div class="col-xs-12">
-						<span class="alias_tag"><a>{{$global_alias->alias}}</a></span>
+						<span class="global_artist_alias"><a>{{$global_alias->alias}}</a></span>
 					</div>
 				</div>
 			@endforeach
@@ -104,7 +104,7 @@
 			@foreach($personal_aliases as $personal_alias)
 				<div class="row">
 					<div class="col-xs-12">
-						<span class="alias_tag"><a>{{$personal_alias->alias}}</a></span>
+						<span class="personal_artist_alias"><a>{{$personal_alias->alias}}</a></span>
 					</div>
 				</div>
 			@endforeach
