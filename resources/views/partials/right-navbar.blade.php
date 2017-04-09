@@ -8,6 +8,12 @@
 		<li><a href="{{ url('/tag') }}">Tag</a><li>
 		<li><a href="{{ url('/scanalator') }}">Scanalator</a><li>
 		<li><a href="{{ url('/series') }}">Series</a><li>
+		<h6 class="dropdown-header">Aliases</h6>
+		<li><a href="{{ url('/artist_alias') }}">Artist Aliases</a><li>
+		<li><a href="{{ url('/character_alias') }}">Character Aliases</a><li>
+		<li><a href="{{ url('/tag_alias') }}">Tag Aliases</a><li>
+		<li><a href="{{ url('/scanalator_alias') }}">Scanalator Aliases</a><li>
+		<li><a href="{{ url('/series_alias') }}">Series Aliases</a><li>
 	</ul>
 </li>
 

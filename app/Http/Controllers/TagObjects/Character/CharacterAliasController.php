@@ -23,7 +23,49 @@ class CharacterAliasController extends Controller
      */
     public function index(Request $request)
     {
-		//
+		$flashed_success = $request->session()->get('flashed_success');
+		$flashed_data = $request->session()->get('flashed_data');
+		$flashed_warning = $request->session()->get('flashed_warning');
+		
+		$alias_list_type = trim(strtolower($request->input('type')));
+		$alias_list_order = trim(strtolower($request->input('order')));
+		
+		if (($alias_list_type != "global") && ($alias_list_type != "personal") && ($alias_list_type != "mixed"))
+		{
+			$alias_list_type = "mixed";
+		}
+		
+		if (($alias_list_order != "asc") && ($alias_list_order != "desc"))
+		{
+			$alias_list_order = "asc";
+		}
+		
+		$aliases = new CharacterAlias();
+		
+		if (Auth::user())
+		{
+			if ($alias_list_type == "global")
+			{
+				$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate(30);
+			}
+			
+			if ($alias_list_type == "personal")
+			{
+				$aliases = $aliases->where('user_id', '=', Auth::user()->id)->orderBy('alias', $alias_list_order)->paginate(30);
+			}
+			
+			if ($alias_list_type == "mixed")
+			{
+				$aliases = $aliases->where('user_id', '=', null)->orWhere('user_id', '=', Auth::user()->id)->orderBy('alias', $alias_list_order)->paginate(30);
+			}
+		}
+		else
+		{
+			$aliases = new CharacterAlias();
+			$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate(30);
+		}
+		
+		return View('characters.alias.index', array('aliases' => $aliases->appends(Input::except('page')), 'list_type' => $alias_list_type, 'list_order' => $alias_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 	
     /**
