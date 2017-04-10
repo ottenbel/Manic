@@ -12,6 +12,7 @@ use App\Models\Collection;
 use App\Models\Image;
 use App\Models\Page;
 use App\Models\TagObjects\Scanalator\Scanalator;
+use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 use App\Models\Volume;
 
 class ChapterController extends Controller
@@ -479,9 +480,21 @@ class ChapterController extends Controller
 		{
 			if (trim($scanalator_name) != "")
 			{
-				$scanalator = Scanalator::where('name', '=', $scanalator_name)->first();			
-				if (count($scanalator))
+				$scanalator = Scanalator::where('name', '=', $scanalator_name)->first();
+				$personal_alias = ScanalatorAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $scanalator_name)->first();
+				$global_alias = ScanalatorAlias::where('user_id', '=', null)->where('alias', '=', $scanalator_name)->first();
+				if ($scanalator != null)
 				{
+					$chapter->scanalators()->attach($scanalator, ['primary' => $isPrimary]);
+				}
+				else if ($personal_alias != null)
+				{
+					$scanalator = Scanalator::where('id', '=', $personal_alias->scanalator_id)->first();
+					$chapter->scanalators()->attach($scanalator, ['primary' => $isPrimary]);
+				}
+				else if ($global_alias != null)
+				{
+					$scanalator = Scanalator::where('id', '=', $global_alias->scanalator_id)->first();
 					$chapter->scanalators()->attach($scanalator, ['primary' => $isPrimary]);
 				}
 				else

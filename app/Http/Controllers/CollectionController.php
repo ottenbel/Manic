@@ -7,14 +7,18 @@ use Illuminate\Validation\Rule;
 use Auth;
 use Input;
 use App\Models\TagObjects\Artist\Artist;
+use App\Models\TagObjects\Artist\ArtistAlias;
 use App\Models\TagObjects\Character\Character;
+use App\Models\TagObjects\Character\CharacterAlias;
 use App\Models\Collection;
 use App\Models\Image;
 use App\Models\Language;
 use App\Models\Rating;
 use App\Models\TagObjects\Series\Series;
+use App\Models\TagObjects\Series\SeriesAlias;
 use App\Models\Status;
 use App\Models\TagObjects\Tag\Tag;
+use App\Models\TagObjects\Tag\TagAlias;
 
 class CollectionController extends Controller
 {
@@ -380,9 +384,21 @@ class CollectionController extends Controller
 		{
 			if (trim($artist_name) != "")
 			{
-				$artist = Artist::where('name', '=', $artist_name)->first();			
-				if (count($artist))
+				$artist = Artist::where('name', '=', $artist_name)->first();
+				$personal_alias = ArtistAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $artist_name)->first();
+				$global_alias = ArtistAlias::where('user_id', '=', null)->where('alias', '=', $artist_name)->first();
+				if ($artist != null)
 				{
+					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
+				}
+				else if ($personal_alias != null)
+				{
+					$artist = Artist::where('id', '=', $personal_alias->artist_id)->first();
+					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
+				}
+				else if ($global_alias != null)
+				{
+					$artist = Artist::where('id', '=', $global_alias->artist_id)->first();
 					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
 				}
 				else
@@ -407,8 +423,21 @@ class CollectionController extends Controller
 			if (trim($series_name) != "")
 			{
 				$series = Series::where('name', '=', $series_name)->first();
-				if (count($series))
+				$personal_alias = SeriesAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $series_name)->first();
+				$global_alias = SeriesAlias::where('user_id', '=', null)->where('alias', '=', $series_name)->first();
+				
+				if ($series != null)
 				{
+					$collection->series()->attach($series, ['primary' => $isPrimary]);
+				}
+				else if ($personal_alias != null)
+				{
+					$series = Series::where('id', '=', $personal_alias->series_id)->first();
+					$collection->series()->attach($series, ['primary' => $isPrimary]);
+				}
+				else if ($global_alias != null)
+				{
+					$series = Series::where('id', '=', $global_alias->series_id)->first();
 					$collection->series()->attach($series, ['primary' => $isPrimary]);
 				}
 				else
@@ -435,8 +464,36 @@ class CollectionController extends Controller
 			if (trim($character_name) != "")
 			{
 				$character = Character::where('name', '=', $character_name)->first();
+				$personal_alias = CharacterAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $character_name)->first();
+				$global_alias = CharacterAlias::where('user_id', '=', null)->where('alias', '=', $character_name)->first();
 				if ($character != null)
 				{
+					$series = $collection->series->where('id', '=', $character->series_id)->first();
+					if ($series != null)
+					{
+						$collection->characters()->attach($character, ['primary' => $isPrimary]);
+					}
+					else
+					{
+						array_push($missing_characters, trim($character_name));
+					}
+				}
+				else if ($personal_alias != null)
+				{
+					$character = Character::where('id', '=', $personal_alias->character_id)->first();
+					$series = $collection->series->where('id', '=', $character->series_id)->first();
+					if ($series != null)
+					{
+						$collection->characters()->attach($character, ['primary' => $isPrimary]);
+					}
+					else
+					{
+						array_push($missing_characters, trim($character_name));
+					}
+				}
+				else if ($global_alias != null)
+				{
+					$character = Character::where('id', '=', $global_alias->character_id)->first();
 					$series = $collection->series->where('id', '=', $character->series_id)->first();
 					if ($series != null)
 					{
@@ -463,8 +520,20 @@ class CollectionController extends Controller
 			if (trim($tag_name) != "")
 			{
 				$tag = Tag::where('name', '=', $tag_name)->first();
-				if (count($tag))
+				$personal_alias = TagAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $tag_name)->first();
+				$global_alias = TagAlias::where('user_id', '=', null)->where('alias', '=', $tag_name)->first();
+				if ($tag != null)
 				{
+					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
+				}
+				else if ($personal_alias != null)
+				{
+					$tag = Tag::where('id', '=', $personal_alias->tag_id)->first();
+					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
+				}
+				else if ($global_alias != null)
+				{
+					$tag = Tag::where('id', '=', $global_alias->tag_id)->first();
 					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
 				}
 				else
