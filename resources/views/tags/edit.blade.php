@@ -15,9 +15,7 @@ Edit Tag - {{{$tagObject->name}}}
 	<form method="POST" action="/tag/{{$tagObject->id}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
-		
-		{{ Form::hidden('tag_id', $tagObject->id) }}
-		
+				
 		@include('partials.tag-object-input')
 		
 		{{ Form::submit('Update Tag', array('class' => 'btn btn-primary')) }}

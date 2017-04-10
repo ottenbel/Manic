@@ -197,9 +197,7 @@ class ArtistController extends Controller
     {
 		$this->validate($request, [
 		'name' => ['required',
-					Rule::unique('artists')->where(function ($query){
-						$query->where('id', '!=', trim(Input::get('artist_id')));
-					})],
+					Rule::unique('artists')->ignore($artist->id)],
 				'url' => 'URL',
 		]);
 		

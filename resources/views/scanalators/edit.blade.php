@@ -15,9 +15,7 @@ Edit Scanalator - {{{$tagObject->name}}}
 	<form method="POST" action="/scanalator/{{$tagObject->id}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
-		
-		{{ Form::hidden('scanalator_id', $tagObject->id) }}
-		
+				
 		@include('partials.tag-object-input')
 		
 		{{ Form::submit('Update Scanalator', array('class' => 'btn btn-primary')) }}

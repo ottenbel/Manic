@@ -193,9 +193,7 @@ class TagController extends Controller
     {
 		$this->validate($request, [
 		'name' => ['required',
-					Rule::unique('tags')->where(function ($query){
-						$query->where('id', '!=', trim(Input::get('tag_id')));
-					})],
+					Rule::unique('tags')->ignore($tag->id)],
 				'url' => 'URL',
 		]);
 		

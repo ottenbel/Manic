@@ -80,7 +80,7 @@
 				<li><a href="">Delete Chapter</a></li>
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagController@show")	
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Tag\\TagController@show")	
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Tag <span class="caret"></span>
@@ -90,7 +90,7 @@
 				<li><a href="">Delete Tag</a></li>
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagController@edit")
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Tag\\TagController@edit")
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Tag <span class="caret"></span>
@@ -100,7 +100,7 @@
 				<li><a href="">Delete Tag</a></li>
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\ArtistController@show")	
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Artist\\ArtistController@show")	
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Artist <span class="caret"></span>
@@ -110,7 +110,7 @@
 				<li><a href="">Delete Artist</a></li>
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\ArtistController@edit")
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Artist\\ArtistController@edit")
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Artist <span class="caret"></span>
@@ -120,7 +120,7 @@
 				<li><a href="">Delete Artist</a></li>
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\CharacterController@show")	
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Character\\CharacterController@show")	
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Character <span class="caret"></span>
@@ -130,7 +130,7 @@
 				<li><a href="">Delete Character</a></li>
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\CharacterController@edit")
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Character\\CharacterController@edit")
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Character <span class="caret"></span>
@@ -140,7 +140,7 @@
 				<li><a href="">Delete Character</a></li>
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\SeriesController@show")	
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Series\\SeriesController@show")	
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Series <span class="caret"></span>
@@ -151,7 +151,7 @@
 				<li><a href="">Delete Series</a></li>
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\SeriesController@edit")
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Series\\SeriesController@edit")
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Series <span class="caret"></span>
@@ -162,7 +162,7 @@
 				<li><a href="">Delete Series</a></li>
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\ScanalatorController@show")	
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Scanalator\\ScanalatorController@show")	
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Scanalator <span class="caret"></span>
@@ -172,7 +172,7 @@
 				<li><a href="">Delete Scanalator</a></li>
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\ScanalatorController@edit")
+	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Scanalator\\ScanalatorController@edit")
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Scanalator <span class="caret"></span>

@@ -196,9 +196,7 @@ class ScanalatorController extends Controller
     {
 		$this->validate($request, [
 		'name' => ['required',
-					Rule::unique('scanalators')->where(function ($query){
-						$query->where('id', '!=', trim(Input::get('scanalator_id')));
-					})],
+					Rule::unique('scanalators')->ignore($scanalator->id)],
 				'url' => 'URL',
 		]);
 		

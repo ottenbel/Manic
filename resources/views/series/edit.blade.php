@@ -15,9 +15,7 @@
 	<form method="POST" action="/series/{{$tagObject->id}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
-		
-		{{ Form::hidden('series_id', $tagObject->id) }}
-		
+				
 		@include('partials.tag-object-input')
 		
 		{{ Form::submit('Update Series', array('class' => 'btn btn-primary')) }}

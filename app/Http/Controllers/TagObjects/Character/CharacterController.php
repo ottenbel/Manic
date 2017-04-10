@@ -213,9 +213,7 @@ class CharacterController extends Controller
     {
 		$this->validate($request, [
 		'name' => ['required',
-					Rule::unique('characters')->where(function ($query){
-						$query->where('id', '!=', trim(Input::get('character_id')));
-					})],
+					Rule::unique('characters')->ignore($character->id)],
 				'url' => 'URL',
 		]);
 		

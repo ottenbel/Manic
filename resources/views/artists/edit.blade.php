@@ -16,8 +16,6 @@ Edit Artist - {{{$tagObject->name}}}
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
 		
-		{{ Form::hidden('artist_id', $tagObject->id) }}
-		
 		@include('partials.tag-object-input')
 		
 		{{ Form::submit('Update Artist', array('class' => 'btn btn-primary')) }}

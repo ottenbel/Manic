@@ -237,9 +237,7 @@ class SeriesController extends Controller
     {
 		$this->validate($request, [
 		'name' => ['required',
-					Rule::unique('series')->where(function ($query){
-						$query->where('id', '!=', trim(Input::get('series_id')));
-					})],
+					Rule::unique('series')->ignore($series->id)],
 				'url' => 'URL',
 		]);
 		

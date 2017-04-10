@@ -241,9 +241,7 @@ class CollectionController extends Controller
 		$collection_id = $collection->id;
         $this->validate($request, [
 			'name' => ['required',
-						Rule::unique('collections')->where(function ($query){
-							$query->where('id', '!=', trim(Input::get('collection_id')));
-						})],
+						Rule::unique('collections')->ignore($collection->id)],
 			'parent_id' => 'nullable|exists:collections,id',
 			'rating' => 'nullable|exists:ratings,id',
 			'status' => 'nullable|exists:statuses,id',
