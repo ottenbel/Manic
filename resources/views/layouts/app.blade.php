@@ -32,6 +32,13 @@
         ]); ?>
     </script>
 	
+	<script>
+		$(window).on('load', function () 
+		{
+			$('#javascript_enabled').hide();
+		});
+	</script>
+	
 	@yield('head')
 	
 </head>
@@ -68,6 +75,10 @@
                 </div>
             </div>
         </nav>
+		
+		<div id="javascript_enabled" class="alert alert-warning" role="alert">
+			Javascript is required for optimal site functionality.  Please enable Javascript in your browser for full functionality.
+		</div>
 		
 		{{-- Add code so that any page can display data that has been flashed to session. --}}
 		@if(!empty($flashed_success))
