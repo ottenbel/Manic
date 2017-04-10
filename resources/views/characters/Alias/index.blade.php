@@ -47,7 +47,7 @@
 			
 			@if($alias->user_id == null)
 				<div class="col-xs-4">
-					<span class="global_character_alias"><a href="/character/{{$alias->artist_id}}">{{{$alias->alias}}}</a></span>
+					<span class="global_character_alias"><a href="/character/{{$alias->character_id}}">{{{$alias->alias}}}</a></span>
 				</div>
 			@else
 				<div class="col-xs-4">
