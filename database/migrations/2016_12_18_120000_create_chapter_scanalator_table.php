@@ -20,6 +20,7 @@ class CreateChapterScanalatorTable extends Migration
 			$table->timestamps();
 			$table->foreign('chapter_id')->references('id')->on('chapters')->onDelete('cascade');
 			$table->foreign('scanalator_id')->references('id')->on('scanalators')->onDelete('cascade');
+			$table->unique(['chapter_id', 'scanalator_id']);
 		});
     }
 

@@ -20,6 +20,7 @@ class CreateArtistCollectionTable extends Migration
 			$table->timestamps();
 			$table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
 			$table->foreign('collection_id')->references('id')->on('collections')->onDelete('cascade');
+			$table->unique(['artist_id', 'collection_id']);
 		});
     }
 

@@ -20,6 +20,7 @@ class CreateCharacterCollectionTable extends Migration
 			$table->timestamps();
 			$table->foreign('character_id')->references('id')->on('characters')->onDelete('cascade');
 			$table->foreign('collection_id')->references('id')->on('collections')->onDelete('cascade');
+			$table->unique(['character_id', 'collection_id']);
 		});
     }
 

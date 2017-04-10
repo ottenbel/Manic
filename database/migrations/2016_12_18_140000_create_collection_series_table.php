@@ -20,6 +20,7 @@ class CreateCollectionSeriesTable extends Migration
 			$table->timestamps();
 			$table->foreign('collection_id')->references('id')->on('collections')->onDelete('cascade');
 			$table->foreign('series_id')->references('id')->on('series')->onDelete('cascade');
+			$table->unique(['collection_id', 'series_id']);
 		});
     }
 

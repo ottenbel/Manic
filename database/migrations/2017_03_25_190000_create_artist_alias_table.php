@@ -27,6 +27,7 @@ class CreateArtistAliasTable extends Migration
 			$table->foreign('artist_id')->references('id')->on('artists')->onDelete('cascade');
 			$table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
 			$table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+			$table->unique(['user_id', 'alias']);
 		});
     }
 

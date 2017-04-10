@@ -20,6 +20,7 @@ class CreateChapterImageTable extends Migration
 			$table->timestamps();
 			$table->foreign('chapter_id')->references('id')->on('chapters')->onDelete('cascade');
 			$table->foreign('image_id')->references('id')->on('images')->onDelete('cascade');
+			$table->unique(['chapter_id', 'page_number']);
 		});
     }
 

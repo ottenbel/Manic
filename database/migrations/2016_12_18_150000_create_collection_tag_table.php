@@ -20,6 +20,7 @@ class CreateCollectionTagTable extends Migration
 			$table->timestamps();
 			$table->foreign('collection_id')->references('id')->on('collections')->onDelete('cascade');
 			$table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
+			$table->unique(['collection_id', 'tag_id']);
 		});
     }
 
