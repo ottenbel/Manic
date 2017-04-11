@@ -102,6 +102,14 @@ class ArtistController extends Controller
 		$artist->created_by = Auth::user()->id;
 		$artist->updated_by = Auth::user()->id;
 		
+		//Destroy any artist aliases that share the name with the artist to be created.
+		$aliases_list = ArtistAlias::where('alias', '=', trim(Input::get('name')))->get();
+		
+		foreach ($aliases_list as $alias)
+		{
+			$alias->destroy();
+		}
+		
 		$artist->save();
 		
 		//Redirect to the artist that was created
@@ -205,6 +213,14 @@ class ArtistController extends Controller
 		$artist->description = trim(Input::get('description'));
 		$artist->url = trim(Input::get('url'));
 		$artist->updated_by = Auth::user()->id;
+		
+		//Destroy any artist aliases that share the name with the artist to be created.
+		$aliases_list = ArtistAlias::where('alias', '=', trim(Input::get('name')))->get();
+		
+		foreach ($aliases_list as $alias)
+		{
+			$alias->destroy();
+		}
 		
 		$artist->save();
 		

@@ -102,6 +102,14 @@ class ScanalatorController extends Controller
 		$scanalator->created_by = Auth::user()->id;
 		$scanalator->updated_by = Auth::user()->id;
 		
+		//Destroy any scanalator aliases that share the name with the artist to be created.
+		$aliases_list = ScanalatorAlias::where('alias', '=', trim(Input::get('name')))->get();
+		
+		foreach ($aliases_list as $alias)
+		{
+			$alias->destroy();
+		}
+		
 		$scanalator->save();
 		
 		//Redirect to the scanalator that was created
@@ -204,6 +212,14 @@ class ScanalatorController extends Controller
 		$scanalator->description = trim(Input::get('description'));
 		$scanalator->url = trim(Input::get('url'));
 		$scanalator->updated_by = Auth::user()->id;
+		
+		//Destroy any scanalator aliases that share the name with the artist to be created.
+		$aliases_list = ScanalatorAlias::where('alias', '=', trim(Input::get('name')))->get();
+		
+		foreach ($aliases_list as $alias)
+		{
+			$alias->destroy();
+		}
 		
 		$scanalator->save();
 		

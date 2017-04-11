@@ -102,6 +102,14 @@ class SeriesController extends Controller
 		$series->created_by = Auth::user()->id;
 		$series->updated_by = Auth::user()->id;
 		
+		//Destroy any series aliases that share the name with the artist to be created.
+		$aliases_list = SeriesAlias::where('alias', '=', trim(Input::get('name')))->get();
+		
+		foreach ($aliases_list as $alias)
+		{
+			$alias->destroy();
+		}
+		
 		$series->save();
 		
 		//Redirect to the series that was created
@@ -245,6 +253,14 @@ class SeriesController extends Controller
 		$series->description = trim(Input::get('description'));
 		$series->url = trim(Input::get('url'));
 		$series->updated_by = Auth::user()->id;
+		
+		//Destroy any series aliases that share the name with the artist to be created.
+		$aliases_list = SeriesAlias::where('alias', '=', trim(Input::get('name')))->get();
+		
+		foreach ($aliases_list as $alias)
+		{
+			$alias->destroy();
+		}
 		
 		$series->save();
 		
