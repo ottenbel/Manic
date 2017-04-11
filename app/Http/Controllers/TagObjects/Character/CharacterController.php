@@ -114,12 +114,12 @@ class CharacterController extends Controller
 		$character->url = trim(Input::get('url'));
 		$character->series_id = $parent_series->id;
 		
-		//Destroy any character aliases that share the name with the artist to be created.
+		//Delete any character aliases that share the name with the artist to be created.
 		$aliases_list = CharacterAlias::where('alias', '=', trim(Input::get('name')))->get();
 		
 		foreach ($aliases_list as $alias)
 		{
-			$alias->destroy();
+			$alias->delete();
 		}
 		
 		$character->save();
@@ -224,12 +224,12 @@ class CharacterController extends Controller
 		$character->description = trim(Input::get('description'));
 		$character->url = trim(Input::get('url'));
 		
-		//Destroy any character aliases that share the name with the artist to be created.
+		//Delete any character aliases that share the name with the artist to be created.
 		$aliases_list = CharacterAlias::where('alias', '=', trim(Input::get('name')))->get();
 		
 		foreach ($aliases_list as $alias)
 		{
-			$alias->destroy();
+			$alias->delete();
 		}
 		
 		$character->save();

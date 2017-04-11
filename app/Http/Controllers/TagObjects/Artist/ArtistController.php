@@ -100,12 +100,12 @@ class ArtistController extends Controller
 		$artist->description = trim(Input::get('description'));
 		$artist->url = trim(Input::get('url'));
 		
-		//Destroy any artist aliases that share the name with the artist to be created.
+		//Delete any artist aliases that share the name with the artist to be created.
 		$aliases_list = ArtistAlias::where('alias', '=', trim(Input::get('name')))->get();
 		
 		foreach ($aliases_list as $alias)
 		{
-			$alias->destroy();
+			$alias->delete();
 		}
 		
 		$artist->save();
@@ -211,12 +211,12 @@ class ArtistController extends Controller
 		$artist->description = trim(Input::get('description'));
 		$artist->url = trim(Input::get('url'));
 		
-		//Destroy any artist aliases that share the name with the artist to be created.
+		//Delete any artist aliases that share the name with the artist to be created.
 		$aliases_list = ArtistAlias::where('alias', '=', trim(Input::get('name')))->get();
 		
 		foreach ($aliases_list as $alias)
 		{
-			$alias->destroy();
+			$alias->delete();
 		}
 		
 		$artist->save();

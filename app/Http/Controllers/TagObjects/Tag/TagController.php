@@ -100,12 +100,12 @@ class TagController extends Controller
 		$tag->description = trim(Input::get('description'));
 		$tag->url = trim(Input::get('url'));
 		
-		//Destroy any tag aliases that share the name with the artist to be created.
+		//Delete any tag aliases that share the name with the artist to be created.
 		$aliases_list = TagAlias::where('alias', '=', trim(Input::get('name')))->get();
 		
 		foreach ($aliases_list as $alias)
 		{
-			$alias->destroy();
+			$alias->delete();
 		}
 		
 		$tag->save();
@@ -207,12 +207,12 @@ class TagController extends Controller
 		$tag->description = trim(Input::get('description'));
 		$tag->url = trim(Input::get('url'));
 		
-		//Destroy any tag aliases that share the name with the artist to be created.
+		//Delete any tag aliases that share the name with the artist to be created.
 		$aliases_list = TagAlias::where('alias', '=', trim(Input::get('name')))->get();
 		
 		foreach ($aliases_list as $alias)
 		{
-			$alias->destroy();
+			$alias->delete();
 		}
 		
 		$tag->save();

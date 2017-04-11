@@ -100,12 +100,12 @@ class SeriesController extends Controller
 		$series->description = trim(Input::get('description'));
 		$series->url = trim(Input::get('url'));
 		
-		//Destroy any series aliases that share the name with the artist to be created.
+		//Delete any series aliases that share the name with the artist to be created.
 		$aliases_list = SeriesAlias::where('alias', '=', trim(Input::get('name')))->get();
 		
 		foreach ($aliases_list as $alias)
 		{
-			$alias->destroy();
+			$alias->delete();
 		}
 		
 		$series->save();
@@ -251,12 +251,12 @@ class SeriesController extends Controller
 		$series->description = trim(Input::get('description'));
 		$series->url = trim(Input::get('url'));
 		
-		//Destroy any series aliases that share the name with the artist to be created.
+		//Delete any series aliases that share the name with the artist to be created.
 		$aliases_list = SeriesAlias::where('alias', '=', trim(Input::get('name')))->get();
 		
 		foreach ($aliases_list as $alias)
 		{
-			$alias->destroy();
+			$alias->delete();
 		}
 		
 		$series->save();
