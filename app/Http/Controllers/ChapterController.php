@@ -385,7 +385,6 @@ class ChapterController extends Controller
 		$chapter->chapter_number = trim(Input::get('chapter_number'));
 		$chapter->name = trim(Input::get('name'));
 		$chapter->source = trim(Input::get('source'));
-		$chapter->created_by = Auth::user()->id;
 		$chapter->updated_by = Auth::user()->id;
 		
 		$chapter->save();

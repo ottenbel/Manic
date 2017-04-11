@@ -136,7 +136,6 @@ class VolumeController extends Controller
 		
 		$volume->volume_number = trim(Input::get('volume_number'));
 		$volume->name = trim(Input::get('name'));
-		$volume->created_by = Auth::user()->id;
 		$volume->updated_by = Auth::user()->id;
 		
 		//Handle uploading cover here
