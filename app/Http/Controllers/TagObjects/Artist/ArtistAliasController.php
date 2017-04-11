@@ -98,9 +98,6 @@ class ArtistAliasController extends Controller
 			$artistAlias->user_id = Auth::user()->id;
 		}
 		
-		$artistAlias->created_by = Auth::user()->id;
-		$artistAlias->updated_by = Auth::user()->id;
-		
 		$artistAlias->save();
 		
 		//Redirect to the artist that the alias was created for

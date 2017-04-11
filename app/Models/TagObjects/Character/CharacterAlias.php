@@ -11,6 +11,11 @@ class CharacterAlias extends BaseManicModel
 	//Update the corresponding character when creating/updating an alias (use function name).
 	protected $touches = ['character'];
 	
+	public static function boot()
+    {
+        parent::boot();
+    }
+	
 	/*
 	 * Get the character that the alias belongs to.
 	 */

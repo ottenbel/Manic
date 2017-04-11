@@ -11,6 +11,11 @@ class SeriesAlias extends BaseManicModel
 	//Update the corresponding series when creating/updating an alias (use function name).
 	protected $touches = ['series'];
 	
+	public static function boot()
+    {
+        parent::boot();
+    }
+	
 	/*
 	 * Get the series that the alias belongs to.
 	 */

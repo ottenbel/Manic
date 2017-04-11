@@ -10,6 +10,11 @@ class Volume extends BaseManicModel
     protected $table = 'volumes';
 	protected $touches = ['collection'];
 	
+	public static function boot()
+    {
+        parent::boot();
+    }
+	
 	/*
 	 * Get all chapters associated with the volume.
 	 */

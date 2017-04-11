@@ -9,6 +9,11 @@ class Collection extends BaseManicModel
 	//Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'collections';
 	
+	public static function boot()
+    {
+        parent::boot();
+    }
+	
 	/*
 	 * Get all volumes associated with the collection.
 	 */

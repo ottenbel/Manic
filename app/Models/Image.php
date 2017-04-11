@@ -9,6 +9,11 @@ class Image extends BaseManicModel
 	//Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'images';
 	
+	public static function boot()
+    {
+        parent::boot();
+    }
+	
 	/*
 	 * Get any collections that use this image as a cover image.
 	 */

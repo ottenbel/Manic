@@ -140,9 +140,6 @@ class ChapterController extends Controller
 		$chapter->chapter_number = trim(Input::get('chapter_number'));
 		$chapter->name = trim(Input::get('name'));
 		$chapter->source = trim(Input::get('source'));
-		$chapter->created_by = Auth::user()->id;
-		$chapter->updated_by = Auth::user()->id;
-		
 		$chapter->save();
 		
 		//Explode the scanalators arrays to be processed (if commonalities exist force to primary)
@@ -170,9 +167,6 @@ class ChapterController extends Controller
 				$image->name = str_replace('public', 'storage', $path);
 				$image->hash = $hash;
 				$image->extension = $file_extension;
-				$image->created_by = Auth::user()->id;
-				$image->updated_by = Auth::user()->id;
-				
 				$image->save();
 			}
 			
@@ -182,12 +176,6 @@ class ChapterController extends Controller
 		}
 		
 		$collection = $volume->collection;
-		
-		$volume->updated_by = Auth::user()->id;
-		$volume->save();
-		
-		$collection->updated_by = Auth::user()->id;
-		$collection->save();
 		
 		return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully created new chapter #$chapter->chapter_number on collection $collection->name."));
     }
@@ -385,8 +373,6 @@ class ChapterController extends Controller
 		$chapter->chapter_number = trim(Input::get('chapter_number'));
 		$chapter->name = trim(Input::get('name'));
 		$chapter->source = trim(Input::get('source'));
-		$chapter->updated_by = Auth::user()->id;
-		
 		$chapter->save();
 		
 		//Explode the scanalators arrays to be processed (if commonalities exist force to primary)
@@ -439,9 +425,6 @@ class ChapterController extends Controller
 					$image->name = str_replace('public', 'storage', $path);
 					$image->hash = $hash;
 					$image->extension = $file_extension;
-					$image->created_by = Auth::user()->id;
-					$image->updated_by = Auth::user()->id;
-					
 					$image->save();
 				}
 				
@@ -452,12 +435,6 @@ class ChapterController extends Controller
 		}
 		
 		$collection = $volume->collection;
-		
-		$volume->updated_by = Auth::user()->id;
-		$volume->save();
-		
-		$collection->updated_by = Auth::user()->id;
-		$collection->save();
 		
 		return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully updated  chapter #$chapter->chapter_number on collection $collection->name."));
     }
@@ -501,8 +478,6 @@ class ChapterController extends Controller
 					//Create a new scanalator
 					$scanalator = new Scanalator;
 					$scanalator->name = $scanalator_name;
-					$scanalator->created_by = Auth::user()->id;
-					$scanalator->updated_by = Auth::user()->id;
 					$scanalator->save();
 					
 					$chapter->scanalators()->attach($scanalator, ['primary' => $isPrimary]);

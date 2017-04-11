@@ -11,6 +11,11 @@ class ArtistAlias extends BaseManicModel
 	//Update the corresponding artist when creating/updating an alias (use function name).
 	protected $touches = ['artist'];
 	
+	public static function boot()
+    {
+        parent::boot();
+    }
+	
 	/*
 	 * Get the artist that the alias belongs to.
 	 */

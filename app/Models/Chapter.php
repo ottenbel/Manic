@@ -10,6 +10,11 @@ class Chapter extends BaseManicModel
     protected $table = 'chapters';
 	protected $touches = ['volume'];
 	
+	public static function boot()
+    {
+        parent::boot();
+    }
+	
 	/*
 	 * Get the pages associated with the chapter.
 	 */

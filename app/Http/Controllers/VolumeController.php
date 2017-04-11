@@ -52,8 +52,6 @@ class VolumeController extends Controller
 		$volume->collection_id = $collection_id;
 		$volume->volume_number = trim(Input::get('volume_number'));
 		$volume->name = trim(Input::get('name'));
-		$volume->created_by = Auth::user()->id;
-		$volume->updated_by = Auth::user()->id;
 		
 		//Handle uploading cover here
 		if ($request->hasFile('image')) 
@@ -80,9 +78,6 @@ class VolumeController extends Controller
 				$image->name = str_replace('public', 'storage', $path);
 				$image->hash = $hash;
 				$image->extension = $file_extension;
-				$image->created_by = Auth::user()->id;
-				$image->updated_by = Auth::user()->id;
-				
 				$image->save();
 				
 				$volume->cover = $image->id;
@@ -90,10 +85,7 @@ class VolumeController extends Controller
 		}
 		
 		$volume->save();
-		
-		$collection->updated_by = Auth::user()->id;
-		$collection->save();
-		
+				
 		return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully created new volume #$volume->volume_number on collection $collection->name."));
     }
 
@@ -136,7 +128,6 @@ class VolumeController extends Controller
 		
 		$volume->volume_number = trim(Input::get('volume_number'));
 		$volume->name = trim(Input::get('name'));
-		$volume->updated_by = Auth::user()->id;
 		
 		//Handle uploading cover here
 		if ($request->hasFile('image')) 
@@ -162,10 +153,7 @@ class VolumeController extends Controller
 				$image = new Image();
 				$image->name = str_replace('public', 'storage', $path);
 				$image->hash = $hash;
-				$image->extension = $file_extension;
-				$image->created_by = Auth::user()->id;
-				$image->updated_by = Auth::user()->id;
-				
+				$image->extension = $file_extension;				
 				$image->save();
 				
 				$volume->cover = $image->id;
@@ -177,9 +165,6 @@ class VolumeController extends Controller
 		}
 		
 		$volume->save();
-		
-		$collection->updated_by = Auth::user()->id;
-		$collection->save();
 		
 		return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully updated volume #$volume->volume_number on collection $collection->name."));
     }

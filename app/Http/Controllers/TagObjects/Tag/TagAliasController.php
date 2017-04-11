@@ -97,10 +97,7 @@ class TagAliasController extends Controller
 			$tagAlias->alias = Input::get('personal_alias');
 			$tagAlias->user_id = Auth::user()->id;
 		}
-		
-		$tagAlias->created_by = Auth::user()->id;
-		$tagAlias->updated_by = Auth::user()->id;
-		
+				
 		$tagAlias->save();
 		
 		//Redirect to the tag that the alias was created for

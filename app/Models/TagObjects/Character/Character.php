@@ -11,6 +11,11 @@ class Character extends CollectionAssociatedTagObjectModel
 	//Update the corresponding series when creating/updating a character (use function name).
 	protected $touches = ['series'];
 	
+	public static function boot()
+    {
+        parent::boot();
+    }
+	
 	/*
 	 * Get the series that the character is associated with.
 	 */

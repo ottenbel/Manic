@@ -97,10 +97,7 @@ class ScanalatorAliasController extends Controller
 			$scanalatorAlias->alias = Input::get('personal_alias');
 			$scanalatorAlias->user_id = Auth::user()->id;
 		}
-		
-		$scanalatorAlias->created_by = Auth::user()->id;
-		$scanalatorAlias->updated_by = Auth::user()->id;
-		
+				
 		$scanalatorAlias->save();
 		
 		//Redirect to the scanalator that the alias was created for

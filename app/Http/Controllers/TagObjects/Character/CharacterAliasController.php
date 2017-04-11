@@ -100,10 +100,7 @@ class CharacterAliasController extends Controller
 			$characterAlias->alias = Input::get('personal_alias');
 			$characterAlias->user_id = Auth::user()->id;
 		}
-		
-		$characterAlias->created_by = Auth::user()->id;
-		$characterAlias->updated_by = Auth::user()->id;
-		
+				
 		$characterAlias->save();
 		
 		//Redirect to the character that the alias was created for

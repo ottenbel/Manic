@@ -84,8 +84,6 @@ class CollectionController extends Controller
 		$collection->status_id = Input::get('statuses');
 		$collection->rating_id = Input::get('ratings');
 		$collection->language_id = Input::get('language');
-		$collection->created_by = Auth::user()->id;
-		$collection->updated_by = Auth::user()->id;
 		
 		//Handle uploading cover here
 		if ($request->hasFile('image')) 
@@ -112,9 +110,6 @@ class CollectionController extends Controller
 				$image->name = str_replace('public', 'storage', $path);
 				$image->hash = $hash;
 				$image->extension = $file_extension;
-				$image->created_by = Auth::user()->id;
-				$image->updated_by = Auth::user()->id;
-				
 				$image->save();
 				
 				$collection->cover = $image->id;
@@ -290,9 +285,6 @@ class CollectionController extends Controller
 				$image->name = str_replace('public', 'storage', $path);
 				$image->hash = $hash;
 				$image->extension = $file_extension;
-				$image->created_by = Auth::user()->id;
-				$image->updated_by = Auth::user()->id;
-				
 				$image->save();
 				
 				$collection->cover = $image->id;
@@ -404,8 +396,6 @@ class CollectionController extends Controller
 					//Create a new artist
 					$artist = new Artist;
 					$artist->name = $artist_name;
-					$artist->created_by = Auth::user()->id;
-					$artist->updated_by = Auth::user()->id;
 					$artist->save();
 					
 					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
@@ -443,8 +433,6 @@ class CollectionController extends Controller
 					//Create a new series
 					$series = new Series;
 					$series->name = $series_name;
-					$series->created_by = Auth::user()->id;
-					$series->updated_by = Auth::user()->id;
 					$series->save();
 					
 					$collection->series()->attach($series, ['primary' => $isPrimary]);
@@ -539,8 +527,6 @@ class CollectionController extends Controller
 					//Create a new tag
 					$tag = new Tag;
 					$tag->name = $tag_name;
-					$tag->created_by = Auth::user()->id;
-					$tag->updated_by = Auth::user()->id;
 					$tag->save();
 					
 					$collection->tags()->attach($tag, ['primary' => $isPrimary]);

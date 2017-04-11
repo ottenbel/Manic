@@ -9,6 +9,11 @@ class Series extends CollectionAssociatedTagObjectModel
     //Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'series';
 	
+	public static function boot()
+    {
+        parent::boot();
+    }
+	
 	/*
 	 * Get the characters that are associated with the series.
 	 */

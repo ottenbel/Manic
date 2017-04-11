@@ -99,8 +99,6 @@ class ArtistController extends Controller
 		$artist->name = trim(Input::get('name'));
 		$artist->description = trim(Input::get('description'));
 		$artist->url = trim(Input::get('url'));
-		$artist->created_by = Auth::user()->id;
-		$artist->updated_by = Auth::user()->id;
 		
 		//Destroy any artist aliases that share the name with the artist to be created.
 		$aliases_list = ArtistAlias::where('alias', '=', trim(Input::get('name')))->get();
@@ -212,7 +210,6 @@ class ArtistController extends Controller
 		$artist->name = trim(Input::get('name'));
 		$artist->description = trim(Input::get('description'));
 		$artist->url = trim(Input::get('url'));
-		$artist->updated_by = Auth::user()->id;
 		
 		//Destroy any artist aliases that share the name with the artist to be created.
 		$aliases_list = ArtistAlias::where('alias', '=', trim(Input::get('name')))->get();

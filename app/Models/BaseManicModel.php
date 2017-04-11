@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Auth;
 
 class BaseManicModel extends Model
 {
@@ -27,6 +28,25 @@ class BaseManicModel extends Model
         'updated_at',
         'deleted_at'
     ];
+	
+	public static function boot()
+	{
+		parent::boot();
+		static::bootUuidsTrait();
+		
+		static::creating(function($model)
+		{
+			$user = Auth::user();
+			$model->created_by = $user->id;
+			$model->updated_by = $user->id;
+		});
+
+		static::updating(function($model)
+		{
+			$user = Auth::user();
+			$model->updated_by = $user->id;
+		});
+  }
 	
 	/*
 	 * Get the mapping to the user that created the rating.

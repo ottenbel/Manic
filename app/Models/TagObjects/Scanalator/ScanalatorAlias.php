@@ -11,6 +11,11 @@ class ScanalatorAlias extends BaseManicModel
 	//Update the corresponding scanalator when creating/updating an alias (use function name).
 	protected $touches = ['scanalator'];
 	
+	public static function boot()
+    {
+        parent::boot();
+    }
+	
 	/*
 	 * Get the scanalator that the alias belongs to.
 	 */

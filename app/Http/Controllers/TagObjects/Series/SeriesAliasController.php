@@ -97,10 +97,7 @@ class SeriesAliasController extends Controller
 			$seriesAlias->alias = Input::get('personal_alias');
 			$seriesAlias->user_id = Auth::user()->id;
 		}
-		
-		$seriesAlias->created_by = Auth::user()->id;
-		$seriesAlias->updated_by = Auth::user()->id;
-		
+				
 		$seriesAlias->save();
 		
 		//Redirect to the series that the alias was created for

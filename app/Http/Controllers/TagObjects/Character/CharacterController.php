@@ -113,10 +113,6 @@ class CharacterController extends Controller
 		$character->description = trim(Input::get('description'));
 		$character->url = trim(Input::get('url'));
 		$character->series_id = $parent_series->id;
-		$character->created_by = Auth::user()->id;
-		$character->updated_by = Auth::user()->id;
-		
-		$parent_series->updated_by = Auth::user()->id;
 		
 		//Destroy any character aliases that share the name with the artist to be created.
 		$aliases_list = CharacterAlias::where('alias', '=', trim(Input::get('name')))->get();
@@ -127,7 +123,6 @@ class CharacterController extends Controller
 		}
 		
 		$character->save();
-		$parent_series->save();
 		
 		//Redirect to the character that was created
 		return redirect()->action('TagObjects\Character\CharacterController@show', [$character])->with("flashed_success", array("Successfully created character $character->name under series $parent_series->name."));
@@ -228,7 +223,6 @@ class CharacterController extends Controller
 		$character->name = trim(Input::get('name'));
 		$character->description = trim(Input::get('description'));
 		$character->url = trim(Input::get('url'));
-		$character->updated_by = Auth::user()->id;
 		
 		//Destroy any character aliases that share the name with the artist to be created.
 		$aliases_list = CharacterAlias::where('alias', '=', trim(Input::get('name')))->get();

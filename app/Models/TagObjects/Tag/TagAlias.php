@@ -11,6 +11,11 @@ class TagAlias extends BaseManicModel
 	//Update the corresponding tag when creating/updating an alias (use function name).
 	protected $touches = ['tag'];
 	
+	public static function boot()
+    {
+        parent::boot();
+    }
+	
 	/*
 	 * Get the series that the alias belongs to.
 	 */

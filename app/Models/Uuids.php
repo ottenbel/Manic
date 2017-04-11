@@ -9,10 +9,8 @@ trait Uuids
     /**
      * Boot function from laravel.
      */
-    protected static function boot()
+    protected static function bootUuidsTrait()
     {
-        parent::boot();
-
         static::creating(function ($model) {
 			if (empty($model->{$model->getKeyName()}))
 			{

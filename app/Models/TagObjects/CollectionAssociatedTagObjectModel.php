@@ -6,6 +6,11 @@ use App\Models\BaseManicModel;
 
 class CollectionAssociatedTagObjectModel extends BaseManicModel
 {
+	public static function boot()
+    {
+        parent::boot();
+    }
+	
 	/*
 	 * Get the mapping from tag object to collections.
 	 */
