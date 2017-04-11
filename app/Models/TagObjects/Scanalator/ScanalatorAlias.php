@@ -8,12 +8,19 @@ class ScanalatorAlias extends BaseManicModel
 {
     //Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'scanalator_alias';
-	//Update the corresponding scanalator when creating/updating an alias (use function name).
-	protected $touches = ['scanalator'];
 	
 	public static function boot()
     {
         parent::boot();
+		
+		/*
+		 * The touches array doesn't call the update function.
+		 */
+		static::saved(function($model)
+		{
+			$scanalator = $model->scanalator();
+			$scanalator->touch();
+		}
     }
 	
 	/*

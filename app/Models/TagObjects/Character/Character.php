@@ -8,12 +8,19 @@ class Character extends CollectionAssociatedTagObjectModel
 {
 	//Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'characters';
-	//Update the corresponding series when creating/updating a character (use function name).
-	protected $touches = ['series'];
 	
 	public static function boot()
     {
         parent::boot();
+		
+		/*
+		 * The touches array doesn't call the update function.
+		 */
+		static::saved(function($model)
+		{
+			$series = $model->series();
+			$series->touch();
+		}
     }
 	
 	/*

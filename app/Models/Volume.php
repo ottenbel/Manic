@@ -8,11 +8,19 @@ class Volume extends BaseManicModel
 {
     //Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'volumes';
-	protected $touches = ['collection'];
 	
 	public static function boot()
     {
         parent::boot();
+		
+		/*
+		 * The touches array doesn't call the update function.
+		 */
+		static::saved(function($model)
+		{
+			$collection = $model->collection();
+			$collection->touch();
+		}
     }
 	
 	/*

@@ -8,12 +8,19 @@ class CharacterAlias extends BaseManicModel
 {
 	//Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'character_alias';
-	//Update the corresponding character when creating/updating an alias (use function name).
-	protected $touches = ['character'];
 	
 	public static function boot()
     {
         parent::boot();
+		
+		/*
+		 * The touches array doesn't call the update function.
+		 */
+		static::saved(function($model)
+		{
+			$character = $model->character();
+			$character->touch();
+		}
     }
 	
 	/*

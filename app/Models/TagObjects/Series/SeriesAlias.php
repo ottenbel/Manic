@@ -8,12 +8,19 @@ class SeriesAlias extends BaseManicModel
 {
     //Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'series_alias';
-	//Update the corresponding series when creating/updating an alias (use function name).
-	protected $touches = ['series'];
 	
 	public static function boot()
     {
         parent::boot();
+		
+		/*
+		 * The touches array doesn't call the update function.
+		 */
+		static::saved(function($model)
+		{
+			$series = $model->series();
+			$series->touch();
+		}
     }
 	
 	/*
