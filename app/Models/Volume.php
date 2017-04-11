@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseManicModel;
+use Auth;
 
 class Volume extends BaseManicModel
 {
@@ -13,14 +14,23 @@ class Volume extends BaseManicModel
     {
         parent::boot();
 		
-		/*
-		 * The touches array doesn't call the update function.
-		 */
-		static::saved(function($model)
+		static::creating(function($model)
 		{
-			$collection = $model->collection();
-			$collection->touch();
-		}
+			parent::creating($model);
+			
+			$collection = $model->collection()->first();
+			$collection->updated_by = Auth::user()->id;
+			$collection->save();
+		});
+		
+		static::deleting(function($model)
+		{
+			parent::deleting($model);
+			
+			$collection = $model->collection()->first();
+			$collection->updated_by = Auth::user()->id;
+			$collection->save();
+		});
     }
 	
 	/*

@@ -3,6 +3,7 @@
 namespace App\Models\TagObjects\Scanalator;
 
 use App\Models\BaseManicModel;
+use Auth;
 
 class ScanalatorAlias extends BaseManicModel
 {
@@ -13,14 +14,23 @@ class ScanalatorAlias extends BaseManicModel
     {
         parent::boot();
 		
-		/*
-		 * The touches array doesn't call the update function.
-		 */
-		static::saved(function($model)
+		static::creating(function($model)
 		{
-			$scanalator = $model->scanalator();
-			$scanalator->touch();
-		}
+			parent::creating($model);
+			
+			$scanalator = $model->scanalator()->first();
+			$scanalator->updated_by = Auth::user()->id;
+			$scanalator->save();
+		});
+		
+		static::deleting(function($model)
+		{
+			parent::deleting($model);
+			
+			$scanalator = $model->scanalator()->first();
+			$scanalator->updated_by = Auth::user()->id;
+			$scanalator->save();
+		});
     }
 	
 	/*

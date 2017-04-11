@@ -3,6 +3,7 @@
 namespace App\Models\TagObjects\Artist;
 
 use App\Models\BaseManicModel;
+use Auth;
 
 class ArtistAlias extends BaseManicModel
 {
@@ -13,14 +14,23 @@ class ArtistAlias extends BaseManicModel
     {
         parent::boot();
 		
-		/*
-		 * The touches array doesn't call the update function.
-		 */
-		static::saved(function($model)
+		static::creating(function($model)
 		{
-			$artist = $model->artist();
-			$artist->touch();
-		}
+			parent::creating($model);
+			
+			$artist = $model->artist()->first();
+			$artist->updated_by = Auth::user()->id;
+			$artist->save();
+		});
+		
+		static::deleting(function($model)
+		{
+			parent::deleting($model);
+			
+			$artist = $model->artist()->first();
+			$artist->updated_by = Auth::user()->id;
+			$artist->save();
+		});
     }
 	
 	/*

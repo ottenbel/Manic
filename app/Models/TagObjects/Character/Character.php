@@ -3,6 +3,7 @@
 namespace App\Models\TagObjects\Character;
 
 use App\Models\TagObjects\CollectionAssociatedTagObjectModel;
+use Auth;
 
 class Character extends CollectionAssociatedTagObjectModel
 {
@@ -13,14 +14,23 @@ class Character extends CollectionAssociatedTagObjectModel
     {
         parent::boot();
 		
-		/*
-		 * The touches array doesn't call the update function.
-		 */
-		static::saved(function($model)
+		static::creating(function($model)
 		{
-			$series = $model->series();
-			$series->touch();
-		}
+			parent::creating($model);
+			
+			$series = $model->series()->first();
+			$series->updated_by = Auth::user()->id;
+			$series->save();
+		});
+		
+		static::deleting(function($model)
+		{
+			parent::deleting($model);
+			
+			$series = $model->series()->first();
+			$series->updated_by = Auth::user()->id;
+			$series->save();
+		});
     }
 	
 	/*

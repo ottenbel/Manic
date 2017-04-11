@@ -3,6 +3,7 @@
 namespace App\Models\TagObjects\Tag;
 
 use App\Models\BaseManicModel;
+use Auth;
 
 class TagAlias extends BaseManicModel
 {
@@ -13,14 +14,23 @@ class TagAlias extends BaseManicModel
     {
         parent::boot();
 		
-		/*
-		 * The touches array doesn't call the update function.
-		 */
-		static::saved(function($model)
+		static::creating(function($model)
 		{
-			$tag = $model->tag();
-			$tag->touch();
-		}
+			parent::creating($model);
+			
+			$tag = $model->tag()->first();
+			$tag->updated_by = Auth::user()->id;
+			$tag->save();
+		});
+		
+		static::deleting(function($model)
+		{
+			parent::deleting($model);
+			
+			$tag = $model->tag()->first();
+			$tag->updated_by = Auth::user()->id;
+			$tag->save();
+		});
     }
 	
 	/*

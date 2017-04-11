@@ -46,6 +46,12 @@ class BaseManicModel extends Model
 			$user = Auth::user();
 			$model->updated_by = $user->id;
 		});
+		
+		static::deleting(function($model)
+		{
+			$user = Auth::user();
+			$model->updated_by = $user->id;
+		});
   }
 	
 	/*
