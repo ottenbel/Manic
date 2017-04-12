@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
 use Input;
+use MappingHelper;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
 use App\Models\TagObjects\Character\Character;
@@ -127,24 +128,24 @@ class CollectionController extends Controller
 		$artist_secondary_array = array_diff(array_map('trim', explode(',', Input::get('artist_secondary'))), $artist_primary_array);
 	
 		$collection->artists()->detach();
-		$this->map_artists($collection, $artist_primary_array, true);
-		$this->map_artists($collection, $artist_secondary_array, false);
+		MappingHelper::MapArtists($collection, $artist_primary_array, true);
+		MappingHelper::MapArtists($collection, $artist_secondary_array, false);
 		
 		//Explode the series arrays to be processed (if commonalities exist force to primary)
 		$series_primary_array = array_map('trim', explode(',', Input::get('series_primary')));
 		$series_secondary_array = array_diff(array_map('trim', explode(',', Input::get('series_secondary'))), $series_primary_array);
 	
 		$collection->series()->detach();
-		$this->map_series($collection, $series_primary_array, true);
-		$this->map_series($collection, $series_secondary_array, false);
+		MappingHelper::MapSeries($collection, $series_primary_array, true);
+		MappingHelper::MapSeries($collection, $series_secondary_array, false);
 
 		//Explode the character arrays to be processed (if commonalities exist force to primary)
 		$characters_primary_array = array_map('trim', explode(',', Input::get('character_primary')));
 		$characters_secondary_array = array_diff(array_map('trim', explode(',', Input::get('character_secondary'))), $characters_primary_array);
 		
 		$collection->characters()->detach();
-		$missing_primary_characters = $this->map_characters($collection, $characters_primary_array, true);
-		$missing_secondary_characters = $this->map_characters($collection, $characters_secondary_array, false);
+		$missing_primary_characters = MappingHelper::MapCharacters($collection, $characters_primary_array, true);
+		$missing_secondary_characters = MappingHelper::MapCharacters($collection, $characters_secondary_array, false);
 		
 		$missing_characters = array_unique(array_merge($missing_primary_characters, $missing_secondary_characters));
 		
@@ -153,8 +154,8 @@ class CollectionController extends Controller
 		$tags_secondary_array = array_diff(array_map('trim', explode(',', Input::get('tag_secondary'))), $tags_primary_array);
 		
 		$collection->tags()->detach();
-		$this->map_tags($collection, $tags_primary_array, true);
-		$this->map_tags($collection, $tags_secondary_array, false);
+		MappingHelper::MapTags($collection, $tags_primary_array, true);
+		MappingHelper::MapTags($collection, $tags_secondary_array, false);
 		
 		//Redirect to the collection that was created
 		if (count($missing_characters))
@@ -298,24 +299,24 @@ class CollectionController extends Controller
 		$artist_secondary_array = array_diff(array_map('trim', explode(',', Input::get('artist_secondary'))), $artist_primary_array);
 	
 		$collection->artists()->detach();
-		$this->map_artists($collection, $artist_primary_array, true);
-		$this->map_artists($collection, $artist_secondary_array, false);
+		MappingHelper::MapArtists($collection, $artist_primary_array, true);
+		MappingHelper::MapArtists($collection, $artist_secondary_array, false);
 		
 		//Explode the series arrays to be processed (if commonalities exist force to primary)
 		$series_primary_array = array_map('trim', explode(',', Input::get('series_primary')));
 		$series_secondary_array = array_diff(array_map('trim', explode(',', Input::get('series_secondary'))), $series_primary_array);
 	
 		$collection->series()->detach();
-		$this->map_series($collection, $series_primary_array, true);
-		$this->map_series($collection, $series_secondary_array, false);
+		MappingHelper::MapSeries($collection, $series_primary_array, true);
+		MappingHelper::MapSeries($collection, $series_secondary_array, false);
 		
 		//Explode the character arrays to be processed (if commonalities exist force to primary)
 		$characters_primary_array = array_map('trim', explode(',', Input::get('character_primary')));
 		$characters_secondary_array = array_diff(array_map('trim', explode(',', Input::get('character_secondary'))), $characters_primary_array);
 		
 		$collection->characters()->detach();
-		$missing_primary_characters = $this->map_characters($collection, $characters_primary_array, true);
-		$missing_secondary_characters = $this->map_characters($collection, $characters_secondary_array, false);
+		$missing_primary_characters = MappingHelper::MapCharacters($collection, $characters_primary_array, true);
+		$missing_secondary_characters = MappingHelper::MapCharacters($collection, $characters_secondary_array, false);
 		
 		$missing_characters = array_unique(array_merge($missing_primary_characters, $missing_secondary_characters));
 		
@@ -324,8 +325,8 @@ class CollectionController extends Controller
 		$tags_secondary_array = array_diff(array_map('trim', explode(',', Input::get('tag_secondary'))), $tags_primary_array);
 		
 		$collection->tags()->detach();
-		$this->map_tags($collection, $tags_primary_array, true);
-		$this->map_tags($collection, $tags_secondary_array, false);
+		MappingHelper::MapTags($collection, $tags_primary_array, true);
+		MappingHelper::MapTags($collection, $tags_secondary_array, false);
 		
 		//Redirect to the collection that was created
 		if (count($missing_characters))
@@ -363,176 +364,6 @@ class CollectionController extends Controller
      */
     public function destroy(Collection $collection)
     {
-        $collection->delete();
-		
-		return redirect()->action()->with();
+        //
     }
-	
-	private function map_artists(&$collection, $artist_array, $isPrimary)
-	{
-		foreach ($artist_array as $artist_name)
-		{
-			if (trim($artist_name) != "")
-			{
-				$artist = Artist::where('name', '=', $artist_name)->first();
-				$personal_alias = ArtistAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $artist_name)->first();
-				$global_alias = ArtistAlias::where('user_id', '=', null)->where('alias', '=', $artist_name)->first();
-				if ($artist != null)
-				{
-					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
-				}
-				else if ($personal_alias != null)
-				{
-					$artist = Artist::where('id', '=', $personal_alias->artist_id)->first();
-					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
-				}
-				else if ($global_alias != null)
-				{
-					$artist = Artist::where('id', '=', $global_alias->artist_id)->first();
-					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
-				}
-				else
-				{
-					//Create a new artist
-					$artist = new Artist;
-					$artist->name = $artist_name;
-					$artist->save();
-					
-					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
-				}
-			}
-		}
-	}
-	
-	private function map_series(&$collection, $series_array, $isPrimary)
-	{
-		foreach ($series_array as $series_name)
-		{
-			if (trim($series_name) != "")
-			{
-				$series = Series::where('name', '=', $series_name)->first();
-				$personal_alias = SeriesAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $series_name)->first();
-				$global_alias = SeriesAlias::where('user_id', '=', null)->where('alias', '=', $series_name)->first();
-				
-				if ($series != null)
-				{
-					$collection->series()->attach($series, ['primary' => $isPrimary]);
-				}
-				else if ($personal_alias != null)
-				{
-					$series = Series::where('id', '=', $personal_alias->series_id)->first();
-					$collection->series()->attach($series, ['primary' => $isPrimary]);
-				}
-				else if ($global_alias != null)
-				{
-					$series = Series::where('id', '=', $global_alias->series_id)->first();
-					$collection->series()->attach($series, ['primary' => $isPrimary]);
-				}
-				else
-				{
-					//Create a new series
-					$series = new Series;
-					$series->name = $series_name;
-					$series->save();
-					
-					$collection->series()->attach($series, ['primary' => $isPrimary]);
-				}
-			}
-		}
-	}
-	
-	private function map_characters(&$collection, $characters_array, $isPrimary)
-	{
-		$missing_characters = array();
-		
-		foreach ($characters_array as $character_name)
-		{
-			if (trim($character_name) != "")
-			{
-				$character = Character::where('name', '=', $character_name)->first();
-				$personal_alias = CharacterAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $character_name)->first();
-				$global_alias = CharacterAlias::where('user_id', '=', null)->where('alias', '=', $character_name)->first();
-				if ($character != null)
-				{
-					$series = $collection->series->where('id', '=', $character->series_id)->first();
-					if ($series != null)
-					{
-						$collection->characters()->attach($character, ['primary' => $isPrimary]);
-					}
-					else
-					{
-						array_push($missing_characters, trim($character_name));
-					}
-				}
-				else if ($personal_alias != null)
-				{
-					$character = Character::where('id', '=', $personal_alias->character_id)->first();
-					$series = $collection->series->where('id', '=', $character->series_id)->first();
-					if ($series != null)
-					{
-						$collection->characters()->attach($character, ['primary' => $isPrimary]);
-					}
-					else
-					{
-						array_push($missing_characters, trim($character_name));
-					}
-				}
-				else if ($global_alias != null)
-				{
-					$character = Character::where('id', '=', $global_alias->character_id)->first();
-					$series = $collection->series->where('id', '=', $character->series_id)->first();
-					if ($series != null)
-					{
-						$collection->characters()->attach($character, ['primary' => $isPrimary]);
-					}
-					else
-					{
-						array_push($missing_characters, trim($character_name));
-					}
-				}
-				else
-				{
-					array_push($missing_characters, trim($character_name));
-				}
-			}
-		}
-		return $missing_characters;
-	}
-	
-	private function map_tags(&$collection, $tags_array, $isPrimary)
-	{
-		foreach ($tags_array as $tag_name)
-		{
-			if (trim($tag_name) != "")
-			{
-				$tag = Tag::where('name', '=', $tag_name)->first();
-				$personal_alias = TagAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $tag_name)->first();
-				$global_alias = TagAlias::where('user_id', '=', null)->where('alias', '=', $tag_name)->first();
-				if ($tag != null)
-				{
-					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
-				}
-				else if ($personal_alias != null)
-				{
-					$tag = Tag::where('id', '=', $personal_alias->tag_id)->first();
-					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
-				}
-				else if ($global_alias != null)
-				{
-					$tag = Tag::where('id', '=', $global_alias->tag_id)->first();
-					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
-				}
-				else
-				{
-					//Create a new tag
-					$tag = new Tag;
-					$tag->name = $tag_name;
-					$tag->save();
-					
-					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
-				}
-			}
-		}
-	}
-
 }

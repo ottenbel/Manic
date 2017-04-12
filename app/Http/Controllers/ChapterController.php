@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Redirect;
 use Auth;
 use Input;
+use MappingHelper;
 use App\Models\Chapter;
 use App\Models\Collection;
 use App\Models\Image;
@@ -147,8 +148,8 @@ class ChapterController extends Controller
 		$scanalator_secondary_array = array_diff(array_map('trim', explode(',', Input::get('scanalator_secondary'))), $scanalator_primary_array);
 		
 		$chapter->scanalators()->detach();
-		$this->map_scanalators($chapter, $scanalator_primary_array, true);
-		$this->map_scanalators($chapter, $scanalator_secondary_array, false);
+		MappingHelper::MapScanalators($chapter, $scanalator_primary_array, true);
+		MappingHelper::MapScanalators($chapter, $scanalator_secondary_array, false);
 		
 		$page_number = 0;
 		foreach(Input::file('images') as $file)
@@ -380,8 +381,8 @@ class ChapterController extends Controller
 		$scanalator_secondary_array = array_diff(array_map('trim', explode(',', Input::get('scanalator_secondary'))), $scanalator_primary_array);
 		
 		$chapter->scanalators()->detach();
-		$this->map_scanalators($chapter, $scanalator_primary_array, true);
-		$this->map_scanalators($chapter, $scanalator_secondary_array, false);
+		MappingHelper::MapScanalators($chapter, $scanalator_primary_array, true);
+		MappingHelper::MapScanalators($chapter, $scanalator_secondary_array, false);
 		
 		$pages = $chapter->pages;
 
@@ -449,40 +450,4 @@ class ChapterController extends Controller
     {
         //
     }
-	
-	private function map_scanalators(&$chapter, $scanalator_array, $isPrimary)
-	{
-		foreach ($scanalator_array as $scanalator_name)
-		{
-			if (trim($scanalator_name) != "")
-			{
-				$scanalator = Scanalator::where('name', '=', $scanalator_name)->first();
-				$personal_alias = ScanalatorAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $scanalator_name)->first();
-				$global_alias = ScanalatorAlias::where('user_id', '=', null)->where('alias', '=', $scanalator_name)->first();
-				if ($scanalator != null)
-				{
-					$chapter->scanalators()->attach($scanalator, ['primary' => $isPrimary]);
-				}
-				else if ($personal_alias != null)
-				{
-					$scanalator = Scanalator::where('id', '=', $personal_alias->scanalator_id)->first();
-					$chapter->scanalators()->attach($scanalator, ['primary' => $isPrimary]);
-				}
-				else if ($global_alias != null)
-				{
-					$scanalator = Scanalator::where('id', '=', $global_alias->scanalator_id)->first();
-					$chapter->scanalators()->attach($scanalator, ['primary' => $isPrimary]);
-				}
-				else
-				{
-					//Create a new scanalator
-					$scanalator = new Scanalator;
-					$scanalator->name = $scanalator_name;
-					$scanalator->save();
-					
-					$chapter->scanalators()->attach($scanalator, ['primary' => $isPrimary]);
-				}
-			}
-		}
-	}
 }
