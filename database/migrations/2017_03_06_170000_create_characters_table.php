@@ -19,14 +19,14 @@ class CreateCharactersTable extends Migration
 			$table->string('name')->unique();
 			$table->longText('description')->nullable();
 			$table->string('url')->nullable();
-            $table->uuid('created_by');
-			$table->uuid('updated_by');
+            $table->uuid('created_by')->nullable();
+			$table->uuid('updated_by')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			$table->primary('id');
 			$table->foreign('series_id')->references('id')->on('series')->onDelete('cascade');
-			$table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
-			$table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+			$table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 

@@ -19,13 +19,13 @@ class CreateChaptersTable extends Migration
 			$table->unsignedInteger('chapter_number');
 			$table->string('name')->nullable();
 			$table->string('source');
-			$table->uuid('created_by');
-			$table->uuid('updated_by');
+			$table->uuid('created_by')->nullable();
+			$table->uuid('updated_by')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			$table->primary('id');
-			$table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
-			$table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+			$table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
 			$table->foreign('volume_id')->references('id')->on('volumes')->onDelete('cascade');
 			$table->unique(['volume_id', 'chapter_number']);
 		});

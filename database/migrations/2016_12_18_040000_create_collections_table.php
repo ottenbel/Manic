@@ -23,13 +23,13 @@ class CreateCollectionsTable extends Migration
 			$table->uuid('language_id')->nullable();
 			$table->uuid('rating_id')->nullable();
 			$table->uuid('status_id')->nullable();
-			$table->uuid('created_by');
-			$table->uuid('updated_by');
+			$table->uuid('created_by')->nullable();
+			$table->uuid('updated_by')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 			$table->primary('id');
-			$table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
-			$table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
+			$table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
 			$table->foreign('cover')->references('id')->on('images')->onDelete('set null');
 			$table->foreign('language_id')->references('id')->on('languages')->onDelete('set null');
 			$table->foreign('rating_id')->references('id')->on('ratings')->onDelete('set null');
