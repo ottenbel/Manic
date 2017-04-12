@@ -48,6 +48,12 @@ class User extends Authenticatable
         'deleted_at'
     ];
 	
+	public static function boot()
+	{
+		parent::boot();
+		static::bootUuidsTrait();
+	}
+	
 	/*
 	 * Get the list of chapters created by the user.
 	 */
