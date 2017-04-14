@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use Auth;
 use DB;
 use Input;
+use Config;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
 
@@ -28,34 +29,36 @@ class ArtistController extends Controller
 		$artist_list_type = trim(strtolower($request->input('type')));
 		$artist_list_order = trim(strtolower($request->input('order')));
 		
-		if (($artist_list_type != "usage") && ($artist_list_type != "alphabetic"))
+		if (($artist_list_type != Config::get('constants.sortingStringComparison.tagListType.usage')) 
+			&& ($artist_list_type != Config::get('constants.sortingStringComparison.tagListType.alphabetic')))
 		{
-			$artist_list_type = "usage";
+			$artist_list_type = Config::get('constants.sortingStringComparison.tagListType.usage');
 		}
 		
-		if (($artist_list_order != "asc") && ($artist_list_order != "desc"))
+		if (($artist_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($artist_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			if($artist_list_type == "usage")
+			if($artist_list_type == Config::get('constants.sortingStringComparison.tagListType.usage'))
 			{
-				$artist_list_order = "asc";
+				$artist_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 			}
 			else
 			{
-				$artist_list_order = "desc";
+				$artist_list_order = Config::get('constants.sortingStringComparison.listOrder.descending');
 			}
 		}
 		
-		if ($artist_list_type == "alphabetic")
+		if ($artist_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
 		{
 			$artists = new artist();
-			$artist_output = $artists->orderBy('name', $artist_list_order)->paginate(30);
+			$artist_output = $artists->orderBy('name', $artist_list_order)->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
 			
 			$artists = $artist_output;
 		}
 		else
 		{	
 			$artists = new artist();
-			$artists_used = $artists->join('artist_collection', 'artists.id', '=', 'artist_collection.artist_id')->select('artists.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $artist_list_order)->orderBy('name', 'desc')->paginate(30);
+			$artists_used = $artists->join('artist_collection', 'artists.id', '=', 'artist_collection.artist_id')->select('artists.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $artist_list_order)->orderBy('name', 'desc')->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
 			
 			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds artists that aren't used into the dataset used for popularity)
 			
@@ -129,24 +132,26 @@ class ArtistController extends Controller
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
 		
-		if (($global_list_order != 'asc') && ($global_list_order != 'desc'))
+		if (($global_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($global_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			$global_list_order = 'asc';
+			$global_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		if (($personal_list_order != 'asc') && ($personal_list_order != 'desc'))
+		if (($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			$personal_list_order = 'asc';
+			$personal_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		$global_aliases = $artist->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(10, ['*'], 'global_alias_page');
+		$global_aliases = $artist->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'global_alias_page');
 		$global_aliases->appends(Input::except('global_alias_page'));
 		
 		$personal_aliases = null;
 		
 		if (Auth::check())
 		{
-			$personal_aliases = $artist->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(10, ['*'], 'personal_alias_page');
+			$personal_aliases = $artist->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'personal_alias_page');
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
@@ -168,25 +173,27 @@ class ArtistController extends Controller
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
 		
-		if (($global_list_order != 'asc') && ($global_list_order != 'desc'))
+		if (($global_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($global_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			$global_list_order = 'asc';
+			$global_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		if (($personal_list_order != 'asc') && ($personal_list_order != 'desc'))
+		if (($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			$personal_list_order = 'asc';
+			$personal_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
 		//Add auth check here
-		$global_aliases = $artist->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(10, ['*'], 'global_alias_page');
+		$global_aliases = $artist->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'global_alias_page');
 		$global_aliases->appends(Input::except('global_alias_page'));
 		
 		$personal_aliases = null;
 		
 		if (Auth::check())
 		{
-			$personal_aliases = $artist->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(10, ['*'], 'personal_alias_page');
+			$personal_aliases = $artist->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'personal_alias_page');
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		

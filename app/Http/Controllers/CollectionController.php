@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
 use Input;
+use Config;
 use MappingHelper;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
@@ -35,7 +36,7 @@ class CollectionController extends Controller
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
         //Get all relevant collections
-		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->orderBy('updated_at', 'desc')->paginate(10);
+		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->orderBy('updated_at', 'desc')->paginate(Config::get('constants.pagination.collectionsPerPageIndex'));
 		
 		return View('collections.index', array('collections' => $collections, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }

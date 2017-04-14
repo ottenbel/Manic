@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use Auth;
 use DB;
 use Input;
+use Config;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
 
@@ -28,34 +29,36 @@ class SeriesController extends Controller
 		$series_list_type = trim(strtolower($request->input('type')));
 		$series_list_order = trim(strtolower($request->input('order')));
 		
-		if (($series_list_type != "usage") && ($series_list_type != "alphabetic"))
+		if (($series_list_type != Config::get('constants.sortingStringComparison.tagListType.usage')) 
+			&& ($series_list_type != Config::get('constants.sortingStringComparison.tagListType.alphabetic')))
 		{
-			$series_list_type = "usage";
+			$series_list_type = Config::get('constants.sortingStringComparison.tagListType.usage');
 		}
 		
-		if (($series_list_order != "asc") && ($series_list_order != "desc"))
+		if (($series_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($series_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			if($series_list_type == "usage")
+			if($series_list_type == Config::get('constants.sortingStringComparison.tagListType.usage'))
 			{
-				$series_list_order = "asc";
+				$series_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 			}
 			else
 			{
-				$series_list_order = "desc";
+				$series_list_order = Config::get('constants.sortingStringComparison.listOrder.descending');
 			}
 		}
 		
-		if ($series_list_type == "alphabetic")
+		if ($series_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
 		{
 			$series = new Series();
-			$series_output = $series->orderBy('name', $series_list_order)->paginate(30);
+			$series_output = $series->orderBy('name', $series_list_order)->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
 			
 			$series = $series_output;
 		}
 		else
 		{	
 			$series = new Series();
-			$series_used = $series->join('collection_series', 'series.id', '=', 'collection_series.series_id')->select('series.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $series_list_order)->orderBy('name', 'desc')->paginate(30);
+			$series_used = $series->join('collection_series', 'series.id', '=', 'collection_series.series_id')->select('series.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $series_list_order)->orderBy('name', 'desc')->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
 			
 			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds series that aren't used into the dataset used for popularity)
 			
@@ -129,34 +132,36 @@ class SeriesController extends Controller
 		$characters_list_type = trim(strtolower($request->input('character_type')));
 		$characters_list_order = trim(strtolower($request->input('character_order')));
 		
-		if (($characters_list_type != "usage") && ($characters_list_type != "alphabetic"))
+		if (($characters_list_type != Config::get('constants.sortingStringComparison.tagListType.usage')) 
+			&& ($characters_list_type != Config::get('constants.sortingStringComparison.tagListType.alphabetic')))
 		{
-			$characters_list_type = "usage";
+			$characters_list_type = Config::get('constants.sortingStringComparison.tagListType.usage');
 		}
 		
-		if (($characters_list_order != "asc") && ($characters_list_order != "desc"))
+		if (($characters_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($characters_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			if($characters_list_type == "usage")
+			if($characters_list_type == Config::get('constants.sortingStringComparison.tagListType.usage'))
 			{
-				$characters_list_order = "asc";
+				$characters_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 			}
 			else
 			{
-				$characters_list_order = "desc";
+				$characters_list_order = Config::get('constants.sortingStringComparison.listOrder.descending');
 			}
 		}
 		
-		if ($characters_list_type == "alphabetic")
+		if ($characters_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
 		{
 			$characters = $series->characters();
-			$characters_output = $characters->orderBy('name', $characters_list_order)->paginate(12, ['*'], 'character_page');
+			$characters_output = $characters->orderBy('name', $characters_list_order)->paginate(Config::get('constants.pagination.charactersPerPageSeries'), ['*'], 'character_page');
 
 			$characters = $characters_output;
 		}
 		else
 		{	
 			$characters = $series->characters()	;
-			$characters_used = $characters->join('character_collection', 'characters.id', '=', 'character_collection.character_id')->select('characters.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $characters_list_order)->orderBy('name', 'desc')->paginate(12, ['*'], 'character_page');
+			$characters_used = $characters->join('character_collection', 'characters.id', '=', 'character_collection.character_id')->select('characters.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $characters_list_order)->orderBy('name', 'desc')->paginate(Config::get('constants.pagination.charactersPerPageSeries'), ['*'], 'character_page');
 			
 			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds series that aren't used into the dataset used for popularity)
 			
@@ -170,24 +175,26 @@ class SeriesController extends Controller
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
 		
-		if (($global_list_order != 'asc') && ($global_list_order != 'desc'))
+		if (($global_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($global_list_order != 'desc'))
 		{
-			$global_list_order = 'asc';
+			$global_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		if (($personal_list_order != 'asc') && ($personal_list_order != 'desc'))
+		if (($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($personal_list_order != 'desc'))
 		{
-			$personal_list_order = 'asc';
+			$personal_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		$global_aliases = $series->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(10, ['*'], 'global_alias_page');
+		$global_aliases = $series->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'global_alias_page');
 		$global_aliases->appends(Input::except('global_alias_page'));
 		
 		$personal_aliases = null;
 		
 		if (Auth::check())
 		{
-			$personal_aliases = $series->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(10, ['*'], 'personal_alias_page');
+			$personal_aliases = $series->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'personal_alias_page');
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
@@ -209,24 +216,26 @@ class SeriesController extends Controller
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
 		
-		if (($global_list_order != 'asc') && ($global_list_order != 'desc'))
+		if (($global_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($global_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			$global_list_order = 'asc';
+			$global_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		if (($personal_list_order != 'asc') && ($personal_list_order != 'desc'))
+		if (($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			$personal_list_order = 'asc';
+			$personal_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		$global_aliases = $series->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(10, ['*'], 'global_alias_page');
+		$global_aliases = $series->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'global_alias_page');
 		$global_aliases->appends(Input::except('global_alias_page'));
 		
 		$personal_aliases = null;
 		
 		if (Auth::check())
 		{
-			$personal_aliases = $series->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(10, ['*'], 'personal_alias_page');
+			$personal_aliases = $series->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'personal_alias_page');
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		

@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use Auth;
 use DB;
 use Input;
+use Config;
 use App\Models\TagObjects\Artist\ArtistAlias;
 use App\Models\TagObjects\Artist\Artist;
 
@@ -27,39 +28,42 @@ class ArtistAliasController extends Controller
 		$alias_list_type = trim(strtolower($request->input('type')));
 		$alias_list_order = trim(strtolower($request->input('order')));
 		
-		if (($alias_list_type != "global") && ($alias_list_type != "personal") && ($alias_list_type != "mixed"))
+		if (($alias_list_type != Config::get('constants.sortingStringComparison.aliasListType.global')) 
+			&& ($alias_list_type != Config::get('constants.sortingStringComparison.aliasListType.personal')) 
+			&& ($alias_list_type != Config::get('constants.sortingStringComparison.aliasListType.mixed')))
 		{
-			$alias_list_type = "mixed";
+			$alias_list_type = Config::get('constants.sortingStringComparison.aliasListType.mixed');
 		}
 		
-		if (($alias_list_order != "asc") && ($alias_list_order != "desc"))
+		if (($alias_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($alias_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			$alias_list_order = "asc";
+			$alias_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
 		$aliases = new ArtistAlias();
 		
 		if (Auth::user())
 		{
-			if ($alias_list_type == "global")
+			if ($alias_list_type == Config::get('constants.sortingStringComparison.aliasListType.global'))
 			{
-				$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate(30);
+				$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageIndex'));
 			}
 			
-			if ($alias_list_type == "personal")
+			if ($alias_list_type == Config::get('constants.sortingStringComparison.aliasListType.personal'))
 			{
-				$aliases = $aliases->where('user_id', '=', Auth::user()->id)->orderBy('alias', $alias_list_order)->paginate(30);
+				$aliases = $aliases->where('user_id', '=', Auth::user()->id)->orderBy('alias', $alias_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageIndex'));
 			}
 			
-			if ($alias_list_type == "mixed")
+			if ($alias_list_type == Config::get('constants.sortingStringComparison.aliasListType.mixed'))
 			{
-				$aliases = $aliases->where('user_id', '=', null)->orWhere('user_id', '=', Auth::user()->id)->orderBy('alias', $alias_list_order)->paginate(30);
+				$aliases = $aliases->where('user_id', '=', null)->orWhere('user_id', '=', Auth::user()->id)->orderBy('alias', $alias_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageIndex'));
 			}
 		}
 		else
 		{
 			$aliases = new ArtistAlias();
-			$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate(30);
+			$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageIndex'));
 		}
 		
 		return View('artists.alias.index', array('aliases' => $aliases->appends(Input::except('page')), 'list_type' => $alias_list_type, 'list_order' => $alias_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));

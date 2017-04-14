@@ -8,6 +8,7 @@ use Illuminate\Validation\Rule;
 use Auth;
 use DB;
 use Input;
+use Config;
 use App\Models\TagObjects\Tag\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
 
@@ -28,34 +29,36 @@ class TagController extends Controller
 		$tag_list_type = trim(strtolower($request->input('type')));
 		$tag_list_order = trim(strtolower($request->input('order')));
 		
-		if (($tag_list_type != "usage") && ($tag_list_type != "alphabetic"))
+		if (($tag_list_type != Config::get('constants.sortingStringComparison.tagListType.usage')) 
+			&& ($tag_list_type != Config::get('constants.sortingStringComparison.tagListType.alphabetic')))
 		{
-			$tag_list_type = "usage";
+			$tag_list_type = Config::get('constants.sortingStringComparison.tagListType.usage');
 		}
 		
-		if (($tag_list_order != "asc") && ($tag_list_order != "desc"))
+		if (($tag_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($tag_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			if($tag_list_type == "usage")
+			if($tag_list_type == Config::get('constants.sortingStringComparison.tagListType.usage'))
 			{
-				$tag_list_order = "asc";
+				$tag_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 			}
 			else
 			{
-				$tag_list_order = "desc";
+				$tag_list_order = Config::get('constants.sortingStringComparison.listOrder.descending');
 			}
 		}
 		
-		if ($tag_list_type == "alphabetic")
+		if ($tag_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
 		{
 			$tags = new Tag();
-			$tag_output = $tags->orderBy('name', $tag_list_order)->paginate(30);
+			$tag_output = $tags->orderBy('name', $tag_list_order)->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
 			
 			$tags = $tag_output;
 		}
 		else
 		{	
 			$tags = new Tag();
-			$tags_used = $tags->join('collection_tag', 'tags.id', '=', 'collection_tag.tag_id')->select('tags.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $tag_list_order)->orderBy('name', 'desc')->paginate(30);
+			$tags_used = $tags->join('collection_tag', 'tags.id', '=', 'collection_tag.tag_id')->select('tags.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $tag_list_order)->orderBy('name', 'desc')->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
 			
 			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds tags that aren't used into the dataset used for popularity)
 			
@@ -129,22 +132,24 @@ class TagController extends Controller
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
 		
-		if (($global_list_order != 'asc') && ($global_list_order != 'desc'))
+		if (($global_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($global_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			$global_list_order = 'asc';
+			$global_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		if (($personal_list_order != 'asc') && ($personal_list_order != 'desc'))
+		if (($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			$personal_list_order = 'asc';
+			$personal_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		$global_aliases = $tag->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(10, ['*'], 'global_alias_page');
+		$global_aliases = $tag->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'global_alias_page');
 		$personal_aliases = null;
 		
 		if (Auth::check())
 		{
-			$personal_aliases = $tag->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(10, ['*'], 'personal_alias_page');
+			$personal_aliases = $tag->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'personal_alias_page');
 		}
 		
 		return View('tags.show', array('tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases->appends(Input::except('global_alias_page')), 'personal_aliases' => $personal_aliases->appends(Input::except('personal_alias_page')), 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
@@ -165,24 +170,26 @@ class TagController extends Controller
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
 		
-		if (($global_list_order != 'asc') && ($global_list_order != 'desc'))
+		if (($global_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($global_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			$global_list_order = 'asc';
+			$global_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		if (($personal_list_order != 'asc') && ($personal_list_order != 'desc'))
+		if (($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
 		{
-			$personal_list_order = 'asc';
+			$personal_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		$global_aliases = $tag->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(10, ['*'], 'global_alias_page');
+		$global_aliases = $tag->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'global_alias_page');
 		$global_aliases->appends(Input::except('global_alias_page'));
 		
 		$personal_aliases = null;
 		
 		if (Auth::check())
 		{
-			$personal_aliases = $tag->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(10, ['*'], 'personal_alias_page');
+			$personal_aliases = $tag->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'personal_alias_page');
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
