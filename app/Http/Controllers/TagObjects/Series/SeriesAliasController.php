@@ -80,12 +80,12 @@ class SeriesAliasController extends Controller
 		if ($isGlobalAlias)
 		{
 			$this->validate($request, [
-				'global_alias' => 'required|unique:series,name|unique:series_alias,alias,null,null,user_id,NULL']);
+				'global_alias' => 'required|unique:series,name|unique:series_alias,alias,null,null,user_id,NULL|regex:/^[^,]+$/']);
 		}
 		else
 		{
 			$this->validate($request, [
-				'personal_alias' => 'required|unique:series,name|unique:series_alias,alias,null,null,user_id,'.Auth::user()->id]);
+				'personal_alias' => 'required|unique:series,name|unique:series_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,]+$/']);
 		}
 		
 		$seriesAlias = new SeriesAlias();

@@ -94,7 +94,7 @@ class ArtistController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'name' => 'required|unique:artists',
+			'name' => 'required|unique:artists|regex:/^[^,]+$/',
 			'url' => 'URL',
 		]);
 		
@@ -210,7 +210,8 @@ class ArtistController extends Controller
     {
 		$this->validate($request, [
 		'name' => ['required',
-					Rule::unique('artists')->ignore($artist->id)],
+					Rule::unique('artists')->ignore($artist->id),
+					'regex:/^[^,]+$/'],
 				'url' => 'URL',
 		]);
 		

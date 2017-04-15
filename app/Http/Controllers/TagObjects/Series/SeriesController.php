@@ -94,7 +94,7 @@ class SeriesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'name' => 'required|unique:series',
+			'name' => 'required|unique:series|regex:/^[^,]+$/',
 			'url' => 'URL',
 		]);
 		
@@ -252,7 +252,8 @@ class SeriesController extends Controller
     {
 		$this->validate($request, [
 		'name' => ['required',
-					Rule::unique('series')->ignore($series->id)],
+					Rule::unique('series')->ignore($series->id),
+					'regex:/^[^,]+$/'],
 				'url' => 'URL',
 		]);
 		

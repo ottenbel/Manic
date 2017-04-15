@@ -97,10 +97,7 @@ class CharacterController extends Controller
     public function store(Request $request)
     {	
 		$this->validate($request, [
-		'name' => ['required',
-					Rule::unique('characters')->where(function ($query){
-						$query->where('id', '!=', trim(Input::get('character_id')));
-					})],
+		'name' => 'required|unique:characters|regex:/^[^,]+$/',
 				'url' => 'URL',
 		]);
 		
@@ -223,7 +220,8 @@ class CharacterController extends Controller
     {
 		$this->validate($request, [
 		'name' => ['required',
-					Rule::unique('characters')->ignore($character->id)],
+					Rule::unique('characters')->ignore($character->id),
+					'regex:/^[^,]+$/'],
 				'url' => 'URL',
 		]);
 		

@@ -94,7 +94,7 @@ class TagController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'name' => 'required|unique:tags',
+			'name' => 'required|unique:tags|regex:/^[^,]+$/',
 			'url' => 'URL',
 		]);
 		
@@ -206,7 +206,8 @@ class TagController extends Controller
     {
 		$this->validate($request, [
 		'name' => ['required',
-					Rule::unique('tags')->ignore($tag->id)],
+					Rule::unique('tags')->ignore($tag->id),
+					'regex:/^[^,]+$/'],
 				'url' => 'URL',
 		]);
 		

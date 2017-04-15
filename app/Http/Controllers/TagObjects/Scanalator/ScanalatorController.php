@@ -94,7 +94,7 @@ class ScanalatorController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-			'name' => 'required|unique:scanalators',
+			'name' => 'required|unique:scanalators|regex:/^[^,]+$/',
 			'url' => 'URL',
 		]);
 		
@@ -209,7 +209,8 @@ class ScanalatorController extends Controller
     {
 		$this->validate($request, [
 		'name' => ['required',
-					Rule::unique('scanalators')->ignore($scanalator->id)],
+					Rule::unique('scanalators')->ignore($scanalator->id),
+					'regex:/^[^,]+$/'],
 				'url' => 'URL',
 		]);
 		
