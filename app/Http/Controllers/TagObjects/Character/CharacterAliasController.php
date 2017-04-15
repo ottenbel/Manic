@@ -80,12 +80,13 @@ class CharacterAliasController extends Controller
     public function store(Request $request, Character $character)
     {	
 		$isGlobalAlias = Input::get('is_global_alias');
+		$isPersonalAlias = Input::get('is_personal_alias');
 		if ($isGlobalAlias)
 		{
 			$this->validate($request, [
 				'global_alias' => 'required|unique:characters,name|unique:character_alias,alias,null,null,user_id,NULL|regex:/^[^,]+$/']);
 		}
-		else
+		else if ($isPersonalAlias)
 		{
 			$this->validate($request, [
 				'personal_alias' => 'required|unique:characters,name|unique:character_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,]+$/']);

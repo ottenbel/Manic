@@ -77,12 +77,13 @@ class ScanalatorAliasController extends Controller
     public function store(Request $request, Scanalator $scanalator)
     {
         $isGlobalAlias = Input::get('is_global_alias');
+		$isPersonalAlias = Input::get('is_personal_alias');
 		if ($isGlobalAlias)
 		{
 			$this->validate($request, [
 				'global_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias,null,null,user_id,NULL|regex:/^[^,]+$/']);
 		}
-		else
+		else if ($isPersonalAlias)
 		{
 			$this->validate($request, [
 				'personal_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,]+$/']);

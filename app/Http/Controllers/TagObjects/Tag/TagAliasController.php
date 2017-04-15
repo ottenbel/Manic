@@ -77,12 +77,13 @@ class TagAliasController extends Controller
     public function store(Request $request, Tag $tag)
     {
         $isGlobalAlias = Input::get('is_global_alias');
+		$isPersonalAlias = Input::get('is_personal_alias');
 		if ($isGlobalAlias)
 		{
 			$this->validate($request, [
 				'global_alias' => 'required|unique:tags,name|unique:tag_alias,alias,null,null,user_id,NULL|regex:/^[^,]+$/']);
 		}
-		else
+		else if ($isPersonalAlias)
 		{
 			$this->validate($request, [
 				'personal_alias' => 'required|unique:tags,name|unique:tag_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,]+$/']);

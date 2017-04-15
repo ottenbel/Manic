@@ -85,7 +85,7 @@
 		
 		<form method="POST" action="/character_alias/{{$character->id}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
-			{{ Form::hidden('is_global_alias', false) }}
+			{{ Form::hidden('is_personal_alias', true) }}
 			
 			@include('partials.personal-alias-input')
 			
