@@ -1,8 +1,8 @@
 # Project Description
 
-Manic is a reworking of a previous unreleased project of mine. It is built using the Laravel framework with verious other components for functionality.
+Manic is a reworking of a previous unreleased project of mine. It is built using the Laravel framework with various other components for functionality.
 
-Manic is an open source project for hosting and sharing comics/manga/etc.  It was inspired by seeing various websites with a similar concept online.  I was hoping to find some open source software so I could run a similar site locally.  I was unable to find a site which provided its source code so I decided to build my own and share it with the world.
+Manic is an open source project for hosting and sharing comics/manga/etc. It was inspired by various websites with a similar concept online. I was unable to find an open source project with a similar concept so I decided to create Manic in order to fill that open niche.
 
 # Installation Instructions
 
