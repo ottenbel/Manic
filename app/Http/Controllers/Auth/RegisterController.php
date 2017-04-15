@@ -6,6 +6,7 @@ use App\Model\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Config;
 
 class RegisterController extends Controller
 {
@@ -67,6 +68,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
 			'api_token' => str_random(60),
+			'role_id' => Config::get('constants.roles.user'),
         ]);
     }
 }
