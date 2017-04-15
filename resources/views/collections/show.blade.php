@@ -21,90 +21,165 @@
 			<div id="collection_info" class="col-md-9">
 		@else
 			<div id="collection_short_info">
-		@endif		
-			<h2>{{{$collection->name}}}</h2>
+		@endif
+			<div class="row">
+				<div class="col-md-12">
+					<h2>{{{$collection->name}}}</h2>
+				</div>
+			</div>
 			@if(($collection->primary_artists()->count()) || ($collection->secondary_artists()->count()))
-				<div class="tag_holder"><strong>Artists:</strong>
-					@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
-						<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
-					@endforeach
-					
-					@foreach($collection->secondary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
-						<span class="secondary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
-					@endforeach
+				<div class="row">
+					<div class="tag_holder">
+						<div class="col-md-2">
+							<strong>Artists:</strong>
+						</div>
+						<div class="col-md-10">
+							@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
+								<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+							@endforeach
+							
+							@foreach($collection->secondary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
+								<span class="secondary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+							@endforeach
+						</div>
+					</div>
 				</div>
 			@endif
 			
 			@if(($collection->primary_series()->count()) || ($collection->secondary_series()->count()))
-				<div class="tag_holder"><strong>Series:</strong>
-					@foreach($collection->primary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
-						<span class="primary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
-					@endforeach
-					
-					@foreach($collection->secondary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
-						<span class="secondary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
-					@endforeach
+				<div class="row">
+					<div class="tag_holder">
+						<div class="col-md-2">
+							<strong>Series:</strong>
+						</div>
+						<div class="col-md-10">
+							@foreach($collection->primary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
+								<span class="primary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
+							@endforeach
+							
+							@foreach($collection->secondary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
+								<span class="secondary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
+							@endforeach
+						</div>
+					</div>
 				</div>
 			@endif
 			
 			@if(($collection->primary_characters()->count()) || ($collection->secondary_characters()->count()))
-				<div class="tag_holder"><strong>Characters:</strong>
-					@foreach($collection->primary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $character)
-						<span class="primary_characters"><a href="/character/{{$character->id}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
-					@endforeach
-					
-					@foreach($collection->secondary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $character)
-						<span class="secondary_characters"><a href="/character/{{$character->id}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
-					@endforeach
+				<div class="row">
+					<div class="tag_holder">
+						<div class="col-md-2">
+							<strong>Characters:</strong>
+						</div>
+						<div class="col-md-10">
+							@foreach($collection->primary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $character)
+								<span class="primary_characters"><a href="/character/{{$character->id}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+							@endforeach
+							
+							@foreach($collection->secondary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $character)
+								<span class="secondary_characters"><a href="/character/{{$character->id}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+							@endforeach
+						</div>
+					</div>
 				</div>
 			@endif
 			
 			@if(($collection->primary_tags()->count()) || ($collection->secondary_tags()->count()))
-				<div class="tag_holder"><strong>Tags:</strong>
-					@foreach($collection->primary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $tag)
-						<span class="primary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count"> ({{$tag->usage_count()}})</span></a></span>
-					@endforeach
-					
-					@foreach($collection->secondary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $tag)
-						<span class="secondary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count">({{$tag->usage_count()}})</span></a></span>
-					@endforeach
+				<div class="row">
+					<div class="tag_holder">
+						<div class="col-md-2">
+							<strong>Tags:</strong>
+						</div>
+						<div class="col-md-10">
+							@foreach($collection->primary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $tag)
+								<span class="primary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count"> ({{$tag->usage_count()}})</span></a></span>
+							@endforeach
+							
+							@foreach($collection->secondary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $tag)
+								<span class="secondary_tags"><a href="/tag/{{$tag->id}}">{{{$tag->name}}} <span class="tag_count">({{$tag->usage_count()}})</span></a></span>
+							@endforeach
+						</div>
+					</div>
 				</div>
 			@endif
 			
 			@if($collection->language != null)
-				<div>
-					<strong>Language:</strong> {{{$collection->language->name}}}
+				<div class="row">
+					<div class="col-md-2">
+						<strong>Language:</strong>
+					</div>
+					<div class="col-md-10">
+						{{{$collection->language->name}}}
+					</div>
 				</div>
 			@endif
 			
 			@if($collection->rating != null)
-				<div>
-					<strong>Rating:</strong> {{{$collection->rating->name}}}
+				<div class="row">
+					<div class="col-md-2">
+						<strong>Rating:</strong>
+					</div>
+					<div class="col-md-10">
+						{{{$collection->rating->name}}}
+					</div>
 				</div>	
 			@endif
 			
 			@if($collection->status != null)
-				<div>
-					<strong>Status:</strong> {{{$collection->status->name}}}
+				<div class="row">
+					<div class="col-md-2">
+						<strong>Status:</strong> 
+					</div>
+					<div class="col-md-10">
+						{{{$collection->status->name}}}
+					</div>
 				</div>
 			@endif
 			
 			@if($collection->canonical)
-				<div>
-					<strong>Canonicity:</strong> Canonical
+				<div class="row">
+					<div class="col-md-2">
+						<strong>Canonicity:</strong>
+					</div>
+					<div class="col-md-10">
+						Canonical
+					</div>
 				</div>
 			@else
-				<div>
-					<strong>Canonicity:</strong> Non-Canon
+				<div class="row">
+					<div class="col-md-2">
+						<strong>Canonicity:</strong>
+					</div>
+					<div class="col-md-10">
+						Non-Canon
+					</div>
 				</div>
 			@endif
 			
-			<div>
-				<strong>Created By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->created_by_user->name}}}</a> @ {{$collection->created_at}}
+			<div class="row">
+				<div class="col-md-2">
+					<strong>Created By:</strong> 
+				</div>
+				<div class="col-md-10">
+					@if ($collection->created_by_user != null)
+						<a href="/user/{{$collection->id}}">{{{$collection->created_by_user->name}}}</a> @ {{$collection->created_at}}
+					@else
+						Unknown @ {{$collection->created_at}}
+					@endif
+				</div>
 			</div>
 			
-			<div>
-				<strong>Last Updated By:</strong> <a href="/user/{{$collection->id}}">{{{$collection->updated_by_user->name}}}</a> @ {{$collection->updated_at}}
+			<div class="row">
+				<div class="col-md-2">
+					<strong>Updated By:</strong> 
+				</div>
+				<div class="col-md-10">
+					@if($collection->updated_by_user != null)
+						<a href="/user/{{$collection->id}}">{{{$collection->updated_by_user->name}}}</a> @ {{$collection->updated_at}}
+					@else
+						Unknown @ {{$collection->updated_at}}
+					@endif
+				</div>
 			</div>
 		</div>
 	</div>
