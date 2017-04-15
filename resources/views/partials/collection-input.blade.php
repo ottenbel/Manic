@@ -22,9 +22,9 @@
 <div class="form-group">
 	{{ Form::label('name', 'Name') }}
 	@if((!empty($collection)) && ($collection->name != null) && (Input::old('name') == null))
-		{{ Form::text('name', $collection->name, array('class' => 'form-control')) }}
+		{{ Form::text('name', $collection->name, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.name'))) }}
 	@else
-		{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+		{{ Form::text('name', Input::old('name'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.name'))) }}
 	@endif
 	@if($errors->has('name'))
 		<div class ="alert alert-danger" id="name_errors">{{$errors->first('name')}}</div>
@@ -34,9 +34,9 @@
 <div class="form-group">
 	{{ Form::label('description', 'Description') }}
 	@if((!empty($collection)) && ($collection->description != null) && (Input::old('description') == null))
-		{{ Form::textarea('description', $collection->description, array('class' => 'form-control')) }}
+		{{ Form::textarea('description', $collection->description, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.description'))) }}
 	@else
-		{{ Form::textarea('description', Input::old('description'), array('class' => 'form-control')) }}
+		{{ Form::textarea('description', Input::old('description'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.description'))) }}
 	@endif
 <div>
 
@@ -65,16 +65,16 @@
 <div class="form-group">
 	{{ Form::label('artist_primary', 'Primary Artists') }}
 	@if((!empty($collection)) && ($collection->primary_artists != null) && (Input::old('artist_primary') == null))
-		{{ Form::text('artist_primary', collect($collection->primary_artists->pluck('name'))->implode(", "), array('class' => 'form-control')) }}
+		{{ Form::text('artist_primary', collect($collection->primary_artists->pluck('name'))->implode(", "), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.primaryArtists'))) }}
 	@else
-		{{ Form::text('artist_primary', Input::old('artist_primary'), array('class' => 'form-control')) }}
+		{{ Form::text('artist_primary', Input::old('artist_primary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.primaryArtists'))) }}
 	@endif
 	
 	{{ Form::label('artist_secondary', 'Secondary Artists') }}
 	@if((!empty($collection)) && ($collection->secondary_artists != null) && (Input::old('artist_secondary') == null))
-		{{ Form::text('artist_secondary', collect($collection->secondary_artists->pluck('name'))->implode(', '), array('class' => 'form-control')) }}
+		{{ Form::text('artist_secondary', collect($collection->secondary_artists->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondaryArtists'))) }}
 	@else
-		{{ Form::text('artist_secondary', Input::old('artist_secondary'), array('class' => 'form-control')) }}
+		{{ Form::text('artist_secondary', Input::old('artist_secondary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondaryArtists'))) }}
 	@endif
 </div>
 
@@ -82,25 +82,25 @@
 	{{ Form::label('series_primary', 'Series Primary') }}
 	
 	@if((!empty($collection)) && ($collection->primary_series != null) && (Input::old('series_primary') == null))
-		{{ Form::text('series_primary', collect($collection->primary_series->pluck('name'))->implode(', '), array('class' => 'form-control')) }}
+		{{ Form::text('series_primary', collect($collection->primary_series->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.primarySeries'))) }}
 	@else
-		{{ Form::text('series_primary', Input::old('series_primary'), array('class' => 'form-control')) }}
+		{{ Form::text('series_primary', Input::old('series_primary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.primarySeries'))) }}
 	@endif
 	
 	{{ Form::label('series_secondary', 'Series Secondary') }}
 	@if((!empty($collection)) && ($collection->secondary_series != null) && (Input::old('series_secondary') == null))
-		{{ Form::text('series_secondary', collect($collection->secondary_series->pluck('name'))->implode(', '), array('class' => 'form-control')) }}
+		{{ Form::text('series_secondary', collect($collection->secondary_series->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondarySeries'))) }}
 	@else
-		{{ Form::text('series_secondary', Input::old('series_secondary'), array('class' => 'form-control')) }}
+		{{ Form::text('series_secondary', Input::old('series_secondary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondarySeries'))) }}
 	@endif
 </div>
 
 <div class="form-group">
 	{{ Form::label('character_primary', 'Characters Primary') }}
 	@if((!empty($collection)) && ($collection->primary_characters != null) && (Input::old('character_primary') == null))
-		{{ Form::text('character_primary', collect($collection->primary_characters->pluck('name'))->implode(', '), array('class' => 'form-control')) }}
+		{{ Form::text('character_primary', collect($collection->primary_characters->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.primaryCharacters'))) }}
 	@else
-		{{ Form::text('character_primary', Input::old('character_primary'), array('class' => 'form-control')) }}
+		{{ Form::text('character_primary', Input::old('character_primary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.primaryCharacters'))) }}
 	@endif
 	
 	@if($errors->has('character_primary'))
@@ -109,9 +109,9 @@
 	
 	{{ Form::label('character_secondary', 'Characters Secondary') }}
 	@if((!empty($collection)) && ($collection->secondary_characters != null) && (Input::old('character_secondary') == null))
-		{{ Form::text('character_secondary', collect($collection->secondary_characters->pluck('name'))->implode(', '), array('class' => 'form-control')) }}
+		{{ Form::text('character_secondary', collect($collection->secondary_characters->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondaryCharacters'))) }}
 	@else
-		{{ Form::text('character_secondary', Input::old('character_secondary'), array('class' => 'form-control')) }}
+		{{ Form::text('character_secondary', Input::old('character_secondary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondaryCharacters'))) }}
 	@endif
 	
 	@if($errors->has('character_secondary'))
@@ -122,16 +122,16 @@
 <div class="form-group">
 	{{ Form::label('tag_primary', 'Tags Primary') }}
 	@if((!empty($collection)) && ($collection->primary_tags != null) && (Input::old('tag_primary') == null))
-		{{ Form::text('tag_primary', collect($collection->primary_tags->pluck('name'))->implode(', '), array('class' => 'form-control')) }}
+		{{ Form::text('tag_primary', collect($collection->primary_tags->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.primaryTags'))) }}
 	@else
-		{{ Form::text('tag_primary', Input::old('tag_primary'), array('class' => 'form-control')) }}
+		{{ Form::text('tag_primary', Input::old('tag_primary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.primaryTags'))) }}
 	@endif
 	
 	{{ Form::label('tag_secondary', 'Tags Secondary') }}
 	@if((!empty($collection)) && ($collection->secondary_tags != null) && (Input::old('tag_secondary') == null))
-		{{ Form::text('tag_secondary', collect($collection->secondary_tags->pluck('name'))->implode(', '), array('class' => 'form-control')) }}
+		{{ Form::text('tag_secondary', collect($collection->secondary_tags->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondaryTags'))) }}
 	@else
-		{{ Form::text('tag_secondary', Input::old('tag_secondary'), array('class' => 'form-control')) }}
+		{{ Form::text('tag_secondary', Input::old('tag_secondary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondaryTags'))) }}
 	@endif
 </div>
 

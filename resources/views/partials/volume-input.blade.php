@@ -25,9 +25,9 @@
 <div class="form-group">
 	{{ Form::label('volume_number', 'Number') }}
 	@if((!empty($volume)) && ($volume->volume_number != null) && (Input::old('volume_number') == null))
-		{{ Form::text('volume_number', $volume->volume_number, array('class' => 'form-control')) }}
+		{{ Form::text('volume_number', $volume->volume_number, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.volumes.number'))) }}
 	@else
-		{{ Form::text('volume_number', Input::old('volume_number'), array('class' => 'form-control')) }}
+		{{ Form::text('volume_number', Input::old('volume_number'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.volumes.number'))) }}
 	@endif
 	@if($errors->has('volume_number'))
 		<div class ="alert alert-danger" id="name_errors">{{$errors->first('volume_number')}}</div>
@@ -37,8 +37,8 @@
 <div class="form-group">
 	{{ Form::label('name', 'Name') }}
 	@if((!empty($volume)) && ($volume->name != null) && (Input::old('name') == null))
-		{{ Form::text('name', $volume->name, array('class' => 'form-control')) }}
+		{{ Form::text('name', $volume->name, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.volumes.name'))) }}
 	@else
-		{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+		{{ Form::text('name', Input::old('name'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.volumes.name'))) }}
 	@endif
 </div>
