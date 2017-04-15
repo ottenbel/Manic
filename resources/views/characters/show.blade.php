@@ -47,17 +47,6 @@
 	@if(($global_aliases->count() > 0) || (Auth::user()))
 		<h3>Global Aliases</h3>
 		
-		@if(Auth::user())
-			<form method="POST" action="/character_alias/{{$character->id}}" enctype="multipart/form-data">
-				{{ csrf_field() }}
-				{{ Form::hidden('is_global_alias', true) }}
-				
-				@include('partials.global-alias-input')
-				
-				{{ Form::submit('Create Global Character Alias', array('class' => 'btn btn-primary')) }}
-			</form>
-		@endif
-		
 		@if($global_aliases->count() > 0)
 			<div>
 				<b>Display Order:</b>
@@ -77,21 +66,24 @@
 			@endforeach
 			
 			{{ $global_aliases->links() }}
+			<br/>
+		@endif
+		
+		@if(Auth::user())
+			<form method="POST" action="/character_alias/{{$character->id}}" enctype="multipart/form-data">
+				{{ csrf_field() }}
+				{{ Form::hidden('is_global_alias', true) }}
+				
+				@include('partials.global-alias-input')
+				
+				{{ Form::submit('Create Global Character Alias', array('class' => 'btn btn-primary')) }}
+			</form>
 		@endif
 	@endif
 	
 	@if(Auth::user())
 		<h3>Personal Aliases</h3>
 		
-		<form method="POST" action="/character_alias/{{$character->id}}" enctype="multipart/form-data">
-			{{ csrf_field() }}
-			{{ Form::hidden('is_personal_alias', true) }}
-			
-			@include('partials.personal-alias-input')
-			
-			{{ Form::submit('Create Personal Character Alias', array('class' => 'btn btn-primary')) }}
-		</form>
-
 		@if($personal_aliases->count() > 0)
 			<div>
 				<b>Display Order:</b>
@@ -111,7 +103,17 @@
 			@endforeach
 			
 			{{ $personal_aliases->links() }}
+			<br/>
 		@endif
+		
+		<form method="POST" action="/character_alias/{{$character->id}}" enctype="multipart/form-data">
+			{{ csrf_field() }}
+			{{ Form::hidden('is_personal_alias', true) }}
+			
+			@include('partials.personal-alias-input')
+			
+			{{ Form::submit('Create Personal Character Alias', array('class' => 'btn btn-primary')) }}
+		</form>
 	@endif
 </div>
 @endsection

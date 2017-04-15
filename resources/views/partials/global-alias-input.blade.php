@@ -1,5 +1,4 @@
 <div class="form-group">
-	{{ Form::label('global_alias', 'Alias') }}
 	@if((!empty($globalAliasObject)) && ($globalAliasObject->alias != null) && (Input::old('global_alias') == null))
 		{{ Form::text('global_alias', $globalAliasObject->alias, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.aliases.global'))) }}
 	@else

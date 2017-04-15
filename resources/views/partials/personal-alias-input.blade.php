@@ -1,5 +1,4 @@
 <div class="form-group">
-	{{ Form::label('personal_alias', 'Alias') }}
 	@if((!empty($personalAliasObject)) && ($personalAliasObject->alias != null) && (Input::old('personal_alias') == null))
 		{{ Form::text('personal_alias', $personalAliasObject->alias, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.aliases.personal'))) }}
 	@else
