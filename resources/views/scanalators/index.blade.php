@@ -49,13 +49,15 @@
 		{{ $scanalators->links() }}
 	@else
 		@if(Auth::user())
-			<div>
+			<div class="text-center">
 				No scanalators have been found in the database. Add a new scanalator <a href = "{{url('/scanalator/create')}}">here.</a>
 			</div>
+			<br/>
 		@else
-			<div>
+			<div class="text-center">
 				No scanalators have been found in the database.
 			</div>
+			<br/>
 		@endif
 	@endif
 	</div>

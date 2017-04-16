@@ -49,13 +49,15 @@
 		{{ $characters->links() }}
 	@else
 		@if(Auth::user())
-			<div>
+			<div class="text-center">
 				No characters have been found in the database. Add a new character <a href = "{{url('/character/create')}}">here.</a>
 			</div>
+			<br/>
 		@else
-			<div>
+			<div class="text-center">
 				No characters have been found in the database.
 			</div>
+			<br/>
 		@endif
 	@endif
 </div>

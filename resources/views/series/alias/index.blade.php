@@ -65,13 +65,15 @@
 			{{ $aliases->links() }}
 		@else
 			@if(Auth::user())
-				<div>
+				<div class="text-center">
 					No series aliases have been found in the database. View series' in the database <a href = "{{url('/series')}}">here.</a>
 				</div>
+				<br/>
 			@else
-				<div>
+				<div class="text-center">
 					No series aliases have been found in the database.
 				</div>
+				<br/>
 			@endif
 		@endif
 	</div>

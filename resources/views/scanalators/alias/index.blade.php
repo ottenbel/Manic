@@ -65,13 +65,15 @@
 			{{ $aliases->links() }}
 		@else
 			@if(Auth::user())
-				<div>
+				<div class="text-center">
 					No scanalator aliases have been found in the database. View scanalators in the database <a href = "{{url('/scanalator')}}">here.</a>
 				</div>
+				<br/>
 			@else
-				<div>
+				<div class="text-center">
 					No scanalator aliases have been found in the database.
 				</div>
+				<br/>
 			@endif
 		@endif
 	</div>

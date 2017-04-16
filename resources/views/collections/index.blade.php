@@ -13,13 +13,15 @@ Index - Page {{$collections->currentPage()}}
 	<div class="row">
 		@if($collections->count() == 0)
 			@if(Auth::user())
-				<div>
+				<div class="text-center">
 					No collections have been found in the database. Add a new collection <a href = "{{url('/collection/create')}}">here.</a>
 				</div>
+				<br/>
 			@else
-				<div>
+				<div class="text-center">
 					No collections have been found in the database.
 				</div>
+				<br/>
 			@endif
 		@else
 			<table class="table table-striped">
