@@ -49,13 +49,15 @@
 			{{ $artists->links() }}
 		@else
 			@if (Auth::user())
-				<div>
+				<div class="text-center">
 					No artists have been found in the database. Add a new artist <a href = "{{url('/artist/create')}}">here.</a>
 				</div>
+				<br/>
 			@else
-				<div>
+				<div class="text-center">
 					No artists have been found in the database.
 				</div>
+				<br/>
 			@endif
 		@endif
 	</div>	

@@ -49,13 +49,15 @@
 		{{ $series->links() }}
 	@else
 		@if(Auth::user())
-			<div>
+			<div class="text-center">
 				No series have been found in the database. Add a new series <a href = "{{url('/series/create')}}">here.</a>
 			</div>
+			<br/>
 		@else
-			<div>
+			<div class="text-center">
 				No series have been found in the database.
 			</div>
+			<br/>
 		@endif
 	@endif
 	</div>
