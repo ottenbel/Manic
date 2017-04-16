@@ -245,4 +245,58 @@ class User extends Authenticatable
 	{
 		return $this->hasMany('App\Models\TagObjects\Tag\Tag', 'updated_by');
 	}
+	
+	public function has_user_permission()
+	{
+		if (($this->role_id == Config::get('constants.roles.user')) 
+			|| ($this->role_id == Config::get('constants.roles.editor')) 
+			|| ($this->role_id == Config::get('constants.roles.administrator')) 
+			|| ($this->role_id == Config::get('constants.roles.owner')))
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+	}
+	
+	public function has_editor_permission()
+	{
+		if (($this->role_id == Config::get('constants.roles.editor')) 
+			|| ($this->role_id == Config::get('constants.roles.administrator')) 
+			|| ($this->role_id == Config::get('constants.roles.owner')))
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+	}
+	
+	public function has_administrator_permission()
+	{
+		if (($this->role_id == Config::get('constants.roles.administrator')) 
+			|| ($this->role_id == Config::get('constants.roles.owner')))
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+	}
+	
+	public function has_owner_permission()
+	{
+		if ($this->role_id == Config::get('constants.roles.owner'))
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+	}
 }
