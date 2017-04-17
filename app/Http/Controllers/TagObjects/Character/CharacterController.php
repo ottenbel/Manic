@@ -82,6 +82,9 @@ class CharacterController extends Controller
      */
     public function create(Request $request, Series $series = null)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Character::class);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -95,7 +98,10 @@ class CharacterController extends Controller
      * @return Response
      */
     public function store(Request $request)
-    {	
+    {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Character::class);
+		
 		$this->validate($request, [
 		'name' => 'required|unique:characters|regex:/^[^,]+$/',
 				'url' => 'URL',
@@ -177,6 +183,9 @@ class CharacterController extends Controller
      */
     public function edit(Request $request, Character $character)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($character);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -218,6 +227,9 @@ class CharacterController extends Controller
      */
     public function update(Request $request, Character $character)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($character);
+		
 		$this->validate($request, [
 		'name' => ['required',
 					Rule::unique('characters')->ignore($character->id),
@@ -246,11 +258,12 @@ class CharacterController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Character  $character
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Character $character)
     {
-        //
+        //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($character);
     }
 }

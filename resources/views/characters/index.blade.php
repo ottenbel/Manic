@@ -48,17 +48,19 @@
 		<br/>
 		{{ $characters->links() }}
 	@else
-		@if(Auth::user())
+		@can('create', App\Models\TagObjects\Character\Character::class)
 			<div class="text-center">
 				No characters have been found in the database. Add a new character <a href = "{{url('/character/create')}}">here.</a>
 			</div>
 			<br/>
-		@else
+		@endcan
+		
+		@cannot('create', App\Models\TagObjects\Character\Character::class)
 			<div class="text-center">
 				No characters have been found in the database.
 			</div>
 			<br/>
-		@endif
+		@endcan
 	@endif
 </div>
 @endsection

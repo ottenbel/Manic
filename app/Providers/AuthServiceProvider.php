@@ -17,6 +17,7 @@ class AuthServiceProvider extends ServiceProvider
 		'App\Models\Volume' => 'App\Policies\VolumePolicy',
 		'App\Models\Chapter' => 'App\Policies\ChapterPolicy',
 		'App\Models\TagObjects\Artist\Artist' => 'App\Policies\TagObjects\Artist\ArtistPolicy',
+		'App\Models\TagObjects\Character\Character' => 'App\Policies\TagObjects\Character\CharacterPolicy',
     ];
 
     /**
