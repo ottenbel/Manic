@@ -22,7 +22,7 @@
 	<li><a href="{{ url('/login') }}">Login</a></li>
 	<li><a href="{{ url('/register') }}">Register</a></li>
 @else
-	<!-- If the user has the edit role -->
+	<!-- Add general checks on roles once all policies have been created -->
 	@if(Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\CollectionController@show")
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -33,8 +33,12 @@
 					<li><a href="/chapter/create/{{$collection->id}}">Add Chapter</a></li>
 				@endif
 				<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
-				<li><a href="/collection/{{$collection->id}}/edit">Edit Collection</a><li>
-				<li><a href="">Delete Collection</a></li>
+				@can('update', $collection)
+					<li><a href="/collection/{{$collection->id}}/edit">Edit Collection</a><li>
+				@endcan
+				@can('delete', $collection)
+					<li><a href="">Delete Collection</a></li>
+				@endcan
 			</ul>
 		</li>
 	@elseif(Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\ChapterController@show")
@@ -53,12 +57,16 @@
 				Collection <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/collection/{{$collection->id}}/">View Collection</a><li>
+				@can('show', $collection)
+					<li><a href="/collection/{{$collection->id}}/">View Collection</a><li>
+				@endcan
 				@if(count($collection->volumes))
 					<li><a href="/chapter/create/{{$collection->id}}">Add Chapter</a></li>
 				@endif
 				<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
-				<li><a href="">Delete Collection</a></li>
+				@can('delete', $collection)
+					<li><a href="">Delete Collection</a></li>
+				@endcan
 			</ul>
 		</li>
 	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\VolumeController@edit")
@@ -188,7 +196,9 @@
 				Create <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="{{url('/collection/create')}}">Collection</a></li>
+				@can('create', App\Models\Collection::class)
+					<li><a href="{{url('/collection/create')}}">Collection</a></li>
+				@endcan
 				<div class="dropdown-divider"></div>
 				<h6 class="dropdown-header">Tags</h6>
 				<li><a href="{{ url('/artist/create') }}">Artist</a><li>

@@ -23,7 +23,7 @@ use App\Models\TagObjects\Tag\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
 
 class CollectionController extends Controller
-{
+{	
     /**
      * Display a listing of the resource.
      *
@@ -48,6 +48,9 @@ class CollectionController extends Controller
      */
     public function create(Request $request)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Collection::class);
+		
 		$ratings = Rating::orderBy('priority', 'asc')->get();
 		$statuses = Status::orderBy('priority', 'asc')->get();
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
@@ -62,6 +65,9 @@ class CollectionController extends Controller
      */
     public function store(Request $request)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Collection::class);
+		
 		$this->validate($request, [
 			'name' => 'required|unique:collections,name',
 			'parent_id' => 'nullable|exists:collections,id',
@@ -192,7 +198,7 @@ class CollectionController extends Controller
      * @return Response
      */
     public function show(Request $request, Collection $collection)
-    {
+    {	
 		$flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -215,6 +221,9 @@ class CollectionController extends Controller
      */
     public function edit(Request $request, Collection $collection)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($collection);
+		
 		$flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -235,6 +244,9 @@ class CollectionController extends Controller
      */
     public function update(Request $request, Collection $collection)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($collection);
+		
 		$collection_id = $collection->id;
         $this->validate($request, [
 			'name' => ['required',
@@ -365,6 +377,9 @@ class CollectionController extends Controller
      */
     public function destroy(Collection $collection)
     {
-        //
+        //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($collection);
+		
+		
     }
 }

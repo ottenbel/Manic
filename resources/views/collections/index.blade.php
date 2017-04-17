@@ -12,17 +12,18 @@ Index - Page {{$collections->currentPage()}}
 <div class="container">
 	<div class="row">
 		@if($collections->count() == 0)
-			@if(Auth::user())
+			@can('create', App\Models\Collection::class)
 				<div class="text-center">
 					No collections have been found in the database. Add a new collection <a href = "{{url('/collection/create')}}">here.</a>
 				</div>
 				<br/>
-			@else
+			@endcan
+			@cannot('create', App\Models\Collection::class)
 				<div class="text-center">
 					No collections have been found in the database.
 				</div>
 				<br/>
-			@endif
+			@endcan
 		@else
 			<table class="table table-striped">
 				@foreach($collections as $collection)
