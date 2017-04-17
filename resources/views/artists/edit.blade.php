@@ -10,6 +10,7 @@ Edit Artist - {{{$tagObject->name}}}
 
 @section('content')
 <div class="container">
+	@can('update', $tagObject)
 	<h1>Edit Artist</h1>
 	
 	<form method="POST" action="/artist/{{$tagObject->id}}" enctype="multipart/form-data">
@@ -20,6 +21,14 @@ Edit Artist - {{{$tagObject->name}}}
 		
 		{{ Form::submit('Update Artist', array('class' => 'btn btn-primary')) }}
 	</form>
+	@endcan
+	
+	@cannot('update', $tagObject)
+		<h1>Error</h1>
+		<div class="alert alert-danger" role="alert">
+			User does not have the correct permissions in order to edit artist.
+		</div>
+	@endcan
 </div>
 @endsection
 

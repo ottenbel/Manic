@@ -129,14 +129,19 @@
 				<li><a href="">Delete Tag</a></li>
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Artist\\ArtistController@show")	
+	@elseif ((Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Artist\\ArtistController@show")
+		&& ((Auth::User()->can('update', $artist)) || (Auth::User()->can('delete', $artist))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Artist <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/artist/{{$artist->id}}/edit/">Edit Artist</a><li>
-				<li><a href="">Delete Artist</a></li>
+				@can('update', $artist)
+					<li><a href="/artist/{{$artist->id}}/edit/">Edit Artist</a><li>
+				@endcan
+				@can('delete', $artist)
+					<li><a href="">Delete Artist</a></li>
+				@endcan
 			</ul>
 		</li>
 	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Artist\\ArtistController@edit")
@@ -146,7 +151,9 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				<li><a href="/artist/{{$tagObject->id}}/">View Artist</a><li>
-				<li><a href="">Delete Artist</a></li>
+				@can('delete', $tagObject)
+					<li><a href="">Delete Artist</a></li>
+				@endcan
 			</ul>
 		</li>
 	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Character\\CharacterController@show")	
@@ -222,7 +229,9 @@
 				@endcan
 				<div class="dropdown-divider"></div>
 				<h6 class="dropdown-header">Tags</h6>
-				<li><a href="{{ url('/artist/create') }}">Artist</a><li>
+				@can('create', App\Models\TagObjects\Artist\Artist::class)
+					<li><a href="{{ url('/artist/create') }}">Artist</a><li>
+				@endcan
 				<li><a href="{{ url('/character/create') }}">Character</a><li>
 				<li><a href="{{ url('/tag/create') }}">Tag</a><li>
 				<li><a href="{{ url('/scanalator/create') }}">Scanalator</a><li>

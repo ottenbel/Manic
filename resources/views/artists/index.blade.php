@@ -48,17 +48,19 @@
 			<br/>
 			{{ $artists->links() }}
 		@else
-			@if (Auth::user())
+			@can('create', App\Models\TagObjects\Artist\Artist::class)
 				<div class="text-center">
 					No artists have been found in the database. Add a new artist <a href = "{{url('/artist/create')}}">here.</a>
 				</div>
 				<br/>
-			@else
+			@endcan
+			
+			@cannot('create', App\Models\TagObjects\Artist\Artist::class)
 				<div class="text-center">
 					No artists have been found in the database.
 				</div>
 				<br/>
-			@endif
+			@endcan
 		@endif
 	</div>	
 @endsection

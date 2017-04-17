@@ -79,6 +79,9 @@ class ArtistController extends Controller
      */
     public function create(Request $request)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Artist::class);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -93,6 +96,9 @@ class ArtistController extends Controller
      */
     public function store(Request $request)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Artist::class);
+		
         $this->validate($request, [
 			'name' => 'required|unique:artists|regex:/^[^,]+$/',
 			'url' => 'URL',
@@ -166,6 +172,9 @@ class ArtistController extends Controller
      */
     public function edit(Request $request, Artist $artist)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($artist);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -208,6 +217,9 @@ class ArtistController extends Controller
      */
     public function update(Request $request, Artist $artist)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($artist);
+		
 		$this->validate($request, [
 		'name' => ['required',
 					Rule::unique('artists')->ignore($artist->id),
@@ -236,11 +248,12 @@ class ArtistController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Artist  $artist
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Artist $artist)
     {
-        //
+        //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($artist);
     }
 }
