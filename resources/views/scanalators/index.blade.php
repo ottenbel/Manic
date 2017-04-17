@@ -48,17 +48,18 @@
 		<br/>
 		{{ $scanalators->links() }}
 	@else
-		@if(Auth::user())
+		@can('create', App\Models\TagObjects\Scanalator\Scanalator::class)
 			<div class="text-center">
 				No scanalators have been found in the database. Add a new scanalator <a href = "{{url('/scanalator/create')}}">here.</a>
 			</div>
 			<br/>
-		@else
+		@endcan
+		@cannot('create', App\Models\TagObjects\Scanalator\Scanalator::class)
 			<div class="text-center">
 				No scanalators have been found in the database.
 			</div>
 			<br/>
-		@endif
+		@endcan
 	@endif
 	</div>
 @endsection

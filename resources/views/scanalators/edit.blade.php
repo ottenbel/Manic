@@ -10,6 +10,7 @@ Edit Scanalator - {{{$tagObject->name}}}
 
 @section('content')
 <div class="container">
+	@can('update', $tagObject)
 	<h1>Edit Scanalator</h1>
 	
 	<form method="POST" action="/scanalator/{{$tagObject->id}}" enctype="multipart/form-data">
@@ -20,6 +21,14 @@ Edit Scanalator - {{{$tagObject->name}}}
 		
 		{{ Form::submit('Update Scanalator', array('class' => 'btn btn-primary')) }}
 	</form>
+	@endcan
+	
+	@cannot('update', $tagObject)
+		<h1>Error</h1>
+		<div class="alert alert-danger" role="alert">
+			User does not have the correct permissions in order to edit scanalator.
+		</div>
+	@endcan
 </div>
 @endsection
 

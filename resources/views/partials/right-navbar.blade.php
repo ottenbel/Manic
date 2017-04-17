@@ -5,15 +5,15 @@
 	<ul class="dropdown-menu" role="menu">
 		<li><a href="{{ url('/artist') }}">Artist</a><li>
 		<li><a href="{{ url('/character') }}">Character</a><li>
-		<li><a href="{{ url('/tag') }}">Tag</a><li>
 		<li><a href="{{ url('/scanalator') }}">Scanalator</a><li>
 		<li><a href="{{ url('/series') }}">Series</a><li>
+		<li><a href="{{ url('/tag') }}">Tag</a><li>
 		<h6 class="dropdown-header">Aliases</h6>
 		<li><a href="{{ url('/artist_alias') }}">Artist Aliases</a><li>
 		<li><a href="{{ url('/character_alias') }}">Character Aliases</a><li>
-		<li><a href="{{ url('/tag_alias') }}">Tag Aliases</a><li>
 		<li><a href="{{ url('/scanalator_alias') }}">Scanalator Aliases</a><li>
 		<li><a href="{{ url('/series_alias') }}">Series Aliases</a><li>
+		<li><a href="{{ url('/tag_alias') }}">Tag Aliases</a><li>
 	</ul>
 </li>
 
@@ -207,14 +207,19 @@
 				<li><a href="">Delete Series</a></li>
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Scanalator\\ScanalatorController@show")	
+	@elseif ((Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Scanalator\\ScanalatorController@show")
+		&& ((Auth::User()->can('update', $scanalator)) || (Auth::User()->can('delete', $scanalator))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Scanalator <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/scanalator/{{$scanalator->id}}/edit/">Edit Scanalator</a><li>
-				<li><a href="">Delete Scanalator</a></li>
+				@can('update', $scanalator)
+					<li><a href="/scanalator/{{$scanalator->id}}/edit/">Edit Scanalator</a><li>
+				@endcan
+				@can('delete', $scanalator)
+					<li><a href="">Delete Scanalator</a></li>
+				@endcan
 			</ul>
 		</li>
 	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Scanalator\\ScanalatorController@edit")
@@ -224,7 +229,9 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				<li><a href="/scanalator/{{$tagObject->id}}/">View Scanalator</a><li>
-				<li><a href="">Delete Scanalator</a></li>
+				@can('delete', $tagObject)
+					<li><a href="">Delete Scanalator</a></li>
+				@endcan
 			</ul>
 		</li>
 	@else
@@ -244,9 +251,11 @@
 				@can('create', App\Models\TagObjects\Character\Character::class)
 					<li><a href="{{ url('/character/create') }}">Character</a><li>
 				@endcan
-				<li><a href="{{ url('/tag/create') }}">Tag</a><li>
-				<li><a href="{{ url('/scanalator/create') }}">Scanalator</a><li>
-				<li><a href="{{ url('/series/create') }}">Series</a><li>	
+				@can('create', App\Models\TagObjects\Scanalator\Scanalator::class)
+					<li><a href="{{ url('/scanalator/create') }}">Scanalator</a><li>
+				@endcan
+				<li><a href="{{ url('/series/create') }}">Series</a><li>
+				<li><a href="{{ url('/tag/create') }}">Tag</a><li>	
 			</ul>
 		</li>
 	@endif

@@ -79,6 +79,9 @@ class ScanalatorController extends Controller
      */
     public function create(Request $request)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Scanalator::class);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -93,6 +96,9 @@ class ScanalatorController extends Controller
      */
     public function store(Request $request)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Scanalator::class);
+		
         $this->validate($request, [
 			'name' => 'required|unique:scanalators|regex:/^[^,]+$/',
 			'url' => 'URL',
@@ -166,6 +172,9 @@ class ScanalatorController extends Controller
      */
     public function edit(Request $request, Scanalator $scanalator)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($scanalator);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -207,6 +216,9 @@ class ScanalatorController extends Controller
      */
     public function update(Request $request, Scanalator $scanalator)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($scanalator);
+		
 		$this->validate($request, [
 		'name' => ['required',
 					Rule::unique('scanalators')->ignore($scanalator->id),
@@ -235,11 +247,12 @@ class ScanalatorController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Scanalator  $scanalator
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Scanalator $scanalator)
     {
-        //
+        //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($scanalator);
     }
 }
