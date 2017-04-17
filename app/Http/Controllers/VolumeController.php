@@ -19,6 +19,9 @@ class VolumeController extends Controller
      */
     public function create(Request $request, Collection $collection)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Volume::class);
+		
 		$flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -33,6 +36,9 @@ class VolumeController extends Controller
      */
     public function store(Request $request)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Volume::class);
+		
         $this->validate($request, [
 			'collection_id' => 'required|exists:collections,id',
 			'volume_number' => ['required',
@@ -97,6 +103,9 @@ class VolumeController extends Controller
      */
     public function edit(Request $request, Volume $volume)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($volume);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -112,6 +121,9 @@ class VolumeController extends Controller
      */
     public function update(Request $request, Volume $volume)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($volume);
+		
         $this->validate($request, [
 			'collection_id' => 'required|exists:collections,id',
 			'volume_number' => ['required',
@@ -175,8 +187,9 @@ class VolumeController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Volume $volume)
     {
-        //
+        //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($volume);
     }
 }

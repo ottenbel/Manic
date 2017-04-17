@@ -32,7 +32,9 @@
 				@if(count($collection->volumes))
 					<li><a href="/chapter/create/{{$collection->id}}">Add Chapter</a></li>
 				@endif
-				<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
+				@can('create', App\Models\Volume::class)
+					<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
+				@endcan
 				@can('update', $collection)
 					<li><a href="/collection/{{$collection->id}}/edit">Edit Collection</a><li>
 				@endcan
@@ -57,27 +59,31 @@
 				Collection <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				@can('show', $collection)
-					<li><a href="/collection/{{$collection->id}}/">View Collection</a><li>
-				@endcan
+				<li><a href="/collection/{{$collection->id}}/">View Collection</a><li>
 				@if(count($collection->volumes))
 					<li><a href="/chapter/create/{{$collection->id}}">Add Chapter</a></li>
 				@endif
-				<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
+				@can('create', App\Models\Volume::class)
+					<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
+				@endcan
 				@can('delete', $collection)
 					<li><a href="">Delete Collection</a></li>
 				@endcan
 			</ul>
 		</li>
 	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\VolumeController@edit")
-	<li class="dropdown">
-			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-				Volume <span class="caret"></span>
-			</a>
-			<ul class="dropdown-menu" role="menu">
-				<li><a href="">Delete Volume</a></li>
-			</ul>
-		</li>
+		@can('delete', $volume)
+		<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+					Volume <span class="caret"></span>
+				</a>
+				@can('delete', $volume)
+				<ul class="dropdown-menu" role="menu">
+					<li><a href="">Delete Volume</a></li>
+				</ul>
+				@endcan
+			</li>
+		@endcan
 	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\ChapterController@edit")
 	<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

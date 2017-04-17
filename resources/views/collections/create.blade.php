@@ -14,15 +14,24 @@ Create a New Collection
 
 @section('content')
 <div class="container">
-	<h1>Create a New Collection</h1>
+	@can('create', App\Models\Collection::class)
+		<h1>Create a New Collection</h1>
+		
+		<form method="POST" action="/collection" enctype="multipart/form-data">
+			{{ csrf_field() }}
+			
+			@include('partials.collection-input', array('ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))
+			
+			{{ Form::submit('Create Collection', array('class' => 'btn btn-primary')) }}
+		</form>
+	@endcan
 	
-	<form method="POST" action="/collection" enctype="multipart/form-data">
-		{{ csrf_field() }}
-		
-		@include('partials.collection-input', array('ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))
-		
-		{{ Form::submit('Create Collection', array('class' => 'btn btn-primary')) }}
-	</form>
+	@cannot('create', App\Models\Collection::class)
+		<h1>Error</h1>
+		<div class="alert alert-danger" role="alert">
+			User does not have the correct permissions in order to create a new collection.
+		</div>
+	@endcan
 </div>
 @endsection
 

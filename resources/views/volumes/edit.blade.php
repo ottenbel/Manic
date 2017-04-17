@@ -10,33 +10,41 @@ Edit Volume - {{{$volume->name}}}
 
 @section('content')
 <div class="container">
-	<h1>Edit Volume</h1>
+	@can('update', $volume)
+		<h1>Edit Volume</h1>
+		
+		<form method="POST" action="/volume/{{$volume->id}}" enctype="multipart/form-data">
+			{{ csrf_field() }}
+			{{method_field('PATCH')}}
+			
+			{{ Form::hidden('collection_id', $volume->collection_id) }}
+			{{ Form::hidden('volume_id', $volume->id) }}
+			
+			@include('partials.volume-input', array('volume' => $volume))
+			
+			<div id = "chapters">
+				@foreach($volume->chapters()->orderBy('chapter_number', 'asc')->get() as $chapter)
+					<div id="chapter">
+						@if($chapter->name != null && $chapter->name != "")
+							<a href="/chapter/{{$chapter->id}}/edit">Chapter {{$chapter->chapter_number}} - {{$chapter->name}}</a>
+						@else
+							<a href="/chapter/{{$chapter->id}}/edit">Chapter {{$chapter->chapter_number}}</a>
+						@endif
+					</div>
+				@endforeach
+			</div>
+			<br/>
+			
+			{{ Form::submit('Update Volume', array('class' => 'btn btn-primary')) }}
+		</form>
+	@endcan
 	
-	<form method="POST" action="/volume/{{$volume->id}}" enctype="multipart/form-data">
-		{{ csrf_field() }}
-		{{method_field('PATCH')}}
-		
-		{{ Form::hidden('collection_id', $volume->collection_id) }}
-		{{ Form::hidden('volume_id', $volume->id) }}
-		
-		@include('partials.volume-input', array('volume' => $volume))
-		
-		<div id = "chapters">
-			@foreach($volume->chapters()->orderBy('chapter_number', 'asc')->get() as $chapter)
-				<div id="chapter">
-					@if($chapter->name != null && $chapter->name != "")
-						<a href="/chapter/{{$chapter->id}}/edit">Chapter {{$chapter->chapter_number}} - {{$chapter->name}}</a>
-					@else
-						<a href="/chapter/{{$chapter->id}}/edit">Chapter {{$chapter->chapter_number}}</a>
-					@endif
-				</div>
-			@endforeach
+	@cannot('update', $volume)
+		<h1>Error</h1>
+		<div class="alert alert-danger" role="alert">
+			User does not have the correct permissions in order to edit volume.
 		</div>
-		<br/>
-		
-		{{ Form::submit('Update Volume', array('class' => 'btn btn-primary')) }}
-	</form>
-	
+	@endcan
 </div>
 @endsection
 
