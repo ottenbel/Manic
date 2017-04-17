@@ -25,6 +25,9 @@ class ChapterController extends Controller
      */
     public function create(Request $request, Collection $collection)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Chapter::class);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -63,6 +66,9 @@ class ChapterController extends Controller
      */
     public function store(Request $request)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Chapter::class);
+		
 		$volume = Volume::where('id', '=', trim(Input::get('volume_id')))->first();
 		
 		$lower_chapter_limit = 0;
@@ -251,6 +257,9 @@ class ChapterController extends Controller
      */
     public function edit(Request $request, Chapter $chapter)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($chapter);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -271,6 +280,9 @@ class ChapterController extends Controller
      */
     public function update(Request $request, Chapter $chapter)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($chapter);
+		
 		$delete_pages_array = Input::get('delete_pages');
 		$update_pages_array = Input::get('chapter_pages');	
 		
@@ -446,8 +458,9 @@ class ChapterController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Chapter $chapter)
     {
-        //
+        //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($chapter);
     }
 }
