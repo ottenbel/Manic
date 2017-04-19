@@ -10,15 +10,24 @@ Create a New Series
 
 @section('content')
 <div class="container">
-	<h1>Create a New Series</h1>
+	@can('create', App\Models\TagObjects\Series\Series::class)
+		<h1>Create a New Series</h1>
+		
+		<form method="POST" action="/series" enctype="multipart/form-data">
+			{{ csrf_field() }}
+			
+			@include('partials.tag-object-input')
+			
+			{{ Form::submit('Create Series', array('class' => 'btn btn-primary')) }}
+		</form>
+	@endcan
 	
-	<form method="POST" action="/series" enctype="multipart/form-data">
-		{{ csrf_field() }}
-		
-		@include('partials.tag-object-input')
-		
-		{{ Form::submit('Create Series', array('class' => 'btn btn-primary')) }}
-	</form>
+	@cannot('create', App\Models\TagObjects\Series\Series::class)
+		<h1>Error</h1>
+		<div class="alert alert-danger" role="alert">
+			User does not have the correct permissions in order to create a new series.
+		</div>
+	@endcan
 </div>
 @endsection
 

@@ -48,17 +48,19 @@
 		<br/>
 		{{ $series->links() }}
 	@else
-		@if(Auth::user())
+		@can('create', App\Models\TagObjects\Series\Series::class)
 			<div class="text-center">
 				No series have been found in the database. Add a new series <a href = "{{url('/series/create')}}">here.</a>
 			</div>
 			<br/>
-		@else
+		@endcan
+		
+		@cannot('create', App\Models\TagObjects\Series\Series::class)
 			<div class="text-center">
 				No series have been found in the database.
 			</div>
 			<br/>
-		@endif
+		@endcan
 	@endif
 	</div>
 @endsection

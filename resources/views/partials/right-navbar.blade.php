@@ -183,7 +183,9 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Series\\SeriesController@show")	
+	@elseif ((Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Series\\SeriesController@show")
+	&& ((Auth::User()->can('update', $series)) || (Auth::User()->can('delete', $series)) 
+		|| (Auth::User()->can('create', App\Models\TagObjects\Character\Character::class))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Series <span class="caret"></span>
@@ -192,8 +194,12 @@
 				@can('create', App\Models\TagObjects\Character\Character::class)
 					<li><a href="/character/create/{{$series->id}}">Add Character</a><li>
 				@endcan
-				<li><a href="/series/{{$series->id}}/edit/">Edit Series</a><li>
-				<li><a href="">Delete Series</a></li>
+				@can('update', $series)
+					<li><a href="/series/{{$series->id}}/edit/">Edit Series</a><li>
+				@endcan
+				@can('delete', $series)
+					<li><a href="">Delete Series</a></li>
+				@endcan
 			</ul>
 		</li>
 	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Series\\SeriesController@edit")
@@ -202,9 +208,13 @@
 				Series <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/character/create/{{$tagObject->id}}">Add Character</a><li>
+				@can('create', App\Models\TagObjects\Character\Character::class)
+					<li><a href="/character/create/{{$tagObject->id}}">Add Character</a><li>
+				@endcan
 				<li><a href="/series/{{$tagObject->id}}/">View Series</a><li>
-				<li><a href="">Delete Series</a></li>
+				@can('delete', $tagObject)
+					<li><a href="">Delete Series</a></li>
+				@endcan
 			</ul>
 		</li>
 	@elseif ((Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Scanalator\\ScanalatorController@show")
@@ -254,7 +264,9 @@
 				@can('create', App\Models\TagObjects\Scanalator\Scanalator::class)
 					<li><a href="{{ url('/scanalator/create') }}">Scanalator</a><li>
 				@endcan
-				<li><a href="{{ url('/series/create') }}">Series</a><li>
+				@can('create', App\Models\TagObjects\Series\Series::class)
+					<li><a href="{{ url('/series/create') }}">Series</a><li>
+				@endcan
 				<li><a href="{{ url('/tag/create') }}">Tag</a><li>	
 			</ul>
 		</li>

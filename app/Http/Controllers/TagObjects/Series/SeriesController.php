@@ -79,6 +79,9 @@ class SeriesController extends Controller
      */
     public function create(Request $request)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Series::class);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -93,6 +96,9 @@ class SeriesController extends Controller
      */
     public function store(Request $request)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Series::class);
+		
         $this->validate($request, [
 			'name' => 'required|unique:series|regex:/^[^,]+$/',
 			'url' => 'URL',
@@ -209,6 +215,9 @@ class SeriesController extends Controller
      */
     public function edit(Request $request, Series $series)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($series);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -250,6 +259,9 @@ class SeriesController extends Controller
      */
     public function update(Request $request, Series $series)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($series);
+		
 		$this->validate($request, [
 		'name' => ['required',
 					Rule::unique('series')->ignore($series->id),
@@ -278,11 +290,12 @@ class SeriesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Series  $series
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Series $series)
     {
-        //
+        //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($series);
     }
 }
