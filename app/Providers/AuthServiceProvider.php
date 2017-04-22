@@ -20,7 +20,8 @@ class AuthServiceProvider extends ServiceProvider
 		'App\Models\TagObjects\Character\Character' => 'App\Policies\TagObjects\Character\CharacterPolicy',
 		'App\Models\TagObjects\Scanalator\Scanalator' => 'App\Policies\TagObjects\Scanalator\ScanalatorPolicy',
 		'App\Models\TagObjects\Series\Series' => 'App\Policies\TagObjects\Series\SeriesPolicy',
-		'App\Models\TagObjects\Tag\Tag' => 'App\Policies\TagObjects\Tag\TagPolicy'
+		'App\Models\TagObjects\Tag\Tag' => 'App\Policies\TagObjects\Tag\TagPolicy',
+		'App\Models\TagObjects\Artist\ArtistAlias' => 'App\Policies\TagObjects\Artist\ArtistAliasPolicy',
     ];
 
     /**

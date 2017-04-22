@@ -43,7 +43,8 @@
 	
 	<br/>
 	
-	@if(($global_aliases->count() > 0) || (Auth::user()))
+	@if(($global_aliases->count() > 0) 
+		|| ((Auth::user()) && (Auth::user()->can('create', [App\Models\TagObjects\Artist\ArtistAlias::class, true]))))
 		<h3>Global Aliases</h3>
 	
 		@if($global_aliases->count() > 0)
@@ -68,7 +69,7 @@
 			<br/>
 		@endif
 	
-		@if(Auth::user())
+		@can('create', [App\Models\TagObjects\Artist\ArtistAlias::class, true])
 			<form method="POST" action="/artist_alias/{{$artist->id}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ Form::hidden('is_global_alias', true) }}
@@ -77,7 +78,7 @@
 				
 				{{ Form::submit('Create Global Artist Alias', array('class' => 'btn btn-primary')) }}
 			</form>
-		@endif
+		@endcan
 	@endif
 	
 	@if(Auth::user())
@@ -94,25 +95,29 @@
 			</div>
 		
 			@foreach($personal_aliases as $personal_alias)
-				<div class="row">
-					<div class="col-xs-12">
-						<span class="personal_artist_alias"><a>{{$personal_alias->alias}}</a></span>
+				@can('view', $personal_alias)
+					<div class="row">
+						<div class="col-xs-12">
+							<span class="personal_artist_alias"><a>{{$personal_alias->alias}}</a></span>
+						</div>
 					</div>
-				</div>
+				@endcan
 			@endforeach
 			
 			{{ $personal_aliases->links() }}
 			<br/>
 		@endif
 		
-		<form method="POST" action="/artist_alias/{{$artist->id}}" enctype="multipart/form-data">
-			{{ csrf_field() }}
-			{{ Form::hidden('is_personal_alias', true) }}
-			
-			@include('partials.personal-alias-input')
-			
-			{{ Form::submit('Create Personal Artist Alias', array('class' => 'btn btn-primary')) }}
-		</form>
+		@can('create', [App\Models\TagObjects\Artist\ArtistAlias::class, false])
+			<form method="POST" action="/artist_alias/{{$artist->id}}" enctype="multipart/form-data">
+				{{ csrf_field() }}
+				{{ Form::hidden('is_personal_alias', true) }}
+				
+				@include('partials.personal-alias-input')
+				
+				{{ Form::submit('Create Personal Artist Alias', array('class' => 'btn btn-primary')) }}
+			</form>
+		@endcan
 	@endif
 	
 </div>
