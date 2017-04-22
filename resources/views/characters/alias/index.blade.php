@@ -51,9 +51,11 @@
 						<span class="global_character_alias"><a href="/character/{{$alias->character_id}}">{{{$alias->alias}}}</a></span>
 					</div>
 				@else
-					<div class="col-xs-4">
-						<span class="personal_character_alias"><a href="/character/{{$alias->character_id}}">{{{$alias->alias}}}</a></span>
-					</div>
+					@can('view', $alias)
+						<div class="col-xs-4">
+							<span class="personal_character_alias"><a href="/character/{{$alias->character_id}}">{{{$alias->alias}}}</a></span>
+						</div>
+					@endcan
 				@endif
 				
 				@if((($loop->iteration - 1) % 3) == 2)			
@@ -64,17 +66,18 @@
 			<br/>
 			{{ $aliases->links() }}
 		@else
-			@if(Auth::user())
+			@can('create', [App\Models\TagObjects\Character\CharacterAlias::class, false])
 				<div class="text-center">
 					No character aliases have been found in the database. View characters in the database <a href = "{{url('/character')}}">here.</a>
 				</div>
 				<br/>
-			@else
+			@endcan
+			@cannot('create', [App\Models\TagObjects\Character\CharacterAlias::class, false])
 				<div class="text-center">
 					No character aliases have been found in the database.
 				</div>
 				<br/>
-			@endif
+			@endcan
 		@endif
 	</div>
 @endsection
