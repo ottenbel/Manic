@@ -109,14 +109,19 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Tag\\TagController@show")	
+	@elseif ((Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Tag\\TagController@show")
+			&& ((Auth::User()->can('update', $tag)) || (Auth::User()->can('delete', $tag))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Tag <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/tag/{{$tag->id}}/edit/">Edit Tag</a><li>
-				<li><a href="">Delete Tag</a></li>
+				@can('update', $tag)
+					<li><a href="/tag/{{$tag->id}}/edit/">Edit Tag</a><li>
+				@endcan
+				@can('delete', $tag)
+					<li><a href="">Delete Tag</a></li>
+				@endcan
 			</ul>
 		</li>
 	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Tag\\TagController@edit")
@@ -126,7 +131,9 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				<li><a href="/tag/{{$tagObject->id}}/">View Tag</a><li>
-				<li><a href="">Delete Tag</a></li>
+				@can('delete', $tagObject)
+					<li><a href="">Delete Tag</a></li>
+				@endcan
 			</ul>
 		</li>
 	@elseif ((Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Artist\\ArtistController@show")
@@ -244,7 +251,12 @@
 				@endcan
 			</ul>
 		</li>
-	@else
+	@elseif ((Auth::user()->can('create', App\Models\Collection::class)) 
+			|| (Auth::user()->can('create', App\Models\TagObjects\Tag\Tag::class)) 
+			|| (Auth::user()->can('create', App\Models\TagObjects\Artist\Artist::class)) 
+			|| (Auth::user()->can('create', App\Models\TagObjects\Character\Character::class)) 
+			|| (Auth::user()->can('create', App\Models\TagObjects\Scanalator\Scanalator::class)) 
+			|| (Auth::user()->can('create', App\Models\TagObjects\Series\Series::class)))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Create <span class="caret"></span>
@@ -253,21 +265,31 @@
 				@can('create', App\Models\Collection::class)
 					<li><a href="{{url('/collection/create')}}">Collection</a></li>
 				@endcan
-				<div class="dropdown-divider"></div>
-				<h6 class="dropdown-header">Tags</h6>
-				@can('create', App\Models\TagObjects\Artist\Artist::class)
-					<li><a href="{{ url('/artist/create') }}">Artist</a><li>
-				@endcan
-				@can('create', App\Models\TagObjects\Character\Character::class)
-					<li><a href="{{ url('/character/create') }}">Character</a><li>
-				@endcan
-				@can('create', App\Models\TagObjects\Scanalator\Scanalator::class)
-					<li><a href="{{ url('/scanalator/create') }}">Scanalator</a><li>
-				@endcan
-				@can('create', App\Models\TagObjects\Series\Series::class)
-					<li><a href="{{ url('/series/create') }}">Series</a><li>
-				@endcan
-				<li><a href="{{ url('/tag/create') }}">Tag</a><li>	
+				@if((Auth::user()->can('create', App\Models\TagObjects\Tag\Tag::class)) 
+					|| (Auth::user()->can('create', App\Models\TagObjects\Artist\Artist::class)) 
+					|| (Auth::user()->can('create', App\Models\TagObjects\Character\Character::class)) 
+					|| (Auth::user()->can('create', App\Models\TagObjects\Scanalator\Scanalator::class)) 
+					|| (Auth::user()->can('create', App\Models\TagObjects\Series\Series::class)))
+					
+					<div class="dropdown-divider"></div>
+					<h6 class="dropdown-header">Tags</h6>
+			
+					@can('create', App\Models\TagObjects\Artist\Artist::class)
+						<li><a href="{{ url('/artist/create') }}">Artist</a><li>
+					@endcan
+					@can('create', App\Models\TagObjects\Character\Character::class)
+						<li><a href="{{ url('/character/create') }}">Character</a><li>
+					@endcan
+					@can('create', App\Models\TagObjects\Scanalator\Scanalator::class)
+						<li><a href="{{ url('/scanalator/create') }}">Scanalator</a><li>
+					@endcan
+					@can('create', App\Models\TagObjects\Series\Series::class)
+						<li><a href="{{ url('/series/create') }}">Series</a><li>
+					@endcan
+					@can('create', App\Models\TagObjects\Tag\Tag::class)
+						<li><a href="{{ url('/tag/create') }}">Tag</a><li>
+					@endcan
+				@endif
 			</ul>
 		</li>
 	@endif

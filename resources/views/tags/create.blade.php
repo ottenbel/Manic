@@ -10,6 +10,7 @@ Create a New Tag
 
 @section('content')
 <div class="container">
+	@can('create', App\Models\TagObjects\Tag\Tag::class)
 	<h1>Create a New Tag</h1>
 	
 	<form method="POST" action="/tag" enctype="multipart/form-data">
@@ -19,6 +20,14 @@ Create a New Tag
 		
 		{{ Form::submit('Create Tag', array('class' => 'btn btn-primary')) }}
 	</form>
+	@endcan
+	
+	@cannot('create', App\Models\TagObjects\Tag\Tag::class)
+		<h1>Error</h1>
+		<div class="alert alert-danger" role="alert">
+			User does not have the correct permissions in order to create a new tag.
+		</div>
+	@endcan
 </div>
 @endsection
 

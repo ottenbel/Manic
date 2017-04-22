@@ -48,17 +48,19 @@
 			<br/>
 			{{ $tags->links() }}
 		@else
-			@if(Auth::user())
+			@can('create', App\Models\TagObjects\Tag\Tag::class)
 				<div class="text-center">
 					No tags have been found in the database. Add a new tag <a href = "{{url('/tag/create')}}">here.</a>
 				</div>
 				<br/>
-			@else
+			@endcan
+			
+			@cannot('create', App\Models\TagObjects\Tag\Tag::class)
 				<div class="text-center">
 					No tags have been found in the database.
 				</div>
 				<br/>
-			@endif
+			@endcan
 		@endif
 	</div>
 @endsection

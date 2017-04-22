@@ -79,6 +79,9 @@ class TagController extends Controller
      */
     public function create(Request $request)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Tag::class);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -93,6 +96,9 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize(Tag::class);
+		
         $this->validate($request, [
 			'name' => 'required|unique:tags|regex:/^[^,]+$/',
 			'url' => 'URL',
@@ -163,6 +169,9 @@ class TagController extends Controller
      */
     public function edit(Request $request, Tag $tag)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($tag);
+		
         $flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
@@ -204,6 +213,9 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($tag);
+		
 		$this->validate($request, [
 		'name' => ['required',
 					Rule::unique('tags')->ignore($tag->id),
@@ -232,11 +244,12 @@ class TagController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Tag  $tag
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(Tag $tag)
     {
-        //
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+        $this->authorize($tag);
     }
 }
