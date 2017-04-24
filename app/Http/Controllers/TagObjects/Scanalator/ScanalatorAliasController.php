@@ -80,11 +80,17 @@ class ScanalatorAliasController extends Controller
 		$isPersonalAlias = Input::get('is_personal_alias');
 		if ($isGlobalAlias)
 		{
+			//Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+			$this->authorize([ScanalatorAlias::class, true]);
+			
 			$this->validate($request, [
 				'global_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias,null,null,user_id,NULL|regex:/^[^,]+$/']);
 		}
 		else if ($isPersonalAlias)
 		{
+			//Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+			$this->authorize([ScanalatorAlias::class, false]);
+			
 			$this->validate($request, [
 				'personal_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,]+$/']);
 		}
@@ -112,11 +118,12 @@ class ScanalatorAliasController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  ScanalatorAlias  $scanalatorAlias
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(ScanalatorAlias $scanalatorAlias)
     {
-        //
+        //Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($artistAlias);
     }
 }
