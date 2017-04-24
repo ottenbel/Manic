@@ -51,9 +51,11 @@
 						<span class="global_series_alias"><a href="/series/{{$alias->series_id}}">{{{$alias->alias}}}</a></span>
 					</div>
 				@else
-					<div class="col-xs-4">
-						<span class="personal_series_alias"><a href="/series/{{$alias->series_id}}">{{{$alias->alias}}}</a></span>
-					</div>
+					@can('view', $alias)
+						<div class="col-xs-4">
+							<span class="personal_series_alias"><a href="/series/{{$alias->series_id}}">{{{$alias->alias}}}</a></span>
+						</div>
+					@endcan
 				@endif
 				
 				@if((($loop->iteration - 1) % 3) == 2)			
@@ -64,17 +66,18 @@
 			<br/>
 			{{ $aliases->links() }}
 		@else
-			@if(Auth::user())
+			@can('create', [App\Models\TagObjects\Series\SeriesAlias::class, false])
 				<div class="text-center">
 					No series aliases have been found in the database. View series' in the database <a href = "{{url('/series')}}">here.</a>
 				</div>
 				<br/>
-			@else
+			@endcan
+			@cannot('create', [App\Models\TagObjects\Series\SeriesAlias::class, false])
 				<div class="text-center">
 					No series aliases have been found in the database.
 				</div>
 				<br/>
-			@endif
+			@endcan
 		@endif
 	</div>
 @endsection
