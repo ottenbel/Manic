@@ -108,7 +108,7 @@
 			<br/>
 		@endif
 		
-		@can('create', [App\Models\TagObjects\Character\CharacterAlias::class, false])
+		@can('create', [App\Models\TagObjects\Scanalator\ScanalatorAlias::class, false])
 			<form method="POST" action="/scanalator_alias/{{$scanalator->id}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ Form::hidden('is_personal_alias', true) }}
