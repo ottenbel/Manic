@@ -121,12 +121,12 @@ class CharacterAliasController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  ArtistAlias  $artistAlias
+     * @param  CharacterAlias  $characterAlias
      * @return Response
      */
-    public function destroy(ArtistAlias $artistAlias)
+    public function destroy(CharacterAlias $characterAlias)
     {
         //Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize($artistAlias);
+		$this->authorize($characterAlias);
     }
 }
