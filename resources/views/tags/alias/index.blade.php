@@ -51,9 +51,11 @@
 						<span class="global_tag_alias"><a href="/tag/{{$alias->tag_id}}">{{{$alias->alias}}}</a></span>
 					</div>
 				@else
-					<div class="col-xs-4">
-						<span class="personal_tag_alias"><a href="/tag/{{$alias->tag_id}}">{{{$alias->alias}}}</a></span>
-					</div>
+					@can('view', $alias)
+						<div class="col-xs-4">
+							<span class="personal_tag_alias"><a href="/tag/{{$alias->tag_id}}">{{{$alias->alias}}}</a></span>
+						</div>
+					@endcan
 				@endif
 				
 				@if((($loop->iteration - 1) % 3) == 2)			
@@ -64,17 +66,18 @@
 			<br/>
 			{{ $aliases->links() }}
 		@else
-			@if(Auth::user())
+			@can('create', [App\Models\TagObjects\Tag\TagAlias::class, false])
 				<div class="text-center">
 					No tag aliases have been found in the database. View tags in the database <a href = "{{url('/tag')}}">here.</a>
 				</div>
 				<br/>
-			@else
+			@endcan
+			@cannot('create', [App\Models\TagObjects\Tag\TagAlias::class, false])
 				<div class="text-center">
 					No tag aliases have been found in the database.
 				</div>
 				<br/>
-			@endif
+			@endcan
 		@endif
 	</div>
 @endsection

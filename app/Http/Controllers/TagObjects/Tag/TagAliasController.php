@@ -80,11 +80,17 @@ class TagAliasController extends Controller
 		$isPersonalAlias = Input::get('is_personal_alias');
 		if ($isGlobalAlias)
 		{
+			//Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+			$this->authorize([TagAlias::class, true]);
+			
 			$this->validate($request, [
 				'global_alias' => 'required|unique:tags,name|unique:tag_alias,alias,null,null,user_id,NULL|regex:/^[^,]+$/']);
 		}
 		else if ($isPersonalAlias)
 		{
+			//Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+			$this->authorize([TagAlias::class, false]);
+			
 			$this->validate($request, [
 				'personal_alias' => 'required|unique:tags,name|unique:tag_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,]+$/']);
 		}
@@ -112,11 +118,12 @@ class TagAliasController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  TagAlias  $tagAlias
      * @return Response
      */
-    public function destroy($id)
+    public function destroy(TagAlias $tagAlias)
     {
-        //
+        //Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($tagAlias);
     }
 }
