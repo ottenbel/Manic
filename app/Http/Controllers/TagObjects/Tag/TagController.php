@@ -151,14 +151,17 @@ class TagController extends Controller
 		}
 		
 		$global_aliases = $tag->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'global_alias_page');
+		$global_aliases->appends(Input::except('global_alias_page'));
+		
 		$personal_aliases = null;
 		
 		if (Auth::check())
 		{
 			$personal_aliases = $tag->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'personal_alias_page');
+			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tags.show', array('tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases->appends(Input::except('global_alias_page')), 'personal_aliases' => $personal_aliases->appends(Input::except('personal_alias_page')), 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tags.show', array('tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
