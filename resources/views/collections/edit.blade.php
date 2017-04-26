@@ -29,9 +29,9 @@ Edit Collection - {{{$collection->name}}}
 					@can('update', $volume)
 						<div id="volume">
 							@if($volume->name != null && $volume->name != "")
-								<a href="/volume/{{$volume->id}}/edit">Volume {{$volume->volume_number}} - {{{$volume->name}}}</a>
+								<a href="{{route('edit_volume', ['volume' => $volume])}}">Volume {{$volume->volume_number}} - {{{$volume->name}}}</a>
 							@else
-								<a href="/volume/{{$volume->id}}/edit">Volume {{$volume->volume_number}}</a>
+								<a href="{{route('edit_volume', ['volume' => $volume])}}">Volume {{$volume->volume_number}}</a>
 							@endif 
 						</div>
 					@endcan

@@ -26,10 +26,10 @@ Route::get('/collection/{collection}', 'CollectionController@show')->Name('show_
 
 //Volume controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/volume/create/{collection}', 'VolumeController@create');
-	Route::post('/volume', 'VolumeController@store');
-	Route::get('/volume/{volume}/edit', 'VolumeController@edit');
-	Route::patch('/volume/{volume}', 'VolumeController@update');
+	Route::get('/volume/create/{collection}', 'VolumeController@create')->Name('create_volume');
+	Route::post('/volume', 'VolumeController@store')->Name('store_volume');
+	Route::get('/volume/{volume}/edit', 'VolumeController@edit')->Name('edit_volume');
+	Route::patch('/volume/{volume}', 'VolumeController@update')->Name('update_volume');
 });
 //End Volume controller routes
 

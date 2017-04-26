@@ -2,7 +2,7 @@
 	<div class="row">
 		@if(!empty($volume) && ($volume->cover_image != null))
 			<div id="cover" class="col-md-4">
-				<a href="/volume/{{$volume->id}}"><img src="{{asset($volume->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%"></a>
+				<img src="{{asset($volume->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%">
 			</div>
 		@endif
 		

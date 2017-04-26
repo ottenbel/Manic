@@ -39,7 +39,7 @@
 					@endcan
 				@endif
 				@can('create', App\Models\Volume::class)
-					<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
+					<li><a href="{{route('create_volume', ['collection' => $collection])}}">Add Volume</a><li>
 				@endcan
 				@can('update', $collection)
 					<li><a href="{{route('edit_collection', ['collection' => $collection])}}">Edit Collection</a><li>
@@ -85,7 +85,7 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif ((Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\VolumeController@edit")
+	@elseif ((Route::is('edit_volume'))
 		&& (Auth::User()->can('delete', $volume)))
 		<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

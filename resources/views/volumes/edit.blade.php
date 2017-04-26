@@ -13,7 +13,7 @@ Edit Volume - {{{$volume->name}}}
 	@can('update', $volume)
 		<h1>Edit Volume</h1>
 		
-		<form method="POST" action="/volume/{{$volume->id}}" enctype="multipart/form-data">
+		<form method="POST" action="{{route('update_volume', ['volume' => $volume])}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 			
