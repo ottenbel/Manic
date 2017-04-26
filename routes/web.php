@@ -12,16 +12,16 @@
 */
 
 //Collection controller routes
-Route::get('/', 'CollectionController@index');
+Route::get('/', 'CollectionController@index')->Name('index_collection');
 
 Route::group(['middleware' => 'auth'], function(){
 	Route::get('/collection/create', 'CollectionController@create')->Name('create_collection');
-	Route::post('/collection', 'CollectionController@store');
-	Route::get('/collection/{collection}/edit', 'CollectionController@edit');
-	Route::patch('/collection/{collection}', 'CollectionController@update');
+	Route::post('/collection', 'CollectionController@store')->Name('store_collection');
+	Route::get('/collection/{collection}/edit', 'CollectionController@edit')->Name('edit_collection');
+	Route::patch('/collection/{collection}', 'CollectionController@update')->Name('update_collection');
 });
 
-Route::get('/collection/{collection}', 'CollectionController@show');
+Route::get('/collection/{collection}', 'CollectionController@show')->Name('show_collection');
 //End Collection controller routes
 
 //Volume controller routes

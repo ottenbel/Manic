@@ -23,7 +23,7 @@
 	<li><a href="{{ url('/register') }}">Register</a></li>
 @else
 	<!-- Add general checks on roles once all policies have been created -->
-	@if((Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\CollectionController@show")
+	@if((Route::is('show_collection'))
 		&& ((Auth::User()->can('create', App\Models\Chapter::class)) 
 			|| (Auth::User()->can('create', App\Models\Volume::class)) 
 			|| (Auth::User()->can('update', $collection)) 
@@ -42,7 +42,7 @@
 					<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
 				@endcan
 				@can('update', $collection)
-					<li><a href="/collection/{{$collection->id}}/edit">Edit Collection</a><li>
+					<li><a href="{{route('edit_collection', ['collection' => $collection])}}">Edit Collection</a><li>
 				@endcan
 				@can('delete', $collection)
 					<li><a href="">Delete Collection</a></li>
@@ -65,13 +65,13 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\CollectionController@edit")
+	@elseif (Route::is('edit_collection'))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Collection <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/collection/{{$collection->id}}/">View Collection</a><li>
+				<li><a href="{{route('show_collection', ['collection' => $collection])}}">View Collection</a><li>
 				@if(count($collection->volumes))
 					@can('create', App\Models\Chapter::class)
 						<li><a href="/chapter/create/{{$collection->id}}">Add Chapter</a></li>

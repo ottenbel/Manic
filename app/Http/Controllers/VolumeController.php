@@ -92,7 +92,7 @@ class VolumeController extends Controller
 		
 		$volume->save();
 				
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully created new volume #$volume->volume_number on collection $collection->name."));
+		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully created new volume #$volume->volume_number on collection $collection->name."));
     }
 
     /**
@@ -178,7 +178,7 @@ class VolumeController extends Controller
 		
 		$volume->save();
 		
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully updated volume #$volume->volume_number on collection $collection->name."));
+		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully updated volume #$volume->volume_number on collection $collection->name."));
     }
 
     /**

@@ -12,7 +12,7 @@ Create a New Volume
 <div class="container">
 	@can('create', App\Models\Volume::class)
 		<h1>Create a New Volume</h1>
-		<h2>On <a href="/collection/{{$collection->id}}">{{{$collection->name}}}</a></h2>
+		<h2>On <a href="{{route('show_collection', ['collection' => $collection])}}">{{{$collection->name}}}</a></h2>
 		
 		<form method="POST" action="/volume" enctype="multipart/form-data">
 			{{ csrf_field() }}

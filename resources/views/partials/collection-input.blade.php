@@ -2,7 +2,7 @@
 	<div class="row">
 		@if(!empty($collection) && ($collection->cover_image != null))
 			<div id="cover" class="col-md-4">
-				<a href="/collection/{{$collection->id}}"><img src="{{asset($collection->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%"></a>
+				<a href="{{route('show_collection', ['collection' => $collection])}}"><img src="{{asset($collection->cover_image->name)}}" class="img-thumbnail" height="100px" width="100%"></a>
 			</div>
 		@endif
 		<div id="cover_edit" class="col-md-8">

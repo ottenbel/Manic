@@ -30,11 +30,11 @@ Index - Page {{$collections->currentPage()}}
 					<tr>
 						<td class="col-xs-2">
 						@if($collection->cover_image != null)
-							<a href="/collection/{{$collection->id}}"><img src="{{asset($collection->cover_image->name)}}" class="img-responsive img-rounded"></a>
+							<a href="{{route('show_collection', ['collection' => $collection])}}"><img src="{{asset($collection->cover_image->name)}}" class="img-responsive img-rounded"></a>
 						@endif
 						</td>
 						<td class="col-xs-10">
-							<div><a href="/collection/{{$collection->id}}"><h4>{{{$collection->name}}}</h4></a></div>
+							<div><a href="{{route('show_collection', ['collection' => $collection])}}"><h4>{{{$collection->name}}}</h4></a></div>
 							
 							@if(($collection->primary_artists()->count()) || ($collection->secondary_artists()->count()))
 								<div class="row">

@@ -184,7 +184,7 @@ class ChapterController extends Controller
 		
 		$collection = $volume->collection;
 		
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully created new chapter #$chapter->chapter_number on collection $collection->name."));
+		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully created new chapter #$chapter->chapter_number on collection $collection->name."));
     }
 
     /**
@@ -449,7 +449,7 @@ class ChapterController extends Controller
 		
 		$collection = $volume->collection;
 		
-		return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully updated  chapter #$chapter->chapter_number on collection $collection->name."));
+		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully updated  chapter #$chapter->chapter_number on collection $collection->name."));
     }
 
     /**

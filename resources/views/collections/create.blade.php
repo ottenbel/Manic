@@ -17,7 +17,7 @@ Create a New Collection
 	@can('create', App\Models\Collection::class)
 		<h1>Create a New Collection</h1>
 		
-		<form method="POST" action="/collection" enctype="multipart/form-data">
+		<form method="POST" action="{{route('store_collection')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
 			@include('partials.collection-input', array('ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))

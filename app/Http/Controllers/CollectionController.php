@@ -183,11 +183,11 @@ class CollectionController extends Controller
 				$flashed_warning_array = array_push($flashed_warning_array, $missing_secondary_characters_string);
 			}
 			
-			return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", array("Partially created collection $collection->name."))->with("flashed_warning", $flashed_warning_array);
+			return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_data", array("Partially created collection $collection->name."))->with("flashed_warning", $flashed_warning_array);
 		}
 		else
 		{
-			return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully created collection $collection->name."));
+			return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully created collection $collection->name."));
 		}
     }
 	
@@ -361,11 +361,11 @@ class CollectionController extends Controller
 			}
 		
 			//Redirect to the collection that was created
-			return redirect()->action('CollectionController@show', [$collection])->with("flashed_data", array("Partially updated collection $collection->name."))->with("flashed_warning", $flashed_warning_array);
+			return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_data", array("Partially updated collection $collection->name."))->with("flashed_warning", $flashed_warning_array);
 		}
 		else
 		{
-			return redirect()->action('CollectionController@show', [$collection])->with("flashed_success", array("Successfully updated collection $collection->name."));
+			return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully updated collection $collection->name."));
 		}
 	}
 

@@ -17,7 +17,7 @@ Edit Collection - {{{$collection->name}}}
 	@can('update', $collection)
 		<h1>Edit Collection</h1>
 		
-		<form method="POST" action="/collection/{{$collection->id}}" enctype="multipart/form-data">
+		<form method="POST" action="{{route('update_collection', ['collection' => $collection])}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 			

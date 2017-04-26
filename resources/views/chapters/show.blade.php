@@ -22,11 +22,11 @@
 	<div>
 		@if($chapter->name)
 			<div class="col-md-5">
-				<b><a href="/collection/{{$collection->id}}">{{{$collection->name}}}</a></b> - Ch {{$chapter->chapter_number}} - {{{$chapter->name}}}
+				<b><a href="{{route('show_collection', ['collection' => $collection])}}">{{{$collection->name}}}</a></b> - Ch {{$chapter->chapter_number}} - {{{$chapter->name}}}
 			</div>
 		@else
 			<div class="col-md-5">
-				<b><a href="/collection/{{$collection->id}}">{{{$collection->name}}}</a></b> - Ch {{$chapter->chapter_number}}
+				<b><a href="{{route('show_collection', ['collection' => $collection])}}">{{{$collection->name}}}</a></b> - Ch {{$chapter->chapter_number}}
 			</div>
 		@endif
 		
