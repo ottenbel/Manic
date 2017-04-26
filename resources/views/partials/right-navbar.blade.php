@@ -263,7 +263,7 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('create', App\Models\Collection::class)
-					<li><a href="{{url('/collection/create')}}">Collection</a></li>
+					<li><a href="{{route('create_collection')}}">Collection</a></li>
 				@endcan
 				@if((Auth::user()->can('create', App\Models\TagObjects\Tag\Tag::class)) 
 					|| (Auth::user()->can('create', App\Models\TagObjects\Artist\Artist::class)) 

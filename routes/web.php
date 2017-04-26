@@ -15,7 +15,7 @@
 Route::get('/', 'CollectionController@index');
 
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/collection/create', 'CollectionController@create');
+	Route::get('/collection/create', 'CollectionController@create')->Name('create_collection');
 	Route::post('/collection', 'CollectionController@store');
 	Route::get('/collection/{collection}/edit', 'CollectionController@edit');
 	Route::patch('/collection/{collection}', 'CollectionController@update');
