@@ -120,7 +120,7 @@ class SeriesController extends Controller
 		$series->save();
 		
 		//Redirect to the series that was created
-		return redirect()->action('TagObjects\Series\SeriesController@show', [$series])->with("flashed_success", array("Successfully created series $series->name."));
+		return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully created series $series->name."));
     }
 
     /**
@@ -284,7 +284,7 @@ class SeriesController extends Controller
 		$series->save();
 		
 		//Redirect to the series that was created
-		return redirect()->action('TagObjects\Series\SeriesController@show', [$series])->with("flashed_success", array("Successfully updated series $series->name."));
+		return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully updated series $series->name."));
     }
 
     /**

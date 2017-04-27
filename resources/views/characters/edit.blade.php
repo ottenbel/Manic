@@ -12,7 +12,7 @@ Edit Character - {{{$tagObject->name}}}
 <div class="container">
 	@can('update', $tagObject)
 		<h1>Edit Character</h1>
-		<h2>Associated With <a href="/series/{{$tagObject->series->id}}">{{$tagObject->series->name}}</a></h2>
+		<h2>Associated With <a href="{{route('show_series', ['series' => $tagObject->series()->first()])}}">{{$tagObject->series->name}}</a></h2>
 		
 		<form method="POST" action="/character/{{$tagObject->id}}" enctype="multipart/form-data">
 			{{ csrf_field() }}

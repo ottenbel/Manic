@@ -54,11 +54,11 @@
 						</div>
 						<div class="col-md-10">
 							@foreach($collection->primary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
-								<span class="primary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
+								<span class="primary_series"><a href="{{route('show_series', ['series' => $series])}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
 							@endforeach
 							
 							@foreach($collection->secondary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
-								<span class="secondary_series"><a href="/series/{{$series->id}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
+								<span class="secondary_series"><a href="{{route('show_series', ['series' => $series])}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
 							@endforeach
 						</div>
 					</div>

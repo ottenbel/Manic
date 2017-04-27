@@ -6,13 +6,13 @@
 		<li><a href="{{ route('index_artist') }}">Artist</a><li>
 		<li><a href="{{ url('/character') }}">Character</a><li>
 		<li><a href="{{ url('/scanalator') }}">Scanalator</a><li>
-		<li><a href="{{ url('/series') }}">Series</a><li>
+		<li><a href="{{ route('index_series') }}">Series</a><li>
 		<li><a href="{{ route('index_tag') }}">Tag</a><li>
 		<h6 class="dropdown-header">Aliases</h6>
 		<li><a href="{{ route('index_artist_alias') }}">Artist Aliases</a><li>
 		<li><a href="{{ url('/character_alias') }}">Character Aliases</a><li>
 		<li><a href="{{ url('/scanalator_alias') }}">Scanalator Aliases</a><li>
-		<li><a href="{{ url('/series_alias') }}">Series Aliases</a><li>
+		<li><a href="{{ route('index_series_alias') }}">Series Aliases</a><li>
 		<li><a href="{{ route('index_tag_alias') }}">Tag Aliases</a><li>
 	</ul>
 </li>
@@ -185,9 +185,8 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif ((Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Series\\SeriesController@show")
-	&& ((Auth::User()->can('update', $series)) || (Auth::User()->can('delete', $series)) 
-		|| (Auth::User()->can('create', App\Models\TagObjects\Character\Character::class))))
+	@elseif ((Route::is('show_series')) && ((Auth::User()->can('update', $series)) 
+		|| (Auth::User()->can('delete', $series)) || (Auth::User()->can('create', App\Models\TagObjects\Character\Character::class))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Series <span class="caret"></span>
@@ -197,14 +196,14 @@
 					<li><a href="/character/create/{{$series->id}}">Add Character</a><li>
 				@endcan
 				@can('update', $series)
-					<li><a href="/series/{{$series->id}}/edit/">Edit Series</a><li>
+					<li><a href="{{route('edit_series', ['series' => $series])}}">Edit Series</a><li>
 				@endcan
 				@can('delete', $series)
 					<li><a href="">Delete Series</a></li>
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Series\\SeriesController@edit")
+	@elseif (Route::is('edit_series'))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Series <span class="caret"></span>
@@ -213,7 +212,7 @@
 				@can('create', App\Models\TagObjects\Character\Character::class)
 					<li><a href="/character/create/{{$tagObject->id}}">Add Character</a><li>
 				@endcan
-				<li><a href="/series/{{$tagObject->id}}/">View Series</a><li>
+				<li><a href="{{route('show_series', ['series' => $tagObject])}}">View Series</a><li>
 				@can('delete', $tagObject)
 					<li><a href="">Delete Series</a></li>
 				@endcan
@@ -279,7 +278,7 @@
 						<li><a href="{{ url('/scanalator/create') }}">Scanalator</a><li>
 					@endcan
 					@can('create', App\Models\TagObjects\Series\Series::class)
-						<li><a href="{{ url('/series/create') }}">Series</a><li>
+						<li><a href="{{ route('create_series') }}">Series</a><li>
 					@endcan
 					@can('create', App\Models\TagObjects\Tag\Tag::class)
 						<li><a href="{{route('create_tag')}}">Tag</a><li>

@@ -13,7 +13,7 @@ Create a New Series
 	@can('create', App\Models\TagObjects\Series\Series::class)
 		<h1>Create a New Series</h1>
 		
-		<form method="POST" action="/series" enctype="multipart/form-data">
+		<form method="POST" action="{{route('store_series')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
 			@include('partials.tag-object-input')

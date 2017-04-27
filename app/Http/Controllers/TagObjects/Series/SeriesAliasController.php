@@ -112,7 +112,7 @@ class SeriesAliasController extends Controller
 		$seriesAlias->save();
 		
 		//Redirect to the series that the alias was created for
-		return redirect()->action('TagObjects\Series\SeriesController@show', [$series])->with("flashed_success", array("Successfully created alias $seriesAlias->alias on series $series->name."));
+		return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully created alias $seriesAlias->alias on series $series->name."));
     }
 
     /**

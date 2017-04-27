@@ -88,21 +88,21 @@ Route::get('/artist_alias', 'TagObjects\Artist\ArtistAliasController@index')->Na
 
 //Series controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/series/create', 'TagObjects\Series\SeriesController@create');
-	Route::post('/series', 'TagObjects\Series\SeriesController@store');
-	Route::get('/series/{series}/edit', 'TagObjects\Series\SeriesController@edit');
-	Route::patch('/series/{series}', 'TagObjects\Series\SeriesController@update');
+	Route::get('/series/create', 'TagObjects\Series\SeriesController@create')->Name('create_series');
+	Route::post('/series', 'TagObjects\Series\SeriesController@store')->Name('store_series');
+	Route::get('/series/{series}/edit', 'TagObjects\Series\SeriesController@edit')->Name('edit_series');
+	Route::patch('/series/{series}', 'TagObjects\Series\SeriesController@update')->Name('update_series');
 });
 
-Route::get('/series', 'TagObjects\Series\SeriesController@index');
-Route::get('/series/{series}', 'TagObjects\Series\SeriesController@show');
+Route::get('/series', 'TagObjects\Series\SeriesController@index')->Name('index_series');
+Route::get('/series/{series}', 'TagObjects\Series\SeriesController@show')->Name('show_series');
 
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::post('/series_alias/{series}', 'TagObjects\Series\SeriesAliasController@store');
+	Route::post('/series_alias/{series}', 'TagObjects\Series\SeriesAliasController@store')->Name('store_series_alias');
 });
 
-Route::get('/series_alias', 'TagObjects\Series\SeriesAliasController@index');
+Route::get('/series_alias', 'TagObjects\Series\SeriesAliasController@index')->Name('index_series_alias');
 //End Alias controller routes
 
 //End series controller routes

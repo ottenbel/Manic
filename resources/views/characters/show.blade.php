@@ -11,7 +11,7 @@
 @section('content')
 <div class="container">
 	<h2>{{{$character->name}}}</h2>
-	<h4>Associated With Collection: <a href="/series/{{$character->series->id}}">{{$character->series->name}}</a></h4>
+	<h4>Associated With Collection: <a href="{{route('show_series', ['series' => $character->series()->first()])}}">{{$character->series->name}}</a></h4>
 	
 	<div>
 		@if($character->usage_count())

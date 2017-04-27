@@ -47,18 +47,18 @@
 				<div>
 					<b>Sort By:</b>
 					@if($character_list_type == "usage")
-						<b><a href="/series/{{$series->id}}?character_type=usage&character_order={{$character_list_order}}">Character Usage</a></b> <a href="/series/{{$series->id}}?character_type=alphabetic&character_order={{$character_list_order}}">Alphabetic</a>
+						<b><a href="{{route('show_series', ['series' => $series])}}?character_type=usage&character_order={{$character_list_order}}">Character Usage</a></b> <a href="{{route('show_series', ['series' => $series])}}?character_type=alphabetic&character_order={{$character_list_order}}">Alphabetic</a>
 					@elseif ($character_list_type == "alphabetic")
-						<a href="/series/{{$series->id}}?character_type=usage&character_order={{$character_list_order}}">Character Usage</a> <b><a href="/series/{{$series->id}}?character_type=alphabetic&character_order={{$character_list_order}}">Alphabetic</a></b>
+						<a href="{{route('show_series', ['series' => $series])}}?character_type=usage&character_order={{$character_list_order}}">Character Usage</a> <b><a href="{{route('show_series', ['series' => $series])}}?character_type=alphabetic&character_order={{$character_list_order}}">Alphabetic</a></b>
 					@endif
 				</div>
 				
 				<div>
 					<b>Display Order:</b>
 					@if($character_list_order == "asc")
-						<b><a href="/series/{{$series->id}}?character_type={{$character_list_type}}&character_order=asc">Ascending</a></b> <a href="/series/{{$series->id}}?character_type={{$character_list_type}}&character_order=desc">Descending</a>
+						<b><a href="{{route('show_series', ['series' => $series])}}?character_type={{$character_list_type}}&character_order=asc">Ascending</a></b> <a href="{{route('show_series', ['series' => $series])}}?character_type={{$character_list_type}}&character_order=desc">Descending</a>
 					@elseif($character_list_order == "desc")
-						<a href="/series/{{$series->id}}?character_type={{$character_list_type}}&character_order=asc">Ascending</a> <b><a href="/series/{{$series->id}}?character_type={{$character_list_type}}&character_order=desc">Descending</a></b>
+						<a href="{{route('show_series', ['series' => $series])}}?character_type={{$character_list_type}}&character_order=asc">Ascending</a> <b><a href="{{route('show_series', ['series' => $series])}}?character_type={{$character_list_type}}&character_order=desc">Descending</a></b>
 					@endif
 				</div>
 			</div>
@@ -92,9 +92,9 @@
 			<div>
 				<b>Display Order:</b>
 				@if($global_list_order == "asc")
-					<b><a href="/series/{{$series->id}}?global_order=asc">Ascending</a></b> <a href="/series/{{$series->id}}?global_order=desc">Descending</a>
+					<b><a href="{{route('show_series', ['series' => $series])}}?global_order=asc">Ascending</a></b> <a href="{{route('show_series', ['series' => $series])}}?global_order=desc">Descending</a>
 				@elseif($global_list_order == "desc")
-					<a href="/series/{{$series->id}}?global_order=asc">Ascending</a> <b><a href="/series/{{$series->id}}?global_order=desc">Descending</a></b>
+					<a href="{{route('show_series', ['series' => $series])}}?global_order=asc">Ascending</a> <b><a href="{{route('show_series', ['series' => $series])}}?global_order=desc">Descending</a></b>
 				@endif
 			</div>
 		
@@ -111,7 +111,7 @@
 		@endif
 		
 		@can('create', [App\Models\TagObjects\Series\SeriesAlias::class, true])
-			<form method="POST" action="/series_alias/{{$series->id}}" enctype="multipart/form-data">
+			<form method="POST" action="{{route('store_series_alias', ['series' => $series])}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ Form::hidden('is_global_alias', true) }}
 				
@@ -129,9 +129,9 @@
 			<div>
 				<b>Display Order:</b>
 				@if($personal_list_order == "asc")
-					<b><a href="/series/{{$series->id}}?personal_order=asc">Ascending</a></b> <a href="/series/{{$series->id}}?personal_order=desc">Descending</a>
+					<b><a href="{{route('show_series', ['series' => $series])}}?personal_order=asc">Ascending</a></b> <a href="{{route('show_series', ['series' => $series])}}?personal_order=desc">Descending</a>
 				@elseif($personal_list_order == "desc")
-					<a href="/series/{{$series->id}}?personal_order=asc">Ascending</a> <b><a href="/series/{{$series->id}}?personal_order=desc">Descending</a></b>
+					<a href="{{route('show_series', ['series' => $series])}}?personal_order=asc">Ascending</a> <b><a href="{{route('show_series', ['series' => $series])}}?personal_order=desc">Descending</a></b>
 				@endif
 			</div>
 		
@@ -150,7 +150,7 @@
 		@endif
 		
 		@can('create', [App\Models\TagObjects\Series\SeriesAlias::class, false])
-			<form method="POST" action="/series_alias/{{$series->id}}" enctype="multipart/form-data">
+			<form method="POST" action="{{route('store_series_alias', ['series' => $series])}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ Form::hidden('is_personal_alias', true) }}
 				
