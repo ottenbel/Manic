@@ -112,7 +112,7 @@ class TagAliasController extends Controller
 		$tagAlias->save();
 		
 		//Redirect to the tag that the alias was created for
-		return redirect()->action('TagObjects\Tag\TagController@show', [$tag])->with("flashed_success", array("Successfully created alias $tagAlias->alias on tag $tag->name."));
+		return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_success", array("Successfully created alias $tagAlias->alias on tag $tag->name."));
     }
 
     /**
