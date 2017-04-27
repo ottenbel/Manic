@@ -70,7 +70,7 @@
 		@endif
 		
 		@can('create', [App\Models\TagObjects\Tag\TagAlias::class, true])
-			<form method="POST" action="/tag_alias/{{$tag->id}}" enctype="multipart/form-data">
+			<form method="POST" action="{{route('store_tag_alias', ['tag' => $tag])}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ Form::hidden('is_global_alias', true) }}
 				
@@ -109,7 +109,7 @@
 		@endif
 
 		@can('create', [App\Models\TagObjects\Series\SeriesAlias::class, false])
-			<form method="POST" action="/tag_alias/{{$tag->id}}" enctype="multipart/form-data">
+			<form method="POST" action="{{route('store_tag_alias', ['tag' => $tag])}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ Form::hidden('is_personal_alias', true) }}
 				

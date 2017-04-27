@@ -13,7 +13,7 @@
 		<li><a href="{{ url('/character_alias') }}">Character Aliases</a><li>
 		<li><a href="{{ url('/scanalator_alias') }}">Scanalator Aliases</a><li>
 		<li><a href="{{ url('/series_alias') }}">Series Aliases</a><li>
-		<li><a href="{{ url('/tag_alias') }}">Tag Aliases</a><li>
+		<li><a href="{{ route('index_tag_alias') }}">Tag Aliases</a><li>
 	</ul>
 </li>
 

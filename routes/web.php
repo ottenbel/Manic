@@ -57,11 +57,11 @@ Route::get('/tag/{tag}', 'TagObjects\Tag\TagController@show')->Name('show_tag');
 
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::post('/tag_alias/{tag}', 'TagObjects\Tag\TagAliasController@store');
-	Route::patch('/tag_alias/{tagAlias}', 'TagObjects\Tag\TagAliasController@update');
+	Route::post('/tag_alias/{tag}', 'TagObjects\Tag\TagAliasController@store')->Name('store_tag_alias');
+	Route::patch('/tag_alias/{tagAlias}', 'TagObjects\Tag\TagAliasController@update')->Name('update_tag_alias');
 });
 
-Route::get('/tag_alias', 'TagObjects\Tag\TagAliasController@index');
+Route::get('/tag_alias', 'TagObjects\Tag\TagAliasController@index')->Name('index_tag_alias');
 //End Alias controller routes
 
 //End tag controller routes
