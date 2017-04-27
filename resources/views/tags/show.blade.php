@@ -51,9 +51,9 @@
 			<div>
 				<b>Display Order:</b>
 				@if($global_list_order == "asc")
-					<b><a href="/tag?global_order=asc">Ascending</a></b> <a href="/tag?global_order=desc">Descending</a>
+					<b><a href="{{route('show_tag', ['tag' => $tag])}}?global_order=asc">Ascending</a></b> <a href="{{route('show_tag', ['tag' => $tag])}}?global_order=desc">Descending</a>
 				@elseif($global_list_order == "desc")
-					<a href="/tag?global_order=asc">Ascending</a> <b><a href="/tag?global_order=desc">Descending</a></b>
+					<a href="{{route('show_tag', ['tag' => $tag])}}?global_order=asc">Ascending</a> <b><a href="{{route('show_tag', ['tag' => $tag])}}?global_order=desc">Descending</a></b>
 				@endif
 			</div>
 		
@@ -88,9 +88,9 @@
 			<div>
 				<b>Display Order:</b>
 				@if($personal_list_order == "asc")
-					<b><a href="/tag?personal_order=asc">Ascending</a></b> <a href="/tag?personal_order=desc">Descending</a>
+					<b><a href="{{route('show_tag', ['tag' => $tag])}}?personal_order=asc">Ascending</a></b> <a href="{{route('show_tag', ['tag' => $tag])}}?personal_order=desc">Descending</a>
 				@elseif($personal_list_order == "desc")
-					<a href="/tag?personal_order=asc">Ascending</a> <b><a href="/tag?personal_order=desc">Descending</a></b>
+					<a href="{{route('show_tag', ['tag' => $tag])}}?personal_order=asc">Ascending</a> <b><a href="{{route('show_tag', ['tag' => $tag])}}?personal_order=desc">Descending</a></b>
 				@endif
 			</div>
 		
