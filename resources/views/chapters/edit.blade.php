@@ -13,7 +13,7 @@ Edit Chapter # {{$chapter->chapter_number}} {{{$chapter->name}}}
 	@can('update', $chapter)
 		<h1>Edit Chapter</h1>
 		
-		<form method="POST" action="/chapter/{{$chapter->id}}" enctype="multipart/form-data">
+		<form method="POST" action="{{route('update_chapter', ['chapter' => $chapter])}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 			

@@ -26,9 +26,9 @@ Edit Volume - {{{$volume->name}}}
 				@foreach($volume->chapters()->orderBy('chapter_number', 'asc')->get() as $chapter)
 					<div id="chapter">
 						@if($chapter->name != null && $chapter->name != "")
-							<a href="/chapter/{{$chapter->id}}/edit">Chapter {{$chapter->chapter_number}} - {{$chapter->name}}</a>
+							<a href="{{route('edit_chapter', ['chapter' => $chapter])}}">Chapter {{$chapter->chapter_number}} - {{$chapter->name}}</a>
 						@else
-							<a href="/chapter/{{$chapter->id}}/edit">Chapter {{$chapter->chapter_number}}</a>
+							<a href="{{route('edit_chapter', ['chapter' => $chapter])}}">Chapter {{$chapter->chapter_number}}</a>
 						@endif
 					</div>
 				@endforeach

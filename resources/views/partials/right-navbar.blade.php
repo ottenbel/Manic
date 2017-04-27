@@ -23,10 +23,8 @@
 	<li><a href="{{ url('/register') }}">Register</a></li>
 @else
 	<!-- Add general checks on roles once all policies have been created -->
-	@if((Route::is('show_collection'))
-		&& ((Auth::User()->can('create', App\Models\Chapter::class)) 
-			|| (Auth::User()->can('create', App\Models\Volume::class)) 
-			|| (Auth::User()->can('update', $collection)) 
+	@if((Route::is('show_collection')) && ((Auth::User()->can('create', App\Models\Chapter::class)) 
+			|| (Auth::User()->can('create', App\Models\Volume::class)) || (Auth::User()->can('update', $collection)) 
 			|| (Auth::User()->can('delete', $collection))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -35,7 +33,7 @@
 			<ul class="dropdown-menu" role="menu">
 				@if(count($collection->volumes))
 					@can('create', App\Models\Chapter::class)
-						<li><a href="/chapter/create/{{$collection->id}}">Add Chapter</a></li>
+						<li><a href="{{route('create_chapter', ['collection' => $collection])}}">Add Chapter</a></li>
 					@endcan
 				@endif
 				@can('create', App\Models\Volume::class)
@@ -49,8 +47,7 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif((Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\ChapterController@show") 
-		&&((Auth::User()->can('update', $collection)) 
+	@elseif((Route::is('show_chapter')) &&((Auth::User()->can('update', $collection)) 
 			|| (Auth::User()->can('delete', $collection))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -58,7 +55,7 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $collection)
-					<li><a href="/chapter/{{$chapter->id}}/edit">Edit Chapter</a><li>
+					<li><a href="{{route('edit_chapter', ['chapter' => $chapter])}}">Edit Chapter</a><li>
 				@endcan
 				@can('delete', $collection)
 					<li><a href="">Delete Chapter</a></li>
@@ -74,11 +71,11 @@
 				<li><a href="{{route('show_collection', ['collection' => $collection])}}">View Collection</a><li>
 				@if(count($collection->volumes))
 					@can('create', App\Models\Chapter::class)
-						<li><a href="/chapter/create/{{$collection->id}}">Add Chapter</a></li>
+						<li><a href="{{route('create_chapter', ['collection' => $collection])}}">Add Chapter</a></li>
 					@endcan
 				@endif
 				@can('create', App\Models\Volume::class)
-					<li><a href="/volume/create/{{$collection->id}}">Add Volume</a><li>
+					<li><a href="{{route('create_volume', ['collection' => $collection])}}">Add Volume</a><li>
 				@endcan
 				@can('delete', $collection)
 					<li><a href="">Delete Collection</a></li>
@@ -97,13 +94,13 @@
 				</ul>
 				@endcan
 			</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\ChapterController@edit")
+	@elseif (Route::is('edit_chapter'))
 	<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Chapter <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/chapter/{{$chapter->id}}/">View Chapter</a><li>
+				<li><a href="{{route('show_chapter', ['chapter' => $chapter])}}">View Chapter</a><li>
 				@can('delete', $chapter)
 					<li><a href="">Delete Chapter</a></li>
 				@endcan

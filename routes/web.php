@@ -35,13 +35,13 @@ Route::group(['middleware' => 'auth'], function(){
 
 //Chapter controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/chapter/create/{collection}', 'ChapterController@create');
-	Route::post('/chapter', 'ChapterController@store');
-	Route::get('/chapter/{chapter}/edit', 'ChapterController@edit');
-	Route::patch('/chapter/{chapter}', 'ChapterController@update');
+	Route::get('/chapter/create/{collection}', 'ChapterController@create')->Name('create_chapter');
+	Route::post('/chapter', 'ChapterController@store')->Name('store_chapter');
+	Route::get('/chapter/{chapter}/edit', 'ChapterController@edit')->Name('edit_chapter');
+	Route::patch('/chapter/{chapter}', 'ChapterController@update')->Name('update_chapter');
 });
 
-Route::get('/chapter/{chapter}/{page?}', 'ChapterController@show');
+Route::get('/chapter/{chapter}/{page?}', 'ChapterController@show')->Name('show_chapter');
 //End Chapter controller routes
 
 //Tag controller routes

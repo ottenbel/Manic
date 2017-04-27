@@ -14,7 +14,7 @@ Create a New Chapter
 		<h1>Create a New Chapter</h1>
 		<h2>On <a href="{{route('show_collection', ['collection' => $collection])}}">{{{$collection->name}}}</a></h2>
 		
-		<form method="POST" action="/chapter" enctype="multipart/form-data">
+		<form method="POST" action="{{route('store_chapter')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
 			@include('partials.chapter-input')

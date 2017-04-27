@@ -212,11 +212,11 @@
 							<tr>
 								@if($chapter->name != null && $chapter->name != "")
 									<td>
-										<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->chapter_number}}</a> - {{{$chapter->name}}}
+										<a href="{{route('show_chapter', ['chapter' => $chapter])}}">Chapter {{$chapter->chapter_number}}</a> - {{{$chapter->name}}}
 									</td>
 								@else
 									<td>
-										<a href="/chapter/{{$chapter->id}}">Chapter {{$chapter->chapter_number}}</a>
+										<a href="{{route('show_chapter', ['chapter' => $chapter])}}">Chapter {{$chapter->chapter_number}}</a>
 									</td>
 								@endif
 								<td>
