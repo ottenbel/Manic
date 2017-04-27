@@ -7,7 +7,7 @@
 		<li><a href="{{ url('/character') }}">Character</a><li>
 		<li><a href="{{ url('/scanalator') }}">Scanalator</a><li>
 		<li><a href="{{ url('/series') }}">Series</a><li>
-		<li><a href="{{ url('/tag') }}">Tag</a><li>
+		<li><a href="{{ route('index_tag') }}">Tag</a><li>
 		<h6 class="dropdown-header">Aliases</h6>
 		<li><a href="{{ url('/artist_alias') }}">Artist Aliases</a><li>
 		<li><a href="{{ url('/character_alias') }}">Character Aliases</a><li>
@@ -106,28 +106,27 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif ((Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Tag\\TagController@show")
-			&& ((Auth::User()->can('update', $tag)) || (Auth::User()->can('delete', $tag))))
+	@elseif ((Route::is('show_tag')) && ((Auth::User()->can('update', $tag)) || (Auth::User()->can('delete', $tag))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Tag <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $tag)
-					<li><a href="/tag/{{$tag->id}}/edit/">Edit Tag</a><li>
+					<li><a href="{{route('edit_tag', ['tag' => $tag])}}">Edit Tag</a><li>
 				@endcan
 				@can('delete', $tag)
 					<li><a href="">Delete Tag</a></li>
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Tag\\TagController@edit")
+	@elseif (Route::is('edit_tag'))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Tag <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/tag/{{$tagObject->id}}/">View Tag</a><li>
+				<li><a href="{{route('show_tag', ['tag' => $tagObject])}}">View Tag</a><li>
 				@can('delete', $tagObject)
 					<li><a href="">Delete Tag</a></li>
 				@endcan
@@ -284,7 +283,7 @@
 						<li><a href="{{ url('/series/create') }}">Series</a><li>
 					@endcan
 					@can('create', App\Models\TagObjects\Tag\Tag::class)
-						<li><a href="{{ url('/tag/create') }}">Tag</a><li>
+						<li><a href="{{route('create_tag')}}">Tag</a><li>
 					@endcan
 				@endif
 			</ul>

@@ -46,14 +46,14 @@ Route::get('/chapter/{chapter}/{page?}', 'ChapterController@show')->Name('show_c
 
 //Tag controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/tag/create', 'TagObjects\Tag\TagController@create');
-	Route::post('/tag', 'TagObjects\Tag\TagController@store');
-	Route::get('/tag/{tag}/edit', 'TagObjects\Tag\TagController@edit');
-	Route::patch('/tag/{tag}', 'TagObjects\Tag\TagController@update');
+	Route::get('/tag/create', 'TagObjects\Tag\TagController@create')->Name('create_tag');
+	Route::post('/tag', 'TagObjects\Tag\TagController@store')->Name('store_tag');
+	Route::get('/tag/{tag}/edit', 'TagObjects\Tag\TagController@edit')->Name('edit_tag');
+	Route::patch('/tag/{tag}', 'TagObjects\Tag\TagController@update')->Name('update_tag');
 });
 
-Route::get('/tag', 'TagObjects\Tag\TagController@index');
-Route::get('/tag/{tag}', 'TagObjects\Tag\TagController@show');
+Route::get('/tag', 'TagObjects\Tag\TagController@index')->Name('index_tag');
+Route::get('/tag/{tag}', 'TagObjects\Tag\TagController@show')->Name('show_tag');
 
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){

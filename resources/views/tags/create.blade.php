@@ -13,7 +13,7 @@ Create a New Tag
 	@can('create', App\Models\TagObjects\Tag\Tag::class)
 	<h1>Create a New Tag</h1>
 	
-	<form method="POST" action="/tag" enctype="multipart/form-data">
+	<form method="POST" action="{{route('store_tag')}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		
 		@include('partials.tag-object-input')

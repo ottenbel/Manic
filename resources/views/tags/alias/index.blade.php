@@ -48,12 +48,12 @@
 				
 				@if($alias->user_id == null)
 					<div class="col-xs-4">
-						<span class="global_tag_alias"><a href="/tag/{{$alias->tag_id}}">{{{$alias->alias}}}</a></span>
+						<span class="global_tag_alias"><a href="{{route('show_tag', ['tag' => $alias->tag()->first()])}}">{{{$alias->alias}}}</a></span>
 					</div>
 				@else
 					@can('view', $alias)
 						<div class="col-xs-4">
-							<span class="personal_tag_alias"><a href="/tag/{{$alias->tag_id}}">{{{$alias->alias}}}</a></span>
+							<span class="personal_tag_alias"><a href="{{route('show_tag', ['tag' => $alias->tag()->first()])}}">{{{$alias->alias}}}</a></span>
 						</div>
 					@endcan
 				@endif

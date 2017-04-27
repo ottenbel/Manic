@@ -13,7 +13,7 @@ Edit Tag - {{{$tagObject->name}}}
 	@can('update', $tagObject)
 		<h1>Edit Tag</h1>
 		
-		<form method="POST" action="/tag/{{$tagObject->id}}" enctype="multipart/form-data">
+		<form method="POST" action="{{route('update_tag', ['tag' => $tagObject])}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 					
