@@ -13,7 +13,7 @@ Edit Artist - {{{$tagObject->name}}}
 	@can('update', $tagObject)
 	<h1>Edit Artist</h1>
 	
-	<form method="POST" action="/artist/{{$tagObject->id}}" enctype="multipart/form-data">
+	<form method="POST" action="{{route('update_artist', ['artist' => $tagObject])}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
 		

@@ -3,13 +3,13 @@
 		Tags<span class="caret"></span>
 	</a>
 	<ul class="dropdown-menu" role="menu">
-		<li><a href="{{ url('/artist') }}">Artist</a><li>
+		<li><a href="{{ route('index_artist') }}">Artist</a><li>
 		<li><a href="{{ url('/character') }}">Character</a><li>
 		<li><a href="{{ url('/scanalator') }}">Scanalator</a><li>
 		<li><a href="{{ url('/series') }}">Series</a><li>
 		<li><a href="{{ route('index_tag') }}">Tag</a><li>
 		<h6 class="dropdown-header">Aliases</h6>
-		<li><a href="{{ url('/artist_alias') }}">Artist Aliases</a><li>
+		<li><a href="{{ route('index_artist_alias') }}">Artist Aliases</a><li>
 		<li><a href="{{ url('/character_alias') }}">Character Aliases</a><li>
 		<li><a href="{{ url('/scanalator_alias') }}">Scanalator Aliases</a><li>
 		<li><a href="{{ url('/series_alias') }}">Series Aliases</a><li>
@@ -132,28 +132,27 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif ((Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Artist\\ArtistController@show")
-		&& ((Auth::User()->can('update', $artist)) || (Auth::User()->can('delete', $artist))))
+	@elseif ((Route::is('show_artist')) && ((Auth::User()->can('update', $artist)) || (Auth::User()->can('delete', $artist))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Artist <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $artist)
-					<li><a href="/artist/{{$artist->id}}/edit/">Edit Artist</a><li>
+					<li><a href="{{route('edit_artist', ['artist' => $artist])}}">Edit Artist</a><li>
 				@endcan
 				@can('delete', $artist)
 					<li><a href="">Delete Artist</a></li>
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::getCurrentRoute()->getActionName() == "App\\Http\\Controllers\\TagObjects\\Artist\\ArtistController@edit")
+	@elseif (Route::is('edit_artist'))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Artist <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="/artist/{{$tagObject->id}}/">View Artist</a><li>
+				<li><a href="{{route('show_artist', ['artist' => $tagObject])}}">View Artist</a><li>
 				@can('delete', $tagObject)
 					<li><a href="">Delete Artist</a></li>
 				@endcan
@@ -271,7 +270,7 @@
 					<h6 class="dropdown-header">Tags</h6>
 			
 					@can('create', App\Models\TagObjects\Artist\Artist::class)
-						<li><a href="{{ url('/artist/create') }}">Artist</a><li>
+						<li><a href="{{ route('create_artist') }}">Artist</a><li>
 					@endcan
 					@can('create', App\Models\TagObjects\Character\Character::class)
 						<li><a href="{{ url('/character/create') }}">Character</a><li>

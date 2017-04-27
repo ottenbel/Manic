@@ -120,7 +120,7 @@ class ArtistController extends Controller
 		$artist->save();
 		
 		//Redirect to the artist that was created
-		return redirect()->action('TagObjects\Artist\ArtistController@show', [$artist])->with("flashed_success", array("Successfully created artist $artist->name."));
+		return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_success", array("Successfully created artist $artist->name."));
     }
 
     /**
@@ -242,7 +242,7 @@ class ArtistController extends Controller
 		$artist->save();
 		
 		//Redirect to the artist that was created
-		return redirect()->action('TagObjects\Artist\ArtistController@show', [$artist])->with("flashed_success", array("Successfully updated artist $artist->name."));
+		return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_success", array("Successfully updated artist $artist->name."));
     }
 
     /**

@@ -68,22 +68,22 @@ Route::get('/tag_alias', 'TagObjects\Tag\TagAliasController@index')->Name('index
 
 //Artist controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/artist/create', 'TagObjects\Artist\ArtistController@create');
-	Route::post('/artist', 'TagObjects\Artist\ArtistController@store');
-	Route::get('/artist/{artist}/edit', 'TagObjects\Artist\ArtistController@edit');
-	Route::patch('/artist/{artist}', 'TagObjects\Artist\ArtistController@update');
+	Route::get('/artist/create', 'TagObjects\Artist\ArtistController@create')->Name('create_artist');
+	Route::post('/artist', 'TagObjects\Artist\ArtistController@store')->Name('store_artist');
+	Route::get('/artist/{artist}/edit', 'TagObjects\Artist\ArtistController@edit')->Name('edit_artist');
+	Route::patch('/artist/{artist}', 'TagObjects\Artist\ArtistController@update')->Name('update_artist');
 });
 
-Route::get('/artist', 'TagObjects\Artist\ArtistController@index');
-Route::get('/artist/{artist}', 'TagObjects\Artist\ArtistController@show');
+Route::get('/artist', 'TagObjects\Artist\ArtistController@index')->Name('index_artist');
+Route::get('/artist/{artist}', 'TagObjects\Artist\ArtistController@show')->Name('show_artist');
 
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::post('/artist_alias/{artist}', 'TagObjects\Artist\ArtistAliasController@store');
-	Route::patch('/artist_alias/{artistAlias}', 'TagObjects\Artist\ArtistAliasController@update');
+	Route::post('/artist_alias/{artist}', 'TagObjects\Artist\ArtistAliasController@store')->Name('store_artist_alias');
+	Route::patch('/artist_alias/{artistAlias}', 'TagObjects\Artist\ArtistAliasController@update')->Name('update_artist_alias');
 });
 
-Route::get('/artist_alias', 'TagObjects\Artist\ArtistAliasController@index');
+Route::get('/artist_alias', 'TagObjects\Artist\ArtistAliasController@index')->Name('index_artist_alias');
 //End Alias controller routes
 
 //End artist controller routes

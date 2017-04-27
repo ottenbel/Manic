@@ -112,7 +112,7 @@ class ArtistAliasController extends Controller
 		$artistAlias->save();
 		
 		//Redirect to the artist that the alias was created for
-		return redirect()->action('TagObjects\Artist\ArtistController@show', [$artist])->with("flashed_success", array("Successfully created alias $artistAlias->alias on artist $artist->name."));
+		return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_success", array("Successfully created alias $artistAlias->alias on artist $artist->name."));
     }
 
     /**

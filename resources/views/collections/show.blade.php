@@ -35,11 +35,11 @@
 						</div>
 						<div class="col-md-10">
 							@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
-								<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+								<span class="primary_artists"><a href="{{route('show_artist', ['artist' => $artist])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 							@endforeach
 							
 							@foreach($collection->secondary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
-								<span class="secondary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+								<span class="secondary_artists"><a href="{{route('show_artist', ['artist' => $artist])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 							@endforeach
 						</div>
 					</div>

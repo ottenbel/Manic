@@ -13,7 +13,7 @@ Create a New Artist
 	@can('create', App\Models\TagObjects\Artist\Artist::class)
 		<h1>Create a New Artist</h1>
 		
-		<form method="POST" action="/artist" enctype="multipart/form-data">
+		<form method="POST" action="{{route('store_artist')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
 			@include('partials.tag-object-input')

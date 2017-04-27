@@ -15,18 +15,18 @@
 				<div>
 					<b>Sort By:</b>
 					@if($list_type == "usage")
-						<b><a href="/artist?type=usage&order={{$list_order}}">Artist Usage</a></b> <a href="/artist?type=alphabetic&order={{$list_order}}">Alphabetic</a>
+						<b><a href="{{route('index_artist')}}?type=usage&order={{$list_order}}">Artist Usage</a></b> <a href="{{route('index_artist')}}?type=alphabetic&order={{$list_order}}">Alphabetic</a>
 					@elseif ($list_type == "alphabetic")
-						<a href="/artist?type=usage&order={{$list_order}}">Artist Usage</a> <b><a href="/artist?type=alphabetic&order={{$list_order}}">Alphabetic</a></b>
+						<a href="{{route('index_artist')}}?type=usage&order={{$list_order}}">Artist Usage</a> <b><a href="{{route('index_artist')}}?type=alphabetic&order={{$list_order}}">Alphabetic</a></b>
 					@endif
 				</div>
 				
 				<div>
 					<b>Display Order:</b>
 					@if($list_order == "asc")
-						<b><a href="/artist?type={{$list_type}}&order=asc">Ascending</a></b> <a href="/artist?type={{$list_type}}&order=desc">Descending</a>
+						<b><a href="{{route('index_artist')}}?type={{$list_type}}&order=asc">Ascending</a></b> <a href="{{route('index_artist')}}?type={{$list_type}}&order=desc">Descending</a>
 					@elseif($list_order == "desc")
-						<a href="/artist?type={{$list_type}}&order=asc">Ascending</a> <b><a href="/artist?type={{$list_type}}&order=desc">Descending</a></b>
+						<a href="{{route('index_artist')}}?type={{$list_type}}&order=asc">Ascending</a> <b><a href="{{route('index_artist')}}?type={{$list_type}}&order=desc">Descending</a></b>
 					@endif
 				</div>
 			</div>
@@ -37,7 +37,7 @@
 				@endif
 				
 				<div class="col-xs-4">
-					<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+					<span class="primary_artists"><a href="{{route('show_artist', ['artist' => $artist])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 				</div>
 				
 				@if((($loop->iteration - 1) % 3) == 2)			
@@ -50,7 +50,7 @@
 		@else
 			@can('create', App\Models\TagObjects\Artist\Artist::class)
 				<div class="text-center">
-					No artists have been found in the database. Add a new artist <a href = "{{url('/artist/create')}}">here.</a>
+					No artists have been found in the database. Add a new artist <a href = "{{route('create_artist')}}">here.</a>
 				</div>
 				<br/>
 			@endcan

@@ -44,11 +44,11 @@ Index - Page {{$collections->currentPage()}}
 										</div>
 										<div class="col-md-10">
 											@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $artist)
-												<span class="primary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+												<span class="primary_artists"><a href="{{route('show_artist', ['artist' => $artist])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 											@endforeach
 											@if(10 > $collection->primary_artists()->count())
 												@foreach($collection->secondary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - $collection->primary_artists()->count())->get() as $artist)
-													<span class="secondary_artists"><a href="/artist/{{$artist->id}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+													<span class="secondary_artists"><a href="{{route('show_artist', ['artist' => $artist])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 												@endforeach
 											@endif
 									</div>
