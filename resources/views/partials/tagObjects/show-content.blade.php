@@ -57,32 +57,35 @@
 					</div>
 				</div>
 				
-				@foreach($characters as $character)
-					@if((($loop->iteration - 1) % 3) == 0)
-						<div class="row">
-					@endif
-					
-					<div class="col-xs-4">
-						<span class="primary_characters"><a href="{{route('show_character', ['character' => $character])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
-					</div>
-					
-					@if((($loop->iteration - 1) % 3) == 2)			
+				@if($characters->count() != 0)
+					<br/>					
+					@foreach($characters as $character)
+						@if((($loop->iteration - 1) % 3) == 0)
+							<div class="row">
+						@endif
+						
+						<div class="col-xs-4">
+							<span class="primary_characters"><a href="{{route('show_character', ['character' => $character])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
 						</div>
-					@endif
-				@endforeach
-				<br/>
-				<br/>
-				{{ $characters->links() }}
+						
+						@if((($loop->iteration - 1) % 3) == 2)			
+							</div>
+						@endif
+					@endforeach
+					<br/>
+					<br/>
+					{{ $characters->links() }}
+				@endif
 			</div>		
 		@endif
 	@endif
 	
-	@if(($global_aliases->count() > 0) 
+	@if(($global_aliases->count() != 0) 
 		|| ((Auth::user()) && (Auth::user()->can('create', [$classAliasModelPath, true]))))
 		<br/>
 		<h3>Global Aliases</h3>
 	
-		@if($global_aliases->count() > 0)
+		@if($global_aliases->count() != 0)
 			<div>
 				<b>Display Order:</b>
 				@if($global_list_order == "asc")
@@ -121,7 +124,7 @@
 		<br/>
 		<h3>Personal Aliases</h3>
 		
-		@if($personal_aliases->count() > 0)
+		@if($personal_aliases->count() != 0)
 			<div>
 				<b>Display Order:</b>
 				@if($personal_list_order == "asc")
