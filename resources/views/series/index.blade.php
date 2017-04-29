@@ -52,14 +52,12 @@
 			<div class="text-center">
 				No series have been found in the database. Add a new series <a href = "{{route('create_series')}}">here.</a>
 			</div>
-			<br/>
 		@endcan
 		
 		@cannot('create', App\Models\TagObjects\Series\Series::class)
 			<div class="text-center">
 				No series have been found in the database.
 			</div>
-			<br/>
 		@endcan
 	@endif
 	</div>

@@ -42,10 +42,9 @@
 		</div>
 	@endif
 	
-	<br/>
-	
 	@if(($global_aliases->count() > 0) 
 		|| ((Auth::user()) && (Auth::user()->can('create', [App\Models\TagObjects\Character\CharacterAlias::class, true]))))
+		<br/>
 		<h3>Global Aliases</h3>
 		
 		@if($global_aliases->count() > 0)
@@ -67,10 +66,10 @@
 			@endforeach
 			
 			{{ $global_aliases->links() }}
-			<br/>
 		@endif
 		
 		@can('create', [App\Models\TagObjects\Character\CharacterAlias::class, true])
+			<br/>
 			<form method="POST" action="{{route('store_character_alias', ['character' => $character])}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ Form::hidden('is_global_alias', true) }}
@@ -83,6 +82,7 @@
 	@endif
 	
 	@if(Auth::user())
+		<br/>
 		<h3>Personal Aliases</h3>
 		
 		@if($personal_aliases->count() > 0)
@@ -106,10 +106,10 @@
 			@endforeach
 			
 			{{ $personal_aliases->links() }}
-			<br/>
 		@endif
 		
 		@can('create', [App\Models\TagObjects\Character\CharacterAlias::class, false])
+			<br/>
 			<form method="POST" action="{{route('store_character_alias', ['character' => $character])}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ Form::hidden('is_personal_alias', true) }}

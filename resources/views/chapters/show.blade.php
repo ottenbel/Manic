@@ -54,9 +54,9 @@
 		</div>
 	</div>
 </div>
-<br/>
 
 @if (count($chapter->pages) > 0)
+	<br/>
 	<div class="container" align="center" id='page_viewer_container'>
 		@if(($page_number >= count($chapter->pages)) && ($page_number > 0))
 			<img id="viewer_current_page" src="{{asset($chapter->pages[count($chapter->pages)-1]->name)}}" class="img-responsive" alt="Page {{$chapter->pages[count($chapter->pages)-1]->number}}">
@@ -119,12 +119,14 @@
 		@if(Auth::user())
 			You can add pages to the chapter <a href="{{route('edit_chapter', ['chapter' => $chapter])}}" class="alert-link">here</a>.
 		@endif
-		<br>
+		
 		@if(count($chapter->previous_chapter()->first()))
+			<br>
 			<a href="{{route('show_chapter', ['chapter' => $chapter->previous_chapter()->first(), 'page' => 0])}}">Previous Chapter</a> 
 		@endif
 		
 		@if(count($chapter->next_chapter()->first()))
+			<br>
 			<a href="{{route('show_chapter', ['chapter' => $chapter->next_chapter->first(), page => 0])}}">Next Chapter</a> 
 		@endif
 	</div>

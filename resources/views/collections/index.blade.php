@@ -16,13 +16,11 @@ Index - Page {{$collections->currentPage()}}
 				<div class="text-center">
 					No collections have been found in the database. Add a new collection <a href = "{{route('create_collection')}}">here.</a>
 				</div>
-				<br/>
 			@endcan
 			@cannot('create', App\Models\Collection::class)
 				<div class="text-center">
 					No collections have been found in the database.
 				</div>
-				<br/>
 			@endcan
 		@else
 			<table class="table table-striped">

@@ -103,11 +103,13 @@
         @yield('content')
     </div>
 
+	<br/>
+	<br/>
 	@yield('footer')
 	
 	 <div class="text-center">
                 Running <a href="https://gitlab.com/ottenbel/Manic">Manic (Alpha)</a> - Developed by <a href="https://gitlab.com/Ottenbel">Ottenbel</a> and <a href="https://gitlab.com/ottenbel/Manic/graphs/master">Contributors</a> (2016 - 2017)
 	</div>
-		
+	<br/>	
 </body>
 </html>

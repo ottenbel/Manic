@@ -70,13 +70,11 @@
 				<div class="text-center">
 					No character aliases have been found in the database. View characters in the database <a href = "{{route('index_character')}}">here.</a>
 				</div>
-				<br/>
 			@endcan
 			@cannot('create', [App\Models\TagObjects\Character\CharacterAlias::class, false])
 				<div class="text-center">
 					No character aliases have been found in the database.
 				</div>
-				<br/>
 			@endcan
 		@endif
 	</div>

@@ -52,13 +52,11 @@
 			<div class="text-center">
 				No scanalators have been found in the database. Add a new scanalator <a href = "{{route('create_scanalator')}}">here.</a>
 			</div>
-			<br/>
 		@endcan
 		@cannot('create', App\Models\TagObjects\Scanalator\Scanalator::class)
 			<div class="text-center">
 				No scanalators have been found in the database.
 			</div>
-			<br/>
 		@endcan
 	@endif
 	</div>

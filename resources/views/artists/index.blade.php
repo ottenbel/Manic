@@ -52,14 +52,12 @@
 				<div class="text-center">
 					No artists have been found in the database. Add a new artist <a href = "{{route('create_artist')}}">here.</a>
 				</div>
-				<br/>
 			@endcan
 			
 			@cannot('create', App\Models\TagObjects\Artist\Artist::class)
 				<div class="text-center">
 					No artists have been found in the database.
 				</div>
-				<br/>
 			@endcan
 		@endif
 	</div>	

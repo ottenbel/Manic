@@ -52,14 +52,12 @@
 			<div class="text-center">
 				No characters have been found in the database. Add a new character <a href = "{{route('create_character')}}">here.</a>
 			</div>
-			<br/>
 		@endcan
 		
 		@cannot('create', App\Models\TagObjects\Character\Character::class)
 			<div class="text-center">
 				No characters have been found in the database.
 			</div>
-			<br/>
 		@endcan
 	@endif
 </div>

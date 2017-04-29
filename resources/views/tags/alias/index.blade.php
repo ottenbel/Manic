@@ -70,13 +70,11 @@
 				<div class="text-center">
 					No tag aliases have been found in the database. View tags in the database <a href = "{{url('/tag')}}">here.</a>
 				</div>
-				<br/>
 			@endcan
 			@cannot('create', [App\Models\TagObjects\Tag\TagAlias::class, false])
 				<div class="text-center">
 					No tag aliases have been found in the database.
 				</div>
-				<br/>
 			@endcan
 		@endif
 	</div>

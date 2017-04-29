@@ -70,13 +70,11 @@
 				<div class="text-center">
 					No artist aliases have been found in the database. View artists in the database <a href = "{{route('index_artist')}}">here.</a>
 				</div>
-				<br/>
 			@endcan
 			@cannot('create', [App\Models\TagObjects\Artist\ArtistAlias::class, false])
 				<div class="text-center">
 					No artist aliases have been found in the database.
 				</div>
-				<br/>
 			@endcan
 		@endif
 	</div>

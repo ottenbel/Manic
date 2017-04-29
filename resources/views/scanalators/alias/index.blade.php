@@ -70,13 +70,11 @@
 				<div class="text-center">
 					No scanalator aliases have been found in the database. View scanalators in the database <a href = "{{route('index_scanalator')}}">here.</a>
 				</div>
-				<br/>
 			@endcan
 			@cannot('create', [App\Models\TagObjects\Scanalator\ScanalatorAlias::class, false])
 				<div class="text-center">
 					No scanalator aliases have been found in the database.
 				</div>
-				<br/>
 			@endcan
 		@endif
 	</div>

@@ -70,13 +70,11 @@
 				<div class="text-center">
 					No series aliases have been found in the database. View series' in the database <a href = "{{route('index_series')}}">here.</a>
 				</div>
-				<br/>
 			@endcan
 			@cannot('create', [App\Models\TagObjects\Series\SeriesAlias::class, false])
 				<div class="text-center">
 					No series aliases have been found in the database.
 				</div>
-				<br/>
 			@endcan
 		@endif
 	</div>

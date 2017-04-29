@@ -52,14 +52,12 @@
 				<div class="text-center">
 					No tags have been found in the database. Add a new tag <a href = "{{route('create_tag')}}">here.</a>
 				</div>
-				<br/>
 			@endcan
 			
 			@cannot('create', App\Models\TagObjects\Tag\Tag::class)
 				<div class="text-center">
 					No tags have been found in the database.
 				</div>
-				<br/>
 			@endcan
 		@endif
 	</div>
