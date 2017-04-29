@@ -15,18 +15,18 @@
 				<div>
 					<b>Sort By:</b>
 					@if($list_type == "usage")
-						<b><a href="/character?type=usage&order={{$list_order}}">Character Usage</a></b> <a href="/character?type=alphabetic&order={{$list_order}}">Alphabetic</a>
+						<b><a href="{{route('index_character')}}?type=usage&order={{$list_order}}">Character Usage</a></b> <a href="{{route('index_character')}}?type=alphabetic&order={{$list_order}}">Alphabetic</a>
 					@elseif ($list_type == "alphabetic")
-						<a href="/character?type=usage&order={{$list_order}}">Character Usage</a> <b><a href="/character?type=alphabetic&order={{$list_order}}">Alphabetic</a></b>
+						<a href="{{route('index_character')}}?type=usage&order={{$list_order}}">Character Usage</a> <b><a href="{{route('index_character')}}?type=alphabetic&order={{$list_order}}">Alphabetic</a></b>
 					@endif
 				</div>
 				
 				<div>
 					<b>Display Order:</b>
 					@if($list_order == "asc")
-						<b><a href="/character?type={{$list_type}}&order=asc">Ascending</a></b> <a href="/character?type={{$list_type}}&order=desc">Descending</a>
+						<b><a href="{{route('index_character')}}?type={{$list_type}}&order=asc">Ascending</a></b> <a href="{{route('index_character')}}?type={{$list_type}}&order=desc">Descending</a>
 					@elseif($list_order == "desc")
-						<a href="/character?type={{$list_type}}&order=asc">Ascending</a> <b><a href="/character?type={{$list_type}}&order=desc">Descending</a></b>
+						<a href="{{route('index_character')}}?type={{$list_type}}&order=asc">Ascending</a> <b><a href="{{route('index_character')}}?type={{$list_type}}&order=desc">Descending</a></b>
 					@endif
 				</div>
 			</div>
@@ -37,7 +37,7 @@
 			@endif
 			
 			<div class="col-xs-4">
-				<span class="primary_characters"><a href="/character/{{$character->id}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+				<span class="primary_characters"><a href="{{route('show_character', ['character' => $character])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
 			</div>
 			
 			@if((($loop->iteration - 1) % 3) == 2)			
@@ -50,7 +50,7 @@
 	@else
 		@can('create', App\Models\TagObjects\Character\Character::class)
 			<div class="text-center">
-				No characters have been found in the database. Add a new character <a href = "{{url('/character/create')}}">here.</a>
+				No characters have been found in the database. Add a new character <a href = "{{route('create_character')}}">here.</a>
 			</div>
 			<br/>
 		@endcan

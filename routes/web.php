@@ -130,21 +130,21 @@ Route::get('/scanalator_alias', 'TagObjects\Scanalator\ScanalatorAliasController
 
 //Character controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/character/create/{series?}', 'TagObjects\Character\CharacterController@create');
-	Route::post('/character', 'TagObjects\Character\CharacterController@store');
-	Route::get('/character/{character}/edit', 'TagObjects\Character\CharacterController@edit');
-	Route::patch('/character/{character}', 'TagObjects\Character\CharacterController@update');
+	Route::get('/character/create/{series?}', 'TagObjects\Character\CharacterController@create')->Name('create_character');
+	Route::post('/character', 'TagObjects\Character\CharacterController@store')->Name('store_character');
+	Route::get('/character/{character}/edit', 'TagObjects\Character\CharacterController@edit')->Name('edit_character');
+	Route::patch('/character/{character}', 'TagObjects\Character\CharacterController@update')->Name('update_character');
 });
 
-Route::get('/character', 'TagObjects\Character\CharacterController@index');
-Route::get('/character/{character}', 'TagObjects\Character\CharacterController@show');
+Route::get('/character', 'TagObjects\Character\CharacterController@index')->Name('index_character');
+Route::get('/character/{character}', 'TagObjects\Character\CharacterController@show')->Name('show_character');
 
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::post('/character_alias/{character}', 'TagObjects\Character\CharacterAliasController@store');
+	Route::post('/character_alias/{character}', 'TagObjects\Character\CharacterAliasController@store')->Name('store_character_alias');
 });
 
-Route::get('/character_alias', 'TagObjects\Character\CharacterAliasController@index');
+Route::get('/character_alias', 'TagObjects\Character\CharacterAliasController@index')->Name('index_character_alias');
 //End Alias controller routes
 
 //End Character controller routes

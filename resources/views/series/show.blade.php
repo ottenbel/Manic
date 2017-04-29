@@ -69,7 +69,7 @@
 				@endif
 				
 				<div class="col-xs-4">
-					<span class="primary_characters"><a href="/character/{{$character->id}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+					<span class="primary_characters"><a href="{{route('show_character', ['character' => $character])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
 				</div>
 				
 				@if((($loop->iteration - 1) % 3) == 2)			

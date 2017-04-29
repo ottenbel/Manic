@@ -115,7 +115,7 @@ class CharacterAliasController extends Controller
 		$characterAlias->save();
 		
 		//Redirect to the character that the alias was created for
-		return redirect()->action('TagObjects\Character\CharacterController@show', [$character])->with("flashed_success", array("Successfully created alias $characterAlias->alias on character $character->name."));
+		return redirect()->route('show_character', ['character' => $character])->with("flashed_success", array("Successfully created alias $characterAlias->alias on character $character->name."));
     }
 
     /**

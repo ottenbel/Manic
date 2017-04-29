@@ -13,7 +13,7 @@ Create a New Character
 	@can('create', App\Models\TagObjects\Character\Character::class)
 	<h1>Create a New Character</h1>
 	
-	<form method="POST" action="/character" enctype="multipart/form-data">
+	<form method="POST" action="{{route('store_character')}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		
 		<div class="form-group">
