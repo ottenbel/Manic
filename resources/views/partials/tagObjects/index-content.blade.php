@@ -42,11 +42,11 @@
 			<br/>
 			<div class="text-center">
 				@if($list_type == "usage")
-					<p>No {{$tagObjectName}}s associated with a {{$associatedType}} have been found in the database. </p>
+					<p>No {{$tagObjectNames}} associated with a {{$associatedType}} have been found in the database. </p>
 					
-					<p>Add a new {{$tagObjectName}} <a href = "{{route($createRoute)}}">here</a> or try listing {{$tagObjectName}}s by alphabetical order to find any not associated with a {{$associatedType}}.</p>
+					<p>Add a new {{$tagObjectName}} <a href = "{{route($createRoute)}}">here</a> or try listing {{$tagObjectNames}} by alphabetical order to find any not associated with a {{$associatedType}}.</p>
 				@elseif ($list_type == "alphabetic")
-					<p>No {{$tagObjectName}}s have been found in the database. </p>
+					<p>No {{$tagObjectNames}} have been found in the database. </p>
 					
 					<p>Add a new {{$tagObjectName}} <a href = "{{route($createRoute)}}">here</a>.</p>
 					
@@ -58,11 +58,11 @@
 			<br/>
 			<div class="text-center">
 			@if($list_type == "usage")
-				<p>No {{$tagObjectName}}s associated with a {{$associatedType}} have been found in the database. </p>
+				<p>No {{$tagObjectNames}} associated with a {{$associatedType}} have been found in the database. </p>
 			
-				<p>Try listing {{$tagObjectName}}s by alphabetical order to find any not associated with a {{$associatedType}}.</p>
+				<p>Try listing {{$tagObjectNames}} by alphabetical order to find any not associated with a {{$associatedType}}.</p>
 			@elseif ($list_type == "alphabetic")
-				<p>No {{$tagObjectName}}s associated with a {{$associatedType}} have been found in the database.</p>
+				<p>No {{$tagObjectNames}} associated with a {{$associatedType}} have been found in the database.</p>
 			@endif
 			</div>
 		@endcan
