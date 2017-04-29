@@ -19,16 +19,16 @@ Create a New Character
 		<div class="form-group">
 			{{ Form::label('parent_series', 'Series') }}
 			@if(($series != null) && (Input::old('parent_series') == null))
-				{{ Form::text('parent_series', $series->name, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.tagObjects.parentSeries'))) }}
+				{{ Form::text('parent_series', $series->name, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.tagObjects.character.parentSeries'))) }}
 			@else
-				{{ Form::text('parent_series', Input::old('parent_series'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.tagObjects.parentSeries'))) }}
+				{{ Form::text('parent_series', Input::old('parent_series'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.tagObjects.character.parentSeries'))) }}
 			@endif
 			@if($errors->has('parent_series'))
 				<div class ="alert alert-danger" id="name_errors">{{$errors->first('parent_series')}}</div>
 			@endif
 		</div>
 		
-		@include('partials.tag-object-input')
+		@include('partials.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.character.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source'])
 		
 		{{ Form::submit('Create Character', array('class' => 'btn btn-primary')) }}
 	</form>

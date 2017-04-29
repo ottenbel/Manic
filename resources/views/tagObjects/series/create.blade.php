@@ -16,7 +16,7 @@ Create a New Series
 		<form method="POST" action="{{route('store_series')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
-			@include('partials.tag-object-input')
+			@include('partials.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.series.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.series.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.series.source'])
 			
 			{{ Form::submit('Create Series', array('class' => 'btn btn-primary')) }}
 		</form>

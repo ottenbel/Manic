@@ -16,7 +16,7 @@ Create a New Artist
 		<form method="POST" action="{{route('store_artist')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
-			@include('partials.tag-object-input')
+			@include('partials.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.artist.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.artist.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.artist.source'])
 			
 			{{ Form::submit('Create Artist', array('class' => 'btn btn-primary')) }}
 		</form>

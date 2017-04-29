@@ -17,7 +17,7 @@ Edit Scanalator - {{{$scanalator->name}}}
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
 				
-		@include('partials.tag-object-input', ['tagObject' => $scanalator])
+		@include('partials.tag-object-input', ['tagObject' => $scanalator, 'namePlaceholder' => 'constants.placeholders.tagObjects.scanalator.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.scanalator.source'])
 		
 		{{ Form::submit('Update Scanalator', array('class' => 'btn btn-primary')) }}
 	</form>

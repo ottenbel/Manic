@@ -18,7 +18,7 @@ Edit Character - {{{$character->name}}}
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 			
-			@include('partials.tag-object-input', ['tagObject' => $character])
+			@include('partials.tag-object-input', ['tagObject' => $character, 'namePlaceholder' => 'constants.placeholders.tagObjects.character.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source'])
 			
 			{{ Form::submit('Update Character', array('class' => 'btn btn-primary')) }}
 		</form>

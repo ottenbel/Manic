@@ -17,7 +17,7 @@
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 					
-			@include('partials.tag-object-input', ['tagObject' => $series])
+			@include('partials.tag-object-input', ['tagObject' => $series, 'namePlaceholder' => 'constants.placeholders.tagObjects.series.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.series.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.series.source'])
 			
 			{{ Form::submit('Update Series', array('class' => 'btn btn-primary')) }}
 		</form>

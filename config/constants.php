@@ -25,10 +25,32 @@
 								 ],
 	 'placeholders' => [
 							'tagObjects' => [
-												'name' => 'Tag Object Name',
-												'description' => 'Some text describing the tag object.',
-												'source' => 'https://www.wikipedia.org',
-												'parentSeries' => 'Dresden Files'
+												'artist' => [
+																'name' => 'Artist Name',
+																'description' => 'A description of the artist.',
+																'source' => 'https://en.wikipedia.org/wiki/Artist'
+															],
+												'character' => [
+																	'name' => 'Chapter Name',
+																	'description' => 'A description of the character.',
+																	'source' => 'https://en.wikipedia.org/wiki/Character_(arts)',
+																	'parentSeries' => 'Parent Series'
+															   ],
+												'scanalator' => [
+																	'name' => 'Scanalator Name',
+																	'description' => 'A description of the scanalator.',
+																	'source' => 'https://en.wikipedia.org/wiki/Translation'
+																],
+												'series' => [
+																'name' => 'Series Name',
+																'description' => 'A description of the series.',
+																'source' => 'https://en.wikipedia.org/wiki/Series'
+															],
+												'tag' => [
+															'name' => 'Tag Name',
+															'description' => 'A description of the tag.',
+															'source' => 'https://en.wikipedia.org/wiki/Tag_(metadata)'
+														 ]
 											],
 							'aliases' => [
 											'personal' => 'Personal Alias',
