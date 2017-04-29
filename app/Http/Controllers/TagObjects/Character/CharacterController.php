@@ -216,7 +216,7 @@ class CharacterController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('characters.edit', array('tagObject' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('characters.edit', array('character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**

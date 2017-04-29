@@ -126,8 +126,8 @@
 				Tag <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="{{route('show_tag', ['tag' => $tagObject])}}">View Tag</a><li>
-				@can('delete', $tagObject)
+				<li><a href="{{route('show_tag', ['tag' => $tag])}}">View Tag</a><li>
+				@can('delete', $tag)
 					<li><a href="">Delete Tag</a></li>
 				@endcan
 			</ul>
@@ -152,8 +152,8 @@
 				Artist <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="{{route('show_artist', ['artist' => $tagObject])}}">View Artist</a><li>
-				@can('delete', $tagObject)
+				<li><a href="{{route('show_artist', ['artist' => $artist])}}">View Artist</a><li>
+				@can('delete', $artist)
 					<li><a href="">Delete Artist</a></li>
 				@endcan
 			</ul>
@@ -178,8 +178,8 @@
 				Character <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="{{route('show_character', ['character' => $tagObject])}}">View Character</a><li>
-				@can('delete', $tagObject)
+				<li><a href="{{route('show_character', ['character' => $character])}}">View Character</a><li>
+				@can('delete', $character)
 					<li><a href="">Delete Character</a></li>
 				@endcan
 			</ul>
@@ -209,10 +209,10 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('create', App\Models\TagObjects\Character\Character::class)
-					<li><a href="{{route('create_character', ['series' => $tagObject])}}">Add Character</a><li>
+					<li><a href="{{route('create_character', ['series' => $series])}}">Add Character</a><li>
 				@endcan
-				<li><a href="{{route('show_series', ['series' => $tagObject])}}">View Series</a><li>
-				@can('delete', $tagObject)
+				<li><a href="{{route('show_series', ['series' => $series])}}">View Series</a><li>
+				@can('delete', $series)
 					<li><a href="">Delete Series</a></li>
 				@endcan
 			</ul>
@@ -237,8 +237,8 @@
 				Scanalator <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="{{route('show_scanalator', ['scanalator' => $tagObject])}}">View Scanalator</a><li>
-				@can('delete', $tagObject)
+				<li><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}">View Scanalator</a><li>
+				@can('delete', $scanalator)
 					<li><a href="">Delete Scanalator</a></li>
 				@endcan
 			</ul>

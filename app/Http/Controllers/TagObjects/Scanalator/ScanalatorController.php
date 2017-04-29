@@ -205,7 +205,7 @@ class ScanalatorController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('scanalators.edit', array('tagObject' => $scanalator, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('scanalators.edit', array('scanalator' => $scanalator, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Edit Artist - {{{$tagObject->name}}}
+Edit Artist - {{{$artist->name}}}
 @endsection
 
 @section('head')
@@ -10,20 +10,20 @@ Edit Artist - {{{$tagObject->name}}}
 
 @section('content')
 <div class="container">
-	@can('update', $tagObject)
+	@can('update', $artist)
 	<h1>Edit Artist</h1>
 	
-	<form method="POST" action="{{route('update_artist', ['artist' => $tagObject])}}" enctype="multipart/form-data">
+	<form method="POST" action="{{route('update_artist', ['artist' => $artist])}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
 		
-		@include('partials.tag-object-input')
+		@include('partials.tag-object-input', ['tagObject' => $artist])
 		
 		{{ Form::submit('Update Artist', array('class' => 'btn btn-primary')) }}
 	</form>
 	@endcan
 	
-	@cannot('update', $tagObject)
+	@cannot('update', $artist)
 		<h1>Error</h1>
 		<div class="alert alert-danger" role="alert">
 			User does not have the correct permissions in order to edit artist.
