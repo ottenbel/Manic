@@ -13,7 +13,7 @@ Create a New Scanalator
 	@can('create', App\Models\TagObjects\Scanalator\Scanalator::class)
 		<h1>Create a New Scanalator</h1>
 		
-		<form method="POST" action="/scanalator" enctype="multipart/form-data">
+		<form method="POST" action="{{route('store_scanalator')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
 			@include('partials.tag-object-input')

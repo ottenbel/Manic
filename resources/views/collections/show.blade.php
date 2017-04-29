@@ -223,11 +223,11 @@
 									@if(($chapter->primary_scanalators()) || ($chapter->secondary_scanalators()))
 										<div class="scanalator_holder">			
 										@foreach($chapter->primary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
-												<span class="primary_scanalators"><a href="/scanalator/{{$scanalator->id}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+												<span class="primary_scanalators"><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
 											@endforeach
 											
 											@foreach($chapter->secondary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
-												<span class="secondary_scanalators"><a href="/scanalator/{{$scanalator->id}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+												<span class="secondary_scanalators"><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
 											@endforeach
 										</div>
 									@endif

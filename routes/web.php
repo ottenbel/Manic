@@ -109,21 +109,21 @@ Route::get('/series_alias', 'TagObjects\Series\SeriesAliasController@index')->Na
 
 //Scanalator controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/scanalator/create', 'TagObjects\Scanalator\ScanalatorController@create');
-	Route::post('/scanalator', 'TagObjects\Scanalator\ScanalatorController@store');
-	Route::get('/scanalator/{scanalator}/edit', 'TagObjects\Scanalator\ScanalatorController@edit');
-	Route::patch('/scanalator/{scanalator}', 'TagObjects\Scanalator\ScanalatorController@update');
+	Route::get('/scanalator/create', 'TagObjects\Scanalator\ScanalatorController@create')->Name('create_scanalator');
+	Route::post('/scanalator', 'TagObjects\Scanalator\ScanalatorController@store')->Name('store_scanalator');
+	Route::get('/scanalator/{scanalator}/edit', 'TagObjects\Scanalator\ScanalatorController@edit')->Name('edit_scanalator');
+	Route::patch('/scanalator/{scanalator}', 'TagObjects\Scanalator\ScanalatorController@update')->Name('update_scanalator');
 });
 
-Route::get('/scanalator', 'TagObjects\Scanalator\ScanalatorController@index');
-Route::get('/scanalator/{scanalator}', 'TagObjects\Scanalator\ScanalatorController@show');
+Route::get('/scanalator', 'TagObjects\Scanalator\ScanalatorController@index')->Name('index_scanalator');
+Route::get('/scanalator/{scanalator}', 'TagObjects\Scanalator\ScanalatorController@show')->Name('show_scanalator');
 
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
-	Route::post('/scanalator_alias/{scanalator}', 'TagObjects\Scanalator\ScanalatorAliasController@store');
+	Route::post('/scanalator_alias/{scanalator}', 'TagObjects\Scanalator\ScanalatorAliasController@store')->Name('store_scanalator_alias');
 });
 
-Route::get('/scanalator_alias', 'TagObjects\Scanalator\ScanalatorAliasController@index');
+Route::get('/scanalator_alias', 'TagObjects\Scanalator\ScanalatorAliasController@index')->Name('index_scanalator_alias');
 //End Alias controller routes
 
 //End scanalator controller routes

@@ -51,9 +51,9 @@
 			<div>
 				<b>Display Order:</b>
 				@if($global_list_order == "asc")
-					<b><a href="/scanalator/{{$scanalator->id}}?global_order=asc">Ascending</a></b> <a href="/scanalator/{{$scanalator->id}}?global_order=desc">Descending</a>
+					<b><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}?global_order=asc">Ascending</a></b> <a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}?global_order=desc">Descending</a>
 				@elseif($global_list_order == "desc")
-					<a href="/scanalator/{{$scanalator->id}}?global_order=asc">Ascending</a> <b><a href="/scanalator/{{$scanalator->id}}?global_order=desc">Descending</a></b>
+					<a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}?global_order=asc">Ascending</a> <b><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}?global_order=desc">Descending</a></b>
 				@endif
 			</div>
 		
@@ -70,7 +70,7 @@
 		@endif
 		
 		@can('create', [App\Models\TagObjects\Scanalator\ScanalatorAlias::class, true])
-			<form method="POST" action="/scanalator_alias/{{$scanalator->id}}" enctype="multipart/form-data">
+			<form method="POST" action="{{route('store_scanalator_alias', ['scanalator' => $scanalator])}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ Form::hidden('is_global_alias', true) }}
 				
@@ -88,9 +88,9 @@
 			<div>
 				<b>Display Order:</b>
 				@if($personal_list_order == "asc")
-					<b><a href="/scanalator/{{$scanalator->id}}?personal_order=asc">Ascending</a></b> <a href="/scanalator/{{$scanalator->id}}?personal_order=desc">Descending</a>
+					<b><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}?personal_order=asc">Ascending</a></b> <a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}?personal_order=desc">Descending</a>
 				@elseif($personal_list_order == "desc")
-					<a href="/scanalator/{{$scanalator->id}}?personal_order=asc">Ascending</a> <b><a href="/scanalator/{{$scanalator->id}}?personal_order=desc">Descending</a></b>
+					<a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}?personal_order=asc">Ascending</a> <b><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}?personal_order=desc">Descending</a></b>
 				@endif
 			</div>
 		
@@ -109,7 +109,7 @@
 		@endif
 		
 		@can('create', [App\Models\TagObjects\Scanalator\ScanalatorAlias::class, false])
-			<form method="POST" action="/scanalator_alias/{{$scanalator->id}}" enctype="multipart/form-data">
+			<form method="POST" action="{{route('store_scanalator_alias', ['scanalator' => $scanalator])}}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				{{ Form::hidden('is_personal_alias', true) }}
 				

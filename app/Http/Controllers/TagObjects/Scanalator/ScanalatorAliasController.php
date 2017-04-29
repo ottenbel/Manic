@@ -112,7 +112,7 @@ class ScanalatorAliasController extends Controller
 		$scanalatorAlias->save();
 		
 		//Redirect to the scanalator that the alias was created for
-		return redirect()->action('TagObjects\Scanalator\ScanalatorController@show', [$scanalator])->with("flashed_success", array("Successfully created alias $scanalatorAlias->alias on scanalator $scanalator->name."));
+		return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully created alias $scanalatorAlias->alias on scanalator $scanalator->name."));
     }
 
     /**

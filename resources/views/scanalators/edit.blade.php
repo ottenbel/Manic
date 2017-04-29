@@ -13,7 +13,7 @@ Edit Scanalator - {{{$tagObject->name}}}
 	@can('update', $tagObject)
 	<h1>Edit Scanalator</h1>
 	
-	<form method="POST" action="/scanalator/{{$tagObject->id}}" enctype="multipart/form-data">
+	<form method="POST" action="{{route('update_scanalator', ['scanalator' => $tagObject])}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
 				
