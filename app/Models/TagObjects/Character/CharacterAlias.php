@@ -21,7 +21,7 @@ class CharacterAlias extends BaseManicModel
 			$character = $model->character()->first();
 			$character->updated_by = Auth::user()->id;
 			$character->save();
-			$character->touches();
+			$character->touch();
 		});
 		
 		static::deleting(function($model)
@@ -31,7 +31,7 @@ class CharacterAlias extends BaseManicModel
 			$character = $model->character()->first();
 			$character->updated_by = Auth::user()->id;
 			$character->save();
-			$character->touches();
+			$character->touch();
 		});
     }
 	
