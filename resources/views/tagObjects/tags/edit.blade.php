@@ -17,7 +17,7 @@ Edit Tag - {{{$tag->name}}}
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 					
-			@include('partials.tag-object-input', ['tagObject' => $tag, 'namePlaceholder' => 'constants.placeholders.tagObjects.tag.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.tag.source'])
+			@include('partials.tagObjects.tag-object-input', ['tagObject' => $tag, 'namePlaceholder' => 'constants.placeholders.tagObjects.tag.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.tag.source'])
 			
 			{{ Form::submit('Update Tag', array('class' => 'btn btn-primary')) }}
 		</form>	

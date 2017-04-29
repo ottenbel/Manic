@@ -28,7 +28,7 @@ Create a New Character
 			@endif
 		</div>
 		
-		@include('partials.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.character.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source'])
+		@include('partials.tagObjects.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.character.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source'])
 		
 		{{ Form::submit('Create Character', array('class' => 'btn btn-primary')) }}
 	</form>

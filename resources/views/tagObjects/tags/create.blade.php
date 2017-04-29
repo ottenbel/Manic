@@ -16,7 +16,7 @@ Create a New Tag
 	<form method="POST" action="{{route('store_tag')}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		
-		@include('partials.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.tag.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.tag.source'])
+		@include('partials.tagObjects.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.tag.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.tag.source'])
 		
 		{{ Form::submit('Create Tag', array('class' => 'btn btn-primary')) }}
 	</form>

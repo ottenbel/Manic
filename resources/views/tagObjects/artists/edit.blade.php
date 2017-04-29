@@ -17,7 +17,7 @@ Edit Artist - {{{$artist->name}}}
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
 		
-		@include('partials.tag-object-input', ['tagObject' => $artist, 'namePlaceholder' => 'constants.placeholders.tagObjects.artist.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.artist.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.artist.source'])
+		@include('partials.tagObjects.tag-object-input', ['tagObject' => $artist, 'namePlaceholder' => 'constants.placeholders.tagObjects.artist.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.artist.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.artist.source'])
 		
 		{{ Form::submit('Update Artist', array('class' => 'btn btn-primary')) }}
 	</form>

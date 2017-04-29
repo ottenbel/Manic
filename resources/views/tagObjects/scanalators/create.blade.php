@@ -16,7 +16,7 @@ Create a New Scanalator
 		<form method="POST" action="{{route('store_scanalator')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
-			@include('partials.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.scanalator.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.scanalator.source'])
+			@include('partials.tagObjects.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.scanalator.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.scanalator.source'])
 			
 			{{ Form::submit('Create Scanalator', array('class' => 'btn btn-primary')) }}
 		</form>
