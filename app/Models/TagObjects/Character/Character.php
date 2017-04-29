@@ -21,6 +21,7 @@ class Character extends CollectionAssociatedTagObjectModel
 			$series = $model->series()->first();
 			$series->updated_by = Auth::user()->id;
 			$series->save();
+			$series->touches();
 		});
 		
 		static::deleting(function($model)
@@ -30,6 +31,7 @@ class Character extends CollectionAssociatedTagObjectModel
 			$series = $model->series()->first();
 			$series->updated_by = Auth::user()->id;
 			$series->save();
+			$series->touches();
 		});
     }
 	

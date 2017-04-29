@@ -21,6 +21,7 @@ class ScanalatorAlias extends BaseManicModel
 			$scanalator = $model->scanalator()->first();
 			$scanalator->updated_by = Auth::user()->id;
 			$scanalator->save();
+			$scanalator->touches();
 		});
 		
 		static::deleting(function($model)
@@ -30,6 +31,7 @@ class ScanalatorAlias extends BaseManicModel
 			$scanalator = $model->scanalator()->first();
 			$scanalator->updated_by = Auth::user()->id;
 			$scanalator->save();
+			$scanalator->touches();
 		});
     }
 	

@@ -21,6 +21,7 @@ class Volume extends BaseManicModel
 			$collection = $model->collection()->first();
 			$collection->updated_by = Auth::user()->id;
 			$collection->save();
+			$collection->touches();
 		});
 		
 		static::deleting(function($model)
@@ -30,6 +31,7 @@ class Volume extends BaseManicModel
 			$collection = $model->collection()->first();
 			$collection->updated_by = Auth::user()->id;
 			$collection->save();
+			$collection->touch();
 		});
     }
 	

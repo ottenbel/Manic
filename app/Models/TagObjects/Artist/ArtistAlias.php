@@ -21,6 +21,7 @@ class ArtistAlias extends BaseManicModel
 			$artist = $model->artist()->first();
 			$artist->updated_by = Auth::user()->id;
 			$artist->save();
+			$artist->touches();
 		});
 		
 		static::deleting(function($model)
@@ -30,6 +31,7 @@ class ArtistAlias extends BaseManicModel
 			$artist = $model->artist()->first();
 			$artist->updated_by = Auth::user()->id;
 			$artist->save();
+			$artist->touches();
 		});
     }
 	

@@ -21,6 +21,7 @@ class TagAlias extends BaseManicModel
 			$tag = $model->tag()->first();
 			$tag->updated_by = Auth::user()->id;
 			$tag->save();
+			$tag->touches();
 		});
 		
 		static::deleting(function($model)
@@ -30,6 +31,7 @@ class TagAlias extends BaseManicModel
 			$tag = $model->tag()->first();
 			$tag->updated_by = Auth::user()->id;
 			$tag->save();
+			$tag->touches();
 		});
     }
 	

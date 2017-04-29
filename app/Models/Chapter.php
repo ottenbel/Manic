@@ -21,10 +21,12 @@ class Chapter extends BaseManicModel
 			$volume = $model->volume()->first();
 			$volume->updated_by = Auth::user()->id;
 			$volume->save();
+			$volume->touch();
 			
 			$collection = $volume->collection()->first();
 			$collection->updated_by = Auth::user()->id;
 			$collection->save();
+			$collection->touch();
 		});
 		
 		static::deleting(function($model)
@@ -34,10 +36,12 @@ class Chapter extends BaseManicModel
 			$volume = $model->volume()->first();
 			$volume->updated_by = Auth::user()->id;
 			$volume->save();
+			$volume->touch();
 			
 			$collection = $volume->collection()->first();
 			$collection->updated_by = Auth::user()->id;
 			$collection->save();
+			$collection->touch();
 		});
     }
 	
