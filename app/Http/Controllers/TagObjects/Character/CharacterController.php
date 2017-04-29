@@ -72,7 +72,7 @@ class CharacterController extends Controller
 			$characters = $characters_used;
 		}		
 		
-		return View('characters.index', array('characters' => $characters->appends(Input::except('page')), 'list_type' => $character_list_type, 'list_order' => $character_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.characters.index', array('characters' => $characters->appends(Input::except('page')), 'list_type' => $character_list_type, 'list_order' => $character_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -89,7 +89,7 @@ class CharacterController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('characters.create', array('series' => $series, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.characters.create', array('series' => $series, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -172,7 +172,7 @@ class CharacterController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('characters.show', array('character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.characters.show', array('character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -216,7 +216,7 @@ class CharacterController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('characters.edit', array('character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.characters.edit', array('character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**

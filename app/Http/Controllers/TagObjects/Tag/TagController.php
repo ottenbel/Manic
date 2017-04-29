@@ -69,7 +69,7 @@ class TagController extends Controller
 			$tags = $tags_used;
 		}		
 				
-		return View('tags.index', array('tags' => $tags->appends(Input::except('page')), 'list_type' => $tag_list_type, 'list_order' => $tag_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.tags.index', array('tags' => $tags->appends(Input::except('page')), 'list_type' => $tag_list_type, 'list_order' => $tag_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -86,7 +86,7 @@ class TagController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('tags.create', array('flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.tags.create', array('flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -161,7 +161,7 @@ class TagController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tags.show', array('tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.tags.show', array('tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -205,7 +205,7 @@ class TagController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tags.edit', array('tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.tags.edit', array('tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
