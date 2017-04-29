@@ -9,58 +9,7 @@
 @endsection
 
 @section('content')
-	<div class="container">	
-		@if($artists->count() != 0)
-			<div>
-				<div>
-					<b>Sort By:</b>
-					@if($list_type == "usage")
-						<b><a href="{{route('index_artist')}}?type=usage&order={{$list_order}}">Artist Usage</a></b> <a href="{{route('index_artist')}}?type=alphabetic&order={{$list_order}}">Alphabetic</a>
-					@elseif ($list_type == "alphabetic")
-						<a href="{{route('index_artist')}}?type=usage&order={{$list_order}}">Artist Usage</a> <b><a href="{{route('index_artist')}}?type=alphabetic&order={{$list_order}}">Alphabetic</a></b>
-					@endif
-				</div>
-				
-				<div>
-					<b>Display Order:</b>
-					@if($list_order == "asc")
-						<b><a href="{{route('index_artist')}}?type={{$list_type}}&order=asc">Ascending</a></b> <a href="{{route('index_artist')}}?type={{$list_type}}&order=desc">Descending</a>
-					@elseif($list_order == "desc")
-						<a href="{{route('index_artist')}}?type={{$list_type}}&order=asc">Ascending</a> <b><a href="{{route('index_artist')}}?type={{$list_type}}&order=desc">Descending</a></b>
-					@endif
-				</div>
-			</div>
-			
-			@foreach($artists as $artist)
-				@if((($loop->iteration - 1) % 3) == 0)
-					<div class="row">
-				@endif
-				
-				<div class="col-xs-4">
-					<span class="primary_artists"><a href="{{route('show_artist', ['artist' => $artist])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
-				</div>
-				
-				@if((($loop->iteration - 1) % 3) == 2)			
-					</div>
-				@endif
-			@endforeach
-			<br/>
-			<br/>
-			{{ $artists->links() }}
-		@else
-			@can('create', App\Models\TagObjects\Artist\Artist::class)
-				<div class="text-center">
-					No artists have been found in the database. Add a new artist <a href = "{{route('create_artist')}}">here.</a>
-				</div>
-			@endcan
-			
-			@cannot('create', App\Models\TagObjects\Artist\Artist::class)
-				<div class="text-center">
-					No artists have been found in the database.
-				</div>
-			@endcan
-		@endif
-	</div>	
+	@include('partials.tagObjects.index-content', ['tagObjects' => $artists, 'tagObjectName' => 'artist', 'titleTagObjectName' => 'Artist', 'associatedType' => 'collection', 'indexRoute' => 'index_artist', 'showRoute' => 'show_artist', 'createRoute' => 'create_artist', 'tagDisplayClass' => "primary_artists", 'tagDisplayCountClass' => "artist_count", 'classModelPath' => App\Models\TagObjects\Artist\Artist::class])	
 @endsection
 
 @section('footer')
