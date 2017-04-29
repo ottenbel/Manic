@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Redirect;
 use Auth;
 use Input;
 use App\Models\Collection;
@@ -136,9 +137,28 @@ class VolumeController extends Controller
 			'image' => 'nullable|image'
 		]);
 		
+		$volumeNumber = trim(Input::get('volume_number'));
+		
+		if ($volume->chapters()->count() > 0)
+		{			
+			if (($volume->next_volume()->first() != null) && ($volume->next_volume()->first()->chapters()->count() > 0) && ($volumeNumber > $volume->next_volume()->first()->volume_number))
+			{
+				$nextVolumeNumber = $volume->next_volume()->first()->volume_number;
+				
+				return Redirect::back()->withErrors(['volume_number' => "Volume number must be less than $nextVolumeNumber"])->withInput();
+			}
+			
+			else if (($volume->previous_volume()->first() != null) && ($volume->previous_volume()->first()->chapters()->count() > 0) && ($volumeNumber < $volume->previous_volume()->first()->volume_number))
+			{
+				$previousVolumeNumber = $volume->previous_volume()->first()->volume_number;
+				
+				return Redirect::back()->withErrors(['volume_number' => "Volume number must be greater than $previousVolumeNumber"])->withInput();
+			}
+		}
+		
 		$collection = $volume->collection;
 		
-		$volume->volume_number = trim(Input::get('volume_number'));
+		$volume->volume_number = $volumeNumber;
 		$volume->name = trim(Input::get('name'));
 		
 		//Handle uploading cover here
