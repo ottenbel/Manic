@@ -12,7 +12,7 @@
 			<div class="volume_panel">
 				@if($volume->cover_image != null)
 					<div id="cover" class="col-md-2">
-						@if($edit)
+						@if($editVolume)
 							<a href="{{route($editVolumeRoute, ['volume' => $volume])}}"><img src="{{asset($volume->cover_image->name)}}" class="img-responsive img-rounded" alt="Volume Cover" height="100%" width="100%"</a>
 						@else
 							<img src="{{asset($volume->cover_image->name)}}" class="img-responsive img-rounded" alt="Volume Cover" height="100%" width="100%">
@@ -23,7 +23,7 @@
 					<div>
 				@endif
 				
-					@if($edit)
+					@if($editVolume)
 						<a href="{{route($editVolumeRoute, ['volume' => $volume])}}"><h4>
 							@if($volume->name != null && $volume->name != "")
 								Volume {{$volume->volume_number}} - {{{$volume->name}}}
