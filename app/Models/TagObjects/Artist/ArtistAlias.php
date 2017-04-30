@@ -42,4 +42,12 @@ class ArtistAlias extends BaseManicModel
 	{
 		return $this->belongsTo('App\Models\TagObjects\Artist\Artist');
 	}
+	
+	/*
+	 * A generic function call to retrieve the artist that the alias belongs to.
+	 */
+	public function tag_object()
+	{
+		return $this->belongsTo('App\Models\TagObjects\Artist\Artist');
+	}
 }

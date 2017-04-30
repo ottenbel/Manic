@@ -36,9 +36,17 @@ class TagAlias extends BaseManicModel
     }
 	
 	/*
-	 * Get the series that the alias belongs to.
+	 * Get the tag that the alias belongs to.
 	 */
 	public function tag()
+	{
+		return $this->belongsTo('App\Models\TagObjects\Tag\Tag');
+	}
+	
+	/*
+	 * A generic function call to retrieve the tag that the alias belongs to.
+	 */
+	public function tag_object()
 	{
 		return $this->belongsTo('App\Models\TagObjects\Tag\Tag');
 	}

@@ -42,4 +42,12 @@ class CharacterAlias extends BaseManicModel
 	{
 		return $this->belongsTo('App\Models\TagObjects\Character\Character');
 	}
+	
+	/*
+	 * A generic function call to retrieve the character that the alias belongs to.
+	 */
+	public function tag_object()
+	{
+		return $this->belongsTo('App\Models\TagObjects\Character\Character');
+	}
 }

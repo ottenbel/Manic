@@ -42,4 +42,12 @@ class ScanalatorAlias extends BaseManicModel
 	{
 		return $this->belongsTo('App\Models\TagObjects\Scanalator\Scanalator');
 	}
+	
+	/*
+	 * A generic function call to retrieve the scanalator that the alias belongs to.
+	 */
+	public function tag_object()
+	{
+		return $this->belongsTo('App\Models\TagObjects\Scanalator\Scanalator');
+	}
 }

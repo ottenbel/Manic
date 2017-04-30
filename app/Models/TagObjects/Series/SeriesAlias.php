@@ -42,4 +42,12 @@ class SeriesAlias extends BaseManicModel
 	{
 		return $this->belongsTo('App\Models\TagObjects\Series\Series');
 	}
+	
+	/*
+	 * A generic function call to retrieve the series that the alias belongs to.
+	 */
+	public function tag_object()
+	{
+		return $this->belongsTo('App\Models\TagObjects\Series\Series');
+	}
 }
