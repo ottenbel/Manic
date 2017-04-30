@@ -113,7 +113,7 @@
 				{{ csrf_field() }}
 				{{ Form::hidden('is_global_alias', true) }}
 				
-				@include('partials.global-alias-input')
+				@include('partials.tagObjects.alias.global-alias-input')
 				
 				{{ Form::submit("Create Global $titleTagObjectName Alias", array('class' => 'btn btn-primary')) }}
 			</form>
@@ -154,7 +154,7 @@
 				{{ csrf_field() }}
 				{{ Form::hidden('is_personal_alias', true) }}
 				
-				@include('partials.personal-alias-input')
+				@include('partials.tagObjects.alias.personal-alias-input')
 				
 				{{ Form::submit("Create Personal $titleTagObjectName Alias", array('class' => 'btn btn-primary')) }}
 			</form>
