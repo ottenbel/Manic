@@ -22,17 +22,8 @@ Edit Volume - {{{$volume->name}}}
 			
 			@include('partials.volume-input', array('volume' => $volume))
 			
-			<div id = "chapters">
-				@foreach($volume->chapters()->orderBy('chapter_number', 'asc')->get() as $chapter)
-					<div id="chapter">
-						@if($chapter->name != null && $chapter->name != "")
-							<a href="{{route('edit_chapter', ['chapter' => $chapter])}}">Chapter {{$chapter->chapter_number}} - {{$chapter->name}}</a>
-						@else
-							<a href="{{route('edit_chapter', ['chapter' => $chapter])}}">Chapter {{$chapter->chapter_number}}</a>
-						@endif
-					</div>
-				@endforeach
-			</div>
+			@include('partials.show-volume-chapters', ['volume' => $volume, 'editVolume' => false, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'edit_chapter', 'scanalatorLinkRoute' => 'edit_scanalator', 'chapterOnly' => true])
+			
 			<br/>
 			
 			{{ Form::submit('Update Volume', array('class' => 'btn btn-primary')) }}
