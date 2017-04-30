@@ -24,19 +24,9 @@ Edit Collection - {{{$collection->name}}}
 			{{ Form::hidden('collection_id', $collection->id) }}
 			
 			@include('partials.collection-input', array('collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))
-			<div id = "volumes">
-				@foreach($collection->volumes()->orderBy('volume_number', 'asc')->get() as $volume)
-					@can('update', $volume)
-						<div id="volume">
-							@if($volume->name != null && $volume->name != "")
-								<a href="{{route('edit_volume', ['volume' => $volume])}}">Volume {{$volume->volume_number}} - {{{$volume->name}}}</a>
-							@else
-								<a href="{{route('edit_volume', ['volume' => $volume])}}">Volume {{$volume->volume_number}}</a>
-							@endif 
-						</div>
-					@endcan
-				@endforeach
-			</div>
+			
+			@include('partials.show-collection-content', ['volumes' => $collection->volumes(), 'edit' => true, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'edit_chapter', 'scanalatorLinkRoute' => 'edit_scanalator'])
+			
 			<br/>
 			{{ Form::submit('Update Collection', array('class' => 'btn btn-primary')) }}
 		</form>
