@@ -5,7 +5,11 @@ Edit Chapter # {{$chapter->chapter_number}} {{{$chapter->name}}}
 @endsection
 
 @section('head')
+<script>
+	var volumes = {!!$volumes_array!!};
+</script>
 <script src="/js/autocomplete/scanalator.js"></script>
+<script src="/js/dynamicallydisplayselectedvolume.js"></script>
 @endsection
 
 @section('content')

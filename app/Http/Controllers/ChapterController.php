@@ -37,6 +37,8 @@ class ChapterController extends Controller
 			return "Volume $item";	
 		});
 		
+		$volumes_array = json_encode($collection->volumes()->pluck('id'));
+		
 		if ($collection->volumes()->count() == 0)
 		{
 			//If collection doesn't have any associated volumes prompt the user to create a volume before they create a chapter.
@@ -51,11 +53,11 @@ class ChapterController extends Controller
 				$flashed_warning = array($missing_volume_warning);
 			}
 			
-			return View('volumes.create', array('collection' => $collection, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+			return View('volumes.create', array('collection' => $collection, 'volumes_array' => $volumes_array,  'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
 		}
 		else
 		{
-			return View('chapters.create', array('collection' => $collection, 'volumes' => $volumes, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+			return View('chapters.create', array('collection' => $collection, 'volumes' => $volumes, 'volumes_array' => $volumes_array, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
 		}
     }
 
@@ -264,12 +266,14 @@ class ChapterController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
+		$volumes_array = json_encode($chapter->volume->collection->volumes()->pluck('id'));
+		
 		$volumes = $chapter->volume->collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
 		{
 			return "Volume $item";
 		});
 		
-        return View('chapters.edit', array('chapter' => $chapter, 'volumes' => $volumes, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+        return View('chapters.edit', array('chapter' => $chapter, 'volumes' => $volumes, 'volumes_array' => $volumes_array, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**

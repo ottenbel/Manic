@@ -5,7 +5,11 @@ Create a New Chapter
 @endsection
 
 @section('head')
+<script>
+	var volumes = {!!$volumes_array!!};
+</script>
 <script src="/js/autocomplete/scanalator.js"></script>
+<script src="/js/dynamicallydisplayselectedvolume.js"></script>
 @endsection
 
 @section('content')

@@ -1,11 +1,15 @@
-<button class="accordion" type="button">
+@if($hideVolumes == true)
+	<button id="{{$volume->id}}_button" class="accordion" type="button" style="display:none">
+@else
+	<button id="{{$volume->id}}_button" class="accordion" type="button">
+@endif
 	@if($volume->name != null && $volume->name != "")
 		Volume {{$volume->volume_number}} - {{{$volume->name}}}
 	@else
 		Volume {{$volume->volume_number}}
 	@endif 
 </button>
-<div class="volume_panel">
+<div id="{{$volume->id}}_panel" class="volume_panel">
 	@if(($volume->cover_image != null) && ($chapterOnly != true))
 		<div id="cover" class="col-md-2">
 			@if($editVolume)
