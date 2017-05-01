@@ -163,6 +163,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 	Laravel\Tinker\TinkerServiceProvider::class,
+	Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -232,6 +233,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 		'Uuid' => Webpatser\Uuid\Uuid::class,
 		'MappingHelper' => App\Helpers\MappingHelper::class,
+		'InterventionImage' => Intervention\Image\Facades\Image::class,
     ],
 
 ];
