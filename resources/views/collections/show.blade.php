@@ -202,7 +202,7 @@
 				<div class="volume_panel" id="parent_collection">
 					<span class="col-md-1">
 						@if($collection->parent_collection->cover_image != null)
-							<a href="{{route('show_collection', ['collection' => $collection->parent_collection])}}"><img src="{{asset($collection->parent_collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Collection Cover"></a>
+							<a href="{{route('show_collection', ['collection' => $collection->parent_collection])}}"><img src="{{asset($collection->parent_collection->cover_image->thumbnail)}}" class="img-responsive img-rounded" alt="Collection Cover"></a>
 						@endif
 					</span>
 					<span class="col-md-11">
@@ -225,7 +225,7 @@
 					<div id="sibling_collection">
 						<span class="col-md-1">
 							@if($sibling_collection->cover_image != null)
-								<a href="{{route('show_collection', ['collection' => $sibling_collection])}}"><img src="{{asset($sibling_collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Responsive image"></a>
+								<a href="{{route('show_collection', ['collection' => $sibling_collection])}}"><img src="{{asset($sibling_collection->cover_image->thumbnail)}}" class="img-responsive img-rounded" alt="Responsive image"></a>
 							@endif
 						</span>
 						<span class="col-md-11">
@@ -251,7 +251,7 @@
 						<div id="child_collection">
 							<span class="col-md-1">
 								@if($child_collection->cover_image != null)
-									<a href="{{route('show_collection', ['collection' => $child_collection])}}"><img src="{{asset($child_collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Responsive image"></a>
+									<a href="{{route('show_collection', ['collection' => $child_collection])}}"><img src="{{asset($child_collection->cover_image->thumbnail)}}" class="img-responsive img-rounded" alt="Responsive image"></a>
 								@endif
 							</span>
 							<span class="col-md-11">

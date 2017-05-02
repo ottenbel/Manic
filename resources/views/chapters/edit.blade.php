@@ -33,7 +33,7 @@ Edit Chapter # {{$chapter->chapter_number}} {{{$chapter->name}}}
 					@endif
 						<td>
 							<div>
-								<img src="{{asset($page->name)}}" class="img-responsive img-rounded" alt="Page {{$chapter->page_number}}" height="150px" width="150px">
+								<img src="{{asset($page->thumbnail)}}" class="img-responsive img-rounded" alt="Page {{$chapter->page_number}}" height="150px" width="150px">
 							</div>
 							
 							<div>
