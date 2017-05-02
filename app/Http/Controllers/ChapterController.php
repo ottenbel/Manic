@@ -180,7 +180,7 @@ class ChapterController extends Controller
 				
 				$thumbnailPath = str_replace('images', 'images/thumbnails', $image->name);
 				$thumbnailDBPath = str_replace('public', 'storage', $thumbnailPath);
-				$thumbnail = InterventionImage::make($request->file('image')->getRealPath());
+				$thumbnail = InterventionImage::make($file->getRealPath());
 				$thumbnailRatio = 250/$thumbnail->height();
 				$thumbnailHeight = 250;
 				$thumbnailWidth = $thumbnail->width() * $thumbnailRatio;
@@ -457,7 +457,7 @@ class ChapterController extends Controller
 					
 					$thumbnailPath = str_replace('images', 'images/thumbnails', $image->name);
 					$thumbnailDBPath = str_replace('public', 'storage', $thumbnailPath);
-					$thumbnail = InterventionImage::make($request->file('image')->getRealPath());
+					$thumbnail = InterventionImage::make($file->getRealPath());
 					$thumbnailRatio = 250/$thumbnail->height();
 					$thumbnailHeight = 250;
 					$thumbnailWidth = $thumbnail->width() * $thumbnailRatio;
