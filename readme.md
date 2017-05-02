@@ -13,5 +13,7 @@ Manic is an open source project for hosting and sharing comics/manga/etc. It was
 4. Modify the UserSeeder.php file to use desired email address instead of the default admin@email.com address
 5. Run php artisan migrate --seed
 6. Create a soft link between the storage directory and the public directory ln -s /path/to/laravel/storage/app/public /path/to/laravel/public/storage (http://stackoverflow.com/questions/30191330/laravel-5-how-to-access-image-uploaded-in-storage-within-view/30192351#30192351)
-7. Copy the relevant directories (bootstrap, font awesome, jquery, jquery-ui) from the components directory to the relevant subdirectories (css, js) under the public directory
-8. Sign in to the newly created administrator account and change your password
+7. Create an images directory under the app/public directory. Set the owner and group to www-data
+	1. Create a thumbnails directory under the app/public/images directory. Set the owner and group to www-data. 
+8. Copy the relevant directories (bootstrap, font awesome, jquery, jquery-ui) from the components directory to the relevant subdirectories (css, js) under the public directory
+9. Sign in to the newly created administrator account and change your password

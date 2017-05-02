@@ -8,6 +8,7 @@ use Auth;
 use Input;
 use Config;
 use MappingHelper;
+use InterventionImage;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
 use App\Models\TagObjects\Character\Character;
@@ -118,6 +119,18 @@ class CollectionController extends Controller
 				$image->name = str_replace('public', 'storage', $path);
 				$image->hash = $hash;
 				$image->extension = $file_extension;
+				
+				$thumbnailPath = str_replace('images', 'images/thumbnails', $image->name);
+				$thumbnailDBPath = str_replace('public', 'storage', $thumbnailPath);
+				$thumbnail = InterventionImage::make($request->file('image')->getRealPath());
+				$thumbnailRatio = 250/$thumbnail->height();
+				$thumbnailHeight = 250;
+				$thumbnailWidth = $thumbnail->width() * $thumbnailRatio;
+				$thumbnail->resize($thumbnailWidth, $thumbnailHeight);
+				$thumbnail->save($thumbnailPath);
+		
+				$image->thumbnail = $thumbnailDBPath;
+				
 				$image->save();
 				
 				$collection->cover = $image->id;
@@ -299,6 +312,18 @@ class CollectionController extends Controller
 				$image->name = str_replace('public', 'storage', $path);
 				$image->hash = $hash;
 				$image->extension = $file_extension;
+				
+				$thumbnailPath = str_replace('images', 'images/thumbnails', $image->name);
+				$thumbnailDBPath = str_replace('public', 'storage', $thumbnailPath);
+				$thumbnail = InterventionImage::make($request->file('image')->getRealPath());
+				$thumbnailRatio = 250/$thumbnail->height();
+				$thumbnailHeight = 250;
+				$thumbnailWidth = $thumbnail->width() * $thumbnailRatio;
+				$thumbnail->resize($thumbnailWidth, $thumbnailHeight);
+				$thumbnail->save($thumbnailPath);
+		
+				$image->thumbnail = $thumbnailDBPath;
+				
 				$image->save();
 				
 				$collection->cover = $image->id;
