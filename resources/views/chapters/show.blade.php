@@ -114,20 +114,30 @@
 			</ul>
 	</div>
 @else
-	<div class="alert alert-warning">
+	<br/>
+	<div class="alert alert-warning" style="text-align:center">
 		This chapter has no associated pages.  
-		@if(Auth::user())
+		@can('update', $chapter)
+			<br/>
+			<br/>
 			You can add pages to the chapter <a href="{{route('edit_chapter', ['chapter' => $chapter])}}" class="alert-link">here</a>.
-		@endif
+		@endcan
 		
-		@if(count($chapter->previous_chapter()->first()))
-			<br>
-			<a href="{{route('show_chapter', ['chapter' => $chapter->previous_chapter()->first(), 'page' => 0])}}">Previous Chapter</a> 
-		@endif
-		
-		@if(count($chapter->next_chapter()->first()))
-			<br>
-			<a href="{{route('show_chapter', ['chapter' => $chapter->next_chapter->first(), page => 0])}}">Next Chapter</a> 
+		@if(count($chapter->previous_chapter()->first()) || count($chapter->next_chapter()->first()))
+			<br/>
+			<div class="row">
+				@if(count($chapter->previous_chapter()->first()))
+					<div class="col-md-6">
+						<a href="{{route('show_chapter', ['chapter' => $chapter->previous_chapter()->first(), 'page' => 0])}}">Previous Chapter</a> 
+					</div>
+				@endif
+				
+				@if(count($chapter->next_chapter()->first()))
+					<div class="col-md-6">
+					<a href="{{route('show_chapter', ['chapter' => $chapter->next_chapter->first(), 'page' => 0])}}">Next Chapter</a> 
+					</div>
+				@endif
+			</div>
 		@endif
 	</div>
 @endif
