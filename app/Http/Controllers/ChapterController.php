@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use Auth;
 use Input;
 use MappingHelper;
+use ImageUploadHelper;
 use InterventionImage;
 use App\Models\Chapter;
 use App\Models\Collection;
@@ -162,37 +163,9 @@ class ChapterController extends Controller
 		
 		$page_number = 0;
 		foreach(Input::file('images') as $file)
-		{
-			//Calculate file hash
-			$hash = hash_file("sha256", $file->getPathName());
-			
-			//Does the image already exist?
-			$image = Image::where('hash', '=', $hash)->first();
-			if (!count($image))
-			{
-				$path = $file->store('public/images');
-				$file_extension = $file->guessExtension();
-				
-				$image = new Image();
-				$image->name = str_replace('public', 'storage', $path);
-				$image->hash = $hash;
-				$image->extension = $file_extension;
-				
-				$thumbnailPath = str_replace('images', 'images/thumbnails', $image->name);
-				$thumbnailDBPath = str_replace('public', 'storage', $thumbnailPath);
-				$thumbnail = InterventionImage::make($file->getRealPath());
-				$thumbnailRatio = 250/$thumbnail->height();
-				$thumbnailHeight = 250;
-				$thumbnailWidth = $thumbnail->width() * $thumbnailRatio;
-				$thumbnail->resize($thumbnailWidth, $thumbnailHeight);
-				$thumbnail->save($thumbnailPath);
-		
-				$image->thumbnail = $thumbnailDBPath;
-				$image->save();
-			}
-			
-			$chapter->pages()->attach($image, ['page_number' => $page_number]);
-			
+		{			
+			$image = ImageUploadHelper::UploadImage($file);
+			$chapter->pages()->attach($image, ['page_number' => $page_number]);	
 			$page_number++;
 		}
 		
@@ -440,36 +413,8 @@ class ChapterController extends Controller
 			$page_number = $highest_page_number + 1;
 			foreach(Input::file('images') as $file)
 			{
-				//Calculate file hash
-				$hash = hash_file("sha256", $file->getPathName());
-				
-				//Does the image already exist?
-				$image = Image::where('hash', '=', $hash)->first();
-				if (!count($image))
-				{
-					$path = $file->store('public/images');
-					$file_extension = $file->guessExtension();
-					
-					$image = new Image();
-					$image->name = str_replace('public', 'storage', $path);
-					$image->hash = $hash;
-					$image->extension = $file_extension;
-					
-					$thumbnailPath = str_replace('images', 'images/thumbnails', $image->name);
-					$thumbnailDBPath = str_replace('public', 'storage', $thumbnailPath);
-					$thumbnail = InterventionImage::make($file->getRealPath());
-					$thumbnailRatio = 250/$thumbnail->height();
-					$thumbnailHeight = 250;
-					$thumbnailWidth = $thumbnail->width() * $thumbnailRatio;
-					$thumbnail->resize($thumbnailWidth, $thumbnailHeight);
-					$thumbnail->save($thumbnailPath);
-			
-					$image->thumbnail = $thumbnailDBPath;				
-					$image->save();
-				}
-				
-				$chapter->pages()->attach($image, ['page_number' => $page_number]);
-				
+				$image = ImageUploadHelper::UploadImage($file);
+				$chapter->pages()->attach($image, ['page_number' => $page_number]);	
 				$page_number++;
 			}
 		}

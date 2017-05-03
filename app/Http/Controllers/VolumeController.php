@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use Auth;
 use Input;
 use InterventionImage;
+use ImageUploadHelper;
 use App\Models\Collection;
 use App\Models\Image;
 use App\Models\Volume;
@@ -66,42 +67,9 @@ class VolumeController extends Controller
 		{
 			//Get posted image
 			$file = $request->file('image');
-			
-			//Calculate file hash
-			$hash = hash_file("sha256", $file->getPathName());
-			
-			//Does the image already exist?
-			$image = Image::where('hash', '=', $hash)->first();
-			if (count($image))
-			{
-				//File already exists (use existing mapping)
-				$volume->cover = $image->id;
-			}
-			else
-			{
-				$path = $file->store('public/images');
-				$file_extension = $file->guessExtension();
-				
-				$image = new Image();
-				$image->name = str_replace('public', 'storage', $path);
-				$image->hash = $hash;
-				$image->extension = $file_extension;
-				
-				$thumbnailPath = str_replace('images', 'images/thumbnails', $image->name);
-				$thumbnailDBPath = str_replace('public', 'storage', $thumbnailPath);
-				$thumbnail = InterventionImage::make($request->file('image')->getRealPath());
-				$thumbnailRatio = 250/$thumbnail->height();
-				$thumbnailHeight = 250;
-				$thumbnailWidth = $thumbnail->width() * $thumbnailRatio;
-				$thumbnail->resize($thumbnailWidth, $thumbnailHeight);
-				$thumbnail->save($thumbnailPath);
-		
-				$image->thumbnail = $thumbnailDBPath;
-				$image->save();
-				
-				$volume->cover = $image->id;
-			}
-		}
+			$image = ImageUploadHelper::UploadImage($file);
+			$volume->cover = $image->id;
+		} 
 		
 		$volume->save();
 				
@@ -178,41 +146,8 @@ class VolumeController extends Controller
 		{
 			//Get posted image
 			$file = $request->file('image');
-			
-			//Calculate file hash
-			$hash = hash_file("sha256", $file->getPathName());
-			
-			//Does the image already exist?
-			$image = Image::where('hash', '=', $hash)->first();
-			if (count($image))
-			{
-				//File already exists (use existing mapping)
-				$volume->cover = $image->id;
-			}
-			else
-			{
-				$path = $file->store('public/images');
-				$file_extension = $file->guessExtension();
-				
-				$image = new Image();
-				$image->name = str_replace('public', 'storage', $path);
-				$image->hash = $hash;
-				$image->extension = $file_extension;
-
-				$thumbnailPath = str_replace('images', 'images/thumbnails', $image->name);
-				$thumbnailDBPath = str_replace('public', 'storage', $thumbnailPath);
-				$thumbnail = InterventionImage::make($request->file('image')->getRealPath());
-				$thumbnailRatio = 250/$thumbnail->height();
-				$thumbnailHeight = 250;
-				$thumbnailWidth = $thumbnail->width() * $thumbnailRatio;
-				$thumbnail->resize($thumbnailWidth, $thumbnailHeight);
-				$thumbnail->save($thumbnailPath);
-		
-				$image->thumbnail = $thumbnailDBPath;				
-				$image->save();
-				
-				$volume->cover = $image->id;
-			}
+			$image = ImageUploadHelper::UploadImage($file);
+			$volume->cover = $image->id;
 		}
 		else if (Input::has('delete_cover'))
 		{
