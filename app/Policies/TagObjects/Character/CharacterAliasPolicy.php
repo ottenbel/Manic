@@ -20,7 +20,7 @@ class CharacterAliasPolicy
     public function view(User $user, CharacterAlias $characterAlias)
     {
 		//Global tags are public so we won't use the can view check on those 
-		if (($characterAlias->user_id == $user->id) || ($user->has_administrator_permission()))
+		if ($characterAlias->user_id == $user->id)
 		{
 			return true;
 		}
@@ -61,7 +61,7 @@ class CharacterAliasPolicy
 		{
 			return $user->has_editor_permission();
 		}
-		else if (($characterAlias->user_id == $user->id) || ($user->has_administrator_permission()))
+		else if ($characterAlias->user_id == $user->id)
 		{
 			return true;
 		}

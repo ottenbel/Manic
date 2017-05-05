@@ -20,7 +20,7 @@ class ScanalatorAliasPolicy
     public function view(User $user, ScanalatorAlias $scanalatorAlias)
     {
 		//Global tags are public so we won't use the can view check on those 
-		if (($scanalatorAlias->user_id == $user->id) || ($user->has_administrator_permission()))
+		if ($scanalatorAlias->user_id == $user->id)
 		{
 			return true;
 		}
@@ -61,7 +61,7 @@ class ScanalatorAliasPolicy
 		{
 			return $user->has_editor_permission();
 		}
-		else if (($scanalatorAlias->user_id == $user->id) || ($user->has_administrator_permission()))
+		else if ($scanalatorAlias->user_id == $user->id)
 		{
 			return true;
 		}

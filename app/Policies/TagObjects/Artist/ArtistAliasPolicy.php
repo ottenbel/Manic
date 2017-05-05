@@ -20,7 +20,7 @@ class ArtistAliasPolicy
     public function view(User $user, ArtistAlias $artistAlias)
     {
 		//Global tags are public so we won't use the can view check on those 
-		if (($artistAlias->user_id == $user->id) || ($user->has_administrator_permission()))
+		if ($artistAlias->user_id == $user->id)
 		{
 			return true;
 		}
@@ -61,7 +61,7 @@ class ArtistAliasPolicy
 		{
 			return $user->has_editor_permission();
 		}
-		else if (($artistAlias->user_id == $user->id) || ($user->has_administrator_permission()))
+		else if ($artistAlias->user_id == $user->id)
 		{
 			return true;
 		}
