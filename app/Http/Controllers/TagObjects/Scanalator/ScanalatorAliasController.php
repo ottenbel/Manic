@@ -125,5 +125,20 @@ class ScanalatorAliasController extends Controller
     {
         //Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($scanalatorAlias);
+		
+		$scanalator = $scanalatorAlias->scanalator_id;
+		
+		if($scanalatorAlias->deleted_at == null)
+		{
+			$scanalatorAlias->delete();
+			//redirect to the scanalator that the alias existed for
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully deleted alias from scanalator."));
+		}
+		else
+		{
+			$scanalatorAlias->forceDelete();
+			//redirect to the scanalator that the alias existed for
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully purged alias from scanalator."));
+		}
     }
 }

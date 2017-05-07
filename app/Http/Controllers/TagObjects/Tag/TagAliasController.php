@@ -125,5 +125,20 @@ class TagAliasController extends Controller
     {
         //Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($tagAlias);
+		
+		$tag = $tagAlias->tag_id;
+		
+		if($tagAlias->deleted_at == null)
+		{
+			$tagAlias->delete();
+			//redirect to the tag that the alias existed for
+			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_success", array("Successfully deleted alias from tag."));
+		}
+		else
+		{
+			$tagAlias->forceDelete();
+			//redirect to the tag that the alias existed for
+			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_success", array("Successfully purged alias from tag."));
+		}
     }
 }

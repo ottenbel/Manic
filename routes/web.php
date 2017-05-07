@@ -58,6 +58,7 @@ Route::get('/tag/{tag}', 'TagObjects\Tag\TagController@show')->Name('show_tag');
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
 	Route::post('/tag_alias/{tag}', 'TagObjects\Tag\TagAliasController@store')->Name('store_tag_alias');
+	Route::delete('/tag_alias/{tagAlias}', 'TagObjects\Tag\TagAliasController@destroy')->Name('delete_tag_alias');
 });
 
 Route::get('/tag_alias', 'TagObjects\Tag\TagAliasController@index')->Name('index_tag_alias');
@@ -79,6 +80,7 @@ Route::get('/artist/{artist}', 'TagObjects\Artist\ArtistController@show')->Name(
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
 	Route::post('/artist_alias/{artist}', 'TagObjects\Artist\ArtistAliasController@store')->Name('store_artist_alias');
+	Route::delete('/artist_alias/{artistAlias}', 'TagObjects\Artist\ArtistAliasController@destroy')->Name('delete_artist_alias');
 });
 
 Route::get('/artist_alias', 'TagObjects\Artist\ArtistAliasController@index')->Name('index_artist_alias');
@@ -100,6 +102,7 @@ Route::get('/series/{series}', 'TagObjects\Series\SeriesController@show')->Name(
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
 	Route::post('/series_alias/{series}', 'TagObjects\Series\SeriesAliasController@store')->Name('store_series_alias');
+	Route::delete('/series_alias/{seriesAlias}', 'TagObjects\Series\SeriesAliasController@destroy')->Name('delete_series_alias');
 });
 
 Route::get('/series_alias', 'TagObjects\Series\SeriesAliasController@index')->Name('index_series_alias');
@@ -121,6 +124,7 @@ Route::get('/scanalator/{scanalator}', 'TagObjects\Scanalator\ScanalatorControll
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
 	Route::post('/scanalator_alias/{scanalator}', 'TagObjects\Scanalator\ScanalatorAliasController@store')->Name('store_scanalator_alias');
+	Route::delete('/scanalator_alias/{scanalatorAlias}', 'TagObjects\Scanalator\ScanalatorAliasController@destroy')->Name('delete_scanalator_alias');
 });
 
 Route::get('/scanalator_alias', 'TagObjects\Scanalator\ScanalatorAliasController@index')->Name('index_scanalator_alias');
@@ -142,6 +146,7 @@ Route::get('/character/{character}', 'TagObjects\Character\CharacterController@s
 //Alias controller routes
 Route::group(['middleware' => 'auth'], function(){
 	Route::post('/character_alias/{character}', 'TagObjects\Character\CharacterAliasController@store')->Name('store_character_alias');
+	Route::delete('/character_alias/{characterAlias}', 'TagObjects\Character\CharacterAliasController@destroy')->Name('delete_character_alias');
 });
 
 Route::get('/character_alias', 'TagObjects\Character\CharacterAliasController@index')->Name('index_character_alias');

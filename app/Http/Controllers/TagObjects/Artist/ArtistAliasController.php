@@ -124,6 +124,21 @@ class ArtistAliasController extends Controller
     public function destroy(ArtistAlias $artistAlias)
     {
         //Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-			$this->authorize($artistAlias);
+		$this->authorize($artistAlias);
+		
+		$artist = $artistAlias->artist_id;
+		
+		if($artistAlias->deleted_at == null)
+		{
+			$artistAlias->delete();
+			//redirect to the artist that the alias existed for
+			return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_success", array("Successfully deleted alias from artist."));
+		}
+		else
+		{
+			$artistAlias->forceDelete();
+			//redirect to the artist that the alias existed for
+			return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_success", array("Successfully purged alias from artist."));
+		}
     }
 }

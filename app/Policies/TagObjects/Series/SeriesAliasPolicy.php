@@ -55,7 +55,7 @@ class SeriesAliasPolicy
      * @param  \App\SeriesAlias  $seriesAlias
      * @return mixed
      */
-    public function delete(User $user, SeriesAlias $seriesAlias, $isGlobal)
+    public function delete(User $user, SeriesAlias $seriesAlias)
     {
         if ($seriesAlias->user_id == null)
 		{

@@ -125,5 +125,20 @@ class SeriesAliasController extends Controller
     {
         //Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($seriesAlias);
+		
+		$series = $seriesAlias->series_id;
+		
+		if($seriesAlias->deleted_at == null)
+		{
+			$seriesAlias->delete();
+			//redirect to the series that the alias existed for
+			return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully deleted alias from series."));
+		}
+		else
+		{
+			$seriesAlias->forceDelete();
+			//redirect to the series that the alias existed for
+			return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully purged alias from series."));
+		}
     }
 }

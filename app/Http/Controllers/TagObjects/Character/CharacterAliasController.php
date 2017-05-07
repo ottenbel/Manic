@@ -128,5 +128,20 @@ class CharacterAliasController extends Controller
     {
         //Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($characterAlias);
+		
+		$character = $characterAlias->character_id;
+		
+		if($characterAlias->deleted_at == null)
+		{
+			$characterAlias->delete();
+			//redirect to the character that the alias existed for
+			return redirect()->route('show_character', ['character' => $character])->with("flashed_success", array("Successfully deleted alias from character."));
+		}
+		else
+		{
+			$characterAlias->forceDelete();
+			//redirect to the character that the alias existed for
+			return redirect()->route('show_character', ['character' => $character])->with("flashed_success", array("Successfully purged alias from character."));
+		}
     }
 }

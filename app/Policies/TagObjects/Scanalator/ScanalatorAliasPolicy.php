@@ -55,7 +55,7 @@ class ScanalatorAliasPolicy
      * @param  \App\ScanalatorAlias  $scanalatorAlias
      * @return mixed
      */
-    public function delete(User $user, ScanalatorAlias $scanalatorAlias, $isGlobal)
+    public function delete(User $user, ScanalatorAlias $scanalatorAlias)
     {
         if ($scanalatorAlias->user_id == null)
 		{

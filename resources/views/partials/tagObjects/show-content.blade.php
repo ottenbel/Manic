@@ -98,9 +98,19 @@
 		
 			@foreach($global_aliases as $global_alias)
 				<div class="row">
-					<div class="col-xs-12">
+					<div class="col-xs-6">
 						<span class="{{$globalAliasDisplayClass}}"><a>{{$global_alias->alias}}</a></span>
 					</div>
+					@can('delete', $global_alias)
+					<div class="col-xs-6">
+						<form method="POST" action="{{route($deleteTagObjectRoute, [$aliasTagObjectName => $global_alias])}}">
+							{{ csrf_field() }}
+							{{method_field('DELETE')}}
+							
+							{{ Form::submit('Delete Alias', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete()')) }}
+						</form>
+					</div>
+					@endcan
 				</div>
 			@endforeach
 			
@@ -136,13 +146,24 @@
 			<br/>
 			
 			@foreach($personal_aliases as $personal_alias)
-				@can('view', $personal_alias)
+				
 					<div class="row">
-						<div class="col-xs-12">
-							<span class="{{$personalAliasDisplayClass}}"><a>{{$personal_alias->alias}}</a></span>
-						</div>
+						@can('view', $personal_alias)
+							<div class="col-xs-6">
+								<span class="{{$personalAliasDisplayClass}}"><a>{{$personal_alias->alias}}</a></span>
+							</div>
+						@endcan
+						@can('delete', $personal_alias)
+							<div class="col-xs-6">
+								<form method="POST" action="{{route($deleteTagObjectRoute, [$aliasTagObjectName => $personal_alias])}}"">
+									{{ csrf_field() }}
+									{{method_field('DELETE')}}
+									
+									{{ Form::submit('Delete Alias', array('class' => 'btn btn-danger', 'onclick' => 'ConfirmDelete()')) }}
+								</form>
+							</div>
+						@endcan
 					</div>
-				@endcan
 			@endforeach
 			
 			{{ $personal_aliases->links() }}

@@ -55,7 +55,7 @@ class TagAliasPolicy
      * @param  \App\TagAlias  $tagAlias
      * @return mixed
      */
-    public function delete(User $user, TagAlias $tagAlias, $isGlobal)
+    public function delete(User $user, TagAlias $tagAlias)
     {
         if ($tagAlias->user_id == null)
 		{

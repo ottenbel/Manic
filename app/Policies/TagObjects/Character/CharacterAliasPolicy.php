@@ -55,7 +55,7 @@ class CharacterAliasPolicy
      * @param  \App\CharacterAlias  $characterAlias
      * @return mixed
      */
-    public function delete(User $user, CharacterAlias $characterAlias, $isGlobal)
+    public function delete(User $user, CharacterAlias $characterAlias)
     {
         if ($characterAlias->user_id == null)
 		{

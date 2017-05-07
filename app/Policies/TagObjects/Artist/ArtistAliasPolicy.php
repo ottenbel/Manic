@@ -55,7 +55,7 @@ class ArtistAliasPolicy
      * @param  \App\ArtistAlias  $artistAlias
      * @return mixed
      */
-    public function delete(User $user, ArtistAlias $artistAlias, $isGlobal)
+    public function delete(User $user, ArtistAlias $artistAlias)
     {
         if ($artistAlias->user_id == null)
 		{
