@@ -48,6 +48,6 @@ class SeriesAlias extends BaseManicModel
 	 */
 	public function tag_object()
 	{
-		return $this->belongsTo('App\Models\TagObjects\Series\Series');
+		return $this->belongsTo('App\Models\TagObjects\Series\Series', 'series_id');
 	}
 }

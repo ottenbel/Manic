@@ -48,6 +48,6 @@ class TagAlias extends BaseManicModel
 	 */
 	public function tag_object()
 	{
-		return $this->belongsTo('App\Models\TagObjects\Tag\Tag');
+		return $this->belongsTo('App\Models\TagObjects\Tag\Tag', 'tag_id');
 	}
 }
