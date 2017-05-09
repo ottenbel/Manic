@@ -48,6 +48,6 @@ class ScanalatorAlias extends BaseManicModel
 	 */
 	public function tag_object()
 	{
-		return $this->belongsTo('App\Models\TagObjects\Scanalator\Scanalator');
+		return $this->belongsTo('App\Models\TagObjects\Scanalator\Scanalator', 'scanalator_id');
 	}
 }

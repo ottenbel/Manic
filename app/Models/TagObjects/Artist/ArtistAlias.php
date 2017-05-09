@@ -48,6 +48,6 @@ class ArtistAlias extends BaseManicModel
 	 */
 	public function tag_object()
 	{
-		return $this->belongsTo('App\Models\TagObjects\Artist\Artist');
+		return $this->belongsTo('App\Models\TagObjects\Artist\Artist', 'artist_id');
 	}
 }

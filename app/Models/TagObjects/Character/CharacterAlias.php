@@ -48,6 +48,6 @@ class CharacterAlias extends BaseManicModel
 	 */
 	public function tag_object()
 	{
-		return $this->belongsTo('App\Models\TagObjects\Character\Character');
+		return $this->belongsTo('App\Models\TagObjects\Character\Character', 'character_id');
 	}
 }
