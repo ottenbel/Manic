@@ -60,7 +60,7 @@
 	@else
 		@can('create', [$classAliasModelPath, false])
 			<div class="text-center">
-				No {{$tagObjectName}} aliases have been found in the database. View {{$tagObjectNames}} in the database <a href = "{{route('index_artist')}}">here.</a>
+				No {{$tagObjectName}} aliases have been found in the database. View {{$tagObjectNames}} in the database <a href = "{{route($indexRoute)}}">here.</a>
 			</div>
 		@endcan
 		@cannot('create', [$classAliasModelPath, false])
