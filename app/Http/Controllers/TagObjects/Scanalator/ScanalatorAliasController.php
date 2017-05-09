@@ -128,17 +128,9 @@ class ScanalatorAliasController extends Controller
 		
 		$scanalator = $scanalatorAlias->scanalator_id;
 		
-		if($scanalatorAlias->deleted_at == null)
-		{
-			$scanalatorAlias->delete();
-			//redirect to the scanalator that the alias existed for
-			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully deleted alias from scanalator."));
-		}
-		else
-		{
-			$scanalatorAlias->forceDelete();
-			//redirect to the scanalator that the alias existed for
-			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully purged alias from scanalator."));
-		}
+		//Force deleting for now, build out functionality for soft deleting later.
+		$scanalatorAlias->forceDelete();
+		//redirect to the scanalator that the alias existed for
+		return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully purged alias from scanalator."));
     }
 }

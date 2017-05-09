@@ -131,17 +131,9 @@ class CharacterAliasController extends Controller
 		
 		$character = $characterAlias->character_id;
 		
-		if($characterAlias->deleted_at == null)
-		{
-			$characterAlias->delete();
-			//redirect to the character that the alias existed for
-			return redirect()->route('show_character', ['character' => $character])->with("flashed_success", array("Successfully deleted alias from character."));
-		}
-		else
-		{
-			$characterAlias->forceDelete();
-			//redirect to the character that the alias existed for
-			return redirect()->route('show_character', ['character' => $character])->with("flashed_success", array("Successfully purged alias from character."));
-		}
+		//Force deleting for now, build out functionality for soft deleting later.
+		$characterAlias->forceDelete();
+		//redirect to the character that the alias existed for
+		return redirect()->route('show_character', ['character' => $character])->with("flashed_success", array("Successfully purged alias from character."));
     }
 }

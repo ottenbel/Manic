@@ -128,17 +128,9 @@ class TagAliasController extends Controller
 		
 		$tag = $tagAlias->tag_id;
 		
-		if($tagAlias->deleted_at == null)
-		{
-			$tagAlias->delete();
-			//redirect to the tag that the alias existed for
-			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_success", array("Successfully deleted alias from tag."));
-		}
-		else
-		{
-			$tagAlias->forceDelete();
-			//redirect to the tag that the alias existed for
-			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_success", array("Successfully purged alias from tag."));
-		}
+		//Force deleting for now, build out functionality for soft deleting later.
+		$tagAlias->forceDelete();
+		//redirect to the tag that the alias existed for
+		return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_success", array("Successfully purged alias from tag."));
     }
 }

@@ -127,18 +127,10 @@ class ArtistAliasController extends Controller
 		$this->authorize($artistAlias);
 		
 		$artist = $artistAlias->artist_id;
-		
-		if($artistAlias->deleted_at == null)
-		{
-			$artistAlias->delete();
-			//redirect to the artist that the alias existed for
-			return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_success", array("Successfully deleted alias from artist."));
-		}
-		else
-		{
-			$artistAlias->forceDelete();
-			//redirect to the artist that the alias existed for
-			return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_success", array("Successfully purged alias from artist."));
-		}
+
+		//Force deleting for now, build out functionality for soft deleting later.
+		$artistAlias->forceDelete();
+		//redirect to the artist that the alias existed for
+		return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_success", array("Successfully purged alias from artist."));
     }
 }

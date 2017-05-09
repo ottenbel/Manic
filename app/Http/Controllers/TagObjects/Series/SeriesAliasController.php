@@ -128,17 +128,9 @@ class SeriesAliasController extends Controller
 		
 		$series = $seriesAlias->series_id;
 		
-		if($seriesAlias->deleted_at == null)
-		{
-			$seriesAlias->delete();
-			//redirect to the series that the alias existed for
-			return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully deleted alias from series."));
-		}
-		else
-		{
-			$seriesAlias->forceDelete();
-			//redirect to the series that the alias existed for
-			return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully purged alias from series."));
-		}
+		//Force deleting for now, build out functionality for soft deleting later.
+		$seriesAlias->forceDelete();
+		//redirect to the series that the alias existed for
+		return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully purged alias from series."));
     }
 }
