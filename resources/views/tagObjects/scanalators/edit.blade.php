@@ -5,14 +5,26 @@ Edit Scanalator - {{{$scanalator->name}}}
 @endsection
 
 @section('head')
-
+	<script src="/js/confirmdelete.js"></script>
 @endsection
 
 @section('content')
 <div class="container">
 	@can('update', $scanalator)
-	<h1>Edit Scanalator</h1>
 	
+	<div class="row">
+		<div class="col-xs-8"><h1>Edit Scanalator</h1></div>
+		@can('delete', $scanalator)
+			<div class="col-xs-4 text-right">
+				<form method="POST" action="{{route('delete_scanalator', ['scanalator' => $scanalator])}}">
+					{{ csrf_field() }}
+					{{method_field('DELETE')}}
+					
+					{{ Form::submit('Delete Scanalator', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete()')) }}
+				</form>
+			</div>
+		@endcan
+	</div>
 	<form method="POST" action="{{route('update_scanalator', ['scanalator' => $scanalator])}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}

@@ -265,5 +265,12 @@ class CharacterController extends Controller
     {
         //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($character);
+		
+		$characterName = $character->name;
+		
+		//Force deleting for now, build out functionality for soft deleting later.
+		$character->forceDelete();
+		
+		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged character $characterName from the database."));
     }
 }

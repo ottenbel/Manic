@@ -297,5 +297,12 @@ class SeriesController extends Controller
     {
         //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($series);
+		
+		$seriesName = $series->name;
+		
+		//Force deleting for now, build out functionality for soft deleting later.
+		$series->forceDelete();
+		
+		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged series $seriesName from the database."));
     }
 }

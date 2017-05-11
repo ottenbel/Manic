@@ -3,7 +3,7 @@
 @section('title')
 Edit Tag - {{{$tag->name}}}
 @endsection
-
+	<script src="/js/confirmdelete.js"></script>
 @section('head')
 
 @endsection
@@ -11,7 +11,20 @@ Edit Tag - {{{$tag->name}}}
 @section('content')
 <div class="container">
 	@can('update', $tag)
-		<h1>Edit Tag</h1>
+		
+		<div class="row">
+			<div class="col-xs-8"><h1>Edit Tag</h1></div>
+			@can('delete', $tag)
+				<div class="col-xs-4 text-right">
+					<form method="POST" action="{{route('delete_tag', ['tag' => $tag])}}">
+						{{ csrf_field() }}
+						{{method_field('DELETE')}}
+						
+						{{ Form::submit('Delete Tag', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete()')) }}
+					</form>
+				</div>
+			@endcan
+		</div>
 		
 		<form method="POST" action="{{route('update_tag', ['tag' => $tag])}}" enctype="multipart/form-data">
 			{{ csrf_field() }}

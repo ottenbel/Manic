@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-	@include('partials.tagObjects.alias.index-content', ['tagObjectName' => 'artist', 'tagObjectNames' => 'artists', 'indexAliasRoute' => 'index_artist_alias', 'showRoute' => 'show_artist', 'globalAliasDisplayClass' => 'global_artist_alias', 'personalAliasDisplayClass' => 'personal_artist_alias', 'classAliasModelPath' => App\Models\TagObjects\Artist\ArtistAlias::class])
+	@include('partials.tagObjects.alias.index-content', ['tagObjectName' => 'artist', 'tagObjectNames' => 'artists', 'indexAliasRoute' => 'index_artist_alias', 'indexRoute' => 'index_artist', 'showRoute' => 'show_artist', 'globalAliasDisplayClass' => 'global_artist_alias', 'personalAliasDisplayClass' => 'personal_artist_alias', 'classAliasModelPath' => App\Models\TagObjects\Artist\ArtistAlias::class])
 @endsection
 
 @section('footer')

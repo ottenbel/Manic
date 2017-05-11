@@ -254,5 +254,12 @@ class ScanalatorController extends Controller
     {
         //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($scanalator);
+		
+		$scanalatorName = $scanalator->name;
+		
+		//Force deleting for now, build out functionality for soft deleting later.
+		$scanalator->forceDelete();
+		
+		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged scanalator $scanalatorName from the database."));
     }
 }

@@ -254,5 +254,12 @@ class TagController extends Controller
     {
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
         $this->authorize($tag);
+		
+		$tagName = $tag->name;
+		
+		//Force deleting for now, build out functionality for soft deleting later.
+		$tag->forceDelete();
+		
+		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged tag $tagName from the database."));
     }
 }

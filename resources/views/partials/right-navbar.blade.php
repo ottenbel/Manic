@@ -106,7 +106,7 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif ((Route::is('show_tag')) && ((Auth::User()->can('update', $tag)) || (Auth::User()->can('delete', $tag))))
+	@elseif ((Route::is('show_tag')) && ((Auth::User()->can('update', $tag)) ))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Tag <span class="caret"></span>
@@ -114,9 +114,6 @@
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $tag)
 					<li><a href="{{route('edit_tag', ['tag' => $tag])}}">Edit Tag</a><li>
-				@endcan
-				@can('delete', $tag)
-					<li><a href="">Delete Tag</a></li>
 				@endcan
 			</ul>
 		</li>
@@ -127,12 +124,9 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				<li><a href="{{route('show_tag', ['tag' => $tag])}}">View Tag</a><li>
-				@can('delete', $tag)
-					<li><a href="">Delete Tag</a></li>
-				@endcan
 			</ul>
 		</li>
-	@elseif ((Route::is('show_artist')) && ((Auth::User()->can('update', $artist)) || (Auth::User()->can('delete', $artist))))
+	@elseif ((Route::is('show_artist')) && ((Auth::User()->can('update', $artist))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Artist <span class="caret"></span>
@@ -140,9 +134,6 @@
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $artist)
 					<li><a href="{{route('edit_artist', ['artist' => $artist])}}">Edit Artist</a><li>
-				@endcan
-				@can('delete', $artist)
-					<li><a href="">Delete Artist</a></li>
 				@endcan
 			</ul>
 		</li>
@@ -153,12 +144,9 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				<li><a href="{{route('show_artist', ['artist' => $artist])}}">View Artist</a><li>
-				@can('delete', $artist)
-					<li><a href="">Delete Artist</a></li>
-				@endcan
 			</ul>
 		</li>
-	@elseif ((Route::is('show_character')) && ((Auth::User()->can('update', $character)) || (Auth::User()->can('delete', $character))))	
+	@elseif ((Route::is('show_character')) && (Auth::User()->can('update', $character)))	
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Character <span class="caret"></span>
@@ -166,9 +154,6 @@
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $character)
 					<li><a href="{{route('edit_character', ['character' => $character])}}">Edit Character</a><li>
-				@endcan
-				@can('delete', $character)
-					<li><a href="">Delete Character</a></li>
 				@endcan
 			</ul>
 		</li>
@@ -179,13 +164,10 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				<li><a href="{{route('show_character', ['character' => $character])}}">View Character</a><li>
-				@can('delete', $character)
-					<li><a href="">Delete Character</a></li>
-				@endcan
 			</ul>
 		</li>
 	@elseif ((Route::is('show_series')) && ((Auth::User()->can('update', $series)) 
-		|| (Auth::User()->can('delete', $series)) || (Auth::User()->can('create', App\Models\TagObjects\Character\Character::class))))
+		 || (Auth::User()->can('create', App\Models\TagObjects\Character\Character::class))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Series <span class="caret"></span>
@@ -196,9 +178,6 @@
 				@endcan
 				@can('update', $series)
 					<li><a href="{{route('edit_series', ['series' => $series])}}">Edit Series</a><li>
-				@endcan
-				@can('delete', $series)
-					<li><a href="">Delete Series</a></li>
 				@endcan
 			</ul>
 		</li>
@@ -212,12 +191,9 @@
 					<li><a href="{{route('create_character', ['series' => $series])}}">Add Character</a><li>
 				@endcan
 				<li><a href="{{route('show_series', ['series' => $series])}}">View Series</a><li>
-				@can('delete', $series)
-					<li><a href="">Delete Series</a></li>
-				@endcan
 			</ul>
 		</li>
-	@elseif ((Route::is('show_scanalator')) && ((Auth::User()->can('update', $scanalator)) || (Auth::User()->can('delete', $scanalator))))
+	@elseif ((Route::is('show_scanalator')) && ((Auth::User()->can('update', $scanalator))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Scanalator <span class="caret"></span>
@@ -225,9 +201,6 @@
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $scanalator)
 					<li><a href="{{route('edit_scanalator', ['scanalator' => $scanalator])}}">Edit Scanalator</a><li>
-				@endcan
-				@can('delete', $scanalator)
-					<li><a href="">Delete Scanalator</a></li>
 				@endcan
 			</ul>
 		</li>
@@ -238,9 +211,6 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				<li><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}">View Scanalator</a><li>
-				@can('delete', $scanalator)
-					<li><a href="">Delete Scanalator</a></li>
-				@endcan
 			</ul>
 		</li>
 	@elseif ((Auth::user()->can('create', App\Models\Collection::class)) 

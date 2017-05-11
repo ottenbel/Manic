@@ -98,11 +98,11 @@
 		
 			@foreach($global_aliases as $global_alias)
 				<div class="row">
-					<div class="col-xs-6">
+					<div class="col-xs-8">
 						<span class="{{$globalAliasDisplayClass}}"><a>{{$global_alias->alias}}</a></span>
 					</div>
 					@can('delete', $global_alias)
-					<div class="col-xs-6">
+					<div class="col-xs-4 text-right">
 						<form method="POST" action="{{route($deleteTagObjectRoute, [$aliasTagObjectName => $global_alias])}}">
 							{{ csrf_field() }}
 							{{method_field('DELETE')}}
@@ -149,12 +149,12 @@
 				
 					<div class="row">
 						@can('view', $personal_alias)
-							<div class="col-xs-6">
+							<div class="col-xs-8">
 								<span class="{{$personalAliasDisplayClass}}"><a>{{$personal_alias->alias}}</a></span>
 							</div>
 						@endcan
 						@can('delete', $personal_alias)
-							<div class="col-xs-6">
+							<div class="col-xs-4 text-right">
 								<form method="POST" action="{{route($deleteTagObjectRoute, [$aliasTagObjectName => $personal_alias])}}"">
 									{{ csrf_field() }}
 									{{method_field('DELETE')}}

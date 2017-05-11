@@ -50,6 +50,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('/tag', 'TagObjects\Tag\TagController@store')->Name('store_tag');
 	Route::get('/tag/{tag}/edit', 'TagObjects\Tag\TagController@edit')->Name('edit_tag');
 	Route::patch('/tag/{tag}', 'TagObjects\Tag\TagController@update')->Name('update_tag');
+	Route::delete('/tag/{tag}', 'TagObjects\Tag\TagController@destroy')->Name('delete_tag');
 });
 
 Route::get('/tag', 'TagObjects\Tag\TagController@index')->Name('index_tag');
@@ -72,6 +73,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('/artist', 'TagObjects\Artist\ArtistController@store')->Name('store_artist');
 	Route::get('/artist/{artist}/edit', 'TagObjects\Artist\ArtistController@edit')->Name('edit_artist');
 	Route::patch('/artist/{artist}', 'TagObjects\Artist\ArtistController@update')->Name('update_artist');
+	Route::delete('/artist/{artist}', 'TagObjects\Artist\ArtistController@destroy')->Name('delete_artist');
 });
 
 Route::get('/artist', 'TagObjects\Artist\ArtistController@index')->Name('index_artist');
@@ -94,6 +96,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('/series', 'TagObjects\Series\SeriesController@store')->Name('store_series');
 	Route::get('/series/{series}/edit', 'TagObjects\Series\SeriesController@edit')->Name('edit_series');
 	Route::patch('/series/{series}', 'TagObjects\Series\SeriesController@update')->Name('update_series');
+	Route::delete('/series/{series}', 'TagObjects\Series\SeriesController@destroy')->Name('delete_series');
 });
 
 Route::get('/series', 'TagObjects\Series\SeriesController@index')->Name('index_series');
@@ -116,6 +119,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('/scanalator', 'TagObjects\Scanalator\ScanalatorController@store')->Name('store_scanalator');
 	Route::get('/scanalator/{scanalator}/edit', 'TagObjects\Scanalator\ScanalatorController@edit')->Name('edit_scanalator');
 	Route::patch('/scanalator/{scanalator}', 'TagObjects\Scanalator\ScanalatorController@update')->Name('update_scanalator');
+	Route::delete('/scanalator/{scanalator}', 'TagObjects\Scanalator\ScanalatorController@destroy')->Name('delete_scanalator');
 });
 
 Route::get('/scanalator', 'TagObjects\Scanalator\ScanalatorController@index')->Name('index_scanalator');
@@ -138,6 +142,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('/character', 'TagObjects\Character\CharacterController@store')->Name('store_character');
 	Route::get('/character/{character}/edit', 'TagObjects\Character\CharacterController@edit')->Name('edit_character');
 	Route::patch('/character/{character}', 'TagObjects\Character\CharacterController@update')->Name('update_character');
+	Route::delete('/character/{character}', 'TagObjects\Character\CharacterController@destroy')->Name('delete_character');
 });
 
 Route::get('/character', 'TagObjects\Character\CharacterController@index')->Name('index_character');

@@ -255,5 +255,12 @@ class ArtistController extends Controller
     {
         //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($artist);
+		
+		$artistName = $artist->name;
+		
+		//Force deleting for now, build out functionality for soft deleting later.
+		$artist->forceDelete();
+		
+		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged artist $artistName from the database."));
     }
 }
