@@ -24,8 +24,7 @@
 @else
 	<!-- Add general checks on roles once all policies have been created -->
 	@if((Route::is('show_collection')) && ((Auth::User()->can('create', App\Models\Chapter::class)) 
-			|| (Auth::User()->can('create', App\Models\Volume::class)) || (Auth::User()->can('update', $collection)) 
-			|| (Auth::User()->can('delete', $collection))))
+			|| (Auth::User()->can('create', App\Models\Volume::class)) || (Auth::User()->can('update', $collection)) ))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Collection <span class="caret"></span>
@@ -42,13 +41,9 @@
 				@can('update', $collection)
 					<li><a href="{{route('edit_collection', ['collection' => $collection])}}">Edit Collection</a><li>
 				@endcan
-				@can('delete', $collection)
-					<li><a href="">Delete Collection</a></li>
-				@endcan
 			</ul>
 		</li>
-	@elseif((Route::is('show_chapter')) &&((Auth::User()->can('update', $collection)) 
-			|| (Auth::User()->can('delete', $collection))))
+	@elseif((Route::is('show_chapter')) &&((Auth::User()->can('update', $collection))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Chapter <span class="caret"></span>
@@ -56,9 +51,6 @@
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $collection)
 					<li><a href="{{route('edit_chapter', ['chapter' => $chapter])}}">Edit Chapter</a><li>
-				@endcan
-				@can('delete', $collection)
-					<li><a href="">Delete Chapter</a></li>
 				@endcan
 			</ul>
 		</li>
@@ -77,23 +69,8 @@
 				@can('create', App\Models\Volume::class)
 					<li><a href="{{route('create_volume', ['collection' => $collection])}}">Add Volume</a><li>
 				@endcan
-				@can('delete', $collection)
-					<li><a href="">Delete Collection</a></li>
-				@endcan
 			</ul>
 		</li>
-	@elseif ((Route::is('edit_volume'))
-		&& (Auth::User()->can('delete', $volume)))
-		<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-					Volume <span class="caret"></span>
-				</a>
-				@can('delete', $volume)
-				<ul class="dropdown-menu" role="menu">
-					<li><a href="">Delete Volume</a></li>
-				</ul>
-				@endcan
-			</li>
 	@elseif (Route::is('edit_chapter'))
 	<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -101,9 +78,6 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				<li><a href="{{route('show_chapter', ['chapter' => $chapter])}}">View Chapter</a><li>
-				@can('delete', $chapter)
-					<li><a href="">Delete Chapter</a></li>
-				@endcan
 			</ul>
 		</li>
 	@elseif ((Route::is('show_tag')) && ((Auth::User()->can('update', $tag)) ))

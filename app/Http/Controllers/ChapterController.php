@@ -434,5 +434,17 @@ class ChapterController extends Controller
     {
         //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($chapter);
+		
+		$collection = $chapter->collection;
+		$chapterName = $chapter->name;
+		if ($chapterName == null)
+		{
+			$chapterName = "";
+		}
+		
+		//Force deleting for now, build out functionality for soft deleting later.
+		$chapter->forceDelete();
+		
+		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully purged chapter $chapterName from the collection."));
     }
 }

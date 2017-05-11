@@ -169,5 +169,17 @@ class VolumeController extends Controller
     {
         //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($volume);
+		
+		$collection = $volume->collection;
+		$volumeName = $volume->name;
+		if ($volumeName == null)
+		{
+			$volumeName = "";
+		}
+		
+		//Force deleting for now, build out functionality for soft deleting later.
+		$volume->forceDelete();
+		
+		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully purged volume $volumeName from the collection."));
     }
 }

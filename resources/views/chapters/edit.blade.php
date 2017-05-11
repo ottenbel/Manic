@@ -5,17 +5,30 @@ Edit Chapter # {{$chapter->chapter_number}} {{{$chapter->name}}}
 @endsection
 
 @section('head')
-<script>
-	var volumes = {!!$volumes_array!!};
-</script>
-<script src="/js/autocomplete/scanalator.js"></script>
-<script src="/js/dynamicallydisplayselectedvolume.js"></script>
+	<script>
+		var volumes = {!!$volumes_array!!};
+	</script>
+	<script src="/js/autocomplete/scanalator.js"></script>
+	<script src="/js/confirmdelete.js"></script>
+	<script src="/js/dynamicallydisplayselectedvolume.js"></script>
 @endsection
 
 @section('content')
 <div class="container">
 	@can('update', $chapter)
-		<h1>Edit Chapter</h1>
+		<div class="row">
+			<div class="col-xs-8"><h1>Edit Chapter</h1></div>
+			@can('delete', $chapter)
+				<div class="col-xs-4 text-right">
+					<form method="POST" action="{{route('delete_chapter', ['chapter' => $chapter])}}">
+						{{ csrf_field() }}
+						{{method_field('DELETE')}}
+						
+						{{ Form::submit('Delete Chapter', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete()')) }}
+					</form>
+				</div>
+			@endcan
+		</div>
 		
 		<form method="POST" action="{{route('update_chapter', ['chapter' => $chapter])}}" enctype="multipart/form-data">
 			{{ csrf_field() }}

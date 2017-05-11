@@ -5,13 +5,25 @@ Edit Volume - {{{$volume->name}}}
 @endsection
 
 @section('head')
-
+	<script src="/js/confirmdelete.js"></script>
 @endsection
 
 @section('content')
 <div class="container">
 	@can('update', $volume)
-		<h1>Edit Volume</h1>
+		<div class="row">
+			<div class="col-xs-8"><h1>Edit Volume</h1></div>
+			@can('delete', $volume)
+				<div class="col-xs-4 text-right">
+					<form method="POST" action="{{route('delete_volume', ['volume' => $volume])}}">
+						{{ csrf_field() }}
+						{{method_field('DELETE')}}
+						
+						{{ Form::submit('Delete Volume', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete()')) }}
+					</form>
+				</div>
+			@endcan
+		</div>
 		
 		<form method="POST" action="{{route('update_volume', ['volume' => $volume])}}" enctype="multipart/form-data">
 			{{ csrf_field() }}

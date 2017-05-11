@@ -19,6 +19,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('/collection', 'CollectionController@store')->Name('store_collection');
 	Route::get('/collection/{collection}/edit', 'CollectionController@edit')->Name('edit_collection');
 	Route::patch('/collection/{collection}', 'CollectionController@update')->Name('update_collection');
+	Route::delete('/collection/{collection}', 'CollectionController@destroy')->Name('delete_collection');
 });
 
 Route::get('/collection/{collection}', 'CollectionController@show')->Name('show_collection');
@@ -30,6 +31,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('/volume', 'VolumeController@store')->Name('store_volume');
 	Route::get('/volume/{volume}/edit', 'VolumeController@edit')->Name('edit_volume');
 	Route::patch('/volume/{volume}', 'VolumeController@update')->Name('update_volume');
+	Route::delete('/volume/{volume}', 'VolumeController@destroy')->Name('delete_volume');
 });
 //End Volume controller routes
 
@@ -39,6 +41,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('/chapter', 'ChapterController@store')->Name('store_chapter');
 	Route::get('/chapter/{chapter}/edit', 'ChapterController@edit')->Name('edit_chapter');
 	Route::patch('/chapter/{chapter}', 'ChapterController@update')->Name('update_chapter');
+	Route::delete('/chapter/{chapter}', 'ChapterController@destroy')->Name('delete_chapter');
 });
 
 Route::get('/chapter/{chapter}/{page?}', 'ChapterController@show')->Name('show_chapter');

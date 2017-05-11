@@ -5,17 +5,30 @@ Edit Collection - {{{$collection->name}}}
 @endsection
 
 @section('head')
-<script src="/js/autocomplete/artist.js"></script>
-<script src="/js/autocomplete/character.js"></script>
-<script src="/js/autocomplete/collection.js"></script>
-<script src="/js/autocomplete/series.js"></script>
-<script src="/js/autocomplete/tag.js"></script>
+	<script src="/js/autocomplete/artist.js"></script>
+	<script src="/js/autocomplete/character.js"></script>
+	<script src="/js/autocomplete/collection.js"></script>
+	<script src="/js/autocomplete/series.js"></script>
+	<script src="/js/autocomplete/tag.js"></script>
+	<script src="/js/confirmdelete.js"></script>
 @endsection
 
 @section('content')
 <div class="container">
 	@can('update', $collection)
-		<h1>Edit Collection</h1>
+		<div class="row">
+			<div class="col-xs-8"><h1>Edit Collection</h1></div>
+			@can('delete', $collection)
+				<div class="col-xs-4 text-right">
+					<form method="POST" action="{{route('delete_collection', ['collection' => $collection])}}">
+						{{ csrf_field() }}
+						{{method_field('DELETE')}}
+						
+						{{ Form::submit('Delete Collection', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete()')) }}
+					</form>
+				</div>
+			@endcan
+		</div>
 		
 		<form method="POST" action="{{route('update_collection', ['collection' => $collection])}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
