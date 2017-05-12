@@ -78,11 +78,11 @@ class ChapterController extends Controller
 		$lower_chapter_limit = 0;
 		$upper_chapter_limit = 0;
 		
-		if (count($volume) && count($volume->previous_volume()->first()) && count($volume->previous_volume()->first()->last_chapter()))
+		if (($volume->previous_volume()->first() != null) && ($volume->previous_volume()->first()->last_chapter()->first() != null))
 		{
 			$lower_chapter_limit = $volume->previous_volume()->first()->last_chapter()->first()->chapter_number;
 		}
-		if (count($volume) && count($volume->next_volume()->first()) && count($volume->next_volume()->first()->first_chapter()))
+		if (($volume->next_volume()->first() != null) && ($volume->next_volume()->first()->first_chapter()->first() != null))
 		{
 			$upper_chapter_limit = $volume->next_volume()->first()->first_chapter()->first()->chapter_number;
 		}
@@ -286,16 +286,16 @@ class ChapterController extends Controller
 			return Redirect::back()->withErrors(['page_requirement' => 'A chapter must have at least one page associated with it.'])->withInput();
 		}
 		
-        $volume = Volume::where('id', '=', trim(Input::get('volume_id')))->first();
+        $volume = Volume::where('id', '=', trim(Input::get('volume_id')))->firstOrFail();
 		
 		$lower_chapter_limit = 0;
 		$upper_chapter_limit = 0;
 		
-		if (count($volume) && count($volume->previous_volume()->first()) && count($volume->previous_volume()->first()->last_chapter()))
+		if (($volume->previous_volume()->first() != null) && ($volume->previous_volume()->first()->last_chapter()->first() != null))
 		{
 			$lower_chapter_limit = $volume->previous_volume()->first()->last_chapter()->first()->chapter_number;
 		}
-		if (count($volume) && count($volume->next_volume()->first()) && count($volume->next_volume()->first()->first_chapter()))
+		if (($volume->next_volume()->first() != null) && ($volume->next_volume()->first()->first_chapter()->first() != null))
 		{
 			$upper_chapter_limit = $volume->next_volume()->first()->first_chapter()->first()->chapter_number;
 		}

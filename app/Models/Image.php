@@ -22,6 +22,14 @@ class Image extends BaseManicModel
 		return $this->hasMany('App\Models\Collection', 'cover'); 
 	 }
 	 
+	/*
+	 * Get any volumes that use this image as a cover image.
+	 */
+	 public function volumes ()
+	 {
+		return $this->hasMany('App\Models\Volume', 'cover');
+	 }	 
+	 
 	 /*
 	  * Get any chapters that use this image as a page image.
 	  */
