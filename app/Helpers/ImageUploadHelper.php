@@ -20,7 +20,7 @@ class ImageUploadHelper
 		}
 		else
 		{
-			$path = $file->store('public/images');
+			$path = $file->store('storage/images/full');
 			$file_extension = $file->guessExtension();
 			
 			$image = new Image();
@@ -28,7 +28,7 @@ class ImageUploadHelper
 			$image->hash = $hash;
 			$image->extension = $file_extension;
 			
-			$thumbnailPath = str_replace('images', 'images/thumbnails', $image->name);
+			$thumbnailPath = str_replace('full', 'thumb', $image->name);
 			$thumbnailDBPath = str_replace('public', 'storage', $thumbnailPath);
 			$thumbnail = InterventionImage::make($file->getRealPath());
 			$thumbnailRatio = 250/$thumbnail->height();
