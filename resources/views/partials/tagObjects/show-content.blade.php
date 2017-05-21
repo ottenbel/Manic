@@ -5,6 +5,39 @@
 		<h4>Associated With Series: <a href="{{route('show_series', ['series' => $tagObject->series()->first()])}}">{{$tagObject->series->name}}</a></h4>
 	@endif
 	
+	<!-- Add functionality to show tag object parents-->
+	@if($tagObject->parents()->count() > 0)
+		<div class="row">
+			<div class="tag_holder">
+				<div class="col-md-2">
+					<strong>Parents:</strong>
+				</div>
+				<div class="col-md-10">
+					@foreach($tagObject->parents()->orderBy('name', 'asc')->get() as $parent)
+						<span class="{{$primaryTagObjectDisplayClass}}"><a href="{{route($showRoute, [$tagObjectName => $parent])}}">{{{$parent->name}}} <span class="{{$tagObjectCountClass}}">({{$parent->usage_count()}})</span></a></span>
+					@endforeach
+				</div>
+			</div>
+		</div>
+	@endif
+	
+	
+	<!-- Add functionality to show tag object children-->
+	@if($tagObject->children()->count() > 0)
+		<div class="row">
+			<div class="tag_holder">
+				<div class="col-md-2">
+					<strong>Children:</strong>
+				</div>
+				<div class="col-md-10">
+					@foreach($tagObject->children()->orderBy('name', 'asc')->get() as $child)
+						<span class="{{$secondaryTagObjectDisplayClass}}"><a href="{{route($showRoute, [$tagObjectName => $child])}}">{{{$child->name}}} <span class="{{$tagObjectCountClass}}">({{$child->usage_count()}})</span></a></span>
+					@endforeach
+				</div>
+			</div>
+		</div>
+	@endif
+	
 	<div>
 		@if($tagObject->usage_count())
 			@if(($tagObject->primary_usage_count() > 0) && ($tagObject->secondary_usage_count() > 0))
