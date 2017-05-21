@@ -21,4 +21,20 @@ class Artist extends CollectionAssociatedTagObjectModel
 	{
 		return $this->hasMany('App\Models\TagObjects\Artist\ArtistAlias');
 	}
+	
+	/*
+	 * Get all parent artists for the given artist.
+	 */
+	public function parents()
+	{
+		return $this->belongsToMany('App\Models\TagObjects\Artist\Artist', 'artist_artist', 'child_id', 'parent_id');
+	}
+	
+	/*
+	 * Get all child artists for the given artist.
+	 */
+	public function children()
+	{
+		return $this->belongsToMany('App\Models\TagObjects\Artist\Artist', 'artist_artist', 'parent_id', 'child_id');
+	}
 }

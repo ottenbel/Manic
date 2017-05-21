@@ -47,10 +47,26 @@ class Scanalator extends BaseManicModel
 	}
 	
 	/*
-	 * Get the aliases associated with the character.
+	 * Get the aliases associated with the scanalator.
 	 */
 	public function aliases()
 	{
 		return $this->hasMany('App\Models\TagObjects\Scanalator\ScanalatorAlias');
+	}
+	
+	/*
+	 * Get all parent scanalators for the given scanalator.
+	 */
+	public function parents()
+	{
+		return $this->belongsToMany('App\Models\TagObjects\Scanalator\Scanalator', 'scanalator_scanalator', 'child_id', 'parent_id');
+	}
+	
+	/*
+	 * Get all child scanalators for the given scanalator.
+	 */
+	public function children()
+	{
+		return $this->belongsToMany('App\Models\TagObjects\Scanalator\Scanalator', 'scanalator_scanalator', 'parent_id', 'child_id');
 	}
 }

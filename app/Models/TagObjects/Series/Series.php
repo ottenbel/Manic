@@ -26,4 +26,20 @@ class Series extends CollectionAssociatedTagObjectModel
 	{
 		return $this->hasMany('App\Models\TagObjects\Series\SeriesAlias');
 	}
+	
+	/*
+	 * Get all parent series for the given series.
+	 */
+	public function parents()
+	{
+		return $this->belongsToMany('App\Models\TagObjects\Series\Series', 'series_series', 'child_id', 'parent_id');
+	}
+	
+	/*
+	 * Get all child series for the given series.
+	 */
+	public function children()
+	{
+		return $this->belongsToMany('App\Models\TagObjects\Series\Series', 'series_series', 'parent_id', 'child_id');
+	}
 }

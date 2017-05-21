@@ -50,4 +50,20 @@ class Character extends CollectionAssociatedTagObjectModel
 	{
 		return $this->hasMany('App\Models\TagObjects\Character\CharacterAlias');
 	}
+	
+	/*
+	 * Get all parent characters for the given character.
+	 */
+	public function parents()
+	{
+		return $this->belongsToMany('App\Models\TagObjects\Character\Character', 'character_character', 'child_id', 'parent_id');
+	}
+	
+	/*
+	 * Get all child characters for the given character.
+	 */
+	public function children()
+	{
+		return $this->belongsToMany('App\Models\TagObjects\Character\Character', 'character_character', 'parent_id', 'child_id');
+	}
 }

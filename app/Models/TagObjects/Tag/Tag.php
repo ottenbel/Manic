@@ -18,4 +18,20 @@ class Tag extends CollectionAssociatedTagObjectModel
 	{
 		return $this->hasMany('App\Models\TagObjects\Tag\TagAlias');
 	}
+	
+	/*
+	 * Get all parent tags for the given tag.
+	 */
+	public function parents()
+	{
+		return $this->belongsToMany('App\Models\TagObjects\Tag\Tag', 'tag_tag', 'child_id', 'parent_id');
+	}
+	
+	/*
+	 * Get all child tags for the given tag.
+	 */
+	public function children()
+	{
+		return $this->belongsToMany('App\Models\TagObjects\Tag\Tag', 'tag_tag', 'parent_id', 'child_id');
+	}
 }
