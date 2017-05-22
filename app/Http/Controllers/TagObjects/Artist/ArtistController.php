@@ -9,6 +9,7 @@ use Auth;
 use DB;
 use Input;
 use Config;
+use MappingHelper;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
 
@@ -250,7 +251,7 @@ class ArtistController extends Controller
 		
 		if (count($causedLoops))
 		{	
-			$childCausingLoopsMessage = "The following artists (" + implode(", ", $causedLoops) + ") were not attached as children to " + $artist->name + " as their addition would cause loops in tag implication.";
+			$childCausingLoopsMessage = "The following artists (" . implode(", ", $causedLoops) . ") were not attached as children to " . $artist->name . " as their addition would cause loops in tag implication.";
 			
 			return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_data", array("Partially updated artist $artist->name."))->with("flashed_warning", array($childCausingLoopsMessage));
 		}

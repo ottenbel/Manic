@@ -151,14 +151,14 @@ class CollectionController extends Controller
 			
 			if (count($missing_primary_characters))
 			{
-				$missing_primary_characters_string = "Missing primary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " + implode(", ", $missing_primary_characters) + ".";
+				$missing_primary_characters_string = "Missing primary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missing_primary_characters) . ".";
 				
 				$flashed_warning_array = array_push($flashed_warning_array, $missing_primary_characters_string);
 			}
 			
 			if (count($missing_secondary_characters))
 			{
-				$missing_secondary_characters_string = "Missing secondary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " + implode(", ", $missing_secondary_characters) + ".";
+				$missing_secondary_characters_string = "Missing secondary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missing_secondary_characters) . ".";
 				
 				$flashed_warning_array = array_push($flashed_warning_array, $missing_secondary_characters_string);
 			}

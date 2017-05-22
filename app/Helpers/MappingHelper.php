@@ -251,12 +251,13 @@ class MappingHelper
 				{
 					$causedLoop = false;
 					$children = $artistChild->children()->get();
-					foreach ($children as $child)
+					for ($i = 0; $i < $children->count(); $i++)
 					{
+						$child = $children[$i];
 						//Check if the current child is the parent artist
 						if ($artist->id != null)
 						{
-							if ($artist->id == child->id)
+							if ($artist->id == $child->id)
 							{
 								array_push($loopedChildren, trim($artistChildName));
 								$causedLoop = true;
@@ -266,7 +267,7 @@ class MappingHelper
 							//Continue to iterate through all descendants to avoid introducing loops in artist implication
 							if ($child->children->count() > 0)
 							{
-								$children = $children->merge($child->children()->get())
+								$children = $children->merge($child->children()->get());
 							}
 						}
 						else
