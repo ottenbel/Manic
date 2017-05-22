@@ -9,6 +9,7 @@ use Auth;
 use DB;
 use Input;
 use Config;
+use MappingHelper;
 use App\Models\TagObjects\Scanalator\Scanalator;
 use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 
@@ -116,6 +117,9 @@ class ScanalatorController extends Controller
 		{
 			$alias->delete();
 		}
+		
+		$scanalatorChildrenArray = array_unique(array_map('trim', explode(',', Input::get('scanalator_child'))));
+		$causedLoops = MappingHelper::MapScanalatorChildren($scanalator, $scanalatorChildrenArray);
 		
 		$scanalator->save();
 		
@@ -238,10 +242,23 @@ class ScanalatorController extends Controller
 			$alias->delete();
 		}
 		
+		$scanalator->children()->detach();
+		$scanalatorChildrenArray = array_unique(array_map('trim', explode(',', Input::get('scanalator_child'))));
+		$causedLoops = MappingHelper::MapScanalatorChildren($scanalator, $scanalatorChildrenArray);
+		
 		$scanalator->save();
 		
-		//Redirect to the scanalator that was created
-		return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully updated scanalator $scanalator->name."));
+		if (count($causedLoops))
+		{	
+			$childCausingLoopsMessage = "The following scanalators (" . implode(", ", $causedLoops) . ") were not attached as children to " . $scanalator->name . " as their addition would cause loops in tag implication.";
+			
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_data", array("Partially updated scanalator $scanalator->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+		}
+		else
+		{		
+			//Redirect to the scanalator that was created
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully updated scanalator $scanalator->name."));
+		}
     }
 
     /**
@@ -256,6 +273,21 @@ class ScanalatorController extends Controller
 		$this->authorize($scanalator);
 		
 		$scanalatorName = $scanalator->name;
+		
+		$parents = $scanalator->parents()->get();
+		$children = $scanalator->children()->get();
+		
+		//Ensure passed through relationships are sustained after deleting intermediary
+		foreach ($parents as $parent)
+		{
+			foreach ($children as $child)
+			{
+				if ($parent->children()->where('id', '=', $child->id)->count() == 0)
+				{
+					$parent->children()->attach($child);
+				}
+			}
+		}
 		
 		//Force deleting for now, build out functionality for soft deleting later.
 		$scanalator->forceDelete();

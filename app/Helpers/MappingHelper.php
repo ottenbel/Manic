@@ -295,6 +295,69 @@ class MappingHelper
 		}
 		
 		return $loopedChildren;
-	}	
+	}
+
+	/*
+	 * Map scanalator children to parent. 
+	 */
+	public static function MapScanalatorChildren(&$scanalator, $scanalatorChildrenArray)
+	{
+		$loopedChildren = array();
+		
+		foreach ($scanalatorChildrenArray as $scanalatorChildName)
+		{
+			if (trim($scanalatorChildName) != "")
+			{
+				$scanalatorChild = Scanalator::where('name', '=', $scanalatorChildName)->first();
+				
+				if ($scanalatorChild != null)
+				{
+					$causedLoop = false;
+					$children = $scanalatorChild->children()->get();
+					for ($i = 0; $i < $children->count(); $i++)
+					{
+						$child = $children[$i];
+						//Check if the current child is the parent scanalator
+						if ($scanalator->id != null)
+						{
+							if ($scanalator->id == $child->id)
+							{
+								array_push($loopedChildren, trim($scanalatorChildName));
+								$causedLoop = true;
+								break;
+							}
+							
+							//Continue to iterate through all descendants to avoid introducing loops in scanalator implication
+							if ($child->children->count() > 0)
+							{
+								$children = $children->merge($child->children()->get());
+							}
+						}
+						else
+						{
+							$scanalator->children()->attach($scanalatorChild);
+							break;
+						}
+					}
+					
+					if (!($causedLoop))
+					{
+						$scanalator->children()->attach($scanalatorChild);
+					}
+				}
+				else
+				{
+					//Create child scanalator
+					$scanalatorChild = new Scanalator;
+					$scanalatorChild->name = $scanalatorChildName;
+					$scanalatorChild->save();
+					
+					$scanalator->children()->attach($scanalatorChild);
+				}
+			}
+		}
+		
+		return $loopedChildren;
+	}
 }
 ?>
