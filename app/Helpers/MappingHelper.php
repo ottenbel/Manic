@@ -233,5 +233,67 @@ class MappingHelper
 			}
 		}
 	}
+	
+	/*
+	 * Map artist children to parent. 
+	 */
+	public static function MapArtistChildren(&$artist, $artistChildrenArray)
+	{
+		$loopedChildren = array();
+		
+		foreach ($artistChildrenArray as $artistChildName)
+		{
+			if (trim($artistChildName) != "")
+			{
+				$artistChild = Artist::where('name', '=', $artistChildName)->first();
+				
+				if ($artistChild != null)
+				{
+					$causedLoop = false;
+					$children = $artistChild->children()->get();
+					foreach ($children as $child)
+					{
+						//Check if the current child is the parent artist
+						if ($artist->id != null)
+						{
+							if ($artist->id == child->id)
+							{
+								array_push($loopedChildren, trim($artistChildName));
+								$causedLoop = true;
+								break;
+							}
+							
+							//Continue to iterate through all descendants to avoid introducing loops in artist implication
+							if ($child->children->count() > 0)
+							{
+								$children = $children->merge($child->children()->get())
+							}
+						}
+						else
+						{
+							$artist->children()->attach($artistChild);
+							break;
+						}
+					}
+					
+					if (!($causedLoop))
+					{
+						$artist->children()->attach($artistChild);
+					}
+				}
+				else
+				{
+					//Create child artist
+					$artistChild = new Artist;
+					$artistChild->name = $artistChildName;
+					$artistChild->save();
+					
+					$artist->children()->attach($artistChild);
+				}
+			}
+		}
+		
+		return $loopedChildren;
+	}	
 }
 ?>
