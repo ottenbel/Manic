@@ -19,15 +19,10 @@ class CharacterSearchAPIController extends Controller
     public function SearchByName(Request $request)
 	{
 		$searchString = trim(Input::get('searchString'));
-		$primarySeriesString = Input::get('primarySeriesString');
-		$secondarySeriesString = Input::get('secondarySeriesString');
+		$seriesString = Input::get('seriesString');
 		
 		//Explode series string into a list of series
-		$seriesPrimaryArray = array_map('trim', explode(',', $primarySeriesString));
-		$seriesSecondaryArray = array_map('trim', explode(',', $primarySeriesString));
-		
-		//Add the two arrays together and clean up duplicates
-		$seriesArray = array_unique(array_merge($seriesPrimaryArray, $seriesSecondaryArray));
+		$seriesArray = array_map('trim', explode(',', $seriesString));
 		
 		$query = new Character();
 		

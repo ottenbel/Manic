@@ -32,7 +32,7 @@
 																'child' => 'Child Artist 1, Child Artist 2'
 															],
 												'character' => [
-																	'name' => 'Chapter Name',
+																	'name' => 'Character Name',
 																	'description' => 'A description of the character.',
 																	'source' => 'https://en.wikipedia.org/wiki/Character_(arts)',
 																	'parentSeries' => 'Parent Series',
