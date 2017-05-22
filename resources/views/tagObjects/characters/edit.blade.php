@@ -5,6 +5,7 @@ Edit Character - {{{$character->name}}}
 @endsection
 
 @section('head')
+	<script src="/js/autocomplete/character.js"></script>
 	<script src="/js/confirmdelete.js"></script>
 @endsection
 
@@ -31,7 +32,15 @@ Edit Character - {{{$character->name}}}
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 			
-			@include('partials.tagObjects.tag-object-input', ['tagObject' => $character, 'namePlaceholder' => 'constants.placeholders.tagObjects.character.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source'])
+			@include('partials.tagObjects.tag-object-input', 
+			[
+				'tagObject' => $character, 
+				'child' => 'character_child',
+				'namePlaceholder' => 'constants.placeholders.tagObjects.character.name', 
+				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 
+				'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source',
+				'childPlaceholder' => 'constants.placeholders.tagObjects.character.child'
+			])
 			
 			{{ Form::submit('Update Character', array('class' => 'btn btn-primary')) }}
 		</form>

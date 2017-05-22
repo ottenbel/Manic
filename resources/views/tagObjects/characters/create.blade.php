@@ -5,7 +5,8 @@ Create a New Character
 @endsection
 
 @section('head')
-<script src="/js/autocomplete/series.js"></script>
+	<script src="/js/autocomplete/character.js"></script>
+	<script src="/js/autocomplete/series.js"></script>
 @endsection
 
 @section('content')
@@ -28,7 +29,14 @@ Create a New Character
 			@endif
 		</div>
 		
-		@include('partials.tagObjects.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.character.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source'])
+		@include('partials.tagObjects.tag-object-input', 
+		[
+			'child' => 'character_child',
+			'namePlaceholder' => 'constants.placeholders.tagObjects.character.name', 
+			'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 
+			'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source',
+			'childPlaceholder' => 'constants.placeholders.tagObjects.character.child'
+		])
 		
 		{{ Form::submit('Create Character', array('class' => 'btn btn-primary')) }}
 	</form>

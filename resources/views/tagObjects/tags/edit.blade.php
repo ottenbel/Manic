@@ -3,6 +3,7 @@
 @section('title')
 Edit Tag - {{{$tag->name}}}
 @endsection
+	<script src="/js/autocomplete/tag.js"></script>
 	<script src="/js/confirmdelete.js"></script>
 @section('head')
 
@@ -30,7 +31,15 @@ Edit Tag - {{{$tag->name}}}
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 					
-			@include('partials.tagObjects.tag-object-input', ['tagObject' => $tag, 'namePlaceholder' => 'constants.placeholders.tagObjects.tag.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.tag.source'])
+			@include('partials.tagObjects.tag-object-input', 
+			[
+				'tagObject' => $tag, 
+				'child' => 'tag_child',
+				'namePlaceholder' => 'constants.placeholders.tagObjects.tag.name', 
+				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.description', 
+				'sourcePlaceholder' => 'constants.placeholders.tagObjects.tag.source',
+				'childPlaceholder' => 'constants.placeholders.tagObjects.tag.child'
+			])
 			
 			{{ Form::submit('Update Tag', array('class' => 'btn btn-primary')) }}
 		</form>	

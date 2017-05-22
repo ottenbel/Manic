@@ -10,6 +10,17 @@
 	@endif
 </div>
 
+<!-- Display textbox for child tag objects-->
+<div class="form-group">
+	{{ Form::label($child, 'Children') }}
+	
+	@if((!empty($tagObject)) && ($tagObject->children()->count() > 0) && (Input::old($child) == null))
+		{{ Form::text($child, collect($tagObject->children->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get($childPlaceholder))) }}
+	@else
+		{{ Form::text($child, Input::old($child), array('class' => 'form-control', 'placeholder' => Config::get($childPlaceholder))) }}
+	@endif
+</div>
+
 <div class="form-group">
 	{{ Form::label('description', 'Description') }}
 	@if((!empty($tagObject)) && ($tagObject->description != null) && (Input::old('description') == null))

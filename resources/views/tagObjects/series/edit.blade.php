@@ -5,6 +5,7 @@
 @endsection
 
 @section('head')
+	<script src="/js/autocomplete/series.js"></script>
 	<script src="/js/confirmdelete.js"></script>
 @endsection
 
@@ -30,7 +31,15 @@
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 					
-			@include('partials.tagObjects.tag-object-input', ['tagObject' => $series, 'namePlaceholder' => 'constants.placeholders.tagObjects.series.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.series.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.series.source'])
+			@include('partials.tagObjects.tag-object-input', 
+			[
+				'tagObject' => $series, 
+				'child' => 'series_child',
+				'namePlaceholder' => 'constants.placeholders.tagObjects.series.name', 
+				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.series.description', 
+				'sourcePlaceholder' => 'constants.placeholders.tagObjects.series.source',
+				'childPlaceholder' => 'constants.placeholders.tagObjects.series.child'
+			])
 			
 			{{ Form::submit('Update Series', array('class' => 'btn btn-primary')) }}
 		</form>

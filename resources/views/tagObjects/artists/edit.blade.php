@@ -5,6 +5,7 @@ Edit Artist - {{{$artist->name}}}
 @endsection
 
 @section('head')
+	<script src="/js/autocomplete/artist.js"></script>
 	<script src="/js/confirmdelete.js"></script>
 @endsection
 
@@ -29,7 +30,15 @@ Edit Artist - {{{$artist->name}}}
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
 		
-		@include('partials.tagObjects.tag-object-input', ['tagObject' => $artist, 'namePlaceholder' => 'constants.placeholders.tagObjects.artist.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.artist.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.artist.source'])
+		@include('partials.tagObjects.tag-object-input', 
+		[
+			'tagObject' => $artist,
+			'child' => 'artist_child',
+			'namePlaceholder' => 'constants.placeholders.tagObjects.artist.name', 
+			'descriptionPlaceholder' => 'constants.placeholders.tagObjects.artist.description', 
+			'sourcePlaceholder' => 'constants.placeholders.tagObjects.artist.source',
+			'childPlaceholder' => 'constants.placeholders.tagObjects.artist.child'
+		])
 		
 		{{ Form::submit('Update Artist', array('class' => 'btn btn-primary')) }}
 	</form>

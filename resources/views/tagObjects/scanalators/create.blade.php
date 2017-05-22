@@ -5,7 +5,7 @@ Create a New Scanalator
 @endsection
 
 @section('head')
-
+	<script src="/js/autocomplete/scanalator.js"></script>
 @endsection
 
 @section('content')
@@ -16,7 +16,14 @@ Create a New Scanalator
 		<form method="POST" action="{{route('store_scanalator')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
-			@include('partials.tagObjects.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.scanalator.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.scanalator.source'])
+			@include('partials.tagObjects.tag-object-input', 
+			[
+				'child' => 'scanalator_child',
+				'namePlaceholder' => 'constants.placeholders.tagObjects.scanalator.name', 
+				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.description', 
+				'sourcePlaceholder' => 'constants.placeholders.tagObjects.scanalator.source',
+				'childPlaceholder' => 'constants.placeholders.tagObjects.scanalator.child'
+			])
 			
 			{{ Form::submit('Create Scanalator', array('class' => 'btn btn-primary')) }}
 		</form>

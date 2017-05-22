@@ -5,7 +5,7 @@ Create a New Tag
 @endsection
 
 @section('head')
-
+	<script src="/js/autocomplete/tag.js"></script>
 @endsection
 
 @section('content')
@@ -16,7 +16,14 @@ Create a New Tag
 	<form method="POST" action="{{route('store_tag')}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		
-		@include('partials.tagObjects.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.tag.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.tag.source'])
+		@include('partials.tagObjects.tag-object-input', 
+		[
+			'child' => 'tag_child',
+			'namePlaceholder' => 'constants.placeholders.tagObjects.tag.name', 
+			'descriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.description', 
+			'sourcePlaceholder' => 'constants.placeholders.tagObjects.tag.source',
+			'childPlaceholder' => 'constants.placeholders.tagObjects.tag.child'
+		])
 		
 		{{ Form::submit('Create Tag', array('class' => 'btn btn-primary')) }}
 	</form>

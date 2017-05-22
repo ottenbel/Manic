@@ -5,7 +5,7 @@ Create a New Series
 @endsection
 
 @section('head')
-
+	<script src="/js/autocomplete/series.js"></script>
 @endsection
 
 @section('content')
@@ -16,7 +16,14 @@ Create a New Series
 		<form method="POST" action="{{route('store_series')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
-			@include('partials.tagObjects.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.series.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.series.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.series.source'])
+			@include('partials.tagObjects.tag-object-input', 
+			[
+				'child' => 'series_child',
+				'namePlaceholder' => 'constants.placeholders.tagObjects.series.name', 
+				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.series.description', 
+				'sourcePlaceholder' => 'constants.placeholders.tagObjects.series.source',
+				'childPlaceholder' => 'constants.placeholders.tagObjects.series.child'
+			])
 			
 			{{ Form::submit('Create Series', array('class' => 'btn btn-primary')) }}
 		</form>

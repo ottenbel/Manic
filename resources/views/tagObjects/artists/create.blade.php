@@ -5,7 +5,7 @@ Create a New Artist
 @endsection
 
 @section('head')
-
+	<script src="/js/autocomplete/artist.js"></script>
 @endsection
 
 @section('content')
@@ -16,7 +16,14 @@ Create a New Artist
 		<form method="POST" action="{{route('store_artist')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
-			@include('partials.tagObjects.tag-object-input', ['namePlaceholder' => 'constants.placeholders.tagObjects.artist.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.artist.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.artist.source'])
+			@include('partials.tagObjects.tag-object-input', 
+			[
+				'child' => 'artist_child',
+				'namePlaceholder' => 'constants.placeholders.tagObjects.artist.name', 
+				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.artist.description', 
+				'sourcePlaceholder' => 'constants.placeholders.tagObjects.artist.source',
+				'childPlaceholder' => 'constants.placeholders.tagObjects.artist.child'
+			])
 			
 			{{ Form::submit('Create Artist', array('class' => 'btn btn-primary')) }}
 		</form>

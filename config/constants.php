@@ -28,28 +28,33 @@
 												'artist' => [
 																'name' => 'Artist Name',
 																'description' => 'A description of the artist.',
-																'source' => 'https://en.wikipedia.org/wiki/Artist'
+																'source' => 'https://en.wikipedia.org/wiki/Artist',
+																'child' => 'Child Artist 1, Child Artist 2'
 															],
 												'character' => [
 																	'name' => 'Chapter Name',
 																	'description' => 'A description of the character.',
 																	'source' => 'https://en.wikipedia.org/wiki/Character_(arts)',
-																	'parentSeries' => 'Parent Series'
+																	'parentSeries' => 'Parent Series',
+																	'child' => 'Child Character 1, Child Character 2'
 															   ],
 												'scanalator' => [
 																	'name' => 'Scanalator Name',
 																	'description' => 'A description of the scanalator.',
-																	'source' => 'https://en.wikipedia.org/wiki/Translation'
+																	'source' => 'https://en.wikipedia.org/wiki/Translation',
+																	'child' => 'Child Scanalator 1, Child Scanalator 2'
 																],
 												'series' => [
 																'name' => 'Series Name',
 																'description' => 'A description of the series.',
-																'source' => 'https://en.wikipedia.org/wiki/Series'
+																'source' => 'https://en.wikipedia.org/wiki/Series',
+																'child' => 'Child Series 1, Child Series 2'
 															],
 												'tag' => [
 															'name' => 'Tag Name',
 															'description' => 'A description of the tag.',
-															'source' => 'https://en.wikipedia.org/wiki/Tag_(metadata)'
+															'source' => 'https://en.wikipedia.org/wiki/Tag_(metadata)',
+															'child' => 'Child Tag 1, Child Tag 2'
 														 ]
 											],
 							'aliases' => [

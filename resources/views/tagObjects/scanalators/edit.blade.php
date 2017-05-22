@@ -5,6 +5,7 @@ Edit Scanalator - {{{$scanalator->name}}}
 @endsection
 
 @section('head')
+	<script src="/js/autocomplete/scanalator.js"></script>
 	<script src="/js/confirmdelete.js"></script>
 @endsection
 
@@ -29,7 +30,15 @@ Edit Scanalator - {{{$scanalator->name}}}
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
 				
-		@include('partials.tagObjects.tag-object-input', ['tagObject' => $scanalator, 'namePlaceholder' => 'constants.placeholders.tagObjects.scanalator.name', 'descriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.description', 'sourcePlaceholder' => 'constants.placeholders.tagObjects.scanalator.source'])
+		@include('partials.tagObjects.tag-object-input', 
+		[
+			'tagObject' => $scanalator, 
+			'child' => 'scanalator_child',
+			'namePlaceholder' => 'constants.placeholders.tagObjects.scanalator.name', 
+			'descriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.description', 
+			'sourcePlaceholder' => 'constants.placeholders.tagObjects.scanalator.source',
+			'childPlaceholder' => 'constants.placeholders.tagObjects.scanalator.child'
+		])
 		
 		{{ Form::submit('Update Scanalator', array('class' => 'btn btn-primary')) }}
 	</form>
