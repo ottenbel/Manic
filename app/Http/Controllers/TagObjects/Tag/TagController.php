@@ -118,13 +118,23 @@ class TagController extends Controller
 			$alias->delete();
 		}
 		
+		$tag->save();
+		
+		$tag->children()->detach();
 		$tagChildrenArray = array_unique(array_map('trim', explode(',', Input::get('tag_child'))));
 		$causedLoops = MappingHelper::MapTagChildren($tag, $tagChildrenArray);
 		
-		$tag->save();
-		
-		//Redirect to the tag that was created
-		return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_success", array("Successfully created tag $tag->name."));
+		if (count($causedLoops))
+		{	
+			$childCausingLoopsMessage = "The following tags (" . implode(", ", $causedLoops) . ") were not attached as children to " . $tag->name . " as their addition would cause loops in tag implication.";
+			
+			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_data", array("Partially updated tag $tag->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+		}
+		else
+		{
+			//Redirect to the tag that was created
+			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_success", array("Successfully created tag $tag->name."));
+		}
     }
 
     /**
@@ -242,17 +252,17 @@ class TagController extends Controller
 			$alias->delete();
 		}
 		
+		$tag->save();
+		
 		$tag->children()->detach();
 		$tagChildrenArray = array_unique(array_map('trim', explode(',', Input::get('tag_child'))));
 		$causedLoops = MappingHelper::MapTagChildren($tag, $tagChildrenArray);
-		
-		$tag->save();
 		
 		if (count($causedLoops))
 		{	
 			$childCausingLoopsMessage = "The following tags (" . implode(", ", $causedLoops) . ") were not attached as children to " . $tag->name . " as their addition would cause loops in tag implication.";
 			
-			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_data", array("Partially updated tag $tag->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_data", array("Partially created tag $tag->name."))->with("flashed_warning", array($childCausingLoopsMessage));
 		}
 		else
 		{		

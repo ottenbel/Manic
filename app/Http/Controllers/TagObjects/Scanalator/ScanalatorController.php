@@ -118,13 +118,23 @@ class ScanalatorController extends Controller
 			$alias->delete();
 		}
 		
+		$scanalator->save();
+		
+		$scanalator->children()->detach();
 		$scanalatorChildrenArray = array_unique(array_map('trim', explode(',', Input::get('scanalator_child'))));
 		$causedLoops = MappingHelper::MapScanalatorChildren($scanalator, $scanalatorChildrenArray);
 		
-		$scanalator->save();
-		
-		//Redirect to the scanalator that was created
-		return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully created scanalator $scanalator->name."));
+		if (count($causedLoops))
+		{	
+			$childCausingLoopsMessage = "The following scanalators (" . implode(", ", $causedLoops) . ") were not attached as children to " . $scanalator->name . " as their addition would cause loops in tag implication.";
+			
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_data", array("Partially updated scanalator $scanalator->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+		}
+		else
+		{
+			//Redirect to the scanalator that was created
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully created scanalator $scanalator->name."));
+		}
     }
 
     /**
@@ -242,17 +252,17 @@ class ScanalatorController extends Controller
 			$alias->delete();
 		}
 		
+		$scanalator->save();
+		
 		$scanalator->children()->detach();
 		$scanalatorChildrenArray = array_unique(array_map('trim', explode(',', Input::get('scanalator_child'))));
 		$causedLoops = MappingHelper::MapScanalatorChildren($scanalator, $scanalatorChildrenArray);
-		
-		$scanalator->save();
 		
 		if (count($causedLoops))
 		{	
 			$childCausingLoopsMessage = "The following scanalators (" . implode(", ", $causedLoops) . ") were not attached as children to " . $scanalator->name . " as their addition would cause loops in tag implication.";
 			
-			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_data", array("Partially updated scanalator $scanalator->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_data", array("Partially created scanalator $scanalator->name."))->with("flashed_warning", array($childCausingLoopsMessage));
 		}
 		else
 		{		

@@ -118,13 +118,23 @@ class ArtistController extends Controller
 			$alias->delete();
 		}
 		
+		$artist->save();
+		
+		$artist->children()->detach();
 		$artistChildrenArray = array_unique(array_map('trim', explode(',', Input::get('artist_child'))));
 		$causedLoops = MappingHelper::MapArtistChildren($artist, $artistChildrenArray);
 		
-		$artist->save();
-		
-		//Redirect to the artist that was created
-		return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_success", array("Successfully created artist $artist->name."));
+		if (count($causedLoops))
+		{	
+			$childCausingLoopsMessage = "The following artists (" . implode(", ", $causedLoops) . ") were not attached as children to " . $artist->name . " as their addition would cause loops in tag implication.";
+			
+			return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_data", array("Partially created artist $artist->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+		}
+		else
+		{
+			//Redirect to the artist that was created
+			return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_success", array("Successfully created artist $artist->name."));
+		}
     }
 
     /**
@@ -243,11 +253,11 @@ class ArtistController extends Controller
 			$alias->delete();
 		}
 		
+		$artist->save();
+		
 		$artist->children()->detach();
 		$artistChildrenArray = array_unique(array_map('trim', explode(',', Input::get('artist_child'))));
 		$causedLoops = MappingHelper::MapArtistChildren($artist, $artistChildrenArray);
-		
-		$artist->save();
 		
 		if (count($causedLoops))
 		{	
