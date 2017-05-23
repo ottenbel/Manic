@@ -9,6 +9,7 @@ use Auth;
 use DB;
 use Input;
 use Config;
+use MappingHelper;
 use App\Models\TagObjects\Tag\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
 
@@ -116,6 +117,9 @@ class TagController extends Controller
 		{
 			$alias->delete();
 		}
+		
+		$tagChildrenArray = array_unique(array_map('trim', explode(',', Input::get('tag_child'))));
+		$causedLoops = MappingHelper::MapTagChildren($tag, $tagChildrenArray);
 		
 		$tag->save();
 		
@@ -238,10 +242,23 @@ class TagController extends Controller
 			$alias->delete();
 		}
 		
+		$tag->children()->detach();
+		$tagChildrenArray = array_unique(array_map('trim', explode(',', Input::get('tag_child'))));
+		$causedLoops = MappingHelper::MapTagChildren($tag, $tagChildrenArray);
+		
 		$tag->save();
 		
-		//Redirect to the tag that was created
-		return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_success", array("Successfully updated tag $tag->name."));
+		if (count($causedLoops))
+		{	
+			$childCausingLoopsMessage = "The following tags (" . implode(", ", $causedLoops) . ") were not attached as children to " . $tag->name . " as their addition would cause loops in tag implication.";
+			
+			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_data", array("Partially updated tag $tag->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+		}
+		else
+		{		
+			//Redirect to the tag that was created
+			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_success", array("Successfully updated tag $tag->name."));
+		}
     }
 
     /**
@@ -256,6 +273,21 @@ class TagController extends Controller
         $this->authorize($tag);
 		
 		$tagName = $tag->name;
+		
+		$parents = $tag->parents()->get();
+		$children = $tag->children()->get();
+		
+		//Ensure passed through relationships are sustained after deleting intermediary
+		foreach ($parents as $parent)
+		{
+			foreach ($children as $child)
+			{
+				if ($parent->children()->where('id', '=', $child->id)->count() == 0)
+				{
+					$parent->children()->attach($child);
+				}
+			}
+		}
 		
 		//Force deleting for now, build out functionality for soft deleting later.
 		$tag->forceDelete();

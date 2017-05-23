@@ -355,8 +355,69 @@ class MappingHelper
 					$scanalator->children()->attach($scanalatorChild);
 				}
 			}
-		}
+		}		
+		return $loopedChildren;
+	}
+	
+	/*
+	 * Map tag children to parent. 
+	 */
+	public static function MapTagChildren(&$tag, $tagChildrenArray)
+	{
+		$loopedChildren = array();
 		
+		foreach ($tagChildrenArray as $tagChildName)
+		{
+			if (trim($tagChildName) != "")
+			{
+				$tagChild = Tag::where('name', '=', $tagChildName)->first();
+				
+				if ($tagChild != null)
+				{
+					$causedLoop = false;
+					$children = $tagChild->children()->get();
+					for ($i = 0; $i < $children->count(); $i++)
+					{
+						$child = $children[$i];
+						//Check if the current child is the parent tag
+						if ($tag->id != null)
+						{
+							if ($tag->id == $child->id)
+							{
+								array_push($loopedChildren, trim($tagChildName));
+								$causedLoop = true;
+								break;
+							}
+							
+							//Continue to iterate through all descendants to avoid introducing loops in tag implication
+							if ($child->children->count() > 0)
+							{
+								$children = $children->merge($child->children()->get());
+							}
+						}
+						else
+						{
+							$tag->children()->attach($tagChild);
+							break;
+						}
+					}
+					
+					if (!($causedLoop))
+					{
+						$tag->children()->attach($tagChild);
+					}
+				}
+				else
+				{
+					//Create child tag
+					$tagChild = new Tag;
+					$tagChild->name = $tagChildName;
+					$tagChild->save();
+					
+					$tag->children()->attach($tagChild);
+				}
+			}
+		}		
 		return $loopedChildren;
 	}
 }
