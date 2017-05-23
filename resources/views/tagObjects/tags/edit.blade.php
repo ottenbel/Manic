@@ -3,10 +3,10 @@
 @section('title')
 Edit Tag - {{{$tag->name}}}
 @endsection
+	
+@section('head')
 	<script src="/js/autocomplete/tag.js"></script>
 	<script src="/js/confirmdelete.js"></script>
-@section('head')
-
 @endsection
 
 @section('content')
