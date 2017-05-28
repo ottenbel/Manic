@@ -52,6 +52,19 @@ class MappingHelper
 	{
 		$missing_characters = array();
 		
+		$fullInheritedSeriesCollection = $collection->series()->get();
+		
+		//Iterate through all series provided AND the full lineage of those series to retrieve the all possible characters that can be used
+		for($i = 0; $i < $fullInheritedSeriesCollection->count(); $i++)
+		{
+			$currentSeries = $fullInheritedSeriesCollection[$i];
+			
+			foreach($currentSeries->parents()->get() as $parent)
+			{
+				$fullInheritedSeriesCollection->push($parent);
+			}
+		}
+		
 		foreach ($characters_array as $character_name)
 		{
 			if (trim($character_name) != "")
@@ -60,7 +73,7 @@ class MappingHelper
 				
 				if ($character != null)
 				{
-					$series = $collection->series->where('id', '=', $character->series_id)->first();
+					$series = $fullInheritedSeriesCollection->where('id', '=', $character->series_id)->first();
 					if ($series != null)
 					{
 						$collection->characters()->attach($character, ['primary' => $isPrimary]);
