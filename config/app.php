@@ -233,6 +233,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 		'Uuid' => Webpatser\Uuid\Uuid::class,
 		'MappingHelper' => App\Helpers\MappingHelper::class,
+		'LookupHelper' => App\Helpers\LookupHelper::class,
 		'ImageUploadHelper' => App\Helpers\ImageUploadHelper::class,
 		'InterventionImage' => Intervention\Image\Facades\Image::class,
     ],

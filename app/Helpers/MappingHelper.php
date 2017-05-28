@@ -13,6 +13,7 @@ use App\Models\TagObjects\Tag\TagAlias;
 use App\Models\TagObjects\Scanalator\Scanalator;
 use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 use Auth;
+use LookupHelper;
 
 class MappingHelper
 {
@@ -25,21 +26,10 @@ class MappingHelper
 		{
 			if (trim($artist_name) != "")
 			{
-				$artist = Artist::where('name', '=', $artist_name)->first();
-				$personal_alias = ArtistAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $artist_name)->first();
-				$global_alias = ArtistAlias::where('user_id', '=', null)->where('alias', '=', $artist_name)->first();
+				$artist = LookupHelper::GetArtistByNameOrAlias($artist_name);
+				
 				if ($artist != null)
 				{
-					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
-				}
-				else if ($personal_alias != null)
-				{
-					$artist = Artist::where('id', '=', $personal_alias->artist_id)->first();
-					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
-				}
-				else if ($global_alias != null)
-				{
-					$artist = Artist::where('id', '=', $global_alias->artist_id)->first();
 					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
 				}
 				else
@@ -66,37 +56,10 @@ class MappingHelper
 		{
 			if (trim($character_name) != "")
 			{
-				$character = Character::where('name', '=', $character_name)->first();
-				$personal_alias = CharacterAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $character_name)->first();
-				$global_alias = CharacterAlias::where('user_id', '=', null)->where('alias', '=', $character_name)->first();
+				$character = LookupHelper::GetCharacterByNameOrAlias($character_name);
+				
 				if ($character != null)
 				{
-					$series = $collection->series->where('id', '=', $character->series_id)->first();
-					if ($series != null)
-					{
-						$collection->characters()->attach($character, ['primary' => $isPrimary]);
-					}
-					else
-					{
-						array_push($missing_characters, trim($character_name));
-					}
-				}
-				else if ($personal_alias != null)
-				{
-					$character = Character::where('id', '=', $personal_alias->character_id)->first();
-					$series = $collection->series->where('id', '=', $character->series_id)->first();
-					if ($series != null)
-					{
-						$collection->characters()->attach($character, ['primary' => $isPrimary]);
-					}
-					else
-					{
-						array_push($missing_characters, trim($character_name));
-					}
-				}
-				else if ($global_alias != null)
-				{
-					$character = Character::where('id', '=', $global_alias->character_id)->first();
 					$series = $collection->series->where('id', '=', $character->series_id)->first();
 					if ($series != null)
 					{
@@ -125,21 +88,10 @@ class MappingHelper
 		{
 			if (trim($tag_name) != "")
 			{
-				$tag = Tag::where('name', '=', $tag_name)->first();
-				$personal_alias = TagAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $tag_name)->first();
-				$global_alias = TagAlias::where('user_id', '=', null)->where('alias', '=', $tag_name)->first();
+				$tag = LookupHelper::GetTagByNameOrAlias($tag_name);
+				
 				if ($tag != null)
 				{
-					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
-				}
-				else if ($personal_alias != null)
-				{
-					$tag = Tag::where('id', '=', $personal_alias->tag_id)->first();
-					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
-				}
-				else if ($global_alias != null)
-				{
-					$tag = Tag::where('id', '=', $global_alias->tag_id)->first();
 					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
 				}
 				else
@@ -164,22 +116,10 @@ class MappingHelper
 		{
 			if (trim($series_name) != "")
 			{
-				$series = Series::where('name', '=', $series_name)->first();
-				$personal_alias = SeriesAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $series_name)->first();
-				$global_alias = SeriesAlias::where('user_id', '=', null)->where('alias', '=', $series_name)->first();
-				
+				$series = LookupHelper::GetSeriesByNameOrAlias($series_name);
+			
 				if ($series != null)
 				{
-					$collection->series()->attach($series, ['primary' => $isPrimary]);
-				}
-				else if ($personal_alias != null)
-				{
-					$series = Series::where('id', '=', $personal_alias->series_id)->first();
-					$collection->series()->attach($series, ['primary' => $isPrimary]);
-				}
-				else if ($global_alias != null)
-				{
-					$series = Series::where('id', '=', $global_alias->series_id)->first();
 					$collection->series()->attach($series, ['primary' => $isPrimary]);
 				}
 				else
@@ -204,21 +144,10 @@ class MappingHelper
 		{
 			if (trim($scanalator_name) != "")
 			{
-				$scanalator = Scanalator::where('name', '=', $scanalator_name)->first();
-				$personal_alias = ScanalatorAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $scanalator_name)->first();
-				$global_alias = ScanalatorAlias::where('user_id', '=', null)->where('alias', '=', $scanalator_name)->first();
+				$scanalator = LookupHelper::GetScanalatorByNameOrAlias($scanalator_name);
+				
 				if ($scanalator != null)
 				{
-					$chapter->scanalators()->attach($scanalator, ['primary' => $isPrimary]);
-				}
-				else if ($personal_alias != null)
-				{
-					$scanalator = Scanalator::where('id', '=', $personal_alias->scanalator_id)->first();
-					$chapter->scanalators()->attach($scanalator, ['primary' => $isPrimary]);
-				}
-				else if ($global_alias != null)
-				{
-					$scanalator = Scanalator::where('id', '=', $global_alias->scanalator_id)->first();
 					$chapter->scanalators()->attach($scanalator, ['primary' => $isPrimary]);
 				}
 				else
@@ -245,9 +174,20 @@ class MappingHelper
 		{
 			if (trim($artistChildName) != "")
 			{
-				$artistChild = Artist::where('name', '=', $artistChildName)->first();
+				$artistChild = LookupHelper::GetArtistByNameOrAlias($artistChildName);
 				
-				if ($artistChild != null)
+				if ($artist->id == null)
+				{
+					if (strtolower($artist->name) == strtolower($artistChildName))
+					{
+						array_push($loopedChildren, trim($artistChild->name));
+					}
+				}
+				else if (($artistChild != null) && ($artistChild->id == $artist->id))
+				{
+					array_push($loopedChildren, trim($artistChild->name));
+				}
+				else if ($artistChild != null)
 				{
 					$causedLoop = false;
 					$children = $artistChild->children()->get();
@@ -308,9 +248,20 @@ class MappingHelper
 		{
 			if (trim($scanalatorChildName) != "")
 			{
-				$scanalatorChild = Scanalator::where('name', '=', $scanalatorChildName)->first();
+				$scanalatorChild = LookupHelper::GetScanalatorByNameOrAlias($scanalatorChildName);
 				
-				if ($scanalatorChild != null)
+				if ($scanalator->id == null)
+				{
+					if (strtolower($scanalator->name) == strtolower($scanalatorChildName))
+					{
+						array_push($loopedChildren, trim($scanalatorChild->name));
+					}
+				}
+				else if (($scanalatorChild != null) && ($scanalatorChild->id == $scanalator->id))
+				{
+					array_push($loopedChildren, trim($scanalatorChild->name));
+				}
+				else if ($scanalatorChild != null)
 				{
 					$causedLoop = false;
 					$children = $scanalatorChild->children()->get();
@@ -370,9 +321,20 @@ class MappingHelper
 		{
 			if (trim($tagChildName) != "")
 			{
-				$tagChild = Tag::where('name', '=', $tagChildName)->first();
+				$tagChild = LookupHelper::GetTagByNameOrAlias($tagChildName);
 				
-				if ($tagChild != null)
+				if ($tag->id == null)
+				{
+					if (strtolower($tag->name) == strtolower($tagChildName))
+					{
+						array_push($loopedChildren, trim($tagChild->name));
+					}
+				}
+				else if (($tagChild != null) && ($tagChild->id == $tag->id))
+				{
+					array_push($loopedChildren, trim($tagChild->name));
+				}
+				else if ($tagChild != null)
 				{
 					$causedLoop = false;
 					$children = $tagChild->children()->get();
@@ -440,9 +402,20 @@ class MappingHelper
 		{
 			if (trim($seriesChildName) != "")
 			{
-				$seriesChild = Series::where('name', '=', $seriesChildName)->first();
+				$seriesChild = LookupHelper::GetSeriesByNameOrAlias($seriesChildName);
 				
-				if ($seriesChild != null)
+				if ($series->id == null)
+				{
+					if (strtolower($series->name) == strtolower($seriesChildName))
+					{
+						array_push($loopedChildren, trim($seriesChild->name));
+					}
+				}
+				else if (($seriesChild != null) && ($seriesChild->id == $series->id))
+				{
+					array_push($loopedChildren, trim($seriesChild->name));
+				}
+				else if ($seriesChild != null)
 				{
 					$causedLoop = false;
 					$children = $seriesChild->children()->get();
