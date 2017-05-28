@@ -420,5 +420,78 @@ class MappingHelper
 		}		
 		return $loopedChildren;
 	}
+	
+	/*
+	 * Map series children to parent. 
+	 */
+	public static function MapSeriesChildren(&$series, $seriesChildrenArray, $lockedChildren)
+	{
+		$loopedChildren = array();
+		
+		if ($lockedChildren->count() > 0)
+		{
+			foreach ($lockedChildren as $lockedChild)
+			{
+				$series->children()->attach($lockedChild);
+			}
+		}
+		
+		foreach ($seriesChildrenArray as $seriesChildName)
+		{
+			if (trim($seriesChildName) != "")
+			{
+				$seriesChild = Series::where('name', '=', $seriesChildName)->first();
+				
+				if ($seriesChild != null)
+				{
+					$causedLoop = false;
+					$children = $seriesChild->children()->get();
+					for ($i = 0; $i < $children->count(); $i++)
+					{
+						$child = $children[$i];
+						//Check if the current child is the parent tag
+						if ($series->id != null)
+						{
+							if ($series->id == $child->id)
+							{
+								array_push($loopedChildren, trim($seriesChildName));
+								$causedLoop = true;
+								break;
+							}
+							
+							//Continue to iterate through all descendants to avoid introducing loops in tag implication
+							if ($child->children->count() > 0)
+							{
+								$children = $children->merge($child->children()->get());
+							}
+						}
+						else
+						{
+							if ($series->children()->where("child_id", "=", $seriesChild->id)->count() == 0)
+							{
+								$series->children()->attach($seriesChild);
+							}
+							break;
+						}
+					}
+					
+					if (!($causedLoop))
+					{
+						$series->children()->attach($seriesChild);
+					}
+				}
+				else
+				{
+					//Create child series
+					$seriesChild = new Series;
+					$seriesChild->name = $seriesChildName;
+					$seriesChild->save();
+					
+					$series->children()->attach($seriesChild);
+				}
+			}
+		}		
+		return $loopedChildren;
+	}
 }
 ?>

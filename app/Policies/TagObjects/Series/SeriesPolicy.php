@@ -55,6 +55,14 @@ class SeriesPolicy
      */
     public function delete(User $user, Series $series)
     {
-        return $user->has_editor_permission();
+		if (($user->has_editor_permission()) && ($series->children()->count() == 0) && ($series->usage_count() == 0))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+        
     }
 }

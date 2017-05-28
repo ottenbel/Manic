@@ -9,6 +9,7 @@ use Auth;
 use DB;
 use Input;
 use Config;
+use MappingHelper;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
 
@@ -119,8 +120,23 @@ class SeriesController extends Controller
 		
 		$series->save();
 		
-		//Redirect to the series that was created
-		return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully created series $series->name."));
+		$lockedChildren = collect();
+		
+		$series->children()->detach();
+		$seriesChildrenArray = array_unique(array_map('trim', explode(',', Input::get('series_child'))));
+		$causedLoops = MappingHelper::MapSeriesChildren($series, $seriesChildrenArray, $lockedChildren);
+		
+		if (count($causedLoops))
+		{	
+			$childCausingLoopsMessage = "The following series (" . implode(", ", $causedLoops) . ") were not attached as children to " . $series->name . " as their addition would cause loops in tag implication.";
+			
+			return redirect()->route('show_tag', ['series' => $series])->with("flashed_data", array("Partially updated series $series->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+		}
+		else
+		{
+			//Redirect to the series that was created
+			return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully created series $series->name."));
+		}
     }
 
     /**
@@ -248,7 +264,23 @@ class SeriesController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.series.edit', array('series' => $series, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		$freeChildren = collect();
+		$lockedChildren = collect();
+		
+		foreach ($series->children()->get() as $child)
+		{
+			//Check whether or not removing the parent child relationship can be done without breaking series/character relationship mapping on collections
+			if (($child->children()->count() == 0) && ($child->usage_count() == 0))
+			{
+				$freeChildren->push($child);
+			}
+			else
+			{
+				$lockedChildren->push($child);
+			}
+		}
+		
+		return View('tagObjects.series.edit', array('series' => $series, 'freeChildren' => $freeChildren, 'lockedChildren' =>$lockedChildren, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -283,8 +315,32 @@ class SeriesController extends Controller
 		
 		$series->save();
 		
-		//Redirect to the series that was created
-		return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully updated series $series->name."));
+		$lockedChildren = collect();
+		
+		foreach ($series->children()->get() as $child)
+		{
+			//Check whether or not removing the parent child relationship can be done without breaking series/character relationship mapping on collections
+			if (!(($child->children()->count() == 0) && ($child->usage_count() == 0)))
+			{
+				$lockedChildren->push($child);
+			}
+		}
+		
+		$series->children()->detach();
+		$seriesChildrenArray = array_unique(array_map('trim', explode(',', Input::get('series_child'))));
+		$causedLoops = MappingHelper::MapSeriesChildren($series, $seriesChildrenArray, $lockedChildren);
+		
+		if (count($causedLoops))
+		{	
+			$childCausingLoopsMessage = "The following series (" . implode(", ", $causedLoops) . ") were not attached as children to " . $series->name . " as their addition would cause loops in tag implication.";
+			
+			return redirect()->route('show_series', ['series' => $series])->with("flashed_data", array("Partially created series $series->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+		}
+		else
+		{	
+			//Redirect to the series that was created
+			return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully updated series $series->name."));
+		}
     }
 
     /**

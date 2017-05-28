@@ -11,15 +11,41 @@
 </div>
 
 <!-- Display textbox for child tag objects-->
-<div class="form-group">
-	{{ Form::label($child, 'Children') }}
-	
-	@if((!empty($tagObject)) && ($tagObject->children()->count() > 0) && (Input::old($child) == null))
-		{{ Form::text($child, collect($tagObject->children->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get($childPlaceholder))) }}
-	@else
-		{{ Form::text($child, Input::old($child), array('class' => 'form-control', 'placeholder' => Config::get($childPlaceholder))) }}
+@if(Route::is('edit_series'))
+	<!-- Display the children that can't be removed from the given series (where children != 0 AND usage count != 0) -->
+	@if($lockedChildren->count() > 0)
+	<div class="row">
+		<div class="col-xs-2">
+			<b>Locked Children</b>
+		</div>
+		<!-- Display the children that can be removed from the given series (where children == 0 AND usage count == 0) -->
+		<div class="col-xs-2">
+			@foreach($lockedChildren as $lockedChild)
+				<span class="primary_series"><a href="{{route('edit_series', ['series' => $lockedChild])}}">{{{$lockedChild->name}}} <span class="series_count">({{$lockedChild->usage_count()}})</span></a></span>
+			@endforeach
+		</div>
+	</div>
 	@endif
-</div>
+	<div class="form-group">
+		{{ Form::label($child, 'New Children') }}
+		
+		@if(($freeChildren->count() > 0) && (Input::old('description') == null))
+			{{ Form::text($child, collect($freeChildren->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get($childPlaceholder))) }}
+		@else
+			{{ Form::text($child, Input::old($child), array('class' => 'form-control', 'placeholder' => Config::get($childPlaceholder))) }}
+		@endif
+	</div>
+@else
+	<div class="form-group">
+		{{ Form::label($child, 'Children') }}
+		
+		@if((!empty($tagObject)) && ($tagObject->children()->count() > 0) && (Input::old($child) == null))
+			{{ Form::text($child, collect($tagObject->children->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get($childPlaceholder))) }}
+		@else
+			{{ Form::text($child, Input::old($child), array('class' => 'form-control', 'placeholder' => Config::get($childPlaceholder))) }}
+		@endif
+	</div>
+@endif
 
 <div class="form-group">
 	{{ Form::label('description', 'Description') }}
