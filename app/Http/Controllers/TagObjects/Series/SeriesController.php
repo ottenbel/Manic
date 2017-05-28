@@ -130,7 +130,7 @@ class SeriesController extends Controller
 		{	
 			$childCausingLoopsMessage = "The following series (" . implode(", ", $causedLoops) . ") were not attached as children to " . $series->name . " as their addition would cause loops in tag implication.";
 			
-			return redirect()->route('show_tag', ['series' => $series])->with("flashed_data", array("Partially updated series $series->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+			return redirect()->route('show_series', ['series' => $series])->with("flashed_data", array("Partially updated series $series->name."))->with("flashed_warning", array($childCausingLoopsMessage));
 		}
 		else
 		{

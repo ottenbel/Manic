@@ -479,5 +479,91 @@ class MappingHelper
 		}		
 		return $loopedChildren;
 	}
+	
+	/*
+	 * Map tag children to parent. 
+	 */
+	public static function MapCharacterChildren(&$character, $characterChildrenArray, $droppedChildren)
+	{
+		$loopedChildren = array();
+		
+		$eligibleSeries = $character->series()->get();
+		
+		for($i = 0; $i < $eligibleSeries->count(); $i++)
+		{
+			$children = $eligibleSeries->children()->get();
+			foreach ($children as $child)
+			{
+				$eligibleSeries->push($child);
+			}
+		}
+		
+		foreach ($characterChildrenArray as $characterChildName)
+		{
+			if (trim($characterChildName) != "")
+			{
+				$characterChild = LookupHelper::GetCharacterByNameOrAlias($characterChildName);
+				
+				if ($character->id == null)
+				{
+					if (strtolower($character->name) == strtolower($characterChildName))
+					{
+						array_push($loopedChildren, trim($characterChild->name));
+					}
+				}
+				else if (($characterChild != null) && ($characterChild->id == $character->id))
+				{
+					array_push($loopedChildren, trim($characterChild->name));
+				}
+				else if ($characterChild != null)
+				{
+					$causedLoop = false;
+					$children = $characterChild->children()->get();
+					for ($i = 0; $i < $children->count(); $i++)
+					{
+						$child = $children[$i];
+						//Check if the current child is the parent character
+						if ($character->id != null)
+						{
+							if ($character->id == $child->id)
+							{
+								array_push($loopedChildren, trim($characterChildName));
+								$causedLoop = true;
+								break;
+							}
+							
+							//Continue to iterate through all descendants to avoid introducing loops in tag implication
+							if ($child->children->count() > 0)
+							{
+								$children = $children->merge($child->children()->get());
+							}
+						}
+						else
+						{
+							if ($eligibleSeries->where('id', '=', $characterChild->series_id)->first() != null)
+							{
+								$tag->children()->attach($characterChild);
+							}
+							else
+							{
+								array_push($droppedChildren, trim($characterChild));
+							}
+							break;
+						}
+					}
+					
+					if (!($causedLoop))
+					{
+						$tag->children()->attach($characterChild);
+					}
+				}
+				else
+				{
+					array_push($droppedChildren, trim($characterChild));
+				}
+			}
+		}		
+		return $loopedChildren;
+	}
 }
 ?>

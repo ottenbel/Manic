@@ -10,6 +10,7 @@ use Auth;
 use DB;
 use Input;
 use Config;
+use MappingHelper;
 use App\Models\TagObjects\Character\Character;
 use App\Models\TagObjects\Character\CharacterAlias;
 use App\Models\TagObjects\Series\Series;
@@ -130,8 +131,36 @@ class CharacterController extends Controller
 		
 		$character->save();
 		
-		//Redirect to the character that was created
-		return redirect()->route('show_character', ['character' => $character])->with("flashed_success", array("Successfully created character $character->name under series $parent_series->name."));
+		//Write out error message to alert the user of dropped children
+		$droppedChildren = array();
+		
+		$character->children()->detach();
+		$characterChildrenArray = array_unique(array_map('trim', explode(',', Input::get('character_child'))));
+		$causedLoops = MappingHelper::MapCharacterChildren($character, $characterChildrenArray, $droppedChildren);
+		
+		if ((count($causedLoops) > 0) || (count($droppedChildren) > 0))
+		{
+			$warnings = array();
+			
+			if (count($causedLoops) > 0)
+			{
+				$childCausingLoopsMessage = "The following characters (" . implode(", ", $causedLoops) . ") were not attached as children to " . $character->name . " as their addition would cause loops in tag implication.";
+				array_push($warnings, $childCausingLoopsMessage);
+			}
+			
+			if (count($droppedChildren) > 0)
+			{
+				$droppedChildrenMessage = "The following characters (" . implode(", ", $droppedChildren) . ") were not attached as children to " . $character->name . " as they could not be found attached to " . $character->series->name . "or a child series of it.";
+				array_push($warnings, $droppedChildrenMessage);
+			}
+			
+			return redirect()->route('show_character', ['character' => $character])->with("flashed_data", array("Partially created character $character->name."))->with("flashed_warning", $warnings);
+		}
+		else
+		{
+			//Redirect to the character that was created
+			return redirect()->route('show_character', ['character' => $character])->with("flashed_success", array("Successfully created character $character->name under series $parent_series->name."));
+		}
     }
 
     /**
@@ -241,7 +270,7 @@ class CharacterController extends Controller
 		$character->description = trim(Input::get('description'));
 		$character->url = trim(Input::get('url'));
 		
-		//Delete any character aliases that share the name with the artist to be created.
+		//Delete any character aliases that share the name with the character to be created.
 		$aliases_list = CharacterAlias::where('alias', '=', trim(Input::get('name')))->get();
 		
 		foreach ($aliases_list as $alias)
@@ -251,8 +280,21 @@ class CharacterController extends Controller
 		
 		$character->save();
 		
-		//Redirect to the character that was created
-		return redirect()->route('show_character', [$character])->with("flashed_success", array("Successfully updated character $character->name."));
+		$character->children()->detach();
+		$characterChildrenArray = array_unique(array_map('trim', explode(',', Input::get('character_child'))));
+		$causedLoops = MappingHelper::MapCharacterChildren($character, $characterChildrenArray);
+		
+		if (count($causedLoops))
+		{	
+			$childCausingLoopsMessage = "The following characters (" . implode(", ", $causedLoops) . ") were not attached as children to " . $character->name . " as their addition would cause loops in tag implication.";
+			
+			return redirect()->route('show_character', ['character' => $character])->with("flashed_data", array("Partially updated character $character->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+		}
+		else
+		{
+			//Redirect to the character that was created
+			return redirect()->route('show_character', [$character])->with("flashed_success", array("Successfully updated character $character->name."));
+		}
     }
 
     /**
@@ -267,6 +309,21 @@ class CharacterController extends Controller
 		$this->authorize($character);
 		
 		$characterName = $character->name;
+		
+		$parents = $character->parents()->get();
+		$children = $character->children()->get();
+		
+		//Ensure passed through relationships are sustained after deleting intermediary
+		foreach ($parents as $parent)
+		{
+			foreach ($children as $child)
+			{
+				if ($parent->children()->where('id', '=', $child->id)->count() == 0)
+				{
+					$parent->children()->attach($child);
+				}
+			}
+		}
 		
 		//Force deleting for now, build out functionality for soft deleting later.
 		$character->forceDelete();

@@ -149,7 +149,7 @@ $(document).ready(function(){
 		  .autocomplete({
 			source: function( request, response ) {
 				$.ajax({
-					url: "/api/v1/character/namesearch",
+					url: "/api/v1/character/childrennamesearch",
 					type: "POST",
 					data: {searchString: extractLast( request.term ), seriesString: $("#parent_series").val()},
 					success: function (data)

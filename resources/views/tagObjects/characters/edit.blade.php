@@ -28,9 +28,14 @@ Edit Character - {{{$character->name}}}
 		
 		<h2>Associated With <a href="{{route('show_series', ['series' => $character->series()->first()])}}">{{$character->series->name}}</a></h2>
 		
-		<form method="POST" action="{{route('update_character', ['series' => $character])}}" enctype="multipart/form-data">
+		<form method="POST" action="{{route('update_character', ['character' => $character])}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
+			
+			<div class="form-group">
+				{{ Form::label('parent_series', 'Series', array('style' => 'display:none')) }}
+				{{ Form::text('parent_series', $character->series()->first()->name, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.tagObjects.character.parentSeries'), 'style' => 'display:none')) }}
+			</div>
 			
 			@include('partials.tagObjects.tag-object-input', 
 			[
