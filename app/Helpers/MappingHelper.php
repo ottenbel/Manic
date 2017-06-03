@@ -183,6 +183,12 @@ class MappingHelper
 	{
 		$loopedChildren = array();
 		
+		$ancestors = null;
+		if($artist->id != null)
+		{
+			$ancestors = $artist->ancestors();
+		}
+		
 		foreach ($artistChildrenArray as $artistChildName)
 		{
 			if (trim($artistChildName) != "")
@@ -202,37 +208,21 @@ class MappingHelper
 				}
 				else if ($artistChild != null)
 				{
-					$causedLoop = false;
-					$children = $artistChild->children()->get();
-					for ($i = 0; $i < $children->count(); $i++)
-					{
-						$child = $children[$i];
-						//Check if the current child is the parent artist
-						if ($artist->id != null)
-						{
-							if ($artist->id == $child->id)
-							{
-								array_push($loopedChildren, trim($artistChildName));
-								$causedLoop = true;
-								break;
-							}
-							
-							//Continue to iterate through all descendants to avoid introducing loops in artist implication
-							if ($child->children->count() > 0)
-							{
-								$children = $children->merge($child->children()->get());
-							}
-						}
-						else
-						{
-							$artist->children()->attach($artistChild);
-							break;
-						}
-					}
+					$childDescendants = $artistChild->descendants();
 					
-					if (!($causedLoop))
+					$ancestorCount = $ancestors->count();
+					$descendantCount = $childDescendants->count();
+					
+					$merged = $ancestors->merge($childDescendants);
+					
+					if (($merged->isEmpty()) ||(($merged->count() == ($ancestorCount + $descendantCount)) 
+						&& ($merged->where('id', '=', $artist->id)->isEmpty())))
 					{
 						$artist->children()->attach($artistChild);
+					}
+					else
+					{
+						array_push($loopedChildren, trim($artistChild->name));
 					}
 				}
 				else
@@ -257,6 +247,12 @@ class MappingHelper
 	{
 		$loopedChildren = array();
 		
+		$ancestors = null;
+		if($scanalator->id != null)
+		{
+			$ancestors = $scanalator->ancestors();
+		}
+		
 		foreach ($scanalatorChildrenArray as $scanalatorChildName)
 		{
 			if (trim($scanalatorChildName) != "")
@@ -276,37 +272,21 @@ class MappingHelper
 				}
 				else if ($scanalatorChild != null)
 				{
-					$causedLoop = false;
-					$children = $scanalatorChild->children()->get();
-					for ($i = 0; $i < $children->count(); $i++)
-					{
-						$child = $children[$i];
-						//Check if the current child is the parent scanalator
-						if ($scanalator->id != null)
-						{
-							if ($scanalator->id == $child->id)
-							{
-								array_push($loopedChildren, trim($scanalatorChildName));
-								$causedLoop = true;
-								break;
-							}
-							
-							//Continue to iterate through all descendants to avoid introducing loops in scanalator implication
-							if ($child->children->count() > 0)
-							{
-								$children = $children->merge($child->children()->get());
-							}
-						}
-						else
-						{
-							$scanalator->children()->attach($scanalatorChild);
-							break;
-						}
-					}
+					$childDescendants = $scanalatorChild->descendants();
 					
-					if (!($causedLoop))
+					$ancestorCount = $ancestors->count();
+					$descendantCount = $childDescendants->count();
+					
+					$merged = $ancestors->merge($childDescendants);
+					
+					if (($merged->isEmpty()) || (($merged->count() == ($ancestorCount + $descendantCount)) 
+						&& ($merged->where('id', '=', $scanalator->id)->isEmpty())))
 					{
-						$scanalator->children()->attach($scanalatorChild);
+						$artist->children()->attach($scanalatorChild);
+					}
+					else
+					{
+						array_push($loopedChildren, trim($scanalatorChild->name));
 					}
 				}
 				else
@@ -330,6 +310,12 @@ class MappingHelper
 	{
 		$loopedChildren = array();
 		
+		$ancestors = null;
+		if($tag->id != null)
+		{
+			$ancestors = $tag->ancestors();
+		}
+		
 		foreach ($tagChildrenArray as $tagChildName)
 		{
 			if (trim($tagChildName) != "")
@@ -349,37 +335,21 @@ class MappingHelper
 				}
 				else if ($tagChild != null)
 				{
-					$causedLoop = false;
-					$children = $tagChild->children()->get();
-					for ($i = 0; $i < $children->count(); $i++)
-					{
-						$child = $children[$i];
-						//Check if the current child is the parent tag
-						if ($tag->id != null)
-						{
-							if ($tag->id == $child->id)
-							{
-								array_push($loopedChildren, trim($tagChildName));
-								$causedLoop = true;
-								break;
-							}
-							
-							//Continue to iterate through all descendants to avoid introducing loops in tag implication
-							if ($child->children->count() > 0)
-							{
-								$children = $children->merge($child->children()->get());
-							}
-						}
-						else
-						{
-							$tag->children()->attach($tagChild);
-							break;
-						}
-					}
+					$childDescendants = $tagChild->descendants();
 					
-					if (!($causedLoop))
+					$ancestorCount = $ancestors->count();
+					$descendantCount = $childDescendants->count();
+					
+					$merged = $ancestors->merge($childDescendants);
+					
+					if (($merged->isEmpty()) || (($merged->count() == ($ancestorCount + $descendantCount)) 
+						&& ($merged->where('id', '=', $tag->id)->isEmpty())))
 					{
 						$tag->children()->attach($tagChild);
+					}
+					else
+					{
+						array_push($loopedChildren, trim($tagChild->name));
 					}
 				}
 				else
@@ -402,6 +372,12 @@ class MappingHelper
 	public static function MapSeriesChildren(&$series, $seriesChildrenArray, $lockedChildren)
 	{
 		$loopedChildren = array();
+		
+		$ancestors = null;
+		if($series->id != null)
+		{
+			$ancestors = $series->ancestors();
+		}
 		
 		if ($lockedChildren->count() > 0)
 		{
@@ -430,40 +406,21 @@ class MappingHelper
 				}
 				else if ($seriesChild != null)
 				{
-					$causedLoop = false;
-					$children = $seriesChild->children()->get();
-					for ($i = 0; $i < $children->count(); $i++)
-					{
-						$child = $children[$i];
-						//Check if the current child is the parent tag
-						if ($series->id != null)
-						{
-							if ($series->id == $child->id)
-							{
-								array_push($loopedChildren, trim($seriesChildName));
-								$causedLoop = true;
-								break;
-							}
-							
-							//Continue to iterate through all descendants to avoid introducing loops in tag implication
-							if ($child->children->count() > 0)
-							{
-								$children = $children->merge($child->children()->get());
-							}
-						}
-						else
-						{
-							if ($series->children()->where("child_id", "=", $seriesChild->id)->count() == 0)
-							{
-								$series->children()->attach($seriesChild);
-							}
-							break;
-						}
-					}
+					$childDescendants = $seriesChild->descendants();
 					
-					if (!($causedLoop))
+					$ancestorCount = $ancestors->count();
+					$descendantCount = $childDescendants->count();
+					
+					$merged = $ancestors->merge($childDescendants);
+					
+					if (($merged->isEmpty()) || (($merged->count() == ($ancestorCount + $descendantCount))  
+						&& ($merged->where('id', '=', $series->id)->isEmpty())))
 					{
 						$series->children()->attach($seriesChild);
+					}
+					else
+					{
+						array_push($loopedChildren, trim($seriesChild->name));
 					}
 				}
 				else
@@ -483,20 +440,18 @@ class MappingHelper
 	/*
 	 * Map tag children to parent. 
 	 */
-	public static function MapCharacterChildren(&$character, $characterChildrenArray, $droppedChildren)
+	public static function MapCharacterChildren(&$character, $characterChildrenArray, &$droppedChildren)
 	{
 		$loopedChildren = array();
 		
-		$eligibleSeries = $character->series()->get();
-		
-		for($i = 0; $i < $eligibleSeries->count(); $i++)
+		$ancestors = null;
+		if($character->id != null)
 		{
-			$children = $eligibleSeries->children()->get();
-			foreach ($children as $child)
-			{
-				$eligibleSeries->push($child);
-			}
+			$ancestors = $character->ancestors();
 		}
+		
+		$eligibleSeries = $character->series->descendants();
+		$eligibleSeries = $eligibleSeries->push($character->series);
 		
 		foreach ($characterChildrenArray as $characterChildName)
 		{
@@ -517,44 +472,28 @@ class MappingHelper
 				}
 				else if ($characterChild != null)
 				{
-					$causedLoop = false;
-					$children = $characterChild->children()->get();
-					for ($i = 0; $i < $children->count(); $i++)
-					{
-						$child = $children[$i];
-						//Check if the current child is the parent character
-						if ($character->id != null)
+					$childDescendants = $characterChild->descendants();
+					
+					$ancestorCount = $ancestors->count();
+					$descendantCount = $childDescendants->count();
+					
+					$merged = $ancestors->merge($childDescendants);
+					
+					if (($merged->isEmpty()) || (($merged->count() == ($ancestorCount + $descendantCount))  
+						&& ($merged->where('id', '=', $character->id)->isEmpty())))
+					{						
+						if ($eligibleSeries->where('id', '=', $characterChild->series_id)->first() != null)
 						{
-							if ($character->id == $child->id)
-							{
-								array_push($loopedChildren, trim($characterChildName));
-								$causedLoop = true;
-								break;
-							}
-							
-							//Continue to iterate through all descendants to avoid introducing loops in tag implication
-							if ($child->children->count() > 0)
-							{
-								$children = $children->merge($child->children()->get());
-							}
+							$character->children()->attach($characterChild);
 						}
 						else
 						{
-							if ($eligibleSeries->where('id', '=', $characterChild->series_id)->first() != null)
-							{
-								$tag->children()->attach($characterChild);
-							}
-							else
-							{
-								array_push($droppedChildren, trim($characterChild));
-							}
-							break;
+							array_push($droppedChildren, trim($characterChild->name));
 						}
 					}
-					
-					if (!($causedLoop))
+					else
 					{
-						$tag->children()->attach($characterChild);
+						array_push($loopedChildren, trim($characterChild->name));
 					}
 				}
 				else

@@ -131,7 +131,6 @@ class CharacterController extends Controller
 		
 		$character->save();
 		
-		//Write out error message to alert the user of dropped children
 		$droppedChildren = array();
 		
 		$character->children()->detach();
@@ -280,15 +279,29 @@ class CharacterController extends Controller
 		
 		$character->save();
 		
+		$droppedChildren = array();
+		
 		$character->children()->detach();
 		$characterChildrenArray = array_unique(array_map('trim', explode(',', Input::get('character_child'))));
-		$causedLoops = MappingHelper::MapCharacterChildren($character, $characterChildrenArray);
-		
-		if (count($causedLoops))
-		{	
-			$childCausingLoopsMessage = "The following characters (" . implode(", ", $causedLoops) . ") were not attached as children to " . $character->name . " as their addition would cause loops in tag implication.";
+		$causedLoops = MappingHelper::MapCharacterChildren($character, $characterChildrenArray, $droppedChildren);
 			
-			return redirect()->route('show_character', ['character' => $character])->with("flashed_data", array("Partially updated character $character->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+		$warnings = array();
+		
+		if ((count($causedLoops) > 0) || (count ($droppedChildren) > 0))
+		{	
+			if (count($causedLoops) > 0)
+			{
+				$childCausingLoopsMessage = "The following characters (" . implode(", ", $causedLoops) . ") were not attached as children to " . $character->name . " as their addition would cause loops in tag implication.";
+				array_push($warnings, $childCausingLoopsMessage);
+			}
+			
+			if (count($droppedChildren) > 0)
+			{
+				$droppedChildrenMessage = "The following characters (" . implode(", ", $droppedChildren) . ") were not attached as children to " . $character->name . " as they could not be found attached to " . $character->series->name . "or a child series of it.";
+				array_push($warnings, $droppedChildrenMessage);
+			}
+			
+			return redirect()->route('show_character', ['character' => $character])->with("flashed_data", array("Partially updated character $character->name."))->with("flashed_warning", $warnings);
 		}
 		else
 		{

@@ -69,4 +69,42 @@ class Scanalator extends BaseManicModel
 	{
 		return $this->belongsToMany('App\Models\TagObjects\Scanalator\Scanalator', 'scanalator_scanalator', 'parent_id', 'child_id');
 	}
+	
+	/*
+	 * Return all descendants of the given scanalator.
+	 */
+	public function descendants()
+	{
+		$children = $this->children()->get();
+		
+		for ($i = 0; $i < $children->count(); $i++)
+		{
+			$child = $children[$i];
+			if ($child->children->count() > 0)
+			{
+				$children = $children->merge($child->children()->get());
+			}
+		}
+		
+		return $children->unique();
+	}
+	
+	/*
+	 * Return all ancestors of the given scanalator.
+	 */
+	public function ancestors()
+	{
+		$parents = $this->parents()->get();
+		
+		for ($i = 0; $i < $parents->count(); $i++)
+		{
+			$parent = $parents[$i];
+			if ($parent->parents->count() > 0)
+			{
+				$parents = $parents->merge($parent->parents()->get());
+			}
+		}
+		
+		return $parents->unique();
+	}
 }

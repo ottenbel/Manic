@@ -42,4 +42,42 @@ class CollectionAssociatedTagObjectModel extends BaseManicModel
 	{
 		return $this->collections()->where('primary', '=', false)->count();
 	}
+	
+	/*
+	 * Return all descendants of the given tag object.
+	 */
+	public function descendants()
+	{
+		$children = $this->children()->get();
+		
+		for ($i = 0; $i < $children->count(); $i++)
+		{
+			$child = $children[$i];
+			if ($child->children->count() > 0)
+			{
+				$children = $children->merge($child->children()->get());
+			}
+		}
+		
+		return $children->unique();
+	}
+	
+	/*
+	 * Return all ancestors of the given tag object.
+	 */
+	public function ancestors()
+	{
+		$parents = $this->parents()->get();
+		
+		for ($i = 0; $i < $parents->count(); $i++)
+		{
+			$parent = $parents[$i];
+			if ($parent->parents->count() > 0)
+			{
+				$parents = $parents->merge($parent->parents()->get());
+			}
+		}
+		
+		return $parents->unique();
+	}
 }
