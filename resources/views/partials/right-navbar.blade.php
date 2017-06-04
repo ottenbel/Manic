@@ -187,7 +187,8 @@
 				<li><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}">View Scanalator</a><li>
 			</ul>
 		</li>
-	@elseif ((Auth::user()->can('create', App\Models\Collection::class)) 
+	@endif
+	@if ((Auth::user()->can('create', App\Models\Collection::class)) 
 			|| (Auth::user()->can('create', App\Models\TagObjects\Tag\Tag::class)) 
 			|| (Auth::user()->can('create', App\Models\TagObjects\Artist\Artist::class)) 
 			|| (Auth::user()->can('create', App\Models\TagObjects\Character\Character::class)) 
