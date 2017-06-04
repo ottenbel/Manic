@@ -22,6 +22,8 @@ class MappingHelper
 	 */
 	public static function MapArtists(&$collection, $artist_array, $isPrimary)
 	{
+		$artist_array = array_unique($artist_array);
+		
 		foreach ($artist_array as $artist_name)
 		{
 			if (trim($artist_name) != "")
@@ -50,6 +52,8 @@ class MappingHelper
 	 */
 	public static function MapCharacters(&$collection, $characters_array, $isPrimary)
 	{
+		$characters_array = array_unique($characters_array);
+		
 		$missing_characters = array();
 		
 		$fullInheritedSeriesCollection = $collection->series()->get();
@@ -97,6 +101,8 @@ class MappingHelper
 	 */
 	 public static function MapTags(&$collection, $tags_array, $isPrimary)
 	{
+		$tags_array = array_unique($tags_array);
+		
 		foreach ($tags_array as $tag_name)
 		{
 			if (trim($tag_name) != "")
@@ -125,6 +131,8 @@ class MappingHelper
 	 */
 	public static function MapSeries(&$collection, $series_array, $isPrimary)
 	{
+		$series_array = array_unique($series_array);
+		
 		foreach ($series_array as $series_name)
 		{
 			if (trim($series_name) != "")
@@ -153,6 +161,8 @@ class MappingHelper
 	 */
     public static function MapScanalators(&$chapter, $scanalator_array, $isPrimary)
 	{
+		$scanalator_array = array_unique($scanalator_array);
+		
 		foreach ($scanalator_array as $scanalator_name)
 		{
 			if (trim($scanalator_name) != "")
@@ -181,6 +191,8 @@ class MappingHelper
 	 */
 	public static function MapArtistChildren(&$artist, $artistChildrenArray)
 	{
+		$artistChildrenArray = array_unique($artistChildrenArray);
+		
 		$loopedChildren = array();
 		
 		$ancestors = null;
@@ -245,6 +257,8 @@ class MappingHelper
 	 */
 	public static function MapScanalatorChildren(&$scanalator, $scanalatorChildrenArray)
 	{
+		$scanalatorChildrenArray = array_unique($scanalatorChildrenArray);
+		
 		$loopedChildren = array();
 		
 		$ancestors = null;
@@ -308,6 +322,8 @@ class MappingHelper
 	 */
 	public static function MapTagChildren(&$tag, $tagChildrenArray)
 	{
+		$tagChildrenArray = array_unique($tagChildrenArray);
+		
 		$loopedChildren = array();
 		
 		$ancestors = null;
@@ -371,6 +387,8 @@ class MappingHelper
 	 */
 	public static function MapSeriesChildren(&$series, $seriesChildrenArray, $lockedChildren)
 	{
+		$seriesChildrenArray = array_unique($seriesChildrenArray);
+		
 		$loopedChildren = array();
 		
 		$ancestors = null;
@@ -442,6 +460,8 @@ class MappingHelper
 	 */
 	public static function MapCharacterChildren(&$character, $characterChildrenArray, &$droppedChildren)
 	{
+		$characterChildrenArray = array_unique($characterChildrenArray);
+		
 		$loopedChildren = array();
 		
 		$ancestors = null;
@@ -461,7 +481,7 @@ class MappingHelper
 				
 				if ($character->id == null)
 				{
-					if (strtolower($character->name) == strtolower($characterChildName))
+					if (strtolower($character->name) == strtolower($characterChild->name))
 					{
 						array_push($loopedChildren, trim($characterChild->name));
 					}
@@ -498,7 +518,7 @@ class MappingHelper
 				}
 				else
 				{
-					array_push($droppedChildren, trim($characterChild));
+					array_push($droppedChildren, trim($characterChildName));
 				}
 			}
 		}		

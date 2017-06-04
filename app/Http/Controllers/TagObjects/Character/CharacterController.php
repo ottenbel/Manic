@@ -149,7 +149,7 @@ class CharacterController extends Controller
 			
 			if (count($droppedChildren) > 0)
 			{
-				$droppedChildrenMessage = "The following characters (" . implode(", ", $droppedChildren) . ") were not attached as children to " . $character->name . " as they could not be found attached to " . $character->series->name . "or a child series of it.";
+				$droppedChildrenMessage = "The following characters (" . implode(", ", $droppedChildren) . ") were not attached as children to " . $character->name . " as they could not be found attached to " . $character->series->name . " or a child series of it.";
 				array_push($warnings, $droppedChildrenMessage);
 			}
 			
@@ -297,7 +297,7 @@ class CharacterController extends Controller
 			
 			if (count($droppedChildren) > 0)
 			{
-				$droppedChildrenMessage = "The following characters (" . implode(", ", $droppedChildren) . ") were not attached as children to " . $character->name . " as they could not be found attached to " . $character->series->name . "or a child series of it.";
+				$droppedChildrenMessage = "The following characters (" . implode(", ", $droppedChildren) . ") were not attached as children to " . $character->name . " as they could not be found attached to " . $character->series->name . " or a child series of it.";
 				array_push($warnings, $droppedChildrenMessage);
 			}
 			
