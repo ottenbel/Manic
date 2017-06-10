@@ -1,3 +1,11 @@
+<!-- search -->
+<li>
+<form method="POST" action="{{route('process_search')}}" enctype="multipart/form-data">
+	{{ csrf_field() }}
+	{{ Form::text('query_string', "", array('class' => 'form-control', 'placeholder' => 'Search...', 'style' => 'margin-top: 8px')) }}
+</form>
+</li>
+
 <li class="dropdown">
 	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 		Tags<span class="caret"></span>

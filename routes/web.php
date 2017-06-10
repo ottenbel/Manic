@@ -162,6 +162,10 @@ Route::get('/character_alias', 'TagObjects\Character\CharacterAliasController@in
 
 //End Character controller routes
 
+//Search controller routes
+Route::post('/search', 'SearchController@search')->Name('process_search');
+//End search controller routes
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
