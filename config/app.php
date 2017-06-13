@@ -235,6 +235,7 @@ return [
 		'MappingHelper' => App\Helpers\MappingHelper::class,
 		'LookupHelper' => App\Helpers\LookupHelper::class,
 		'ImageUploadHelper' => App\Helpers\ImageUploadHelper::class,
+		'SearchHelper' => App\Helpers\SearchHelper::class,
 		'InterventionImage' => Intervention\Image\Facades\Image::class,
     ],
 

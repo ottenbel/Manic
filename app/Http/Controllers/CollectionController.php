@@ -8,6 +8,7 @@ use Auth;
 use Input;
 use Config;
 use MappingHelper;
+use SearchHelper;
 use ImageUploadHelper;
 use InterventionImage;
 use App\Models\TagObjects\Artist\Artist;
@@ -36,9 +37,20 @@ class CollectionController extends Controller
 		$flashed_success = $request->session()->get('flashed_success');
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
+		$search_string = $request->query('search');
 		
-        //Get all relevant collections
-		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->orderBy('updated_at', 'desc')->paginate(Config::get('constants.pagination.collectionsPerPageIndex'));
+		$collections = null;
+		
+		//No search is conducted
+		if ($search_string ==  "")
+		{
+			//Get all relevant collections
+			$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->orderBy('updated_at', 'desc')->paginate(Config::get('constants.pagination.collectionsPerPageIndex'));
+		}
+		else //Filter the collections return based on the search string
+		{
+			$collections = SearchHelper::Search($search_string);
+		}
 		
 		return View('collections.index', array('collections' => $collections, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }

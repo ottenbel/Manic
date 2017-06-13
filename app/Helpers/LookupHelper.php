@@ -24,11 +24,14 @@ class LookupHelper
 			return $artistChild;
 		}
 		
-		$artistChild = ArtistAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $name)->first();
-		if($artistChild != null)
+		if(Auth::check())
 		{
-			$artistChild = $artistChild->artist()->first();
-			return $artistChild;
+			$artistChild = ArtistAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $name)->first();
+			if($artistChild != null)
+			{
+				$artistChild = $artistChild->artist()->first();
+				return $artistChild;
+			}
 		}
 		
 		$artistChild = ArtistAlias::where('user_id', '=', null)->where('alias', '=', $name)->first();
@@ -48,11 +51,14 @@ class LookupHelper
 			return $characterChild;
 		}
 		
-		$characterChild = CharacterAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $name)->first();
-		if($characterChild != null)
+		if (Auth::check())
 		{
-			$characterChild = $characterChild->character()->first();
-			return $characterChild;
+			$characterChild = CharacterAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $name)->first();
+			if($characterChild != null)
+			{
+				$characterChild = $characterChild->character()->first();
+				return $characterChild;
+			}
 		}
 		
 		$characterChild = CharacterAlias::where('user_id', '=', null)->where('alias', '=', $name)->first();
@@ -73,11 +79,14 @@ class LookupHelper
 			return $scanalatorChild;
 		}
 		
-		$scanalatorChild = ScanalatorAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $name)->first();
-		if($scanalatorChild != null)
+		if (Auth::check())
 		{
-			$scanalatorChild = $scanalatorChild->scanalator()->first();
-			return $scanalatorChild;
+			$scanalatorChild = ScanalatorAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $name)->first();
+			if($scanalatorChild != null)
+			{
+				$scanalatorChild = $scanalatorChild->scanalator()->first();
+				return $scanalatorChild;
+			}
 		}
 		
 		$scanalatorChild = ScanalatorAlias::where('user_id', '=', null)->where('alias', '=', $name)->first();
@@ -98,11 +107,14 @@ class LookupHelper
 			return $seriesChild;
 		}
 		
-		$seriesChild = SeriesAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $name)->first();
-		if($seriesChild != null)
+		if (Auth::check())
 		{
-			$seriesChild = $seriesChild->series()->first();
-			return $seriesChild;
+			$seriesChild = SeriesAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $name)->first();
+			if($seriesChild != null)
+			{
+				$seriesChild = $seriesChild->series()->first();
+				return $seriesChild;
+			}
 		}
 		
 		$seriesChild = SeriesAlias::where('user_id', '=', null)->where('alias', '=', $name)->first();
@@ -123,12 +135,15 @@ class LookupHelper
 			return $tagChild;
 		}
 		
-		$tagChild = TagAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $name)->first();
-		if($tagChild != null)
+		if (Auth::check())
 		{
-			$tagChild = $tagChild->tag()->first();
-			return $tagChild;
-		}
+			$tagChild = TagAlias::where('user_id', '=', Auth::user()->id)->where('alias', '=', $name)->first();
+			if($tagChild != null)
+			{
+				$tagChild = $tagChild->tag()->first();
+				return $tagChild;
+			}
+		}		
 		
 		$tagChild = TagAlias::where('user_id', '=', null)->where('alias', '=', $name)->first();
 		if($tagChild != null)
