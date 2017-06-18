@@ -40,6 +40,16 @@ class CollectionController extends Controller
 		$search_string = $request->query('search');
 		
 		$collections = null;
+		$searchArtists = null;
+		$searchCharacters = null;
+		$searchScanalators = null; 
+		$searchSeries = null; 
+		$searchTags = null; 
+		$searchLanguages = null;
+		$searchRatings = null;
+		$searchStatuses = null;
+		$searchCanonicity = null;
+		$invalid_tokens = null;
 		
 		//No search is conducted
 		if ($search_string ==  "")
@@ -49,10 +59,10 @@ class CollectionController extends Controller
 		}
 		else //Filter the collections return based on the search string
 		{
-			$collections = SearchHelper::Search($search_string);
+			SearchHelper::Search($search_string, $collections, $searchArtists, $searchCharacters, $searchScanalators, $searchSeries, $searchTags, $searchLanguages, $searchRatings, $searchStatuses, $searchCanonicity, $invalid_tokens);
 		}
 		
-		return View('collections.index', array('collections' => $collections, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('collections.index', array('collections' => $collections, 'search_artists_array' => $searchArtists, 'search_characters_array' => $searchCharacters, 'search_scanalators_array' => $searchScanalators, 'search_series_array' => $searchSeries, 'search_tags_array' => $searchTags, 'search_languages_array' => $searchLanguages, 'search_ratings_array' => $searchRatings, 'search_statues_array' => $searchStatuses, 'search_canonicity_array' => $searchCanonicity, 'invalid_tokens_array' => $invalid_tokens, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**

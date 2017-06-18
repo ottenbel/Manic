@@ -11,6 +11,272 @@ Index - Page {{$collections->currentPage()}}
 @section('content')
 <div class="container">
 	<div class="row">
+		@if(($search_artists_array != null) || ($search_characters_array != null) || ($search_scanalators_array != null) 
+			|| ($search_series_array != null) || ($search_tags_array != null) || ($search_languages_array != null) 
+			|| ($search_ratings_array != null) || ($search_statues_array != null) || ($search_canonicity_array != null) 
+			|| ($invalid_tokens_array != null))
+			<!--Begin Pannel-->
+			<button id="search_panel" class="accordion" type="button">
+				Search Breakdown
+			</button>
+			<div id = "search_panel" class="volume_panel">
+				@if(count($search_artists_array) > 0)
+					<div class="row">
+						<div class="tag_holder">
+							<div class="col-md-2">
+								<strong>Artists:</strong>
+							</div>
+							<div class="col-md-10">
+								@foreach($search_artists_array as $artist)
+									@if($artist['not'])
+										@if ($artist['primary'])
+											<span class="global_artist_alias"><a href="{{route('show_artist', ['artist' => $artist['artist']])}}">{{{$artist['artist']->name}}}</a></span>
+										@elseif ($artist['secondary'])
+											<span class="personal_artist_alias"><a href="{{route('show_artist', ['artist' => $artist['artist']])}}">{{{$artist['artist']->name}}}</a></span>
+										@else
+											<span class="not_combined_artists"><a href="{{route('show_artist', ['artist' => $artist['artist']])}}">{{{$artist['artist']->name}}}</a></span>
+										@endif
+									@else
+										@if ($artist['primary'])
+											<span class="primary_artists"><a href="{{route('show_artist', ['artist' => $artist['artist']])}}">{{{$artist['artist']->name}}}</a></span>
+										@elseif ($artist['secondary'])
+											<span class="secondary_artists"><a href="{{route('show_artist', ['artist' => $artist['artist']])}}">{{{$artist['artist']->name}}}</a></span>
+										@else
+											<span class="combined_artists"><a href="{{route('show_artist', ['artist' => $artist['artist']])}}">{{{$artist['artist']->name}}}</a></span>
+										@endif
+									@endif
+								@endforeach
+							</div>
+						</div>
+					</div>
+				@endif
+				
+				@if(count($search_series_array) > 0)
+					<div class="row">
+						<div class="tag_holder">
+							<div class="col-md-2">
+								<strong>Series:</strong>
+							</div>
+							<div class="col-md-10">
+								@foreach($search_series_array as $series)
+									@if($series['not'])
+										@if ($series['primary'])
+											<span class="global_series_alias"><a href="{{route('show_series', ['series' => $series['series']])}}">{{{$series['series']->name}}}</a></span>
+										@elseif ($series['secondary'])
+											<span class="personal_series_alias"><a href="{{route('show_series', ['series' => $series['series']])}}">{{{$series['series']->name}}}</a></span>
+										@else
+											<span class="not_combined_series"><a href="{{route('show_series', ['series' => $series['series']])}}">{{{$series['series']->name}}}</a></span>
+										@endif
+									@else
+										@if ($series['primary'])
+											<span class="primary_series"><a href="{{route('show_series', ['series' => $series['series']])}}">{{{$series['series']->name}}}</a></span>
+										@elseif ($series['secondary'])
+											<span class="secondary_series"><a href="{{route('show_series', ['series' => $series['series']])}}">{{{$series['series']->name}}}</a></span>
+										@else
+											<span class="combined_series"><a href="{{route('show_series', ['series' => $series['series']])}}">{{{$series['series']->name}}}</a></span>
+										@endif
+									@endif
+								@endforeach
+							</div>
+						</div>
+					</div>
+				@endif
+				
+				@if(count($search_characters_array) > 0)
+					<div class="row">
+						<div class="tag_holder">
+							<div class="col-md-2">
+								<strong>Characters:</strong>
+							</div>
+							<div class="col-md-10">
+								@foreach($search_characters_array as $character)
+									@if($character['not'])
+										@if($character['primary'])
+											<span class="global_character_alias"><a href="{{route('show_character', ['character' => $character['character']])}}">{{{$character['character']->name}}}</a></span>
+										@elseif($character['secondary'])
+											<span class="personal_character_alias"><a href="{{route('show_character', ['character' => $character['character']])}}">{{{$character['character']->name}}}</a></span>
+										@else
+											<span class="not_combined_characters"><a href="{{route('show_character', ['character' => $character['character']])}}">{{{$character['character']->name}}}</a></span>
+										@endif
+									@else
+										@if ($character['primary'])
+											<span class="primary_characters"><a href="{{route('show_character', ['character' => $character['character']])}}">{{{$character['character']->name}}}</a></span>
+										@elseif ($character['secondary'])
+											<span class="secondary_characters"><a href="{{route('show_character', ['character' => $character['character']])}}">{{{$character['character']->name}}}</a></span>
+										@else
+											<span class="combined_characters"><a href="{{route('show_character', ['character' => $character['character']])}}">{{{$character['character']->name}}}</a></span>
+										@endif
+									@endif
+								@endforeach
+							</div>
+						</div>
+					</div>
+				@endif
+				
+				@if(count($search_tags_array) > 0)
+					<div class="row">
+						<div class="tag_holder">
+							<div class="col-md-2">
+								<strong>Tags:</strong>
+							</div>
+							<div class="col-md-10">
+								@foreach($search_tags_array as $tag)
+									@if($tag['not'])
+										@if($tag['primary'])
+											<span class="global_tag_alias"><a href="{{route('show_tag', ['tag' => $tag['tag']])}}">{{{$tag['tag']->name}}}</a></span>
+										@elseif($tag['secondary'])
+											<span class="personal_tag_alias"><a href="{{route('show_tag', ['tag' => $tag['tag']])}}">{{{$tag['tag']->name}}}</a></span>
+										@else
+											<span class="not_combined_tags"><a href="{{route('show_tag', ['tag' => $tag['tag']])}}">{{{$tag['tag']->name}}}</a></span>
+										@endif
+									@else
+										@if ($tag['primary'])
+											<span class="primary_tags"><a href="{{route('show_tag', ['tag' => $tag['tag']])}}">{{{$tag['tag']->name}}}</a></span>
+										@elseif ($tag['secondary'])
+											<span class="secondary_tags"><a href="{{route('show_tag', ['tag' => $tag['tag']])}}">{{{$tag['tag']->name}}}</a></span>
+										@else
+											<span class="combined_tags"><a href="{{route('show_tag', ['tag' => $tag['tag']])}}">{{{$tag['tag']->name}}}</a></span>
+										@endif
+									@endif
+								@endforeach
+							</div>
+						</div>
+					</div>
+				@endif
+				
+				@if(count($search_scanalators_array) > 0)
+					<div class="row">
+						<div class="tag_holder">
+							<div class="col-md-2">
+								<strong>Scanalators:</strong>
+							</div>
+							<div class="col-md-10">
+								@foreach($search_scanalators_array as $scanalator)
+									@if($scanalator['not'])
+										@if($scanalator['primary'])
+											<span class="global_scanalator_alias"><a href="{{route('show_scanalator', ['scanalator' => $scanalator['scanalator']])}}">{{{$scanalator['scanalator']->name}}}</a></span>
+										@elseif($scanalator['secondary'])
+											<span class="personal_scanalator_alias"><a href="{{route('show_scanalator', ['scanalator' => $scanalator['scanalator']])}}">{{{$scanalator['scanalator']->name}}}</a></span>
+										@else
+											<span class="not_combined_scanalators"><a href="{{route('show_scanalator', ['scanalator' => $scanalator['scanalator']])}}">{{{$scanalator['scanalator']->name}}}</a></span>
+										@endif
+									@else
+										@if ($scanalator['primary'])
+											<span class="primary_scanalators"><a href="{{route('show_scanalator', ['scanalator' => $scanalator['scanalator']])}}">{{{$scanalator['scanalator']->name}}}</a></span>
+										@elseif ($scanalator['secondary'])
+											<span class="secondary_scanalators"><a href="{{route('show_scanalator', ['scanalator' => $scanalator['scanalator']])}}">{{{$scanalator['scanalator']->name}}}</a></span>
+										@else
+											<span class="combined_scanalators"><a href="{{route('show_scanalator', ['scanalator' => $scanalator['scanalator']])}}">{{{$scanalator['scanalator']->name}}}</a></span>
+										@endif
+									@endif
+								@endforeach
+							</div>
+						</div>
+					</div>
+				@endif
+				
+				@if(count($search_languages_array) > 0)
+					<div class="row">
+						<div class="tag_holder">
+							<div class="col-md-2">
+								<strong>Languages (OR):</strong>
+							</div>
+							<div class="col-md-10">
+								@foreach($search_languages_array as $language)
+									@if($language['not'])
+										<span class="not_language_tag"><a href="{{route('index_collection', ['search' => 'language:'.$language['language']->name])}}">{{{$language['language']->name}}}</a></span>
+									@else
+										<span class="language_tag"><a href="{{route('index_collection', ['search' => 'language:'.$language['language']->name])}}">{{{$language['language']->name}}}</a></span>
+									@endif
+								@endforeach
+							</div>
+						</div>
+					</div>
+				@endif
+				
+				@if(count($search_ratings_array) > 0)
+					<div class="row">
+						<div class="tag_holder">
+							<div class="col-md-2">
+								<strong>Ratings (OR):</strong>
+							</div>
+							<div class="col-md-10">
+								@foreach($search_ratings_array as $rating)
+									@if($rating['not'])
+										<span class="not_rating_tag"><a href="{{route('index_collection', ['search' => '-rating:'.$rating['rating']->name])}}">{{{$rating['rating']->name}}}</a></span>
+									@else
+										<span class="rating_tag"><a href="{{route('index_collection', ['search' => 'rating:'.$rating['rating']->name])}}">{{{$rating['rating']->name}}}</a></span>
+									@endif
+								@endforeach
+							</div>
+						</div>
+					</div>
+				@endif
+				
+				@if(count($search_statues_array) > 0)
+					<div class="row">
+						<div class="tag_holder">
+							<div class="col-md-2">
+								<strong>Statuses (OR):</strong>
+							</div>
+							<div class="col-md-10">
+								@foreach($search_statues_array as $status)
+									@if($status['not'])
+										<span class="not_status_tag"><a href="{{route('index_collection', ['search' => '-status:'.$status['status']->name])}}">{{{$status['status']->name}}}</a></span>
+									@else
+										<span class="status_tag"><a href="{{route('index_collection', ['search' => 'status:'.$status['status']->name])}}">{{{$status['status']->name}}}</a></span>
+									@endif
+								@endforeach
+							</div>
+						</div>
+					</div>
+				@endif
+				
+				@if(count($search_canonicity_array) > 0)
+					<div class="row">
+						<div class="tag_holder">
+							<div class="col-md-2">
+								<strong>Canonicity (OR):</strong>
+							</div>
+							<div class="col-md-10">
+								@foreach($search_canonicity_array as $canonicity)
+									@if($canonicity['canon'])
+										@if($canonicity['not'])
+											<span class="not_canonical_tag"><a href="{{route('index_collection', ['search' => '-canonical'])}}">Canonical</a></span>
+										@else
+											<span class="canonical_tag"><a href="{{route('index_collection', ['search' => 'canonical'])}}">Canonical</a></span>
+										@endif
+									@else
+										@if($canonicity['not'])
+											<span class="not_canonical_tag"><a href="{{route('index_collection', ['search' => '-non-canonical'])}}">Non-Canonical</a></span>
+										@else
+											<span class="canonical_tag"><a href="{{route('index_collection', ['search' => 'non-canonical'])}}">Non-Canonical</a></span>
+										@endif
+									@endif
+								@endforeach
+							</div>
+						</div>
+					</div>
+				@endif
+				
+				@if(count($invalid_tokens_array) > 0)
+					<div class="row">
+						<div class="tag_holder">
+							<div class="col-md-2">
+								<strong>Invalid Tokens:</strong>
+							</div>
+							<div class="col-md-10">
+								@foreach($invalid_tokens_array as $invalid_token)
+									<span class="invalid_tag"><a href="{{route('index_collection', ['search' => $invalid_token])}}">{{{$invalid_token}}}</a></span>
+								@endforeach
+							</div>
+						</div>
+					</div>
+				@endif
+			</div>
+			<!--end Pannel-->
+		@endif
+		
 		@if($collections->count() == 0)
 			@can('create', App\Models\Collection::class)
 				<div class="text-center">

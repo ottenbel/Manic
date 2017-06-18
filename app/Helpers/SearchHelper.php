@@ -25,9 +25,8 @@ class SearchHelper
 	/*
 	 * Return the collection that matches the search string.
 	 */
-	public static function Search($search_string)
+	public static function Search($search_string, &$collections, &$searchArtists, &$searchCharacters, &$searchScanalators, &$searchSeries, &$searchTags, &$searchLanguages, &$searchRatings, &$searchStatuses, &$searchCanonicity, &$invalid_tokens)
 	{
-		$invalid_tokens = array();
 		$searchArtists = array();
 		$searchCharacters = array();
 		$searchScanalators = array(); 
@@ -37,6 +36,7 @@ class SearchHelper
 		$searchRatings = array();
 		$searchStatuses = array();
 		$searchCanonicity = array();
+		$invalid_tokens = array();
 		
 		//Break out search into tokens
 		$search_tokens = array_map('trim', explode(',', $search_string));
@@ -490,8 +490,6 @@ class SearchHelper
 		}
 		
 		$collections = $query->orderBy('updated_at', 'desc')->paginate(Config::get('constants.pagination.collectionsPerPageIndex'));
-		
-		return $collections;
 	}
 	
 	private static function ParseSearchTokenArtist(&$searchArtists, &$invalid_tokens, $search_token, $primary, $secondary, $not, $addToInvalid, &$found)
@@ -657,7 +655,7 @@ class SearchHelper
 	
 	private static function ParseSearchCanonicity(&$searchCanonicity, $search_token, $not, &$found)
 	{
-		if ($search_token == "canonical")
+		if (strtolower($search_token) == "canonical")
 		{
 			array_push($searchCanonicity, array('canon' => true, 'not' => $not));
 			if (!($found))
@@ -665,7 +663,7 @@ class SearchHelper
 				$found = true;
 			}
 		}
-		else if ($search_token == "non-canonical")
+		else if (strtolower($search_token) == "non-canonical")
 		{
 			array_push($searchCanonicity, array('canon' => false, 'not' => $not));
 			if (!($found))
