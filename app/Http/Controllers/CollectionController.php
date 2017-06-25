@@ -75,8 +75,8 @@ class CollectionController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize(Collection::class);
 		
-		$ratings = Rating::orderBy('priority', 'asc')->get();
-		$statuses = Status::orderBy('priority', 'asc')->get();
+		$ratings = Rating::orderBy('priority', 'asc')->get()->pluck('name', 'id');
+		$statuses = Status::orderBy('priority', 'asc')->get()->pluck('name', 'id');
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		
 		return View('collections.create', array('ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages));
@@ -230,8 +230,8 @@ class CollectionController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-        $ratings = Rating::orderBy('priority', 'asc')->get();
-		$statuses = Status::orderBy('priority', 'asc')->get();
+        $ratings = Rating::orderBy('priority', 'asc')->get()->pluck('name', 'id');
+		$statuses = Status::orderBy('priority', 'asc')->get()->pluck('name', 'id');
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		$collection->load('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
 		

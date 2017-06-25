@@ -54,15 +54,6 @@
 </div>
 
 <div class="form-group">
-	{{ Form::label('language', 'Language') }}
-	@if((!empty($collection)) && ($collection->language != null) && (Input::old('language') == null))
-		{{ Form::select('language', $languages, $collection->language->id) }}
-	@else
-		{{ Form::select('language', $languages, Input::old('language')) }}
-	@endif
-</div>
-
-<div class="form-group">
 	{{ Form::label('artist_primary', 'Primary Artists') }}
 	@if((!empty($collection)) && ($collection->primary_artists != null) && (Input::old('artist_primary') == null))
 		{{ Form::text('artist_primary', collect($collection->primary_artists->pluck('name'))->implode(", "), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.primaryArtists'))) }}
@@ -145,48 +136,28 @@
 </div>
 
 <div class="form-group">
-	{{ Form::label('rating', 'Rating: ') }}
-	@foreach($ratings as $rating)
-		@if(Input::old('ratings') != null)
-			@if($rating->id == Input::old('ratings'))
-				{{ Form::radio('ratings', $rating->id, true, array('id'=>"ratings-$rating->priority")) }}
-			@else
-				{{ Form::radio('ratings', $rating->id, false, array('id'=>"ratings-$rating->priority")) }}
-			@endif
-	
-		@elseif((!empty($collection)) && ($collection->rating != null))
-			@if($rating->id == $collection->rating->id)
-				{{ Form::radio('ratings', $rating->id, true, array('id'=>"ratings-$rating->priority")) }}
-			@else
-				{{ Form::radio('ratings', $rating->id, false, array('id'=>"ratings-$rating->priority")) }}
-			@endif
-		@else
-			{{ Form::radio('ratings', $rating->id, false, array('id'=>"ratings-$rating->priority")) }}
-		@endif
-		
-		{{ Form::label("ratings-$rating->priority", $rating->name) }}
-	@endforeach
+	{{ Form::label('language', 'Language') }}
+	@if((!empty($collection)) && ($collection->language != null) && (Input::old('language') == null))
+		{{ Form::select('language', $languages, $collection->language->id) }}
+	@else
+		{{ Form::select('language', $languages, Input::old('language')) }}
+	@endif
+</div>
+
+<div class="form-group">
+	{{ Form::label('ratings', 'Rating: ') }}
+	@if((!empty($collection)) && ($collection->rating != null) && (Input::old('ratings') == null))
+		{{ Form::select('ratings', $ratings, $collection->rating->id) }}
+	@else
+		{{ Form::select('ratings', $ratings, Input::old('ratings')) }}
+	@endif
 </div>
 
 <div class="form-group">
 	{{ Form::label('statuses', 'Status: ') }}
-	@foreach($statuses as $status)
-		@if(Input::old('statuses') != null)
-			@if($status->id == Input::old('statuses'))
-				{{ Form::radio('statuses', $status->id, true, array('id'=>"statuses-$status->priority")) }}
-			@else
-				{{ Form::radio('statuses', $status->id, false, array('id'=>"statuses-$status->priority")) }}
-			@endif
-		@elseif((!empty($collection)) && ($collection->status != null))
-			@if($status->id == $collection->status->id)
-				{{ Form::radio('statuses', $status->id, true, array('id'=>"statuses-$status->priority")) }}
-			@else
-				{{ Form::radio('statuses', $status->id, false, array('id'=>"statuses-$status->priority")) }}
-			@endif
-		@else
-			{{ Form::radio('statuses', $status->id, false, array('id'=>"statuses-$status->priority")) }}
-		@endif
-	
-		{{ Form::label("statuses-$status->priority", $status->name) }}
-	@endforeach
+	@if((!empty($collection)) && ($collection->status != null) && (Input::old('statuses') == null))
+		{{ Form::select('statuses', $statuses, $collection->status->id) }}
+	@else
+		{{ Form::select('statuses', $statuses, Input::old('statuses')) }}
+	@endif
 </div>
