@@ -609,11 +609,7 @@ class SearchHelper
 		}
 		else
 		{
-			if ($search_token == "undefined")
-			{
-				array_push($searchRatings, array('rating' => null, 'not' => $not));
-			}
-			else if ($addToInvalid)
+			if ($addToInvalid)
 			{
 				array_push($invalid_tokens, $search_token);
 				if (!($found))
@@ -638,15 +634,7 @@ class SearchHelper
 		}
 		else
 		{
-			if ($search_token == "undefined")
-			{
-				array_push($searchStatuses, array('status' => null, 'not' => $not));
-				if (!($found))
-				{
-					$found = true;
-				}
-			}
-			else if ($addToInvalid)
+			if ($addToInvalid)
 			{
 				array_push($invalid_tokens, $search_token);
 			}
