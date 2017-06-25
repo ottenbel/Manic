@@ -101,7 +101,7 @@ class TagController extends Controller
 		$this->authorize(Tag::class);
 		
         $this->validate($request, [
-			'name' => 'required|unique:tags|regex:/^[^,]+$/',
+			'name' => 'required|unique:tags|regex:/^[^,:-]+$/',
 			'url' => 'URL',
 		]);
 		
@@ -236,7 +236,7 @@ class TagController extends Controller
 		$this->validate($request, [
 		'name' => ['required',
 					Rule::unique('tags')->ignore($tag->id),
-					'regex:/^[^,]+$/'],
+					'regex:/^[^,:-]+$/'],
 				'url' => 'URL',
 		]);
 		

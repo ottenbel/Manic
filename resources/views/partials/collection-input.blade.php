@@ -60,12 +60,18 @@
 	@else
 		{{ Form::text('artist_primary', Input::old('artist_primary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.primaryArtists'))) }}
 	@endif
+	@if($errors->has('artist_primary'))
+		<div class ="alert alert-danger" id="name_errors">{{$errors->first('artist_primary')}}</div>
+	@endif
 	
 	{{ Form::label('artist_secondary', 'Secondary Artists') }}
 	@if((!empty($collection)) && ($collection->secondary_artists != null) && (Input::old('artist_secondary') == null))
 		{{ Form::text('artist_secondary', collect($collection->secondary_artists->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondaryArtists'))) }}
 	@else
 		{{ Form::text('artist_secondary', Input::old('artist_secondary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondaryArtists'))) }}
+	@endif
+	@if($errors->has('artist_secondary'))
+		<div class ="alert alert-danger" id="name_errors">{{$errors->first('artist_secondary')}}</div>
 	@endif
 </div>
 
@@ -77,12 +83,18 @@
 	@else
 		{{ Form::text('series_primary', Input::old('series_primary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.primarySeries'))) }}
 	@endif
+	@if($errors->has('series_primary'))
+		<div class ="alert alert-danger" id="name_errors">{{$errors->first('series_primary')}}</div>
+	@endif
 	
 	{{ Form::label('series_secondary', 'Series Secondary') }}
 	@if((!empty($collection)) && ($collection->secondary_series != null) && (Input::old('series_secondary') == null))
 		{{ Form::text('series_secondary', collect($collection->secondary_series->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondarySeries'))) }}
 	@else
 		{{ Form::text('series_secondary', Input::old('series_secondary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondarySeries'))) }}
+	@endif
+	@if($errors->has('series_secondary'))
+		<div class ="alert alert-danger" id="name_errors">{{$errors->first('series_secondary')}}</div>
 	@endif
 </div>
 
@@ -117,12 +129,18 @@
 	@else
 		{{ Form::text('tag_primary', Input::old('tag_primary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.primaryTags'))) }}
 	@endif
+	@if($errors->has('tag_primary'))
+		<div class ="alert alert-danger" id="character_secondary_errors">{{$errors->first('tag_primary')}}</div>
+	@endif
 	
 	{{ Form::label('tag_secondary', 'Tags Secondary') }}
 	@if((!empty($collection)) && ($collection->secondary_tags != null) && (Input::old('tag_secondary') == null))
 		{{ Form::text('tag_secondary', collect($collection->secondary_tags->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondaryTags'))) }}
 	@else
 		{{ Form::text('tag_secondary', Input::old('tag_secondary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.collections.secondaryTags'))) }}
+	@endif
+	@if($errors->has('tag_secondary'))
+		<div class ="alert alert-danger" id="character_secondary_errors">{{$errors->first('tag_secondary')}}</div>
 	@endif
 </div>
 

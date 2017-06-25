@@ -101,7 +101,7 @@ class SeriesController extends Controller
 		$this->authorize(Series::class);
 		
         $this->validate($request, [
-			'name' => 'required|unique:series|regex:/^[^,]+$/',
+			'name' => 'required|unique:series|regex:/^[^,:-]+$/',
 			'url' => 'URL',
 		]);
 		
@@ -297,7 +297,7 @@ class SeriesController extends Controller
 		$this->validate($request, [
 		'name' => ['required',
 					Rule::unique('series')->ignore($series->id),
-					'regex:/^[^,]+$/'],
+					'regex:/^[^,:-]+$/'],
 				'url' => 'URL',
 		]);
 		

@@ -41,12 +41,18 @@
 	@else
 		{{ Form::text('scanalator_primary', Input::old('scanalator_primary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.chapters.primaryScanalators'))) }}
 	@endif
+	@if($errors->has('scanalator_primary'))
+		<div class ="alert alert-danger" id="name_errors">{{$errors->first('scanalator_primary')}}</div>
+	@endif
 	
 	{{ Form::label('scanalator_secondary', 'Secondary Scanalators') }}
 	@if((!empty($chapter)) && ($chapter->secondary_scanalators != null) && (Input::old('scanalator_secondary') == null))
 		{{ Form::text('scanalator_secondary', collect($chapter->secondary_scanalators->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.chapters.secondaryScanalators'))) }}
 	@else
 		{{ Form::text('scanalator_secondary', Input::old('scanalator_secondary'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.chapters.secondaryScanalators'))) }}
+	@endif
+	@if($errors->has('scanalator_secondary'))
+		<div class ="alert alert-danger" id="name_errors">{{$errors->first('scanalator_secondary')}}</div>
 	@endif
 </div>
 

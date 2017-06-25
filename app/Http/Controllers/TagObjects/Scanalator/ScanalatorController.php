@@ -101,7 +101,7 @@ class ScanalatorController extends Controller
 		$this->authorize(Scanalator::class);
 		
         $this->validate($request, [
-			'name' => 'required|unique:scanalators|regex:/^[^,]+$/',
+			'name' => 'required|unique:scanalators|regex:/^[^,:-]+$/',
 			'url' => 'URL',
 		]);
 		
@@ -236,7 +236,7 @@ class ScanalatorController extends Controller
 		$this->validate($request, [
 		'name' => ['required',
 					Rule::unique('scanalators')->ignore($scanalator->id),
-					'regex:/^[^,]+$/'],
+					'regex:/^[^,:-]+$/'],
 				'url' => 'URL',
 		]);
 		

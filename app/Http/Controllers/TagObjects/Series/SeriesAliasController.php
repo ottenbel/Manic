@@ -84,7 +84,7 @@ class SeriesAliasController extends Controller
 			$this->authorize([SeriesAlias::class, true]);
 			
 			$this->validate($request, [
-				'global_alias' => 'required|unique:series,name|unique:series_alias,alias,null,null,user_id,NULL|regex:/^[^,]+$/']);
+				'global_alias' => 'required|unique:series,name|unique:series_alias,alias,null,null,user_id,NULL|regex:/^[^,:-]+$/']);
 		}
 		else if ($isPersonalAlias)
 		{
@@ -92,7 +92,7 @@ class SeriesAliasController extends Controller
 			$this->authorize([SeriesAlias::class, false]);
 			
 			$this->validate($request, [
-				'personal_alias' => 'required|unique:series,name|unique:series_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,]+$/']);
+				'personal_alias' => 'required|unique:series,name|unique:series_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,:-]+$/']);
 		}
 		
 		$seriesAlias = new SeriesAlias();

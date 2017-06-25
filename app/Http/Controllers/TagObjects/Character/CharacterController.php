@@ -104,7 +104,7 @@ class CharacterController extends Controller
 		$this->authorize(Character::class);
 		
 		$this->validate($request, [
-		'name' => 'required|unique:characters|regex:/^[^,]+$/',
+		'name' => 'required|unique:characters|regex:/^[^,:-]+$/',
 				'url' => 'URL',
 		]);
 		
@@ -261,7 +261,7 @@ class CharacterController extends Controller
 		$this->validate($request, [
 		'name' => ['required',
 					Rule::unique('characters')->ignore($character->id),
-					'regex:/^[^,]+$/'],
+					'regex:/^[^,:-]+$/'],
 				'url' => 'URL',
 		]);
 		

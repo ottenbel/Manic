@@ -84,7 +84,7 @@ class ScanalatorAliasController extends Controller
 			$this->authorize([ScanalatorAlias::class, true]);
 			
 			$this->validate($request, [
-				'global_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias,null,null,user_id,NULL|regex:/^[^,]+$/']);
+				'global_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias,null,null,user_id,NULL|regex:/^[^,:-]+$/']);
 		}
 		else if ($isPersonalAlias)
 		{
@@ -92,7 +92,7 @@ class ScanalatorAliasController extends Controller
 			$this->authorize([ScanalatorAlias::class, false]);
 			
 			$this->validate($request, [
-				'personal_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,]+$/']);
+				'personal_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,:-]+$/']);
 		}
 		
 		$scanalatorAlias = new ScanalatorAlias();

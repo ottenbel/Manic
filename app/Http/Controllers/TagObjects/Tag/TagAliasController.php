@@ -84,7 +84,7 @@ class TagAliasController extends Controller
 			$this->authorize([TagAlias::class, true]);
 			
 			$this->validate($request, [
-				'global_alias' => 'required|unique:tags,name|unique:tag_alias,alias,null,null,user_id,NULL|regex:/^[^,]+$/']);
+				'global_alias' => 'required|unique:tags,name|unique:tag_alias,alias,null,null,user_id,NULL|regex:/^[^,:-]+$/']);
 		}
 		else if ($isPersonalAlias)
 		{
@@ -92,7 +92,7 @@ class TagAliasController extends Controller
 			$this->authorize([TagAlias::class, false]);
 			
 			$this->validate($request, [
-				'personal_alias' => 'required|unique:tags,name|unique:tag_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,]+$/']);
+				'personal_alias' => 'required|unique:tags,name|unique:tag_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,:-]+$/']);
 		}
 		
 		$tagAlias = new TagAlias();

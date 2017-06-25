@@ -84,7 +84,7 @@ class ArtistAliasController extends Controller
 			$this->authorize([ArtistAlias::class, true]);
 			
 			$this->validate($request, [
-				'global_alias' => 'required|unique:artists,name|unique:artist_alias,alias,null,null,user_id,NULL|regex:/^[^,]+$/']);
+				'global_alias' => 'required|unique:artists,name|unique:artist_alias,alias,null,null,user_id,NULL|regex:/^[^,:-]+$/']);
 		}
 		else if ($isPersonalAlias)
 		{
@@ -92,7 +92,7 @@ class ArtistAliasController extends Controller
 			$this->authorize([ArtistAlias::class, false]);
 			
 			$this->validate($request, [
-				'personal_alias' => 'required|unique:artists,name|unique:artist_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,]+$/']);
+				'personal_alias' => 'required|unique:artists,name|unique:artist_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,:-]+$/']);
 		}
 		
 		$artistAlias = new ArtistAlias();

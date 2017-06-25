@@ -101,7 +101,7 @@ class ArtistController extends Controller
 		$this->authorize(Artist::class);
 		
         $this->validate($request, [
-			'name' => 'required|unique:artists|regex:/^[^,]+$/',
+			'name' => 'required|unique:artists|regex:/^[^,:-]+$/',
 			'url' => 'URL',
 		]);
 		
@@ -237,7 +237,7 @@ class ArtistController extends Controller
 		$this->validate($request, [
 		'name' => ['required',
 					Rule::unique('artists')->ignore($artist->id),
-					'regex:/^[^,]+$/'],
+					'regex:/^[^,:-]+$/'],
 				'url' => 'URL',
 		]);
 		

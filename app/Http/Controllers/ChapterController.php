@@ -97,6 +97,8 @@ class ChapterController extends Controller
 						Rule::unique('chapters')->where(function ($query){
 							$query->where('volume_id', trim(Input::get('volume_id')));})
 						],
+			'scanalator_primary' => 'regex:/^[^:-]+$/',
+			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images' => 'required',
 			'images.*' => 'image']);
@@ -112,6 +114,8 @@ class ChapterController extends Controller
 						Rule::unique('chapters')->where(function ($query){
 							$query->where('volume_id', trim(Input::get('volume_id')));})
 						],
+			'scanalator_primary' => 'regex:/^[^:-]+$/',
+			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images' => 'required',
 			'images.*' => 'image']);
@@ -127,6 +131,8 @@ class ChapterController extends Controller
 						Rule::unique('chapters')->where(function ($query){
 							$query->where('volume_id', trim(Input::get('volume_id')));})
 						],
+			'scanalator_primary' => 'regex:/^[^:-]+$/',
+			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images' => 'required',
 			'images.*' => 'image']);
@@ -141,6 +147,8 @@ class ChapterController extends Controller
 						Rule::unique('chapters')->where(function ($query){
 							$query->where('volume_id', trim(Input::get('volume_id')));})
 						],
+			'scanalator_primary' => 'regex:/^[^:-]+$/',
+			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images' => 'required',
 			'images.*' => 'image']);
@@ -312,6 +320,8 @@ class ChapterController extends Controller
 								->where('id', '!=', trim(Input::get('chapter_id')));
 							})
 						],
+			'scanalator_primary' => 'regex:/^[^:-]+$/',
+			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images.*' => 'image',
 			'chapter_pages.*' => 'required|integer|min:0',
@@ -330,6 +340,8 @@ class ChapterController extends Controller
 								->where('id', '!=', trim(Input::get('chapter_id')));
 							})
 						],
+			'scanalator_primary' => 'regex:/^[^:-]+$/',
+			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images.*' => 'image',
 			'chapter_pages.*' => 'required|integer|min:0',
@@ -348,6 +360,8 @@ class ChapterController extends Controller
 								->where('id', '!=', trim(Input::get('chapter_id')));
 							})
 						],
+			'scanalator_primary' => 'regex:/^[^:-]+$/',
+			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images.*' => 'image',
 			'chapter_pages.*' => 'required|integer|min:0',
@@ -365,6 +379,8 @@ class ChapterController extends Controller
 								->where('id', '!=', trim(Input::get('chapter_id')));
 							})
 						],
+			'scanalator_primary' => 'regex:/^[^:-]+$/',
+			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images.*' => 'image',
 			'chapter_pages.*' => 'required|integer|min:0',
