@@ -1,7 +1,6 @@
 <!-- search -->
 <li>
 <form method="POST" action="{{route('process_search')}}" enctype="multipart/form-data">
-	{{ csrf_field() }}
 	{{ Form::text('query_string', "", array('class' => 'form-control', 'placeholder' => 'Search...', 'style' => 'margin-top: 8px')) }}
 </form>
 </li>
