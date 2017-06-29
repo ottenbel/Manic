@@ -184,9 +184,9 @@ Index - Page {{$collections->currentPage()}}
 							<div class="col-md-10">
 								@foreach($search_languages_array as $language)
 									@if($language['not'])
-										<span class="not_language_tag"><a href="{{route('index_collection', ['search' => 'language:'.$language['language']->name])}}">{{{$language['language']->name}}}</a></span>
+										<span class="not_language_tag"><a href="{{route('index_collection', ['search' => '-language:' . $language['language']->name])}}">{{{$language['language']->name}}}</a></span>
 									@else
-										<span class="language_tag"><a href="{{route('index_collection', ['search' => 'language:'.$language['language']->name])}}">{{{$language['language']->name}}}</a></span>
+										<span class="language_tag"><a href="{{route('index_collection', ['search' => 'language:' . $language['language']->name])}}">{{{$language['language']->name}}}</a></span>
 									@endif
 								@endforeach
 							</div>
@@ -308,11 +308,11 @@ Index - Page {{$collections->currentPage()}}
 										</div>
 										<div class="col-md-10">
 											@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $artist)
-												<span class="primary_artists"><a href="{{route('show_artist', ['artist' => $artist])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+												<span class="primary_artists"><a href="{{route('index_collection', ['search' => 'artist:'. $artist->name])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 											@endforeach
 											@if(10 > $collection->primary_artists()->count())
 												@foreach($collection->secondary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - $collection->primary_artists()->count())->get() as $artist)
-													<span class="secondary_artists"><a href="{{route('show_artist', ['artist' => $artist])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+													<span class="secondary_artists"><a href="{{route('index_collection', ['search' => 'artist:'. $artist->name])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 												@endforeach
 											@endif
 									</div>
@@ -328,11 +328,11 @@ Index - Page {{$collections->currentPage()}}
 										</div>
 										<div class="col-md-10">
 											@foreach($collection->primary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $series)
-												<span class="primary_series"><a href="{{route('show_series', ['series' => $series])}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
+												<span class="primary_series"><a href="{{route('index_collection', ['search' => 'series:' . $series->name])}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
 											@endforeach
 											@if(10 > $collection->primary_series()->count())
 												@foreach($collection->secondary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - $collection->primary_series()->count())->get() as $series)
-													<span class="secondary_series"><a href="{{route('show_series', ['series' => $series])}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
+													<span class="secondary_series"><a href="{{route('index_collection', ['search' => 'series:' . $series->name])}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
 												@endforeach
 											@endif
 										</div>
@@ -349,11 +349,11 @@ Index - Page {{$collections->currentPage()}}
 										</div>
 										<div class="col-md-10">
 											@foreach($collection->primary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $character)
-												<span class="primary_characters"><a href="{{route('show_character', ['character' => $character])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+												<span class="primary_characters"><a href="{{route('index_collection', ['search' => 'character:' . $character->name])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
 											@endforeach
 											@if(10 > $collection->primary_characters()->count())
 												@foreach($collection->secondary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - $collection->primary_characters()->count())->get() as $character)
-													<span class="secondary_characters"><a href="{{route('show_character', ['character' => $character])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+													<span class="secondary_characters"><a href="{{route('index_collection', ['search' => 'character:' . $character->name])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
 												@endforeach
 											@endif
 										</div>
@@ -369,11 +369,11 @@ Index - Page {{$collections->currentPage()}}
 										</div>
 										<div class="col-md-10">
 											@foreach($collection->primary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $tag)
-												<span class="primary_tags"><a href="{{route('show_tag', ['tag' => $tag])}}">{{{$tag->name}}} <span class="tag_count"> ({{$tag->usage_count()}})</span></a></span>
+												<span class="primary_tags"><a href="{{route('index_collection', ['search' => 'tag:' . $tag->name])}}">{{{$tag->name}}} <span class="tag_count"> ({{$tag->usage_count()}})</span></a></span>
 											@endforeach
 											@if(10 > $collection->primary_tags()->count())
 												@foreach($collection->secondary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - $collection->primary_tags->count())->get() as $tag)
-													<span class="secondary_tags"><a href="{{route('show_tag', ['tag' => $tag])}}">{{{$tag->name}}} <span class="tag_count">({{$tag->usage_count()}})</span></a></span>
+													<span class="secondary_tags"><a href="{{route('index_collection', ['search' => 'tag:' . $tag->name])}}">{{{$tag->name}}} <span class="tag_count">({{$tag->usage_count()}})</span></a></span>
 												@endforeach
 											@endif
 										</div>
@@ -384,15 +384,15 @@ Index - Page {{$collections->currentPage()}}
 							
 							<td class="col-xs-10">
 								@if($collection->rating != null)
-										<strong>Rating:</strong> {{{$collection->rating->name}}}
+										<strong>Rating:</strong><span class="rating_tag"><a href="{{route('index_collection', ['search' => 'rating:'. $collection->rating->name])}}">{{{$collection->rating->name}}}</a></span>
 									@endif
 									
 									@if($collection->status != null)
-										<strong>Status:</strong> {{{$collection->status->name}}}
+										<strong>Status:</strong><span class="status_tag"><a href="{{route('index_collection', ['search' => 'status:'. $collection->status->name])}}">{{{$collection->status->name}}}</a></span>
 									@endif
 									
 									@if($collection->language != null)
-										<strong>Language:</strong> {{{$collection->language->name}}}
+										<strong>Language:</strong><span class="language_tag"><a href="{{route('index_collection', ['search' => 'language:'. $collection->language->name])}}">{{{$collection->language->name}}}</a></span>
 									@endif
 							</td>
 					</tr>

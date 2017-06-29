@@ -35,11 +35,11 @@
 						</div>
 						<div class="col-md-10">
 							@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
-								<span class="primary_artists"><a href="{{route('show_artist', ['artist' => $artist])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+								<span class="primary_artists"><a href="{{route('index_collection', ['search' => 'artist:' . $artist->name])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 							@endforeach
 							
 							@foreach($collection->secondary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
-								<span class="secondary_artists"><a href="{{route('show_artist', ['artist' => $artist])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+								<span class="secondary_artists"><a href="{{route('index_collection', ['search' => 'artist:' . $artist->name])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
 							@endforeach
 						</div>
 					</div>
@@ -54,11 +54,11 @@
 						</div>
 						<div class="col-md-10">
 							@foreach($collection->primary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
-								<span class="primary_series"><a href="{{route('show_series', ['series' => $series])}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
+								<span class="primary_series"><a href="{{route('index_collection', ['search' => 'series:' . $series->name])}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
 							@endforeach
 							
 							@foreach($collection->secondary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
-								<span class="secondary_series"><a href="{{route('show_series', ['series' => $series])}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
+								<span class="secondary_series"><a href="{{route('index_collection', ['search' => 'series:' . $series->name])}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
 							@endforeach
 						</div>
 					</div>
@@ -73,11 +73,11 @@
 						</div>
 						<div class="col-md-10">
 							@foreach($collection->primary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $character)
-								<span class="primary_characters"><a href="{{route('show_character', ['character' => $character])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+								<span class="primary_characters"><a href="{{route('index_collection', ['search' => 'character:' . $character->name])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
 							@endforeach
 							
 							@foreach($collection->secondary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $character)
-								<span class="secondary_characters"><a href="{{route('show_character', ['character' => $character])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+								<span class="secondary_characters"><a href="{{route('index_collection', ['search' => 'character:' . $character->name])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
 							@endforeach
 						</div>
 					</div>
@@ -92,11 +92,11 @@
 						</div>
 						<div class="col-md-10">
 							@foreach($collection->primary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $tag)
-								<span class="primary_tags"><a href="{{route('show_tag', ['tag' => $tag])}}">{{{$tag->name}}} <span class="tag_count"> ({{$tag->usage_count()}})</span></a></span>
+								<span class="primary_tags"><a href="{{route('index_collection', ['search' => 'tag:' . $tag->name])}}">{{{$tag->name}}} <span class="tag_count"> ({{$tag->usage_count()}})</span></a></span>
 							@endforeach
 							
 							@foreach($collection->secondary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $tag)
-								<span class="secondary_tags"><a href="{{route('show_tag', ['tag' => $tag])}}">{{{$tag->name}}} <span class="tag_count">({{$tag->usage_count()}})</span></a></span>
+								<span class="secondary_tags"><a href="{{route('index_collection', ['search' => 'tag:' . $tag->name])}}">{{{$tag->name}}} <span class="tag_count">({{$tag->usage_count()}})</span></a></span>
 							@endforeach
 						</div>
 					</div>
@@ -109,7 +109,7 @@
 						<strong>Language:</strong>
 					</div>
 					<div class="col-md-10">
-						{{{$collection->language->name}}}
+						<span class="language_tag"><a href="{{route('index_collection', ['search' => 'language:'. $collection->language->name])}}">{{{$collection->language->name}}}</a></span>
 					</div>
 				</div>
 			@endif
@@ -120,7 +120,7 @@
 						<strong>Rating:</strong>
 					</div>
 					<div class="col-md-10">
-						{{{$collection->rating->name}}}
+						<span class="rating_tag"><a href="{{route('index_collection', ['search' => 'rating:'. $collection->rating->name])}}">{{{$collection->rating->name}}}</a></span>
 					</div>
 				</div>	
 			@endif
@@ -131,7 +131,7 @@
 						<strong>Status:</strong> 
 					</div>
 					<div class="col-md-10">
-						{{{$collection->status->name}}}
+						<span class="status_tag"><a href="{{route('index_collection', ['search' => 'status:'. $collection->status->name])}}">{{{$collection->status->name}}}</a></span>
 					</div>
 				</div>
 			@endif
@@ -142,7 +142,7 @@
 						<strong>Canonicity:</strong>
 					</div>
 					<div class="col-md-10">
-						Canonical
+						<span class="canonical_tag"><a href="{{route('index_collection', ['search' => 'canonical'])}}">Canonical</a></span>
 					</div>
 				</div>
 			@else
@@ -151,7 +151,7 @@
 						<strong>Canonicity:</strong>
 					</div>
 					<div class="col-md-10">
-						Non-Canon
+						<span class="canonical_tag"><a href="{{route('index_collection', ['search' => 'non-canonical'])}}">Non-Canonical</a></span>
 					</div>
 				</div>
 			@endif
@@ -191,7 +191,7 @@
 		</div>
 	@endif
 	
-	@include('partials.show-collection-content', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'show_chapter', 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => false])
+	@include('partials.show-collection-content', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'show_chapter', 'scanalatorLinkRoute' => 'index_collection', 'hideVolumes' => false])
 	
 	@if(($collection->parent_collection != null) || (count($collection->child_collections)))
 		<br/>

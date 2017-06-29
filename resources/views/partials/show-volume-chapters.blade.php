@@ -48,11 +48,20 @@
 						@if(($chapter->primary_scanalators()) || ($chapter->secondary_scanalators()))
 							<div class="scanalator_holder">			
 							@foreach($chapter->primary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
-									<span class="primary_scanalators"><a href="{{route($scanalatorLinkRoute, ['scanalator' => $scanalator])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+									@if($scanalatorLinkRoute == 'index_collection')
+										<span class="primary_scanalators"><a href="{{route($scanalatorLinkRoute, ['search' => 'scanalator:' . $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+									@else
+										<span class="primary_scanalators"><a href="{{route($scanalatorLinkRoute, ['scanalator' => $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+									@endif
 								@endforeach
 								
 								@foreach($chapter->secondary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
-									<span class="secondary_scanalators"><a href="{{route($scanalatorLinkRoute, ['scanalator' => $scanalator])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+									@if($scanalatorLinkRoute == 'index_collection')
+										<span class="secondary_scanalators"><a href="{{route($scanalatorLinkRoute, ['search' => 'scanalator:' . $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+									@else
+										<span class="secondary_scanalators"><a href="{{route($scanalatorLinkRoute, ['scanalator' => $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+									@endif
+									
 								@endforeach
 							</div>
 						@endif

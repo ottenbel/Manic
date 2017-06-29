@@ -44,6 +44,11 @@ class SearchHelper
 		//Process and organize the tokens
 		foreach ($search_tokens as $search_token)
 		{
+			if ($search_token == "")
+			{
+				continue;
+			}
+			
 			$searchClassifier = "";
 			$not = false;
 			$primary = false;

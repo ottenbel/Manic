@@ -1,5 +1,10 @@
 <div class="container">
 	<h2>{{{$tagObject->name}}}</h2>
+
+	<div class="row text-center">
+		<a class="btn btn-success btn-lg" href="{{route('index_collection', ['search' => $tagObjectName . ':' . $tagObject->name])}}">Search</a>
+	</div>
+	<br/>
 	
 	@if(Route::is('show_character'))
 		<h4>Associated With Series: <a href="{{route('show_series', ['series' => $tagObject->series()->first()])}}">{{$tagObject->series->name}}</a></h4>
@@ -188,7 +193,7 @@
 						@endcan
 						@can('delete', $personal_alias)
 							<div class="col-xs-4 text-right">
-								<form method="POST" action="{{route($deleteTagObjectRoute, [$aliasTagObjectName => $personal_alias])}}"">
+								<form method="POST" action="{{route($deleteTagObjectRoute, [$aliasTagObjectName => $personal_alias])}}">
 									{{ csrf_field() }}
 									{{method_field('DELETE')}}
 									
