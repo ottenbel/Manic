@@ -30,7 +30,7 @@
 	<li><a href="{{ url('/register') }}">Register</a></li>
 @else
 	<!-- Add general checks on roles once all policies have been created -->
-	@if((Route::is('show_collection')) && ((Auth::User()->can('create', App\Models\Chapter::class)) 
+	@if((Route::is('show_collection')) && (!empty($collection)) && ((Auth::User()->can('create', App\Models\Chapter::class)) 
 			|| (Auth::User()->can('create', App\Models\Volume::class)) || (Auth::User()->can('update', $collection)) ))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -45,23 +45,25 @@
 				@can('create', App\Models\Volume::class)
 					<li><a href="{{route('create_volume', ['collection' => $collection])}}">Add Volume</a><li>
 				@endcan
-				@can('update', $collection)
-					<li><a href="{{route('edit_collection', ['collection' => $collection])}}">Edit Collection</a><li>
-				@endcan
+				@if((!empty($collection)))
+					@can('update', $collection)
+						<li><a href="{{route('edit_collection', ['collection' => $collection])}}">Edit Collection</a><li>
+					@endcan
+				@endif
 			</ul>
 		</li>
-	@elseif((Route::is('show_chapter')) &&((Auth::User()->can('update', $collection))))
+	@elseif((Route::is('show_chapter')) && (!empty($chapter)) &&((Auth::User()->can('update', $chapter))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Chapter <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				@can('update', $collection)
+				@can('update', $chapter)
 					<li><a href="{{route('edit_chapter', ['chapter' => $chapter])}}">Edit Chapter</a><li>
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::is('edit_collection'))
+	@elseif (Route::is('edit_collection') && (!empty($collection)))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Collection <span class="caret"></span>
@@ -78,7 +80,7 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::is('edit_chapter'))
+	@elseif (Route::is('edit_chapter') && (!empty($chapter)))
 	<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Chapter <span class="caret"></span>
@@ -87,7 +89,7 @@
 				<li><a href="{{route('show_chapter', ['chapter' => $chapter])}}">View Chapter</a><li>
 			</ul>
 		</li>
-	@elseif ((Route::is('show_tag')) && ((Auth::User()->can('update', $tag)) ))
+	@elseif ((Route::is('show_tag')) && (!empty($tag)) && ((Auth::User()->can('update', $tag)) ))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Tag <span class="caret"></span>
@@ -98,7 +100,7 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::is('edit_tag'))
+	@elseif (Route::is('edit_tag') && (!empty($tag)))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Tag <span class="caret"></span>
@@ -107,7 +109,7 @@
 				<li><a href="{{route('show_tag', ['tag' => $tag])}}">View Tag</a><li>
 			</ul>
 		</li>
-	@elseif ((Route::is('show_artist')) && ((Auth::User()->can('update', $artist))))
+	@elseif ((Route::is('show_artist')) && (!empty($artist)) && ((Auth::User()->can('update', $artist))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Artist <span class="caret"></span>
@@ -118,7 +120,7 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::is('edit_artist'))
+	@elseif (Route::is('edit_artist') && (!empty($artist)))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Artist <span class="caret"></span>
@@ -127,7 +129,7 @@
 				<li><a href="{{route('show_artist', ['artist' => $artist])}}">View Artist</a><li>
 			</ul>
 		</li>
-	@elseif ((Route::is('show_character')) && (Auth::User()->can('update', $character)))	
+	@elseif ((Route::is('show_character')) && (!empty($character)) && (Auth::User()->can('update', $character)))	
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Character <span class="caret"></span>
@@ -138,7 +140,7 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::is('edit_character'))
+	@elseif (Route::is('edit_character') && (!empty($character)))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Character <span class="caret"></span>
@@ -147,7 +149,7 @@
 				<li><a href="{{route('show_character', ['character' => $character])}}">View Character</a><li>
 			</ul>
 		</li>
-	@elseif ((Route::is('show_series')) && ((Auth::User()->can('update', $series)) 
+	@elseif ((Route::is('show_series')) && (!empty($series)) && ((Auth::User()->can('update', $series)) 
 		 || (Auth::User()->can('create', App\Models\TagObjects\Character\Character::class))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -162,7 +164,7 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::is('edit_series'))
+	@elseif (Route::is('edit_series') && (!empty($series)))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Series <span class="caret"></span>
@@ -174,7 +176,7 @@
 				<li><a href="{{route('show_series', ['series' => $series])}}">View Series</a><li>
 			</ul>
 		</li>
-	@elseif ((Route::is('show_scanalator')) && ((Auth::User()->can('update', $scanalator))))
+	@elseif ((Route::is('show_scanalator')) && (!empty($scanalator)) && ((Auth::User()->can('update', $scanalator))))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Scanalator <span class="caret"></span>
@@ -185,7 +187,7 @@
 				@endcan
 			</ul>
 		</li>
-	@elseif (Route::is('edit_scanalator'))
+	@elseif (Route::is('edit_scanalator') && (!empty($scanalator)))
 		<li class="dropdown">
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 				Scanalator <span class="caret"></span>
