@@ -25,3 +25,4 @@ Route::post('/v1/collection/namesearch', 'API\V1\Collection\CollectionSearchAPIC
 Route::post('/v1/scanalator/namesearch', 'API\V1\Scanalator\ScanalatorSearchAPIController@SearchByName');
 Route::post('/v1/series/namesearch', 'API\V1\Series\SeriesSearchAPIController@SearchByName');
 Route::post('/v1/tag/namesearch', 'API\V1\Tag\TagSearchAPIController@SearchByName');
+Route::post('/v1/namesearch', 'API\V1\GenericSearchAPIController@SearchByName');

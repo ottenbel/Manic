@@ -8,7 +8,7 @@ use Auth;
 use Input;
 use Config;
 use MappingHelper;
-use SearchHelper;
+use SearchParseHelper;
 use ImageUploadHelper;
 use InterventionImage;
 use App\Models\TagObjects\Artist\Artist;
@@ -60,7 +60,7 @@ class CollectionController extends Controller
 		}
 		else //Filter the collections return based on the search string
 		{
-			SearchHelper::Search($search_string, $collections, $searchArtists, $searchCharacters, $searchScanalators, $searchSeries, $searchTags, $searchLanguages, $searchRatings, $searchStatuses, $searchCanonicity, $invalid_tokens);
+			SearchParseHelper::Search($search_string, $collections, $searchArtists, $searchCharacters, $searchScanalators, $searchSeries, $searchTags, $searchLanguages, $searchRatings, $searchStatuses, $searchCanonicity, $invalid_tokens);
 			$collections->appends(Input::except('page'));
 		}
 		

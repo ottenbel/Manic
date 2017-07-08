@@ -1,7 +1,7 @@
 <!-- search -->
 <li>
 <form method="POST" action="{{route('process_search')}}" enctype="multipart/form-data">
-	{{ Form::text('query_string', "", array('class' => 'form-control', 'placeholder' => 'Search...', 'style' => 'margin-top: 8px')) }}
+	{{ Form::text('query_string', "", array('id' => 'search', 'class' => 'form-control', 'placeholder' => 'Search...', 'style' => 'margin-top: 8px')) }}
 </form>
 </li>
 

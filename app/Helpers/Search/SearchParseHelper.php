@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Helpers\Search;
 
 use App\Models\Collection;
 use App\Models\TagObjects\Artist\Artist;
@@ -20,7 +20,7 @@ use Auth;
 use Config;
 use LookupHelper;
 
-class SearchHelper
+class SearchParseHelper
 {
 	/*
 	 * Return the collection that matches the search string.

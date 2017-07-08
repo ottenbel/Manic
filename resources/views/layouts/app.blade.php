@@ -21,10 +21,13 @@
      <!-- Scripts -->
     <script src="/js/app.js"></script>
 	<script src="/js/volume.js"></script>
+	<script src="/js/autocomplete/search.js"></script>
 	<!-- The version of Jquery installed through composer doesn't appear to include the necessary .css file-->
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 	<script src="/js/jquery/jquery.min.js"></script>
 	<script src="/js/jquery-ui/jquery-ui.min.js"></script>
+	
+	<link href="/css/search.css" rel="stylesheet">
 	
     <script>
         window.Laravel = <?php echo json_encode([
