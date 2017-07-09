@@ -26,8 +26,8 @@
 
 <!-- Authentication Links -->
 @if (Auth::guest())
-	<li><a href="{{ url('/login') }}">Login</a></li>
-	<li><a href="{{ url('/register') }}">Register</a></li>
+	<li><a href="{{ route('login') }}">Login</a></li>
+	<li><a href="{{ route('register') }}">Register</a></li>
 @else
 	<!-- Add general checks on roles once all policies have been created -->
 	@if((Route::is('show_collection')) && (!empty($collection)) && ((Auth::User()->can('create', App\Models\Chapter::class)) 
