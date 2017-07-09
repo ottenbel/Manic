@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Session\TokenMismatchException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -49,6 +50,10 @@ class Handler extends ExceptionHandler
         {
               return response()->view('errors.404');
         }
+		else if ($exception instanceof TokenMismatchException)
+		{
+			return response()->view('errors.token-mismatch');
+		}
 
 	
         return parent::render($request, $exception);
@@ -63,7 +68,8 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if ($request->expectsJson()) {
+        if ($request->expectsJson()) 
+		{
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
 
