@@ -15,7 +15,8 @@
       "laravelcollective/html": "5.4.*",
         "laravel/tinker": "^1.0",
         "intervention/image": "^2.3",
-        "iatstuti/laravel-cascade-soft-deletes": "1.2.*"
+        "iatstuti/laravel-cascade-soft-deletes": "1.2.*",
+		"chumper/zipper": "1.0.x"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
