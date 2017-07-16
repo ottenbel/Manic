@@ -10,6 +10,8 @@ use Input;
 use MappingHelper;
 use ImageUploadHelper;
 use InterventionImage;
+use File;
+use Storage;
 use App\Models\Chapter;
 use App\Models\Collection;
 use App\Models\Image;
@@ -101,7 +103,7 @@ class ChapterController extends Controller
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images' => 'required',
-			'images.*' => 'image']);
+			'images.*' => 'mimetypes:image/jpeg,image/bmp,image/png,zip']);
 		}
 		else if ($lower_chapter_limit != 0)
 		{
@@ -118,7 +120,7 @@ class ChapterController extends Controller
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images' => 'required',
-			'images.*' => 'image']);
+			'images.*' => 'mimes:jpeg,bmp,png,zip']);
 		}
 		else if ($upper_chapter_limit != 0)
 		{
@@ -135,7 +137,7 @@ class ChapterController extends Controller
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images' => 'required',
-			'images.*' => 'image']);
+			'images.*' => 'mimes:jpeg,bmp,png,zip']);
 		}
 		else
 		{
@@ -151,7 +153,7 @@ class ChapterController extends Controller
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images' => 'required',
-			'images.*' => 'image']);
+			'images.*' => 'mimes:jpeg,bmp,png,zip']);
 		}
 		
 		$chapter = new Chapter();
@@ -171,10 +173,19 @@ class ChapterController extends Controller
 		
 		$page_number = 0;
 		foreach(Input::file('images') as $file)
-		{			
-			$image = ImageUploadHelper::UploadImage($file);
-			$chapter->pages()->attach($image, ['page_number' => $page_number]);	
-			$page_number++;
+		{
+			$fileExtension = File::mimeType($file);
+			
+			if($fileExtension == "application/zip")
+			{
+				ImageUploadHelper::UploadZip($chapter, $page_number, $file);
+			}
+			else
+			{
+				$image = ImageUploadHelper::UploadImage($file);
+				$chapter->pages()->attach($image, ['page_number' => $page_number]);	
+				$page_number++;
+			}
 		}
 		
 		$collection = $volume->collection;
@@ -323,7 +334,7 @@ class ChapterController extends Controller
 			'scanalator_primary' => 'regex:/^[^:-]+$/',
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
-			'images.*' => 'image',
+			'images.*' => 'mimes:jpeg,bmp,png,zip',
 			'chapter_pages.*' => 'required|integer|min:0',
 			'delete_pages.*' => 'boolean']);
 		}
@@ -343,7 +354,7 @@ class ChapterController extends Controller
 			'scanalator_primary' => 'regex:/^[^:-]+$/',
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
-			'images.*' => 'image',
+			'images.*' => 'mimes:jpeg,bmp,png,zip',
 			'chapter_pages.*' => 'required|integer|min:0',
 			'delete_pages.*' => 'boolean']);
 		}
@@ -363,7 +374,7 @@ class ChapterController extends Controller
 			'scanalator_primary' => 'regex:/^[^:-]+$/',
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
-			'images.*' => 'image',
+			'images.*' => 'mimes:jpeg,bmp,png,zip',
 			'chapter_pages.*' => 'required|integer|min:0',
 			'delete_pages.*' => 'boolean']);
 		}
@@ -382,7 +393,7 @@ class ChapterController extends Controller
 			'scanalator_primary' => 'regex:/^[^:-]+$/',
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
-			'images.*' => 'image',
+			'images.*' => 'mimes:jpeg,bmp,png,zip',
 			'chapter_pages.*' => 'required|integer|min:0',
 			'delete_pages.*' => 'boolean']);
 		}
@@ -429,9 +440,18 @@ class ChapterController extends Controller
 			$page_number = $highest_page_number + 1;
 			foreach(Input::file('images') as $file)
 			{
-				$image = ImageUploadHelper::UploadImage($file);
-				$chapter->pages()->attach($image, ['page_number' => $page_number]);	
-				$page_number++;
+				$fileExtension = File::mimeType($file);
+				
+				if($fileExtension == "application/zip")
+				{
+					ImageUploadHelper::UploadZip($chapter, $page_number, $file);
+				}
+				else
+				{				
+					$image = ImageUploadHelper::UploadImage($file);
+					$chapter->pages()->attach($image, ['page_number' => $page_number]);	
+					$page_number++;
+				}
 			}
 		}
 		

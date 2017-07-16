@@ -75,7 +75,7 @@
 		<div class ="alert alert-danger" id="image_errors">{{$errors->first('images')}}</div>
 	@endif
 	@if (count($errors->get('images.*')))
-		<div class ="alert alert-danger" id="image_errors">All pages must be an image.</div>
+		<div class ="alert alert-danger" id="image_errors">All files uploaded must be an image or zip.</div>
 	@endif
 	
 </div>
