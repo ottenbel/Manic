@@ -40,12 +40,16 @@
 					<span class="secondary_scanalators"><a href="{{route('index_collection', ['search' => 'scanalator:' . $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
 				@endforeach
 			</div>
+		@else
+			<div class="col-md-4"></div>
 		@endif
 		
 		@if($chapter->source != null)
 			<div class="col-md-1">
 				<span class="source_tag"><a href="{{$chapter->source}}">Source</a></source>
 			</div>
+		@else
+			<div class="col-md-1"></div>
 		@endif
 		
 		<div class="col-md-2">
