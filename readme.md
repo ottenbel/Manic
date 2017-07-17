@@ -22,7 +22,7 @@ Manic is an open source project for hosting and sharing comics/manga/etc. It was
 9. Copy the relevant directories (bootstrap, font awesome, jquery, jquery-ui) from the components directory to the relevant subdirectories (css, js) under the public directory
 10. Sign in to the newly created administrator account and change your password
 
-#Project Dependencies
+# Project Dependencies
 
 1. Intervention Image
 2. Zipper
