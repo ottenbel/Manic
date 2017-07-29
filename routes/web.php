@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/chapter/{chapter}/edit', 'ChapterController@edit')->Name('edit_chapter');
 	Route::patch('/chapter/{chapter}', 'ChapterController@update')->Name('update_chapter');
 	Route::delete('/chapter/{chapter}', 'ChapterController@destroy')->Name('delete_chapter');
+	Route::get('/chapter/{chapter}/export', 'ChapterController@export')->Name('export_chapter');
 });
 
 Route::get('/chapter/{chapter}/{page?}', 'ChapterController@show')->Name('show_chapter');

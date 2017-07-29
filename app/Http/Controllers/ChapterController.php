@@ -10,6 +10,7 @@ use Input;
 use MappingHelper;
 use ImageUploadHelper;
 use InterventionImage;
+use FileExportHelper;
 use File;
 use Storage;
 use App\Models\Chapter;
@@ -483,4 +484,35 @@ class ChapterController extends Controller
 		
 		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully purged chapter $chapterName from the collection."));
     }
+	
+	/**
+     * Export the specified as a zip file.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function export(Chapter $chapter)
+    {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($chapter);
+		
+		$fileExport = FileExportHelper::ExportChapter($chapter);
+		
+		if ($fileExport != null)
+		{
+			$chapterName = $chapter->collection->name . " - Chapter " . $chapter->chapter_number;
+			if ($chapter->name != null)
+			{
+				$chapterName = $chapterName . " - " .  $chapter->name;
+			}
+			$chapterName = $chapterName . ".zip";
+			
+			return response()->download($fileExport->path, $chapterName);
+		}
+		else
+		{
+			//Return an error message saying that it couldn't create a chapter export
+			return Redirect::back()->withErrors(["flashed_warning" => "Unable to export zipped chapter file."]);
+		}
+	}
 }

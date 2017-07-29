@@ -2,8 +2,10 @@
 
 namespace App\Console;
 
+use DateTime;
 use Storage;
 use App\Models\Image;
+use App\Models\ChapterExport;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -32,7 +34,8 @@ class Kernel extends ConsoleKernel
 		/*
 		 * Clean up the filesystem (delete any images that aren't linked to anything)
 		 */
-		$schedule->call(function(){
+		$schedule->call(function()
+		{
 			//Retrieve all images
 			$images = Image::all();
 			
@@ -52,6 +55,25 @@ class Kernel extends ConsoleKernel
 					}
 			}
 		})->weekly();
+		
+		/*
+		 * Clean up the filesystem (zip files for chapters that haven't been downloaded in the last week)
+		 */
+		$schedule->call(function()
+		{
+			//Retrieve all chapters with files on disk for exporting
+			$filesForExport = ChapterExport::all();
+			$deleteCutOff = new DateTime;
+			date_sub($deleteCutOff, date_interval_create_from_date_string('1 week'));
+			foreach ($filesForExport as $fileForExport)
+			{
+				if ($fileForExport->last_downloaded < $deleteCutOff)
+				{
+					Storage::Delete($fileForExport->path);
+					$fileForExport->forceDelete();
+				}
+			}
+		})->daily();
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\BaseManicModel;
 use Auth;
+use Storage;
 
 class Chapter extends BaseManicModel
 {
@@ -13,36 +14,6 @@ class Chapter extends BaseManicModel
 	public static function boot()
     {
         parent::boot();
-		
-		static::creating(function($model)
-		{
-			parent::creating($model);
-			
-			$volume = $model->volume()->first();
-			$volume->updated_by = Auth::user()->id;
-			$volume->save();
-			$volume->touch();
-			
-			$collection = $volume->collection()->first();
-			$collection->updated_by = Auth::user()->id;
-			$collection->save();
-			$collection->touch();
-		});
-		
-		static::deleting(function($model)
-		{
-			parent::deleting($model);
-			
-			$volume = $model->volume()->first();
-			$volume->updated_by = Auth::user()->id;
-			$volume->save();
-			$volume->touch();
-			
-			$collection = $volume->collection()->first();
-			$collection->updated_by = Auth::user()->id;
-			$collection->save();
-			$collection->touch();
-		});
     }
 	
 	/*
@@ -107,5 +78,13 @@ class Chapter extends BaseManicModel
 	public function previous_chapter()
 	{
 		return $this->volume->collection->chapters()->where('chapter_number', '<', $this->chapter_number)->orderBy('chapter_number', 'desc')->take(1);
+	}
+	
+	/*
+	 * Get the export associated with the chapter.
+	 */
+	public function export()
+	{
+		return $this->hasOne('App\Models\ChapterExport');
 	}
 }

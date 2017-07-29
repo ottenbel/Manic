@@ -57,4 +57,16 @@ class ChapterPolicy
     {
         return $user->has_editor_permission();
     }
+	
+	/**
+     * Determine whether the user can export the chapter.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Chapter  $chapter
+     * @return mixed
+     */
+    public function export(User $user, Chapter $chapter)
+    {
+        return $user->has_user_permission();
+    }
 }

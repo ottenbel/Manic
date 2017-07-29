@@ -239,6 +239,7 @@ return [
 		'SearchParseHelper' => App\Helpers\Search\SearchParseHelper::class,
 		'SearchLookupHelper' => App\Helpers\Search\SearchLookupHelper::class,
 		'InterventionImage' => Intervention\Image\Facades\Image::class,
+		'FileExportHelper' => App\Helpers\FileExportHelper::class,
 		 'Zipper' => Chumper\Zipper\Zipper::class,
     ],
 
