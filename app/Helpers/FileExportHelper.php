@@ -48,8 +48,11 @@ class FileExportHelper
 				//Generate zip file corresponding to the chapter
 				foreach ($chapter->pages as $page)
 				{
-					$zippedPageName = $page->pivot->page_number . '.' . $page->extension;
-					$zipper->zip($filePath)->folder($chapterName)->add($page->name, $zippedPageName);
+					if (Storage::exists($page->name))
+					{
+						$zippedPageName = $page->pivot->page_number . '.' . $page->extension;
+						$zipper->zip($filePath)->folder($chapterName)->add($page->name, $zippedPageName);
+					}
 				}
 				$zipper->close();
 				

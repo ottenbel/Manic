@@ -36,6 +36,45 @@
 			{{ Form::submit('Jump', array('id' => 'jump_button')) }}
 		</div>
 	</div>
+	@if((count($chapter->primary_scanalators)) || (count($chapter->secondary_scanalators)) || ($chapter->source != null) || (Auth::check() && Auth::user()->can('export', $chapter)))
+		<button class="accordion">Additional Chapter Information:</button>
+		<div class="volume_panel" id="additional_chapter_information">
+			@if((count($chapter->primary_scanalators)) || (count($chapter->secondary_scanalators)))
+				<div class="row">
+					<div class="col-md-2">
+						<strong>Scanalators:</strong> 
+					</div>
+					<div class="scanalator_holder col-md-10">			
+					@foreach($chapter->primary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
+							<span class="primary_scanalators"><a href="{{route('index_collection', ['search' => 'scanalator:' . $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+						@endforeach
+						
+						@foreach($chapter->secondary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
+							<span class="secondary_scanalators"><a href="{{route('index_collection', ['search' => 'scanalator:' . $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+						@endforeach
+					</div>
+				</div>
+			@endif
+			
+			@if($chapter->source != null)
+				<div class="row">
+					<div class="col-md-2">
+						<strong>Source URL:</strong> 
+					</div>
+					<div class="col-md-2">
+						<span class="source_tag"><a href="{{$chapter->source}}">Source</a></source>
+					</div>
+				</div>
+			@endif
+			
+			@can('export', $chapter)
+				<br/>
+				<div class="row text-center">
+					<a class="btn btn btn-success" id="export_chapter_button" href="{{route('export_chapter', $chapter)}}" role="button"><i class="fa fa-download" aria-hidden="true"></i> Download Chapter</a>
+				</div>
+			@endcan
+		</div>
+	@endif
 </div>
 
 @if (count($chapter->pages) > 0)
@@ -96,46 +135,6 @@
 			
 		</ul>
 	</div>
-	
-	@if((count($chapter->primary_scanalators)) || (count($chapter->secondary_scanalators)) || ($chapter->source != null) || (Auth::check() && Auth::user()->can('export', $chapter)))
-		<button class="accordion">Additional Chapter Information:</button>
-		<div class="volume_panel" id="additional_chapter_information">
-			@if((count($chapter->primary_scanalators)) || (count($chapter->secondary_scanalators)))
-				<div class="row">
-					<div class="col-md-2">
-						<strong>Scanalators:</strong> 
-					</div>
-					<div class="scanalator_holder col-md-10">			
-					@foreach($chapter->primary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
-							<span class="primary_scanalators"><a href="{{route('index_collection', ['search' => 'scanalator:' . $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
-						@endforeach
-						
-						@foreach($chapter->secondary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
-							<span class="secondary_scanalators"><a href="{{route('index_collection', ['search' => 'scanalator:' . $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
-						@endforeach
-					</div>
-				</div>
-			@endif
-			
-			@if($chapter->source != null)
-				<div class="row">
-					<div class="col-md-2">
-						<strong>Source URL:</strong> 
-					</div>
-					<div class="col-md-2">
-						<span class="source_tag"><a href="{{$chapter->source}}">Source</a></source>
-					</div>
-				</div>
-			@endif
-			
-			@can('export', $chapter)
-				<br/>
-				<div class="row text-center">
-					<a class="btn btn btn-success" id="export_chapter_button" href="{{route('export_chapter', $chapter)}}" role="button"><i class="fa fa-download" aria-hidden="true"></i> Download Chapter</a>
-				</div>
-			@endcan
-		</div>
-	@endif
 @else
 	<br/>
 	<div class="alert alert-warning" style="text-align:center">
