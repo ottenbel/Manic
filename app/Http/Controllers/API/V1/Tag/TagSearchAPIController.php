@@ -8,6 +8,7 @@ use App\Models\TagObjects\Tag\TagAlias;
 use Illuminate\Http\Request;
 use DB;
 use Input;
+use SearchLookupHelper;
 
 class TagSearchAPIController extends Controller
 {
