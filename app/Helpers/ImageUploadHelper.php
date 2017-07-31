@@ -20,6 +20,24 @@ class ImageUploadHelper
 		$image = Image::where('hash', '=', $hash)->first();
 		if (count($image))
 		{
+			//Write the file back to disk if we already have an entry for it in the database but no corresponding file.
+			if (!(Storage::exists($image->name)))
+			{
+				$path = $file->storeAs('storage/images/full', str_replace('storage/images/full/', '', $image->name));
+			}
+			
+			//Write the thumbnail back to disk if we already have an entry for it in the database but no corresponding file.
+			if (!(Storage::exists($image->thumbnail)))
+			{
+				$thumbnailPath = public_path($image->thumbnail);
+				$thumbnail = InterventionImage::make($file->getRealPath());
+				$thumbnailRatio = 250/$thumbnail->height();
+				$thumbnailHeight = 250;
+				$thumbnailWidth = $thumbnail->width() * $thumbnailRatio;
+				$thumbnail->resize($thumbnailWidth, $thumbnailHeight);
+				$thumbnail->save($thumbnailPath);
+			}
+			
 			return $image;
 		}
 		else
@@ -57,6 +75,29 @@ class ImageUploadHelper
 		$image = Image::where('hash', '=', $hash)->first();
 		if (count($image))
 		{
+			//Write the file back to disk if we already have an entry for it in the database but no corresponding file.
+			if (!(Storage::exists($image->name)))
+			{
+				$basePath = base_path();
+				$newFilePath = $basePath . '/public/' . $image->name;
+				File::Move($file, $newFilePath);
+			}
+			
+			//Write the thumbnail back to disk if we already have an entry for it in the database but no corresponding file.
+			if (!(Storage::exists($image->thumbnail)))
+			{
+				$basePath = base_path();
+				$newFilePath = $basePath . '/public/' . $image->name;
+				
+				$thumbnailPath = str_replace('full', 'thumb', $newFilePath);
+				$thumbnail = InterventionImage::make($newFilePath);
+				$thumbnailRatio = 250/$thumbnail->height();
+				$thumbnailHeight = 250;
+				$thumbnailWidth = $thumbnail->width() * $thumbnailRatio;
+				$thumbnail->resize($thumbnailWidth, $thumbnailHeight);
+				$thumbnail->save($thumbnailPath);
+			}
+			
 			return $image;
 		}
 		else

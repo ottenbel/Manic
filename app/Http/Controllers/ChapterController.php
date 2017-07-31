@@ -512,7 +512,7 @@ class ChapterController extends Controller
 		else
 		{
 			//Return an error message saying that it couldn't create a chapter export
-			return Redirect::back()->withErrors(["flashed_warning" => "Unable to export zipped chapter file."]);
+			return Redirect::back()->with(["flashed_warning" => array("Unable to export zipped chapter file.")]);
 		}
 	}
 }
