@@ -57,4 +57,16 @@ class VolumePolicy
     {
         return $user->has_editor_permission();
     }
+	
+	/**
+     * Determine whether the user can export the volume.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Volume  $volume
+     * @return mixed
+     */
+    public function export(User $user, Volume $volume)
+    {
+        return $user->has_user_permission();
+    }
 }

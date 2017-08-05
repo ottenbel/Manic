@@ -18,7 +18,7 @@
 				<img src="{{asset($volume->cover_image->thumbnail)}}" class="img-responsive img-rounded" alt="Volume Cover" height="100%" width="100%">
 			@endif
 		</div>
-		<div id="cover" class="col-md-10">
+		<div id="body" class="col-md-10">
 	@else
 		<div>
 	@endif
@@ -32,6 +32,15 @@
 				@endif 
 			</h4></a>
 		@endif
+		
+		@if(Route::is('show_collection') && ($volume->chapters->count() > 1))
+			@can('export', $volume)
+				<div class="text-right">
+					<a class="btn btn-sm btn-success" id="export_chapter_button" href="{{route('export_volume', $volume)}}" role="button"><i class="fa fa-download" aria-hidden="true"></i> Download Volume</a>
+				</div>
+			@endcan
+		@endif
+		
 		<table width="100%">
 			@foreach($volume->chapters()->orderBy('chapter_number', 'asc')->get() as $chapter)
 				<tr>

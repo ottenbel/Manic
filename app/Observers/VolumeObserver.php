@@ -2,35 +2,30 @@
 
 namespace App\Observers;
 
-use App\Models\Chapter;
+use App\Models\Volume;
 use Auth;
 use Storage;
 
-class ChapterObserver Extends BaseManicModelObserver
+class VolumeObserver Extends BaseManicModelObserver
 {
 	/**
-     * Listen to the chapter creating event.
+     * Listen to the volume creating event.
      *
      * @param  $model
      * @return void
      */
     public function creating($model)
-    {
-        parent::creating($model);
+    {	
+		parent::creating($model);
 			
-		$volume = $model->volume()->first();
-		$volume->updated_by = Auth::user()->id;
-		$volume->save();
-		$volume->touch();
-		
-		$collection = $volume->collection()->first();
+		$collection = $model->collection()->first();
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		$collection->touch();
     }
 	
     /**
-     * Listen to the chapter created event.
+     * Listen to the volume created event.
      *
      * @param  $model
      * @return void
@@ -41,7 +36,7 @@ class ChapterObserver Extends BaseManicModelObserver
     }
 
 	/**
-     * Listen to the chapter updating event.
+     * Listen to the volume updating event.
      *
      * @param  $model
      * @return void
@@ -50,26 +45,17 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::updating($model);
 			
-		//Delete the relevant file corresponding to the entry from the chapter export table.
+		//Delete the relevant file corresponding to the entry from the volume export table.
 		$export = $model->export;
 		if ($export != null)
 		{
 			Storage::Delete($export->path);
-			$export->forceDelete();
-		}
-		
-		$volume = $model->volume()->first();
-		$volumeExport = $volume->export;
-		
-		if ($volumeExport != null)
-		{
-			Storage::Delete($volumeExport->path);
-			$volumeExport->forceDelete();
+			$model->export->forceDelete();
 		}
     }
 	
     /**
-     * Listen to the chapter updated event.
+     * Listen to the volume updated event.
      *
      * @param  $model
      * @return void
@@ -80,7 +66,7 @@ class ChapterObserver Extends BaseManicModelObserver
     }
 	
 	/**
-     * Listen to the chapter saving event.
+     * Listen to the volume saving event.
      *
      * @param  $model
      * @return void
@@ -91,7 +77,7 @@ class ChapterObserver Extends BaseManicModelObserver
     }
 	
     /**
-     * Listen to the chapter saved event.
+     * Listen to the volume saved event.
      *
      * @param  $model
      * @return void
@@ -102,7 +88,7 @@ class ChapterObserver Extends BaseManicModelObserver
     }
 	
     /**
-     * Listen to the chapter deleting event.
+     * Listen to the volume deleting event.
      *
      * @param  $model
      * @return void
@@ -111,26 +97,14 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::deleting($model);
 			
-		$volume = $model->volume()->first();
-		$volume->updated_by = Auth::user()->id;
-		$volume->save();
-		$volume->touch();
-		
-		$collection = $volume->collection()->first();
+		$collection = $model->collection()->first();
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		$collection->touch();
-		
-		//Delete the relevant file corresponding to the entry from the chapter export table.
-		$export = $model->export;
-		if ($export != null)
-		{
-			Storage::Delete($export->path);
-		}
     }
 	
 	/**
-     * Listen to the chapter deleted event.
+     * Listen to the volume deleted event.
      *
      * @param  $model
      * @return void
@@ -141,7 +115,7 @@ class ChapterObserver Extends BaseManicModelObserver
     }
 	
 	/**
-     * Listen to the chapter restoring event.
+     * Listen to the volume restoring event.
      *
      * @param  $model
      * @return void
@@ -152,9 +126,9 @@ class ChapterObserver Extends BaseManicModelObserver
     }
 	
 	/**
-     * Listen to the chapter restored event.
+     * Listen to the volume restored event.
      *
-     * @param  Chapter  $model
+     * @param  volume  $model
      * @return void
      */
     public function restored($model)

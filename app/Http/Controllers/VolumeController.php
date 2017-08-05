@@ -9,6 +9,7 @@ use Auth;
 use Input;
 use InterventionImage;
 use ImageUploadHelper;
+use FileExportHelper;
 use App\Models\Collection;
 use App\Models\Image;
 use App\Models\Volume;
@@ -182,4 +183,35 @@ class VolumeController extends Controller
 		
 		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully purged volume $volumeName from the collection."));
     }
+	
+	/**
+     * Export the specified as a zip file.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function export(Volume $volume)
+    {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($volume);
+		
+		$fileExport = FileExportHelper::ExportVolume($volume);
+		
+		if ($fileExport != null)
+		{
+			$volumeName = $volume->collection->name . " - Volume " . $volume->volume_number;
+			if ($volume->name != null)
+			{
+				$volumeName = $volumeName . " - " .  $volume->name;
+			}
+			$volumeName = $volumeName . ".zip";
+			
+			return response()->download($fileExport->path, $volumeName);
+		}
+		else
+		{
+			//Return an error message saying that it couldn't create a volume export
+			return Redirect::back()->with(["flashed_warning" => array("Unable to export zipped volume file.")]);
+		}
+	}
 }

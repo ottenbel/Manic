@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/volume/{volume}/edit', 'VolumeController@edit')->Name('edit_volume');
 	Route::patch('/volume/{volume}', 'VolumeController@update')->Name('update_volume');
 	Route::delete('/volume/{volume}', 'VolumeController@destroy')->Name('delete_volume');
+	Route::get('/volume/{volume}/export', 'VolumeController@export')->Name('export_volume');
 });
 //End Volume controller routes
 

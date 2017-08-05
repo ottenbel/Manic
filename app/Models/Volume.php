@@ -13,26 +13,6 @@ class Volume extends BaseManicModel
 	public static function boot()
     {
         parent::boot();
-		
-		static::creating(function($model)
-		{
-			parent::creating($model);
-			
-			$collection = $model->collection()->first();
-			$collection->updated_by = Auth::user()->id;
-			$collection->save();
-			$collection->touch();
-		});
-		
-		static::deleting(function($model)
-		{
-			parent::deleting($model);
-			
-			$collection = $model->collection()->first();
-			$collection->updated_by = Auth::user()->id;
-			$collection->save();
-			$collection->touch();
-		});
     }
 	
 	/*
@@ -89,5 +69,13 @@ class Volume extends BaseManicModel
 	public function last_chapter()
 	{
 		return $this->chapters()->orderBy('chapter_number', 'desc')->take(1);
+	}
+	
+	/*
+	 * Get the export associated with the volume.
+	 */
+	public function export()
+	{
+		return $this->hasOne('App\Models\VolumeExport');
 	}
 }

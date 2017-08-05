@@ -6,6 +6,7 @@ use DateTime;
 use Storage;
 use App\Models\Image;
 use App\Models\ChapterExport;
+use App\Models\VolumeExport;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -63,6 +64,25 @@ class Kernel extends ConsoleKernel
 		{
 			//Retrieve all chapters with files on disk for exporting
 			$filesForExport = ChapterExport::all();
+			$deleteCutOff = new DateTime;
+			date_sub($deleteCutOff, date_interval_create_from_date_string('1 week'));
+			foreach ($filesForExport as $fileForExport)
+			{
+				if ($fileForExport->last_downloaded < $deleteCutOff)
+				{
+					Storage::Delete($fileForExport->path);
+					$fileForExport->forceDelete();
+				}
+			}
+		})->daily();
+		
+		/*
+		 * Clean up the filesystem (zip files for volumes that haven't been downloaded in the last week)
+		 */
+		$schedule->call(function()
+		{
+			//Retrieve all volumes with files on disk for exporting
+			$filesForExport = VolumeExport::all();
 			$deleteCutOff = new DateTime;
 			date_sub($deleteCutOff, date_interval_create_from_date_string('1 week'));
 			foreach ($filesForExport as $fileForExport)
