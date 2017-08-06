@@ -117,6 +117,7 @@ class CharacterController extends Controller
 		
 		$character = new Character();
 		$character->name = trim(Input::get('name'));
+		$character->short_description = trim(Input::get('short_description'));
 		$character->description = trim(Input::get('description'));
 		$character->url = trim(Input::get('url'));
 		$character->series_id = $parent_series->id;
@@ -266,6 +267,7 @@ class CharacterController extends Controller
 		]);
 		
 		$character->name = trim(Input::get('name'));
+		$character->short_description = trim(Input::get('short_description'));
 		$character->description = trim(Input::get('description'));
 		$character->url = trim(Input::get('url'));
 		

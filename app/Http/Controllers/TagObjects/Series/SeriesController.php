@@ -107,6 +107,7 @@ class SeriesController extends Controller
 		
 		$series = new Series();
 		$series->name = trim(Input::get('name'));
+		$series->short_description = trim(Input::get('short_description'));
 		$series->description = trim(Input::get('description'));
 		$series->url = trim(Input::get('url'));
 		
@@ -302,6 +303,7 @@ class SeriesController extends Controller
 		]);
 		
 		$series->name = trim(Input::get('name'));
+		$series->short_description = trim(Input::get('short_description'));
 		$series->description = trim(Input::get('description'));
 		$series->url = trim(Input::get('url'));
 		

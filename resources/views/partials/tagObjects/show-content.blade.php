@@ -1,10 +1,12 @@
 <div class="container">
-	<h2>{{{$tagObject->name}}}</h2>
-
-	<div class="row text-center">
-		<a class="btn btn-success btn-lg" href="{{route('index_collection', ['search' => $tagObjectName . ':' . $tagObject->name])}}">Search</a>
+	<div class="row">
+		<div class="col-md-10">
+			<h2>{{{$tagObject->name}}}</h2>
+		</div>
+		<div class="row col-md-2 text-right">
+			<a class="btn btn-success btn-sm" href="{{route('index_collection', ['search' => $tagObjectName . ':' . $tagObject->name])}}"><i class="fa fa-search" aria-hidden="true"></i> Search</a>
+		</div>
 	</div>
-	<br/>
 	
 	@if(Route::is('show_character'))
 		<h4>Associated With Series: <a href="{{route('show_series', ['series' => $tagObject->series()->first()])}}">{{$tagObject->series->name}}</a></h4>
@@ -42,7 +44,24 @@
 			</div>
 		</div>
 	@endif
+
+	@if(($tagObject->short_description != null) && ($tagObject->short_description != ""))
+		<div><strong>Short Description:</strong></div>
+		<div id="{{$tagObjectName}}_short_description">
+			{{$tagObject->short_description}}
+		</div>
+		<br/>
+	@endif
 	
+	@if(($tagObject->description != null) && ($tagObject->description != ""))
+		<div><strong>Description:</strong></div>
+		<div id="{{$tagObjectName}}_info">
+			{!!nl2br(e($tagObject->description))!!}
+		</div>
+		<br/>
+	@endif
+	
+	<div><strong>Usage:</strong></div>
 	<div>
 		@if($tagObject->usage_count())
 			@if(($tagObject->primary_usage_count() > 0) && ($tagObject->secondary_usage_count() > 0))
@@ -56,13 +75,6 @@
 			{{$tagObject->name}} is not associated with any {{$associatedType}}.
 		@endif
 	</div>
-	
-	@if(($tagObject->description != null) && ($tagObject->description != ""))
-		<br/>	
-		<div id="{{$tagObjectName}}_info">
-			{!!html_entity_decode(nl2br($tagObject->description))!!}
-		</div>
-	@endif
 	
 	@if($tagObject->url != null)
 		<br/>

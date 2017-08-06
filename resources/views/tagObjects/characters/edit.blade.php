@@ -42,6 +42,7 @@ Edit Character - {{{$character->name}}}
 				'tagObject' => $character, 
 				'child' => 'character_child',
 				'namePlaceholder' => 'constants.placeholders.tagObjects.character.name', 
+				'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.character.shortDescription',
 				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 
 				'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source',
 				'childPlaceholder' => 'constants.placeholders.tagObjects.character.child'

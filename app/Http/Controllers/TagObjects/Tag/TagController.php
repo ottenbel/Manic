@@ -107,6 +107,7 @@ class TagController extends Controller
 		
 		$tag = new Tag();
 		$tag->name = trim(Input::get('name'));
+		$tag->short_description = trim(Input::get('short_description'));
 		$tag->description = trim(Input::get('description'));
 		$tag->url = trim(Input::get('url'));
 		
@@ -241,6 +242,7 @@ class TagController extends Controller
 		]);
 		
 		$tag->name = trim(Input::get('name'));
+		$tag->short_description = trim(Input::get('short_description'));
 		$tag->description = trim(Input::get('description'));
 		$tag->url = trim(Input::get('url'));
 		

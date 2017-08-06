@@ -20,6 +20,7 @@ Create a New Tag
 		[
 			'child' => 'tag_child',
 			'namePlaceholder' => 'constants.placeholders.tagObjects.tag.name', 
+			'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.shortDescription',
 			'descriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.description', 
 			'sourcePlaceholder' => 'constants.placeholders.tagObjects.tag.source',
 			'childPlaceholder' => 'constants.placeholders.tagObjects.tag.child'

@@ -48,6 +48,15 @@
 @endif
 
 <div class="form-group">
+	{{ Form::label('short_description', 'Short Description') }}
+	@if((!empty($tagObject)) && ($tagObject->short_description != null) && (Input::old('short_description') == null))
+		{{ Form::text('short_description', $tagObject->short_description, array('class' => 'form-control', 'placeholder' => Config::get($shortDescriptionPlaceholder), 'maxLength' => 150)) }}
+	@else
+		{{ Form::text('short_description', Input::old('short_description'), array('class' => 'form-control', 'placeholder' => Config::get($shortDescriptionPlaceholder), 'maxLength' => 150)) }}
+	@endif
+</div>
+
+<div class="form-group">
 	{{ Form::label('description', 'Description') }}
 	@if((!empty($tagObject)) && ($tagObject->description != null) && (Input::old('description') == null))
 		{{ Form::textarea('description', $tagObject->description, array('class' => 'form-control', 'placeholder' => Config::get($descriptionPlaceholder))) }}

@@ -27,32 +27,37 @@
 							'tagObjects' => [
 												'artist' => [
 																'name' => 'Artist Name',
-																'description' => 'A description of the artist.',
+																'shortDescription' => 'A short description of the artist.',
+																'description' => 'A full description of the artist.',
 																'source' => 'https://en.wikipedia.org/wiki/Artist',
 																'child' => 'Child Artist 1, Child Artist 2'
 															],
 												'character' => [
 																	'name' => 'Character Name',
-																	'description' => 'A description of the character.',
+																	'shortDescription' => 'A short description of the character.',
+																	'description' => 'A full description of the character.',
 																	'source' => 'https://en.wikipedia.org/wiki/Character_(arts)',
-																	'parentSeries' => 'Parent Series',
+																	'parentSeries' => 'Parent Serie.s',
 																	'child' => 'Child Character 1, Child Character 2'
 															   ],
 												'scanalator' => [
 																	'name' => 'Scanalator Name',
-																	'description' => 'A description of the scanalator.',
+																	'shortDescription' => 'A short description of the scanalator.',
+																	'description' => 'A full description of the scanalator.',
 																	'source' => 'https://en.wikipedia.org/wiki/Translation',
 																	'child' => 'Child Scanalator 1, Child Scanalator 2'
 																],
 												'series' => [
 																'name' => 'Series Name',
-																'description' => 'A description of the series.',
+																'shortDescription' => 'A short description of the series.',
+																'description' => 'A full description of the series.',
 																'source' => 'https://en.wikipedia.org/wiki/Series',
 																'child' => 'Child Series 1, Child Series 2'
 															],
 												'tag' => [
 															'name' => 'Tag Name',
-															'description' => 'A description of the tag.',
+															'shortDescription' => 'A short description of the tag.',
+															'description' => 'A full description of the tag.',
 															'source' => 'https://en.wikipedia.org/wiki/Tag_(metadata)',
 															'child' => 'Child Tag 1, Child Tag 2'
 														 ]

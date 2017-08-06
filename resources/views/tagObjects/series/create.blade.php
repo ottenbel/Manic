@@ -20,6 +20,7 @@ Create a New Series
 			[
 				'child' => 'series_child',
 				'namePlaceholder' => 'constants.placeholders.tagObjects.series.name', 
+				'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.series.shortDescription',
 				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.series.description', 
 				'sourcePlaceholder' => 'constants.placeholders.tagObjects.series.source',
 				'childPlaceholder' => 'constants.placeholders.tagObjects.series.child'

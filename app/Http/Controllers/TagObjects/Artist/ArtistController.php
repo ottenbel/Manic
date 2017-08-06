@@ -107,6 +107,7 @@ class ArtistController extends Controller
 		
 		$artist = new Artist();
 		$artist->name = trim(Input::get('name'));
+		$artist->short_description = trim(Input::get('short_description'));
 		$artist->description = trim(Input::get('description'));
 		$artist->url = trim(Input::get('url'));
 		
@@ -242,6 +243,7 @@ class ArtistController extends Controller
 		]);
 		
 		$artist->name = trim(Input::get('name'));
+		$artist->short_description = trim(Input::get('short_description'));
 		$artist->description = trim(Input::get('description'));
 		$artist->url = trim(Input::get('url'));
 		

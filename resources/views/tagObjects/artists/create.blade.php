@@ -20,6 +20,7 @@ Create a New Artist
 			[
 				'child' => 'artist_child',
 				'namePlaceholder' => 'constants.placeholders.tagObjects.artist.name', 
+				'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.artist.shortDescription',
 				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.artist.description', 
 				'sourcePlaceholder' => 'constants.placeholders.tagObjects.artist.source',
 				'childPlaceholder' => 'constants.placeholders.tagObjects.artist.child'

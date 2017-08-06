@@ -34,6 +34,7 @@ Create a New Character
 			'child' => 'character_child',
 			'namePlaceholder' => 'constants.placeholders.tagObjects.character.name', 
 			'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 
+			'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.character.shortDescription',
 			'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source',
 			'childPlaceholder' => 'constants.placeholders.tagObjects.character.child'
 		])

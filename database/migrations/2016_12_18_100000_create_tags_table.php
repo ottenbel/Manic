@@ -17,6 +17,7 @@ class CreateTagsTable extends Migration
             $table->uuid('id');
 			$table->string('name')->unique();
 			$table->longText('description')->nullable();
+			$table->string('short_description', 150)->nullable();
 			$table->string('url')->nullable();
             $table->uuid('created_by')->nullable();
 			$table->uuid('updated_by')->nullable();

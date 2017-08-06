@@ -205,7 +205,7 @@
 		<br/>
 		<br/>
 		<div id="collection_summary_text" class="row">
-				{!!html_entity_decode(nl2br($collection->description))!!}
+				{!!nl2br(e($collection->description))!!}
 		</div>
 	@endif
 	

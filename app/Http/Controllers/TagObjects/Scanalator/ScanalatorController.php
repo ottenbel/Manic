@@ -107,6 +107,7 @@ class ScanalatorController extends Controller
 		
 		$scanalator = new Scanalator();
 		$scanalator->name = trim(Input::get('name'));
+		$scanalator->short_description = trim(Input::get('short_description'));
 		$scanalator->description = trim(Input::get('description'));
 		$scanalator->url = trim(Input::get('url'));
 		
@@ -241,6 +242,7 @@ class ScanalatorController extends Controller
 		]);
 		
 		$scanalator->name = trim(Input::get('name'));
+		$scanalator->short_description = trim(Input::get('short_description'));
 		$scanalator->description = trim(Input::get('description'));
 		$scanalator->url = trim(Input::get('url'));
 		

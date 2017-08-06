@@ -20,6 +20,7 @@ Create a New Scanalator
 			[
 				'child' => 'scanalator_child',
 				'namePlaceholder' => 'constants.placeholders.tagObjects.scanalator.name', 
+				'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.shortDescription',
 				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.description', 
 				'sourcePlaceholder' => 'constants.placeholders.tagObjects.scanalator.source',
 				'childPlaceholder' => 'constants.placeholders.tagObjects.scanalator.child'
