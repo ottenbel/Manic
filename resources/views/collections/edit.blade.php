@@ -24,7 +24,7 @@ Edit Collection - {{{$collection->name}}}
 						{{ csrf_field() }}
 						{{method_field('DELETE')}}
 						
-						{{ Form::submit('Delete Collection', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete()')) }}
+						{{ Form::submit('Delete Collection', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
 					</form>
 				</div>
 			@endcan
