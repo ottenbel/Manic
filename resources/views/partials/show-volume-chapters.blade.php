@@ -36,7 +36,7 @@
 		@if(Route::is('show_collection') && ($volume->chapters->count() > 1))
 			@can('export', $volume)
 				<div>
-					<a class="btn btn-sm btn-success" id="export_chapter_button" href="{{route('export_volume', $volume)}}" role="button" onclick="ConfirmExport(this)"><i class="fa fa-download" aria-hidden="true"></i> Download Volume</a>
+					<a class="btn btn-sm btn-success" id="export_chapter_button" href="{{route('export_volume', $volume)}}" role="button" onclick="ConfirmExport(this, event)"><i class="fa fa-download" aria-hidden="true"></i> Download Volume</a>
 				</div>
 			@endcan
 		@endif

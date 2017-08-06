@@ -1,4 +1,4 @@
-function ConfirmExport(param)
+function ConfirmExport(param, event)
 {
 	if(!($(param).is('[disabled=disabled]')))
 	{
