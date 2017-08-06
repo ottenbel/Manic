@@ -45,11 +45,19 @@ Index - Page {{$collections->currentPage()}}
 										</div>
 										<div class="col-md-10">
 											@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $artist)
-												<span class="primary_artists"><a href="{{route('index_collection', ['search' => 'artist:'. $artist->name])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+												@include('partials.tagObjects.display.display-tag-search-object',
+													['tagObject' => $artist,
+														'tagObjectClass' => 'primary_artists',
+														'tagObjectCountClass' => 'artist_count',
+														'componentToken' => 'artist'])
 											@endforeach
 											@if(10 > $collection->primary_artists()->count())
 												@foreach($collection->secondary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - $collection->primary_artists()->count())->get() as $artist)
-													<span class="secondary_artists"><a href="{{route('index_collection', ['search' => 'artist:'. $artist->name])}}">{{{$artist->name}}} <span class="artist_count">({{$artist->usage_count()}})</span></a></span>
+													@include('partials.tagObjects.display.display-tag-search-object',
+													['tagObject' => $artist,
+														'tagObjectClass' => 'secondary_artists',
+														'tagObjectCountClass' => 'artist_count',
+														'componentToken' => 'artist'])
 												@endforeach
 											@endif
 									</div>
@@ -65,11 +73,19 @@ Index - Page {{$collections->currentPage()}}
 										</div>
 										<div class="col-md-10">
 											@foreach($collection->primary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $series)
-												<span class="primary_series"><a href="{{route('index_collection', ['search' => 'series:' . $series->name])}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
+												@include('partials.tagObjects.display.display-tag-search-object',
+													['tagObject' => $series,
+														'tagObjectClass' => 'primary_series',
+														'tagObjectCountClass' => 'series_count',
+														'componentToken' => 'series'])
 											@endforeach
 											@if(10 > $collection->primary_series()->count())
 												@foreach($collection->secondary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - $collection->primary_series()->count())->get() as $series)
-													<span class="secondary_series"><a href="{{route('index_collection', ['search' => 'series:' . $series->name])}}">{{{$series->name}}} <span class="series_count">({{$series->usage_count()}})</span></a></span>
+													@include('partials.tagObjects.display.display-tag-search-object',
+													['tagObject' => $series,
+														'tagObjectClass' => 'secondary_series',
+														'tagObjectCountClass' => 'series_count',
+														'componentToken' => 'series'])
 												@endforeach
 											@endif
 										</div>
@@ -86,11 +102,19 @@ Index - Page {{$collections->currentPage()}}
 										</div>
 										<div class="col-md-10">
 											@foreach($collection->primary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $character)
-												<span class="primary_characters"><a href="{{route('index_collection', ['search' => 'character:' . $character->name])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+												@include('partials.tagObjects.display.display-tag-search-object',
+													['tagObject' => $character,
+														'tagObjectClass' => 'primary_characters',
+														'tagObjectCountClass' => 'character_count',
+														'componentToken' => 'character'])
 											@endforeach
 											@if(10 > $collection->primary_characters()->count())
 												@foreach($collection->secondary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - $collection->primary_characters()->count())->get() as $character)
-													<span class="secondary_characters"><a href="{{route('index_collection', ['search' => 'character:' . $character->name])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+													@include('partials.tagObjects.display.display-tag-search-object',
+													['tagObject' => $character,
+														'tagObjectClass' => 'secondary_characters',
+														'tagObjectCountClass' => 'character_count',
+														'componentToken' => 'character'])
 												@endforeach
 											@endif
 										</div>
@@ -106,11 +130,19 @@ Index - Page {{$collections->currentPage()}}
 										</div>
 										<div class="col-md-10">
 											@foreach($collection->primary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10)->get() as $tag)
-												<span class="primary_tags"><a href="{{route('index_collection', ['search' => 'tag:' . $tag->name])}}">{{{$tag->name}}} <span class="tag_count"> ({{$tag->usage_count()}})</span></a></span>
+												@include('partials.tagObjects.display.display-tag-search-object',
+													['tagObject' => $tag,
+														'tagObjectClass' => 'primary_tags',
+														'tagObjectCountClass' => 'tag_count',
+														'componentToken' => 'tag'])
 											@endforeach
 											@if(10 > $collection->primary_tags()->count())
 												@foreach($collection->secondary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10 - $collection->primary_tags->count())->get() as $tag)
-													<span class="secondary_tags"><a href="{{route('index_collection', ['search' => 'tag:' . $tag->name])}}">{{{$tag->name}}} <span class="tag_count">({{$tag->usage_count()}})</span></a></span>
+													@include('partials.tagObjects.display.display-tag-search-object',
+													['tagObject' => $tag,
+														'tagObjectClass' => 'secondary_tags',
+														'tagObjectCountClass' => 'tag_count',
+														'componentToken' => 'tag'])
 												@endforeach
 											@endif
 										</div>

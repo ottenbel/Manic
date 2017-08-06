@@ -46,11 +46,19 @@
 					</div>
 					<div class="scanalator_holder col-md-10">			
 					@foreach($chapter->primary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
-							<span class="primary_scanalators"><a href="{{route('index_collection', ['search' => 'scanalator:' . $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+							@include('partials.tagObjects.display.display-tag-search-object',
+								['tagObject' => $scanalator,
+									'tagObjectClass' => 'primary_scanalators',
+									'tagObjectCountClass' => 'scanalator_count',
+									'componentToken' => 'scanalator'])
 						@endforeach
 						
 						@foreach($chapter->secondary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
-							<span class="secondary_scanalators"><a href="{{route('index_collection', ['search' => 'scanalator:' . $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+							@include('partials.tagObjects.display.display-tag-search-object',
+								['tagObject' => $scanalator,
+									'tagObjectClass' => 'secondary_scanalators',
+									'tagObjectCountClass' => 'scanalator_count',
+									'componentToken' => 'scanalator'])
 						@endforeach
 					</div>
 				</div>
@@ -69,8 +77,8 @@
 			
 			@can('export', $chapter)
 				<br/>
-				<div class="row text-center">
-					<a class="btn btn btn-success" id="export_chapter_button" href="{{route('export_chapter', $chapter)}}" role="button" onclick="ConfirmExport(this, event)"><i class="fa fa-download" aria-hidden="true"></i> Download Chapter</a>
+				<div class="row">
+					<a class="btn btn-sm btn-success" id="export_chapter_button" href="{{route('export_chapter', $chapter)}}" role="button" onclick="ConfirmExport(this, event)"><i class="fa fa-download" aria-hidden="true"></i> Download Chapter</a>
 				</div>
 			@endcan
 		</div>

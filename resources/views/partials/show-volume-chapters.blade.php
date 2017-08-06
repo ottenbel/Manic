@@ -58,7 +58,11 @@
 							<div class="scanalator_holder">			
 							@foreach($chapter->primary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
 									@if($scanalatorLinkRoute == 'index_collection')
-										<span class="primary_scanalators"><a href="{{route($scanalatorLinkRoute, ['search' => 'scanalator:' . $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+										@include('partials.tagObjects.display.display-tag-search-object',
+											['tagObject' => $scanalator,
+												'tagObjectClass' => 'primary_scanalators',
+												'tagObjectCountClass' => 'scanalator_count',
+												'componentToken' => 'scanalator'])
 									@else
 										<span class="primary_scanalators"><a href="{{route($scanalatorLinkRoute, ['scanalator' => $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
 									@endif
@@ -66,7 +70,11 @@
 								
 								@foreach($chapter->secondary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
 									@if($scanalatorLinkRoute == 'index_collection')
-										<span class="secondary_scanalators"><a href="{{route($scanalatorLinkRoute, ['search' => 'scanalator:' . $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+										@include('partials.tagObjects.display.display-tag-search-object',
+											['tagObject' => $scanalator,
+												'tagObjectClass' => 'secondary_scanalators',
+												'tagObjectCountClass' => 'scanalator_count',
+												'componentToken' => 'scanalator'])
 									@else
 										<span class="secondary_scanalators"><a href="{{route($scanalatorLinkRoute, ['scanalator' => $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
 									@endif
