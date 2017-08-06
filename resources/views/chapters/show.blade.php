@@ -15,7 +15,7 @@
 	var collection_id = "{{$collection->id}}";
 </script>
 <script src="/js/viewer.js"></script>
-<script src="/js/export.js"></script>
+<script src="/js/handleexport.js"></script>
 @endsection
 
 @section('content')
@@ -70,7 +70,7 @@
 			@can('export', $chapter)
 				<br/>
 				<div class="row text-center">
-					<a class="btn btn btn-success" id="export_chapter_button" href="{{route('export_chapter', $chapter)}}" role="button"><i class="fa fa-download" aria-hidden="true"></i> Download Chapter</a>
+					<a class="btn btn btn-success" id="export_chapter_button" href="{{route('export_chapter', $chapter)}}" role="button" onclick="ConfirmExport(this)"><i class="fa fa-download" aria-hidden="true"></i> Download Chapter</a>
 				</div>
 			@endcan
 		</div>
