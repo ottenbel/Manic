@@ -20,6 +20,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/collection/{collection}/edit', 'CollectionController@edit')->Name('edit_collection');
 	Route::patch('/collection/{collection}', 'CollectionController@update')->Name('update_collection');
 	Route::delete('/collection/{collection}', 'CollectionController@destroy')->Name('delete_collection');
+	Route::get('/collection/{collection}/export', 'CollectionController@export')->Name('export_collection');
 });
 
 Route::get('/collection/{collection}', 'CollectionController@show')->Name('show_collection');

@@ -23,10 +23,28 @@
 			<div id="collection_short_info">
 		@endif
 			<div class="row">
-				<div class="col-md-12">
+				@if(Route::is('show_collection') && ($collection->volumes->count() > 1))
+					@can('export', $collection)
+						<div class="col-md-8">
+					@endcan
+					@cannot('export', $collection)
+						<div class="col-md-12">
+					@endcan
+				@else
+					<div class="col-md-12">
+				@endif
 					<h2>{{{$collection->name}}}</h2>
 				</div>
+				
+				@if(Route::is('show_collection') && ($collection->volumes->count() > 1))
+					@can('export', $collection)
+						<div class="col-md-4 text-right">
+							<a class="btn btn-sm btn-success" id="export_collection_button" href="{{route('export_collection', $collection)}}" role="button" onclick="ConfirmExport(this, event)"><i class="fa fa-download" aria-hidden="true"></i> Download Collection</a>
+						</div>
+					@endcan
+				@endif
 			</div>
+			
 			@if(($collection->primary_artists()->count()) || ($collection->secondary_artists()->count()))
 				<div class="row">
 					<div class="tag_holder">

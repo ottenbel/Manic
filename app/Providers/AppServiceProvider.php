@@ -7,6 +7,8 @@ use App\Models\Chapter;
 use App\Observers\ChapterObserver;
 use App\Models\Volume;
 use App\Observers\VolumeObserver;
+use App\Models\Collection;
+use App\Observers\CollectionObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
         //Register observers
 		Chapter::observe(ChapterObserver::class);
 		Volume::observe(VolumeObserver::class);
+		Collection::observe(CollectionObserver::class);
     }
 
     /**

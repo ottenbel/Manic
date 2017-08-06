@@ -2,14 +2,14 @@
 
 namespace App\Observers;
 
-use App\Models\Volume;
+use App\Models\Collection;
 use Auth;
 use Storage;
 
-class VolumeObserver Extends BaseManicModelObserver
+class CollectionObserver Extends BaseManicModelObserver
 {
 	/**
-     * Listen to the volume creating event.
+     * Listen to the collection creating event.
      *
      * @param  $model
      * @return void
@@ -17,15 +17,10 @@ class VolumeObserver Extends BaseManicModelObserver
     public function creating($model)
     {	
 		parent::creating($model);
-			
-		$collection = $model->collection()->first();
-		$collection->updated_by = Auth::user()->id;
-		$collection->save();
-		$collection->touch();
     }
 	
     /**
-     * Listen to the volume created event.
+     * Listen to the collection created event.
      *
      * @param  $model
      * @return void
@@ -36,7 +31,7 @@ class VolumeObserver Extends BaseManicModelObserver
     }
 
 	/**
-     * Listen to the volume updating event.
+     * Listen to the collection updating event.
      *
      * @param  $model
      * @return void
@@ -45,26 +40,17 @@ class VolumeObserver Extends BaseManicModelObserver
     {
         parent::updating($model);
 			
-		//Delete the relevant file corresponding to the entry from the volume export table.
+		//Delete the relevant file corresponding to the entry from the collection export table.
 		$export = $model->export;
 		if ($export != null)
 		{
 			Storage::Delete($export->path);
 			$model->export->forceDelete();
 		}
-		
-		$collection = $model->collection()->first();
-		$collectionExport = $collection->export;
-		
-		if ($collectionExport != null)
-		{
-			Storage::Delete($collectionExport->path);
-			$collectionExport->forceDelete();
-		}
     }
 	
     /**
-     * Listen to the volume updated event.
+     * Listen to the collection updated event.
      *
      * @param  $model
      * @return void
@@ -75,7 +61,7 @@ class VolumeObserver Extends BaseManicModelObserver
     }
 	
 	/**
-     * Listen to the volume saving event.
+     * Listen to the collection saving event.
      *
      * @param  $model
      * @return void
@@ -86,7 +72,7 @@ class VolumeObserver Extends BaseManicModelObserver
     }
 	
     /**
-     * Listen to the volume saved event.
+     * Listen to the collection saved event.
      *
      * @param  $model
      * @return void
@@ -97,7 +83,7 @@ class VolumeObserver Extends BaseManicModelObserver
     }
 	
     /**
-     * Listen to the volume deleting event.
+     * Listen to the collection deleting event.
      *
      * @param  $model
      * @return void
@@ -105,15 +91,10 @@ class VolumeObserver Extends BaseManicModelObserver
     public function deleting($model)
     {
         parent::deleting($model);
-			
-		$collection = $model->collection()->first();
-		$collection->updated_by = Auth::user()->id;
-		$collection->save();
-		$collection->touch();
     }
 	
 	/**
-     * Listen to the volume deleted event.
+     * Listen to the collection deleted event.
      *
      * @param  $model
      * @return void
@@ -124,7 +105,7 @@ class VolumeObserver Extends BaseManicModelObserver
     }
 	
 	/**
-     * Listen to the volume restoring event.
+     * Listen to the collection restoring event.
      *
      * @param  $model
      * @return void
@@ -135,9 +116,9 @@ class VolumeObserver Extends BaseManicModelObserver
     }
 	
 	/**
-     * Listen to the volume restored event.
+     * Listen to the collection restored event.
      *
-     * @param  volume  $model
+     * @param  $model
      * @return void
      */
     public function restored($model)

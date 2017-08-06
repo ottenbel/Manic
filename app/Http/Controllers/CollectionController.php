@@ -11,6 +11,7 @@ use MappingHelper;
 use SearchParseHelper;
 use ImageUploadHelper;
 use InterventionImage;
+use FileExportHelper;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
 use App\Models\TagObjects\Character\Character;
@@ -389,4 +390,31 @@ class CollectionController extends Controller
 		
 		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged collection $collectionName from the database."));
     }
+	
+	/**
+     * Export the specified as a zip file.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function export(Collection $collection)
+    {
+		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
+		$this->authorize($collection);
+		
+		$fileExport = FileExportHelper::ExportCollection($collection);
+		
+		if ($fileExport != null)
+		{
+			$collectionName = $collection->name;
+			$collectionName = $collectionName . ".zip";
+			
+			return response()->download($fileExport->path, $collectionName);
+		}
+		else
+		{
+			//Return an error message saying that it couldn't create a collection export
+			return Redirect::back()->with(["flashed_warning" => array("Unable to export zipped collection file.")]);
+		}
+	}
 }

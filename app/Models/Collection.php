@@ -173,4 +173,12 @@ class Collection extends BaseManicModel
 	{
 		return $this->belongsTo('App\Models\Status');
 	}
+	
+	/*
+	 * Get the export associated with the collection.
+	 */
+	public function export()
+	{
+		return $this->hasOne('App\Models\CollectionExport');
+	}
 }

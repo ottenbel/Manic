@@ -66,6 +66,15 @@ class ChapterObserver Extends BaseManicModelObserver
 			Storage::Delete($volumeExport->path);
 			$volumeExport->forceDelete();
 		}
+		
+		$collection = $model->collection()->first();
+		$collectionExport = $collection->export;
+		
+		if ($collectionExport != null)
+		{
+			Storage::Delete($collectionExport->path);
+			$collectionExport->forceDelete();
+		}
     }
 	
     /**
