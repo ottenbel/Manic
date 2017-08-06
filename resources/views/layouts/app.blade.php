@@ -35,6 +35,12 @@
         ]); ?>
     </script>
 	
+	<script>
+	  $( function() {
+		$( document ).tooltip();
+	  } );
+	</script>
+	
 	@yield('head')
 	
 </head>
