@@ -21,7 +21,12 @@
 				</div>
 				<div class="col-md-10">
 					@foreach($tagObject->parents()->orderBy('name', 'asc')->get() as $parent)
-						<span class="{{$primaryTagObjectDisplayClass}}"><a href="{{route($showRoute, [$tagObjectName => $parent])}}">{{{$parent->name}}} <span class="{{$tagObjectCountClass}}">({{$parent->usage_count()}})</span></a></span>
+						@include('partials.tagObjects.display.display-tag-object',
+							['tagObjectDisplayClassComponent' => $primaryTagObjectDisplayClass,
+								'tagObjectShowRouteComponent' => $showRoute,
+								'tagObjectNameComponent' => $tagObjectName,
+								'tagObjectComponent' => $parent,
+								'tagObjectCountClassComponent' => $tagObjectCountClass])
 					@endforeach
 				</div>
 			</div>
@@ -38,7 +43,12 @@
 				</div>
 				<div class="col-md-10">
 					@foreach($tagObject->children()->orderBy('name', 'asc')->get() as $child)
-						<span class="{{$secondaryTagObjectDisplayClass}}"><a href="{{route($showRoute, [$tagObjectName => $child])}}">{{{$child->name}}} <span class="{{$tagObjectCountClass}}">({{$child->usage_count()}})</span></a></span>
+						@include('partials.tagObjects.display.display-tag-object',
+							['tagObjectDisplayClassComponent' => $secondaryTagObjectDisplayClass,
+								'tagObjectShowRouteComponent' => $showRoute,
+								'tagObjectNameComponent' => $tagObjectName,
+								'tagObjectComponent' => $child,
+								'tagObjectCountClassComponent' => $tagObjectCountClass])
 					@endforeach
 				</div>
 			</div>
@@ -115,7 +125,12 @@
 						@endif
 						
 						<div class="col-xs-4">
-							<span class="primary_characters"><a href="{{route('show_character', ['character' => $character])}}">{{{$character->name}}} <span class="character_count">({{$character->usage_count()}})</span></a></span>
+							@include('partials.tagObjects.display.display-tag-object',
+							['tagObjectDisplayClassComponent' => 'primary_characters',
+								'tagObjectShowRouteComponent' => 'show_character',
+								'tagObjectNameComponent' => 'character',
+								'tagObjectComponent' => $character,
+								'tagObjectCountClassComponent' => 'character_count'])
 						</div>
 						
 						@if((($loop->iteration - 1) % 3) == 2)			

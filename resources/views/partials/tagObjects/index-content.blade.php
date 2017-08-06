@@ -27,11 +27,17 @@
 			@endif
 			
 			<div class="col-xs-4">
-				<span class="{{$tagDisplayClass}}"><a href="{{route($showRoute, [$tagObjectName => $tagObject])}}">{{{$tagObject->name}}} <span class="{{$tagDisplayCountClass}}">({{$tagObject->usage_count()}})</span></a></span>
+				@include('partials.tagObjects.display.display-tag-object',
+					['tagObjectDisplayClassComponent' => $tagDisplayClass,
+						'tagObjectShowRouteComponent' => $showRoute,
+						'tagObjectNameComponent' => $tagObjectName,
+						'tagObjectComponent' => $tagObject,
+						'tagObjectCountClassComponent' => $tagDisplayCountClass])
 			</div>
 			
 			@if((($loop->iteration - 1) % 3) == 2)
 				</div>
+				<br/>
 			@endif
 		@endforeach
 		<br/>
