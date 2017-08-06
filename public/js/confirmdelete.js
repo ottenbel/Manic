@@ -1,4 +1,4 @@
-function ConfirmDelete()
+function ConfirmDelete(event)
 {
 	if(confirm("Are you sure you want to delete?") == true)
 	{

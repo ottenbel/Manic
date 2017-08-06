@@ -21,7 +21,7 @@ Edit Scanalator - {{{$scanalator->name}}}
 					{{ csrf_field() }}
 					{{method_field('DELETE')}}
 					
-					{{ Form::submit('Delete Scanalator', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete()')) }}
+					{{ Form::submit('Delete Scanalator', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
 				</form>
 			</div>
 		@endcan
