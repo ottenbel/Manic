@@ -1,5 +1,6 @@
 <div class="form-group">
-	{{ Form::label('volume_id', 'Volume') }}
+	{{ Form::label('volume_id', "Volume") }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.help.chapters.volume_number')}}"></i>
 	@if((!empty($chapter)) && ($chapter->volume != null) && (Input::old('volume') == null))
 		{{ Form::select('volume_id', $volumes, $chapter->volume->id) }}
 	@else
@@ -15,6 +16,7 @@
 <br/>
 <div class="form-group">
 	{{ Form::label('chapter_number', 'Number') }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.help.chapters.number')}}"></i>
 	@if((!empty($chapter)) && ($chapter->chapter_number != null) && (Input::old('chapter_number') == null))
 		{{ Form::text('chapter_number', $chapter->chapter_number, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.chapters.number'))) }}
 	@else
@@ -27,6 +29,7 @@
 
 <div class="form-group">
 	{{ Form::label('name', 'Name') }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.help.chapters.name')}}"></i>
 	@if((!empty($chapter)) && ($chapter->name != null) && (Input::old('name') == null))
 		{{ Form::text('name', $chapter->name, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.chapters.name'))) }}
 	@else
@@ -36,6 +39,7 @@
 
 <div class="form-group">
 	{{ Form::label('scanalator_primary', 'Primary Scanalators') }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.help.chapters.scanalator_primary')}}"></i>
 	@if((!empty($chapter)) && ($chapter->primary_scanalators != null) && (Input::old('scanalator_primary') == null))
 		{{ Form::text('scanalator_primary', collect($chapter->primary_scanalators->pluck('name'))->implode(", "), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.chapters.primaryScanalators'))) }}
 	@else
@@ -46,6 +50,7 @@
 	@endif
 	
 	{{ Form::label('scanalator_secondary', 'Secondary Scanalators') }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.help.chapters.scanalator_secondary')}}"></i>
 	@if((!empty($chapter)) && ($chapter->secondary_scanalators != null) && (Input::old('scanalator_secondary') == null))
 		{{ Form::text('scanalator_secondary', collect($chapter->secondary_scanalators->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.chapters.secondaryScanalators'))) }}
 	@else
@@ -58,6 +63,7 @@
 
 <div class="form-group">
 	{{ Form::label('source', 'Source URL') }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.help.chapters.url')}}"></i>
 	@if((!empty($chapter)) && ($chapter->source != null) && (Input::old('source') == null))
 		{{ Form::text('source', $chapter->source, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.chapters.source'))) }}
 	@else
@@ -70,6 +76,7 @@
 
 <div class="form-group">
 	{{ Form::label('images', 'Pages') }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.help.chapters.images')}}"></i>
 	{{ Form::file('images[]', ['multiple' => 'multiple']) }}
 	@if ($errors->has('images'))
 		<div class ="alert alert-danger" id="image_errors">{{$errors->first('images')}}</div>
@@ -77,5 +84,4 @@
 	@if (count($errors->get('images.*')))
 		<div class ="alert alert-danger" id="image_errors">All files uploaded must be an image or zip.</div>
 	@endif
-	
 </div>

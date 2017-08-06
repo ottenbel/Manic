@@ -88,7 +88,19 @@
 							'volumes' => [
 											'number' => '1',
 											'name' => 'Volume Name'
-										 ]
+										 ],
+					   
+							'help' => [
+								'chapters' => [
+												'volume_number' => 'The volume that the chapter will be associated with.',
+												'number' => 'The number of the chapter in the collection (unique to collection).',
+												'name' => 'The name of the chapter (optional).',
+												'scanalator_primary' => 'The main scanalation groups that worked on the chapter (comma delimited/optional).',
+												'scanalator_secondary' => 'Other scanalation groups that worked on the chapter (comma delimited/optional).',
+												'url' => 'The release location where the chapter was obtained (optional).',
+												'images' => 'The files to be uploaded into the chapter as images or a zipped folder (required).'
+											  ]
+							]
 					   ],
 		'roles' => [
 						'user' => 'ddce79e6-8f67-4f18-89d2-af160f1552c5',
