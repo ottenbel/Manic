@@ -8,6 +8,7 @@
 		
 		<div id="cover_edit" class="col-md-8">
 			{{ Form::label('cover', 'Cover Image') }}
+			<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.help.volumes.cover')}}"></i>
 			{{ Form::file('image') }}
 			@if(!empty($volume) && ($volume->cover_image != null))
 				{{ Form::label('delete_cover', 'Remove Cover Image') }}
@@ -24,6 +25,7 @@
 
 <div class="form-group">
 	{{ Form::label('volume_number', 'Number') }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.help.chapters.number')}}"></i>
 	@if((!empty($volume)) && ($volume->volume_number != null) && (Input::old('volume_number') == null))
 		{{ Form::text('volume_number', $volume->volume_number, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.volumes.number'))) }}
 	@else
@@ -36,6 +38,7 @@
 
 <div class="form-group">
 	{{ Form::label('name', 'Name') }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.help.chapters.name')}}"></i>
 	@if((!empty($volume)) && ($volume->name != null) && (Input::old('name') == null))
 		{{ Form::text('name', $volume->name, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.volumes.name'))) }}
 	@else
