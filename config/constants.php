@@ -104,7 +104,25 @@
 												'cover' => 'The cover image to be displayed for the volume (optional).',
 												'number' => 'The number of the volume in the collection (required/unique to collection)',
 												'name' => 'The name of the volume (optional).'
-											 ]
+											 ],
+								'collections' => [
+													'cover' => 'The cover image to be displayed for the collection (optional).',
+													'name' => 'The name of the collection (required/unique).',
+													'description' => 'A summary describing the contents of the collection (optional).',
+													'parent_id' => 'Create a link between the collection to a parent collection using the unique identifier of the parent collection (optional).',
+													'artist_primary' => 'The main artists that worked on the collection (comma delimited/optional).',
+													'artist_secondary' => 'Secondary artists that worked on the collection (comma delimited/optional).',
+													'series_primary' => "The main series' associated with the collection (comma delimited/optional).",
+													'series_secondary' => "Secondary series' associated with the collection (comma delimited/optional).",
+													'character_primary' => "The main characters associated with the collection. Characters must already exist on a series before being used and the series must exist on the collection (comma delimited/optional).",
+													'character_secondary' => "Secondary characters associated with the collection. Characters must already exist on a series before being used and the series must exist on the collection (comma delimited/optional).",
+													'tag_primary' => "The main tags associated with the collection (comma delimited/optional).",
+													'tag_secondary' => "Secondary tags associated with the collection  (comma delimited/optional).",
+													'canonical' => "Whether or not the collection is canonical or not (required).",
+													'language' => "The language of the collection contents (required).",
+													'ratings' => "The collection rating (required).",
+													'statuses' => "The collection status (required)."
+												 ]
 							]
 					   ],
 		'roles' => [
