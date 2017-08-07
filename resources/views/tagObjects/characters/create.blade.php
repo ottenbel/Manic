@@ -19,6 +19,7 @@ Create a New Character
 		
 		<div class="form-group">
 			{{ Form::label('parent_series', 'Series') }}
+			<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.tagObjects.character.parentSeriesHelp')}}"></i>
 			@if(($series != null) && (Input::old('parent_series') == null))
 				{{ Form::text('parent_series', $series->name, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.tagObjects.character.parentSeries'))) }}
 			@else
@@ -36,7 +37,12 @@ Create a New Character
 			'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 
 			'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.character.shortDescription',
 			'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source',
-			'childPlaceholder' => 'constants.placeholders.tagObjects.character.child'
+			'childPlaceholder' => 'constants.placeholders.tagObjects.character.child',
+			'nameHelpPlaceholder' => 'constants.placeholders.tagObjects.character.nameHelp',
+			'shortDescriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.character.shortDescriptionHelp',
+			'descriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.character.descriptionHelp',
+			'sourceHelpPlaceholder' => 'constants.placeholders.tagObjects.character.sourceHelp',
+			'childHelpPlaceholder' => 'constants.placeholders.tagObjects.character.childHelp'
 		])
 		
 		{{ Form::submit('Create Character', array('class' => 'btn btn-primary')) }}

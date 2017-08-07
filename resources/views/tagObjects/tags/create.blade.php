@@ -23,7 +23,12 @@ Create a New Tag
 			'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.shortDescription',
 			'descriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.description', 
 			'sourcePlaceholder' => 'constants.placeholders.tagObjects.tag.source',
-			'childPlaceholder' => 'constants.placeholders.tagObjects.tag.child'
+			'childPlaceholder' => 'constants.placeholders.tagObjects.tag.child',
+			'nameHelpPlaceholder' => 'constants.placeholders.tagObjects.tag.nameHelp',
+			'shortDescriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.tag.shortDescriptionHelp',
+			'descriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.tag.descriptionHelp',
+			'sourceHelpPlaceholder' => 'constants.placeholders.tagObjects.tag.sourceHelp',
+			'childHelpPlaceholder' => 'constants.placeholders.tagObjects.tag.childHelp'
 		])
 		
 		{{ Form::submit('Create Tag', array('class' => 'btn btn-primary')) }}

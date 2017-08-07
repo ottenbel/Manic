@@ -23,7 +23,12 @@ Create a New Scanalator
 				'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.shortDescription',
 				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.description', 
 				'sourcePlaceholder' => 'constants.placeholders.tagObjects.scanalator.source',
-				'childPlaceholder' => 'constants.placeholders.tagObjects.scanalator.child'
+				'childPlaceholder' => 'constants.placeholders.tagObjects.scanalator.child',
+				'nameHelpPlaceholder' => 'constants.placeholders.tagObjects.scanalator.nameHelp',
+				'shortDescriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.scanalator.shortDescriptionHelp',
+				'descriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.scanalator.descriptionHelp',
+				'sourceHelpPlaceholder' => 'constants.placeholders.tagObjects.scanalator.sourceHelp',
+				'childHelpPlaceholder' => 'constants.placeholders.tagObjects.scanalator.childHelp'
 			])
 			
 			{{ Form::submit('Create Scanalator', array('class' => 'btn btn-primary')) }}

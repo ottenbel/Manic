@@ -34,6 +34,7 @@ Edit Character - {{{$character->name}}}
 			
 			<div class="form-group">
 				{{ Form::label('parent_series', 'Series', array('style' => 'display:none')) }}
+				<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.tagObjects.character.parentSeriesHelp')}}"></i>
 				{{ Form::text('parent_series', $character->series()->first()->name, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.tagObjects.character.parentSeries'), 'style' => 'display:none')) }}
 			</div>
 			
@@ -45,7 +46,12 @@ Edit Character - {{{$character->name}}}
 				'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.character.shortDescription',
 				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 
 				'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source',
-				'childPlaceholder' => 'constants.placeholders.tagObjects.character.child'
+				'childPlaceholder' => 'constants.placeholders.tagObjects.character.child',
+				'nameHelpPlaceholder' => 'constants.placeholders.tagObjects.character.nameHelp',
+				'shortDescriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.character.shortDescriptionHelp',
+				'descriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.character.descriptionHelp',
+				'sourceHelpPlaceholder' => 'constants.placeholders.tagObjects.character.sourceHelp',
+				'childHelpPlaceholder' => 'constants.placeholders.tagObjects.character.childHelp'
 			])
 			
 			{{ Form::submit('Update Character', array('class' => 'btn btn-primary')) }}

@@ -39,7 +39,13 @@
 				'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.series.shortDescription',				
 				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.series.description', 
 				'sourcePlaceholder' => 'constants.placeholders.tagObjects.series.source',
-				'childPlaceholder' => 'constants.placeholders.tagObjects.series.child'
+				'childPlaceholder' => 'constants.placeholders.tagObjects.series.child',
+				'nameHelpPlaceholder' => 'constants.placeholders.tagObjects.series.nameHelp',
+				'shortDescriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.series.shortDescriptionHelp',
+				'descriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.series.descriptionHelp',
+				'sourceHelpPlaceholder' => 'constants.placeholders.tagObjects.series.sourceHelp',
+				'childHelpPlaceholder' => 'constants.placeholders.tagObjects.series.childHelp'
+
 			])
 			
 			{{ Form::submit('Update Series', array('class' => 'btn btn-primary')) }}

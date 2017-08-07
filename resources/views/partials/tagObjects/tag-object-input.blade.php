@@ -1,5 +1,6 @@
 <div class="form-group">
 	{{ Form::label('name', 'Name') }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get($nameHelpPlaceholder)}}"></i>
 	@if((!empty($tagObject)) && ($tagObject->name != null) && (Input::old('name') == null))
 		{{ Form::text('name', $tagObject->name, array('class' => 'form-control', 'placeholder' => Config::get($namePlaceholder))) }}
 	@else
@@ -28,7 +29,7 @@
 	@endif
 	<div class="form-group">
 		{{ Form::label($child, 'New Children') }}
-		
+		<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get($childHelpPlaceholder)}}"></i>
 		@if(($freeChildren->count() > 0) && (Input::old('description') == null))
 			{{ Form::text($child, collect($freeChildren->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get($childPlaceholder))) }}
 		@else
@@ -38,7 +39,7 @@
 @else
 	<div class="form-group">
 		{{ Form::label($child, 'Children') }}
-		
+		<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get($childHelpPlaceholder)}}"></i>
 		@if((!empty($tagObject)) && ($tagObject->children()->count() > 0) && (Input::old($child) == null))
 			{{ Form::text($child, collect($tagObject->children->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => Config::get($childPlaceholder))) }}
 		@else
@@ -49,6 +50,7 @@
 
 <div class="form-group">
 	{{ Form::label('short_description', 'Short Description') }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get($shortDescriptionHelpPlaceholder)}}"></i>
 	@if((!empty($tagObject)) && ($tagObject->short_description != null) && (Input::old('short_description') == null))
 		{{ Form::text('short_description', $tagObject->short_description, array('class' => 'form-control', 'placeholder' => Config::get($shortDescriptionPlaceholder), 'maxLength' => 150)) }}
 	@else
@@ -58,6 +60,7 @@
 
 <div class="form-group">
 	{{ Form::label('description', 'Description') }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get($descriptionHelpPlaceholder)}}"></i>
 	@if((!empty($tagObject)) && ($tagObject->description != null) && (Input::old('description') == null))
 		{{ Form::textarea('description', $tagObject->description, array('class' => 'form-control', 'placeholder' => Config::get($descriptionPlaceholder))) }}
 	@else
@@ -67,6 +70,7 @@
 
 <div class="form-group">
 	{{ Form::label('url', 'Source') }}
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get($sourceHelpPlaceholder)}}"></i>
 	@if((!empty($tagObject)) && ($tagObject->url != null) && (Input::old('url') == null))
 		{{ Form::text('url', $tagObject->url, array('class' => 'form-control', 'placeholder' => Config::get($sourcePlaceholder))) }}
 	@else
