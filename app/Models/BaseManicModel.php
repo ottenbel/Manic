@@ -33,35 +33,7 @@ class BaseManicModel extends Model
 	{
 		parent::boot();
 		static::bootUuidsTrait();
-		
-		static::creating(function($model)
-		{
-			$user = Auth::user();
-			if ($user)
-			{
-				$model->created_by = $user->id;
-				$model->updated_by = $user->id;
-			}
-		});
-
-		static::updating(function($model)
-		{
-			$user = Auth::user();
-			if ($user)
-			{
-				$model->updated_by = $user->id;
-			}
-		});
-		
-		static::deleting(function($model)
-		{
-			$user = Auth::user();
-			if ($user)
-			{
-				$model->updated_by = $user->id;
-			}
-		});
-  }
+    }
 	
 	/*
 	 * Get the mapping to the user that created the rating.

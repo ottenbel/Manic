@@ -13,26 +13,6 @@ class Character extends CollectionAssociatedTagObjectModel
 	public static function boot()
     {
         parent::boot();
-		
-		static::creating(function($model)
-		{
-			parent::creating($model);
-			
-			$series = $model->series()->first();
-			$series->updated_by = Auth::user()->id;
-			$series->save();
-			$series->touch();
-		});
-		
-		static::deleting(function($model)
-		{
-			parent::deleting($model);
-			
-			$series = $model->series()->first();
-			$series->updated_by = Auth::user()->id;
-			$series->save();
-			$series->touch();
-		});
     }
 	
 	/*

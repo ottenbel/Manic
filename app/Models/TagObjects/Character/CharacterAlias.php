@@ -13,26 +13,6 @@ class CharacterAlias extends BaseManicModel
 	public static function boot()
     {
         parent::boot();
-		
-		static::creating(function($model)
-		{
-			parent::creating($model);
-			
-			$character = $model->character()->first();
-			$character->updated_by = Auth::user()->id;
-			$character->save();
-			$character->touch();
-		});
-		
-		static::deleting(function($model)
-		{
-			parent::deleting($model);
-			
-			$character = $model->character()->first();
-			$character->updated_by = Auth::user()->id;
-			$character->save();
-			$character->touch();
-		});
     }
 	
 	/*

@@ -13,26 +13,6 @@ class TagAlias extends BaseManicModel
 	public static function boot()
     {
         parent::boot();
-		
-		static::creating(function($model)
-		{
-			parent::creating($model);
-			
-			$tag = $model->tag()->first();
-			$tag->updated_by = Auth::user()->id;
-			$tag->save();
-			$tag->touch();
-		});
-		
-		static::deleting(function($model)
-		{
-			parent::deleting($model);
-			
-			$tag = $model->tag()->first();
-			$tag->updated_by = Auth::user()->id;
-			$tag->save();
-			$tag->touch();
-		});
     }
 	
 	/*

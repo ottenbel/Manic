@@ -13,26 +13,6 @@ class ScanalatorAlias extends BaseManicModel
 	public static function boot()
     {
         parent::boot();
-		
-		static::creating(function($model)
-		{
-			parent::creating($model);
-			
-			$scanalator = $model->scanalator()->first();
-			$scanalator->updated_by = Auth::user()->id;
-			$scanalator->save();
-			$scanalator->touch();
-		});
-		
-		static::deleting(function($model)
-		{
-			parent::deleting($model);
-			
-			$scanalator = $model->scanalator()->first();
-			$scanalator->updated_by = Auth::user()->id;
-			$scanalator->save();
-			$scanalator->touch();
-		});
     }
 	
 	/*

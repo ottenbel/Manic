@@ -13,26 +13,6 @@ class ArtistAlias extends BaseManicModel
 	public static function boot()
     {
         parent::boot();
-		
-		static::creating(function($model)
-		{
-			parent::creating($model);
-			
-			$artist = $model->artist()->first();
-			$artist->updated_by = Auth::user()->id;
-			$artist->save();
-			$artist->touch();
-		});
-		
-		static::deleting(function($model)
-		{
-			parent::deleting($model);
-			
-			$artist = $model->artist()->first();
-			$artist->updated_by = Auth::user()->id;
-			$artist->save();
-			$artist->touch();
-		});
     }
 	
 	/*
