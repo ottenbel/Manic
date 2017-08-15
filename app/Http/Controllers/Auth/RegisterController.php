@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Config;
+use SeedingHelper;
 
 class RegisterController extends Controller
 {
@@ -63,12 +64,17 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
 			'api_token' => str_random(60),
 			'role_id' => Config::get('constants.roles.user'),
         ]);
+		
+		//Seed the database with configuration values for the user.
+		SeedingHelper::SeedPaginationTable($user);
+		
+		return $user;
     }
 }

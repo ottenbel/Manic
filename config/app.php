@@ -162,9 +162,9 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-	Laravel\Tinker\TinkerServiceProvider::class,
-	Intervention\Image\ImageServiceProvider::class,
-	Chumper\Zipper\ZipperServiceProvider::class,
+		Laravel\Tinker\TinkerServiceProvider::class,
+		Intervention\Image\ImageServiceProvider::class,
+		Chumper\Zipper\ZipperServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -238,9 +238,10 @@ return [
 		'ImageUploadHelper' => App\Helpers\ImageUploadHelper::class,
 		'SearchParseHelper' => App\Helpers\Search\SearchParseHelper::class,
 		'SearchLookupHelper' => App\Helpers\Search\SearchLookupHelper::class,
+		'SeedingHelper' => App\Helpers\SeedingHelper::class,
 		'InterventionImage' => Intervention\Image\Facades\Image::class,
 		'FileExportHelper' => App\Helpers\FileExportHelper::class,
-		 'Zipper' => Chumper\Zipper\Zipper::class,
+		'Zipper' => Chumper\Zipper\Zipper::class,
     ],
 
 ];

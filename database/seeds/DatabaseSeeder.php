@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
 		$this->call(StatusSeeder::class);
 		$this->call(RatingSeeder::class);
 		$this->call(LanguageSeeder::class);
+		$this->call(ConfigurationSeeder::class);
     }
 }
