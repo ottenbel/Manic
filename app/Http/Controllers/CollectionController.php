@@ -12,6 +12,7 @@ use SearchParseHelper;
 use ImageUploadHelper;
 use InterventionImage;
 use FileExportHelper;
+use ConfigurationLookupHelper;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
 use App\Models\TagObjects\Character\Character;
@@ -56,7 +57,10 @@ class CollectionController extends Controller
 		if ($search_string ==  "")
 		{
 			//Get all relevant collections
-			$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->orderBy('updated_at', 'desc')->paginate(Config::get('constants.pagination.collectionsPerPageIndex'));
+			$lookupKey = Config::get('constants.keys.paginationCollectionsPerPageIndex');
+			$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
+			$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
 			$collections->appends(Input::except('page'));
 		}
 		else //Filter the collections return based on the search string

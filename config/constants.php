@@ -1,7 +1,7 @@
 <?php
 	return [
+	'keys' => ['paginationCollectionsPerPageIndex' => 'pagination_collections_per_page_index'],
 	'pagination' => [
-						'collectionsPerPageIndex' => 10,
 						'tagObjectsPerPageIndex' => 30,
 						'tagAliasesPerPageIndex' => 30,
 						'tagAliasesPerPageParent' => 10,

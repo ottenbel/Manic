@@ -19,6 +19,7 @@ use App\Models\Status;
 use Auth;
 use Config;
 use LookupHelper;
+use ConfigurationLookupHelper;
 
 class SearchParseHelper
 {
@@ -494,7 +495,10 @@ class SearchParseHelper
 			}
 		}
 		
-		$collections = $query->orderBy('updated_at', 'desc')->paginate(Config::get('constants.pagination.collectionsPerPageIndex'));
+		$lookupKey = Config::get('constants.keys.paginationCollectionsPerPageIndex');
+		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
+		$collections = $query->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
 	}
 	
 	private static function ParseSearchTokenArtist(&$searchArtists, &$invalid_tokens, $search_token, $primary, $secondary, $not, $addToInvalid, &$found)
