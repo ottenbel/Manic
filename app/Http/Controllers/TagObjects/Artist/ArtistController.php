@@ -10,6 +10,7 @@ use DB;
 use Input;
 use Config;
 use MappingHelper;
+use ConfigurationLookupHelper;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
 
@@ -49,17 +50,20 @@ class ArtistController extends Controller
 			}
 		}
 		
+		$lookupKey = Config::get('constants.keys.paginationArtistsPerPageIndex');
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
 		if ($artist_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
 		{
 			$artists = new artist();
-			$artist_output = $artists->orderBy('name', $artist_list_order)->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
+			$artist_output = $artists->orderBy('name', $artist_list_order)->paginate($paginationCount);
 			
 			$artists = $artist_output;
 		}
 		else
 		{	
 			$artists = new artist();
-			$artists_used = $artists->join('artist_collection', 'artists.id', '=', 'artist_collection.artist_id')->select('artists.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $artist_list_order)->orderBy('name', 'desc')->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
+			$artists_used = $artists->join('artist_collection', 'artists.id', '=', 'artist_collection.artist_id')->select('artists.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $artist_list_order)->orderBy('name', 'desc')->paginate($paginationCount);
 			
 			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds artists that aren't used into the dataset used for popularity)
 			

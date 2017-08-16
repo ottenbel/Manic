@@ -10,6 +10,7 @@ use DB;
 use Input;
 use Config;
 use MappingHelper;
+use ConfigurationLookupHelper;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
 
@@ -49,17 +50,20 @@ class SeriesController extends Controller
 			}
 		}
 		
+		$lookupKey = Config::get('constants.keys.paginationSeriesPerPageIndex');
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
 		if ($series_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
 		{
 			$series = new Series();
-			$series_output = $series->orderBy('name', $series_list_order)->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
+			$series_output = $series->orderBy('name', $series_list_order)->paginate($paginationCount);
 			
 			$series = $series_output;
 		}
 		else
 		{	
 			$series = new Series();
-			$series_used = $series->join('collection_series', 'series.id', '=', 'collection_series.series_id')->select('series.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $series_list_order)->orderBy('name', 'desc')->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
+			$series_used = $series->join('collection_series', 'series.id', '=', 'collection_series.series_id')->select('series.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $series_list_order)->orderBy('name', 'desc')->paginate($paginationCount);
 			
 			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds series that aren't used into the dataset used for popularity)
 			

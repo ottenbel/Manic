@@ -1,8 +1,14 @@
 <?php
 	return [
-	'keys' => ['paginationCollectionsPerPageIndex' => 'pagination_collections_per_page_index'],
+	'keys' => [
+				'paginationCollectionsPerPageIndex' => 'pagination_collections_per_page_index',
+				'paginationArtistsPerPageIndex' => 'pagination_artists_per_page_index',
+				'paginationCharactersPerPageIndex' => 'pagination_characters_per_page_index',
+				'paginationScanalatorsPerPageIndex' => 'pagination_scanalators_per_page_index',
+				'paginationSeriesPerPageIndex' => 'pagination_series_per_page_index', 
+				'paginationTagsPerPageIndex' => 'pagination_tags_per_page_index'
+			  ],
 	'pagination' => [
-						'tagObjectsPerPageIndex' => 30,
 						'tagAliasesPerPageIndex' => 30,
 						'tagAliasesPerPageParent' => 10,
 						'charactersPerPageSeries' => 12,

@@ -11,6 +11,7 @@ use DB;
 use Input;
 use Config;
 use MappingHelper;
+use ConfigurationLookupHelper;
 use App\Models\TagObjects\Character\Character;
 use App\Models\TagObjects\Character\CharacterAlias;
 use App\Models\TagObjects\Series\Series;
@@ -52,17 +53,20 @@ class CharacterController extends Controller
 			}
 		}
 		
+		$lookupKey = Config::get('constants.keys.paginationCharactersPerPageIndex');
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
 		if ($character_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
 		{
-			$characters = new Character();
-			$character_output = $characters->orderBy('name', $character_list_order)->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
+			$characters = new Character();	
+			$character_output = $characters->orderBy('name', $character_list_order)->paginate($paginationCount);
 			
 			$characters = $character_output;
 		}
 		else
 		{	
 			$characters = new Character();
-			$characters_used = $characters->join('character_collection', 'characters.id', '=', 'character_collection.character_id')->select('characters.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $character_list_order)->orderBy('name', 'desc')->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
+			$characters_used = $characters->join('character_collection', 'characters.id', '=', 'character_collection.character_id')->select('characters.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $character_list_order)->orderBy('name', 'desc')->paginate($paginationCount);
 			
 			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds characters that aren't used into the dataset used for popularity)
 			

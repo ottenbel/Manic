@@ -10,6 +10,7 @@ use DB;
 use Input;
 use Config;
 use MappingHelper;
+use ConfigurationLookupHelper;
 use App\Models\TagObjects\Tag\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
 
@@ -49,17 +50,20 @@ class TagController extends Controller
 			}
 		}
 		
+		$lookupKey = Config::get('constants.keys.paginationTagsPerPageIndex');
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
 		if ($tag_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
 		{
 			$tags = new Tag();
-			$tag_output = $tags->orderBy('name', $tag_list_order)->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
+			$tag_output = $tags->orderBy('name', $tag_list_order)->paginate($paginationCount);
 			
 			$tags = $tag_output;
 		}
 		else
 		{	
 			$tags = new Tag();
-			$tags_used = $tags->join('collection_tag', 'tags.id', '=', 'collection_tag.tag_id')->select('tags.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $tag_list_order)->orderBy('name', 'desc')->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
+			$tags_used = $tags->join('collection_tag', 'tags.id', '=', 'collection_tag.tag_id')->select('tags.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $tag_list_order)->orderBy('name', 'desc')->paginate($paginationCount);
 			
 			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds tags that aren't used into the dataset used for popularity)
 			

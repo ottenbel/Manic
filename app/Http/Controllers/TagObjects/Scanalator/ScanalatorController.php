@@ -10,6 +10,7 @@ use DB;
 use Input;
 use Config;
 use MappingHelper;
+use ConfigurationLookupHelper;
 use App\Models\TagObjects\Scanalator\Scanalator;
 use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 
@@ -49,17 +50,20 @@ class ScanalatorController extends Controller
 			}
 		}
 		
+		$lookupKey = Config::get('constants.keys.paginationScanalatorsPerPageIndex');
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
 		if ($scanalator_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
 		{
-			$scanalators = new Scanalator();
-			$scanalator_output = $scanalators->orderBy('name', $scanalator_list_order)->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
+			$scanalators = new Scanalator();	
+			$scanalator_output = $scanalators->orderBy('name', $scanalator_list_order)->paginate($paginationCount);
 			
 			$scanalators = $scanalator_output;
 		}
 		else
 		{	
 			$scanalators = new Scanalator();
-			$scanalators_used = $scanalators->join('chapter_scanalator', 'scanalators.id', '=', 'chapter_scanalator.scanalator_id')->select('scanalators.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $scanalator_list_order)->orderBy('name', 'desc')->paginate(Config::get('constants.pagination.tagObjectsPerPageIndex'));
+			$scanalators_used = $scanalators->join('chapter_scanalator', 'scanalators.id', '=', 'chapter_scanalator.scanalator_id')->select('scanalators.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $scanalator_list_order)->orderBy('name', 'desc')->paginate($paginationCount);
 			
 			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds scanalators that aren't used into the dataset used for popularity)
 			
