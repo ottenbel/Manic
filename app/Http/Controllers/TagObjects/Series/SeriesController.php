@@ -50,7 +50,7 @@ class SeriesController extends Controller
 			}
 		}
 		
-		$lookupKey = Config::get('constants.keys.paginationSeriesPerPageIndex');
+		$lookupKey = Config::get('constants.keys.pagination.seriesPerPageIndex');
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
 		if ($series_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))

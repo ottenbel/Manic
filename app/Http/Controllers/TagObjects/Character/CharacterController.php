@@ -53,7 +53,7 @@ class CharacterController extends Controller
 			}
 		}
 		
-		$lookupKey = Config::get('constants.keys.paginationCharactersPerPageIndex');
+		$lookupKey = Config::get('constants.keys.pagination.charactersPerPageIndex');
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
 		if ($character_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))

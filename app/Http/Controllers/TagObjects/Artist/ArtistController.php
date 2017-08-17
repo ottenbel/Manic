@@ -50,7 +50,7 @@ class ArtistController extends Controller
 			}
 		}
 		
-		$lookupKey = Config::get('constants.keys.paginationArtistsPerPageIndex');
+		$lookupKey = Config::get('constants.keys.pagination.artistsPerPageIndex');
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
 		if ($artist_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))

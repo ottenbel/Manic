@@ -50,7 +50,7 @@ class ScanalatorController extends Controller
 			}
 		}
 		
-		$lookupKey = Config::get('constants.keys.paginationScanalatorsPerPageIndex');
+		$lookupKey = Config::get('constants.keys.pagination.scanalatorsPerPageIndex');
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
 		if ($scanalator_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))

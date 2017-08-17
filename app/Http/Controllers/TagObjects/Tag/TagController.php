@@ -50,7 +50,7 @@ class TagController extends Controller
 			}
 		}
 		
-		$lookupKey = Config::get('constants.keys.paginationTagsPerPageIndex');
+		$lookupKey = Config::get('constants.keys.pagination.tagsPerPageIndex');
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
 		if ($tag_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))

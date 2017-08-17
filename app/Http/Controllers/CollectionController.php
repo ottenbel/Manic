@@ -57,7 +57,7 @@ class CollectionController extends Controller
 		if ($search_string ==  "")
 		{
 			//Get all relevant collections
-			$lookupKey = Config::get('constants.keys.paginationCollectionsPerPageIndex');
+			$lookupKey = Config::get('constants.keys.pagination.collectionsPerPageIndex');
 			$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
 			$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);

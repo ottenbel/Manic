@@ -495,7 +495,7 @@ class SearchParseHelper
 			}
 		}
 		
-		$lookupKey = Config::get('constants.keys.paginationCollectionsPerPageIndex');
+		$lookupKey = Config::get('constants.keys.pagination.collectionsPerPageIndex');
 		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
 		$collections = $query->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);

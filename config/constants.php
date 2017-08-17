@@ -1,12 +1,15 @@
 <?php
 	return [
 	'keys' => [
-				'paginationCollectionsPerPageIndex' => 'pagination_collections_per_page_index',
-				'paginationArtistsPerPageIndex' => 'pagination_artists_per_page_index',
-				'paginationCharactersPerPageIndex' => 'pagination_characters_per_page_index',
-				'paginationScanalatorsPerPageIndex' => 'pagination_scanalators_per_page_index',
-				'paginationSeriesPerPageIndex' => 'pagination_series_per_page_index', 
-				'paginationTagsPerPageIndex' => 'pagination_tags_per_page_index'
+				'pagination' => [
+									'collectionsPerPageIndex' => 'pagination_collections_per_page_index',
+									'artistsPerPageIndex' => 'pagination_artists_per_page_index',
+									'charactersPerPageIndex' => 'pagination_characters_per_page_index',
+									'scanalatorsPerPageIndex' => 'pagination_scanalators_per_page_index',
+									'seriesPerPageIndex' => 'pagination_series_per_page_index', 
+									'tagsPerPageIndex' => 'pagination_tags_per_page_index'
+								]
+				
 			  ],
 	'pagination' => [
 						'tagAliasesPerPageIndex' => 30,
