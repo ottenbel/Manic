@@ -9,6 +9,7 @@ use Auth;
 use DB;
 use Input;
 use Config;
+use ConfigurationLookupHelper;
 use App\Models\TagObjects\Series\SeriesAlias;
 use App\Models\TagObjects\Series\Series;
 
@@ -43,27 +44,30 @@ class SeriesAliasController extends Controller
 		
 		$aliases = new SeriesAlias();
 		
+		$lookupKey = Config::get('constants.keys.pagination.paginationSeriesAliasesPerPageIndex');
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
 		if (Auth::user())
 		{
 			if ($alias_list_type == Config::get('constants.sortingStringComparison.aliasListType.global'))
 			{
-				$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageIndex'));
+				$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate($paginationCount);
 			}
 			
 			if ($alias_list_type == Config::get('constants.sortingStringComparison.aliasListType.personal'))
 			{
-				$aliases = $aliases->where('user_id', '=', Auth::user()->id)->orderBy('alias', $alias_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageIndex'));
+				$aliases = $aliases->where('user_id', '=', Auth::user()->id)->orderBy('alias', $alias_list_order)->paginate($paginationCount);
 			}
 			
 			if ($alias_list_type == Config::get('constants.sortingStringComparison.aliasListType.mixed'))
 			{
-				$aliases = $aliases->where('user_id', '=', null)->orWhere('user_id', '=', Auth::user()->id)->orderBy('alias', $alias_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageIndex'));
+				$aliases = $aliases->where('user_id', '=', null)->orWhere('user_id', '=', Auth::user()->id)->orderBy('alias', $alias_list_order)->paginate($paginationCount);
 			}
 		}
 		else
 		{
 			$aliases = new SeriesAlias();
-			$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageIndex'));
+			$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate($paginationCount);
 		}
 		
 		return View('tagObjects.series.alias.index', array('aliases' => $aliases->appends(Input::except('page')), 'list_type' => $alias_list_type, 'list_order' => $alias_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));

@@ -7,15 +7,18 @@
 									'charactersPerPageIndex' => 'pagination_characters_per_page_index',
 									'scanalatorsPerPageIndex' => 'pagination_scanalators_per_page_index',
 									'seriesPerPageIndex' => 'pagination_series_per_page_index', 
-									'tagsPerPageIndex' => 'pagination_tags_per_page_index'
+									'tagsPerPageIndex' => 'pagination_tags_per_page_index',
+									'paginationArtistAliasesPerPageIndex' => 'pagination_artist_aliases_per_page_index',
+									'paginationCharacterAliasesPerPageIndex' => 'pagination_character_aliases_per_page_index',
+									'paginationScanalatorAliasesPerPageIndex' => 'pagination_scanalator_aliases_per_page_index',
+									'paginationSeriesAliasesPerPageIndex' => 'pagination_series_aliases_per_page_index',
+									'paginationTagAliasesPerPageIndex' => 'pagination_tag_aliases_per_page_index'
 								]
 				
 			  ],
 	'pagination' => [
-						'tagAliasesPerPageIndex' => 30,
 						'tagAliasesPerPageParent' => 10,
-						'charactersPerPageSeries' => 12,
-						
+						'charactersPerPageSeries' => 12,	
 					],
 	'sortingStringComparison' => [
 									'aliasListType' => [
