@@ -194,14 +194,17 @@ class CharacterController extends Controller
 			$personal_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		$global_aliases = $character->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'global_alias_page');
+		$lookupKey = Config::get('constants.keys.pagination.characterAliasesPerPageParent');
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
+		$global_aliases = $character->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate($paginationCount, ['*'], 'global_alias_page');
 		$global_aliases ->appends(Input::except('global_alias_page'));
 		
 		$personal_aliases = null;
 		
 		if (Auth::check())
 		{
-			$personal_aliases = $character->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'personal_alias_page');
+			$personal_aliases = $character->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate($paginationCount, ['*'], 'personal_alias_page');
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
@@ -238,14 +241,17 @@ class CharacterController extends Controller
 			$personal_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		$global_aliases = $character->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'global_alias_page');
+		$lookupKey = Config::get('constants.keys.pagination.characterAliasesPerPageParent');
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
+		$global_aliases = $character->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate($paginationCount, ['*'], 'global_alias_page');
 		$global_aliases->appends(Input::except('global_alias_page'));
 		
 		$personal_aliases = null;
 		
 		if (Auth::check())
 		{
-			$personal_aliases = $character->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate(Config::get('constants.pagination.tagAliasesPerPageParent'), ['*'], 'personal_alias_page');
+			$personal_aliases = $character->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate($paginationCount, ['*'], 'personal_alias_page');
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		

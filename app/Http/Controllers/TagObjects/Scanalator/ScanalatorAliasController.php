@@ -44,7 +44,7 @@ class ScanalatorAliasController extends Controller
 		
 		$aliases = new ScanalatorAlias();
 		
-		$lookupKey = Config::get('constants.keys.pagination.paginationScanalatorAliasesPerPageIndex');
+		$lookupKey = Config::get('constants.keys.pagination.scanalatorAliasesPerPageIndex');
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
 		if (Auth::user())

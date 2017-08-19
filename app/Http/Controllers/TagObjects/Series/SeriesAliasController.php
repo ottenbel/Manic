@@ -44,7 +44,7 @@ class SeriesAliasController extends Controller
 		
 		$aliases = new SeriesAlias();
 		
-		$lookupKey = Config::get('constants.keys.pagination.paginationSeriesAliasesPerPageIndex');
+		$lookupKey = Config::get('constants.keys.pagination.seriesAliasesPerPageIndex');
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
 		if (Auth::user())

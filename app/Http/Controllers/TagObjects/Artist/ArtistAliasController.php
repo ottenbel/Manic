@@ -44,7 +44,7 @@ class ArtistAliasController extends Controller
 		
 		$aliases = new ArtistAlias();
 		
-		$lookupKey = Config::get('constants.keys.pagination.paginationArtistAliasesPerPageIndex');
+		$lookupKey = Config::get('constants.keys.pagination.artistAliasesPerPageIndex');
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
 		if (Auth::user())

@@ -47,7 +47,7 @@ class CharacterAliasController extends Controller
 		
 		$aliases = new CharacterAlias();
 		
-		$lookupKey = Config::get('constants.keys.pagination.paginationCharacterAliasesPerPageIndex');
+		$lookupKey = Config::get('constants.keys.pagination.characterAliasesPerPageIndex');
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
 		if (Auth::user())

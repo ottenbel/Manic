@@ -8,17 +8,21 @@
 									'scanalatorsPerPageIndex' => 'pagination_scanalators_per_page_index',
 									'seriesPerPageIndex' => 'pagination_series_per_page_index', 
 									'tagsPerPageIndex' => 'pagination_tags_per_page_index',
-									'paginationArtistAliasesPerPageIndex' => 'pagination_artist_aliases_per_page_index',
-									'paginationCharacterAliasesPerPageIndex' => 'pagination_character_aliases_per_page_index',
-									'paginationScanalatorAliasesPerPageIndex' => 'pagination_scanalator_aliases_per_page_index',
-									'paginationSeriesAliasesPerPageIndex' => 'pagination_series_aliases_per_page_index',
-									'paginationTagAliasesPerPageIndex' => 'pagination_tag_aliases_per_page_index'
+									'artistAliasesPerPageIndex' => 'pagination_artist_aliases_per_page_index',
+									'characterAliasesPerPageIndex' => 'pagination_character_aliases_per_page_index',
+									'scanalatorAliasesPerPageIndex' => 'pagination_scanalator_aliases_per_page_index',
+									'seriesAliasesPerPageIndex' => 'pagination_series_aliases_per_page_index',
+									'tagAliasesPerPageIndex' => 'pagination_tag_aliases_per_page_index',
+									'artistAliasesPerPageParent' => 'pagination_artist_aliases_per_page_parent',
+									'characterAliasesPerPageParent' => 'pagination_character_aliases_per_page_parent',
+									'scanalatorAliasesPerPageParent' => 'pagination_scanalator_aliases_per_page_parent',
+									'seriesAliasesPerPageParent' => 'pagination_series_aliases_per_page_parent',
+									'tagAliasesPerPageParent' => 'pagination_tag_aliases_per_page_parent'
 								]
 				
 			  ],
 	'pagination' => [
-						'tagAliasesPerPageParent' => 10,
-						'charactersPerPageSeries' => 12,	
+						'charactersPerPageSeries' => 12
 					],
 	'sortingStringComparison' => [
 									'aliasListType' => [

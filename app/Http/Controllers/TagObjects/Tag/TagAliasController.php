@@ -44,7 +44,7 @@ class TagAliasController extends Controller
 		
 		$aliases = new TagAlias();
 		
-		$lookupKey = Config::get('constants.keys.pagination.paginationTagAliasesPerPageIndex');
+		$lookupKey = Config::get('constants.keys.pagination.tagAliasesPerPageIndex');
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
 		if (Auth::user())
