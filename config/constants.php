@@ -1,29 +1,28 @@
 <?php
 	return [
-	'keys' => [
-				'pagination' => [
-									'collectionsPerPageIndex' => 'pagination_collections_per_page_index',
-									'artistsPerPageIndex' => 'pagination_artists_per_page_index',
-									'charactersPerPageIndex' => 'pagination_characters_per_page_index',
-									'scanalatorsPerPageIndex' => 'pagination_scanalators_per_page_index',
-									'seriesPerPageIndex' => 'pagination_series_per_page_index', 
-									'tagsPerPageIndex' => 'pagination_tags_per_page_index',
-									'artistAliasesPerPageIndex' => 'pagination_artist_aliases_per_page_index',
-									'characterAliasesPerPageIndex' => 'pagination_character_aliases_per_page_index',
-									'scanalatorAliasesPerPageIndex' => 'pagination_scanalator_aliases_per_page_index',
-									'seriesAliasesPerPageIndex' => 'pagination_series_aliases_per_page_index',
-									'tagAliasesPerPageIndex' => 'pagination_tag_aliases_per_page_index',
-									'artistAliasesPerPageParent' => 'pagination_artist_aliases_per_page_parent',
-									'characterAliasesPerPageParent' => 'pagination_character_aliases_per_page_parent',
-									'scanalatorAliasesPerPageParent' => 'pagination_scanalator_aliases_per_page_parent',
-									'seriesAliasesPerPageParent' => 'pagination_series_aliases_per_page_parent',
-									'tagAliasesPerPageParent' => 'pagination_tag_aliases_per_page_parent'
-								]
-				
-			  ],
-	'pagination' => [
-						'charactersPerPageSeries' => 12
-					],
+	'keys' => 
+		[
+				'pagination' => 
+					[
+						'collectionsPerPageIndex' => 'pagination_collections_per_page_index',
+						'artistsPerPageIndex' => 'pagination_artists_per_page_index',
+						'charactersPerPageIndex' => 'pagination_characters_per_page_index',
+						'scanalatorsPerPageIndex' => 'pagination_scanalators_per_page_index',
+						'seriesPerPageIndex' => 'pagination_series_per_page_index', 
+						'tagsPerPageIndex' => 'pagination_tags_per_page_index',
+						'artistAliasesPerPageIndex' => 'pagination_artist_aliases_per_page_index',
+						'characterAliasesPerPageIndex' => 'pagination_character_aliases_per_page_index',
+						'scanalatorAliasesPerPageIndex' => 'pagination_scanalator_aliases_per_page_index',
+						'seriesAliasesPerPageIndex' => 'pagination_series_aliases_per_page_index',
+						'tagAliasesPerPageIndex' => 'pagination_tag_aliases_per_page_index',
+						'artistAliasesPerPageParent' => 'pagination_artist_aliases_per_page_parent',
+						'characterAliasesPerPageParent' => 'pagination_character_aliases_per_page_parent',
+						'scanalatorAliasesPerPageParent' => 'pagination_scanalator_aliases_per_page_parent',
+						'seriesAliasesPerPageParent' => 'pagination_series_aliases_per_page_parent',
+						'tagAliasesPerPageParent' => 'pagination_tag_aliases_per_page_parent',
+						'charactersPerPageSeries' => 'pagination_characters_per_page_series'
+					]
+		],
 	'sortingStringComparison' => [
 									'aliasListType' => [
 															'global' => 'global',

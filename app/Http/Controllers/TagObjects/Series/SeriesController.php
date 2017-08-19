@@ -178,17 +178,20 @@ class SeriesController extends Controller
 			}
 		}
 		
+		$lookupKey = Config::get('constants.keys.pagination.charactersPerPageSeries');
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
 		if ($characters_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
 		{
 			$characters = $series->characters();
-			$characters_output = $characters->orderBy('name', $characters_list_order)->paginate(Config::get('constants.pagination.charactersPerPageSeries'), ['*'], 'character_page');
+			$characters_output = $characters->orderBy('name', $characters_list_order)->paginate($paginationCount, ['*'], 'character_page');
 
 			$characters = $characters_output;
 		}
 		else
 		{	
 			$characters = $series->characters()	;
-			$characters_used = $characters->join('character_collection', 'characters.id', '=', 'character_collection.character_id')->select('characters.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $characters_list_order)->orderBy('name', 'desc')->paginate(Config::get('constants.pagination.charactersPerPageSeries'), ['*'], 'character_page');
+			$characters_used = $characters->join('character_collection', 'characters.id', '=', 'character_collection.character_id')->select('characters.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $characters_list_order)->orderBy('name', 'desc')->paginate($paginationCount, ['*'], 'character_page');
 			
 			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds series that aren't used into the dataset used for popularity)
 			
