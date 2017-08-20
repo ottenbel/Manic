@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\ConfigurationPagination;
+use App\Models\Configuration\ConfigurationPagination;
 use App\Models\User;
 
 class SeedingHelper

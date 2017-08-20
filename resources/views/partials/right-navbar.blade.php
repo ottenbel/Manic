@@ -247,8 +247,13 @@
 
 		<ul class="dropdown-menu" role="menu">
 			<li>
-				<a href="{{url('/home')}}">User Dashboard</a>
+				<a href="{{route('user_dashboard_main')}}">User Dashboard</a>
 			</li>
+			@if(Auth::user()->has_administrator_permission())
+				<li>
+					<a href="{{route('admin_dashboard_main')}}">Admin Dashboard</a>
+				</li>	
+			@endif
 			<li>
 				<a href="{{ url('/logout') }}"
 					onclick="event.preventDefault();

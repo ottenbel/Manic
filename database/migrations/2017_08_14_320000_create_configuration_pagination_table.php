@@ -14,15 +14,17 @@ class CreateConfigurationPaginationTable extends Migration
     public function up()
     {
 		Schema::create('configuration_pagination', function (Blueprint $table) {
+			$table->uuid('id')->nullable();
 			$table->uuid('user_id')->nullable();
 			$table->string('key');
 			$table->integer('value');
-			$table->string('description');
+			$table->string('description', 150);
 			$table->integer('priority');
 			$table->uuid('created_by')->nullable();
 			$table->uuid('updated_by')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
+			$table->primary('id');
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
 			$table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
 			$table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');

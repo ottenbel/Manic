@@ -247,6 +247,14 @@ class User extends Authenticatable
 		return $this->hasMany('App\Models\TagObjects\Tag\Tag', 'updated_by');
 	}
 	
+	/*
+	 * Get all pagination configuration values associated with the user
+	 */
+	public function pagination_configuration()
+	{
+		return $this->hasMany('App\Models\Configuration\ConfigurationPagination');
+	}
+	
 	public function has_user_permission()
 	{
 		if (($this->role_id == Config::get('constants.roles.user')) 

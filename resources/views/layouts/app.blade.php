@@ -67,7 +67,7 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        @include('partials.left-navbar')
                     </ul>
 
                     <!-- Right Side Of Navbar -->

@@ -171,4 +171,19 @@ Route::post('/search', 'SearchController@search')->Name('process_search');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+//User dashboards
+Route::group(['middleware' => 'auth'], function(){
+	Route::get('/user', 'Dashboard\UserController@main')->Name('user_dashboard_main');
+	Route::get('/user/configuration', 'Dashboard\UserController@configuration')->Name('user_dashboard_configuration_main');
+	Route::get('/user/configuration/pagination', 'Configuration\PaginationController@edit')->Name('user_dashboard_configuration_pagination');
+	Route::patch('user/configuration/pagination/', 'Configuration\PaginationController@update')->Name('user_update_configuration_pagination');
+	Route::delete('user/configuration/pagination/', 'Configuration\PaginationController@reset')->Name('user_reset_configuration_pagination');
+});
+
+//Admin dashboard
+Route::group(['middleware' => ['auth', 'isAdministrator']], function(){
+	Route::get('/admin', 'Dashboard\AdminController@main')->Name('admin_dashboard_main');
+	Route::get('/admin/configuration', 'Dashboard\AdminController@configuration')->Name('admin_dashboard_configuration_main');
+	Route::get('/admin/configuration/pagination', 'Configuration\PaginationController@edit')->Name('admin_dashboard_configuration_pagination');
+	Route::patch('admin/configuration/pagination/', 'Configuration\PaginationController@update')->Name('admin_update_configuration_pagination');
+});

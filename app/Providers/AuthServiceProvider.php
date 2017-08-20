@@ -26,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
 		'App\Models\TagObjects\Scanalator\ScanalatorAlias' => 'App\Policies\TagObjects\Scanalator\ScanalatorAliasPolicy',
 		'App\Models\TagObjects\Series\SeriesAlias' => 'App\Policies\TagObjects\Series\SeriesAliasPolicy',
 		'App\Models\TagObjects\Tag\TagAlias' => 'App\Policies\TagObjects\Tag\TagAliasPolicy',
+		'App\Models\Configuration\ConfigurationPagination' => 'App\Policies\Configuration\ConfigurationPaginationPolicy',
     ];
 
     /**
