@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
+use App;
 
 class CheckIsOwner
 {
@@ -22,7 +23,7 @@ class CheckIsOwner
 		}
 		else
 		{
-			return back()->withInput();
+			App::abort(403, 'Access denied');
 		}
     }
 }

@@ -91,7 +91,9 @@ class SeriesController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('tagObjects.series.create', array('flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		$configurations = self::GetConfiguration();
+		
+		return View('tagObjects.series.create', array('configurations' => $configurations, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -249,6 +251,8 @@ class SeriesController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
+		$configurations = self::GetConfiguration();
+		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
 		
@@ -294,7 +298,7 @@ class SeriesController extends Controller
 			}
 		}
 		
-		return View('tagObjects.series.edit', array('series' => $series, 'freeChildren' => $freeChildren, 'lockedChildren' =>$lockedChildren, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.series.edit', array('configurations' => $configurations, 'series' => $series, 'freeChildren' => $freeChildren, 'lockedChildren' =>$lockedChildren, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -376,4 +380,20 @@ class SeriesController extends Controller
 		
 		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged series $seriesName from the database."));
     }
+	
+	private static function GetConfiguration()
+	{
+		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'series%')->get();
+		
+		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.series.name'))->first();
+		$shortDescription = $configurations->where('key', '=', Config::get('constants.keys.placeholders.series.shortDescription'))->first();
+		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.series.description'))->first();
+		$source = $configurations->where('key', '=', Config::get('constants.keys.placeholders.series.source'))->first();
+		$parent = $configurations->where('key', '=', Config::get('constants.keys.placeholders.series.parent'))->first();
+		$child = $configurations->where('key', '=', Config::get('constants.keys.placeholders.series.child'))->first();
+		
+		$configurationsArray = array('name' => $name, 'shortDescription' => $shortDescription, 'description' => $description, 'source' => $source, 'parent' => $parent, 'child' => $child);
+		
+		return $configurationsArray;
+	}
 }

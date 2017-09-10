@@ -86,7 +86,9 @@ class CollectionController extends Controller
 		$statuses = Status::orderBy('priority', 'asc')->get()->pluck('name', 'id');
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		
-		return View('collections.create', array('ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages));
+		$configurations = self::GetConfiguration();
+		
+		return View('collections.create', array('configurations' => $configurations, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages));
     }
 
     /**
@@ -245,12 +247,14 @@ class CollectionController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
+		$configurations = self::GetConfiguration();
+		
         $ratings = Rating::orderBy('priority', 'asc')->get()->pluck('name', 'id');
 		$statuses = Status::orderBy('priority', 'asc')->get()->pluck('name', 'id');
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		$collection->load('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
 		
-		return View('collections.edit', array('collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('collections.edit', array('configurations' => $configurations, 'collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -420,5 +424,31 @@ class CollectionController extends Controller
 			//Return an error message saying that it couldn't create a collection export
 			return Redirect::back()->with(["flashed_warning" => array("Unable to export zipped collection file.")]);
 		}
+	}
+	
+	private static function GetConfiguration()
+	{
+		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'collection%')->get();
+		
+		$cover = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.cover'))->first();
+		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.name'))->first();
+		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.description'))->first();
+		$parent = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.parent'))->first();
+		$primaryArtists = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.primaryArtists'))->first();
+		$secondaryArtists = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.secondaryArtists'))->first();
+		$primarySeries = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.primarySeries'))->first();
+		$secondarySeries = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.secondarySeries'))->first();
+		$primaryCharacters = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.primaryCharacters'))->first();
+		$secondaryCharacters = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.secondaryCharacters'))->first();
+		$primaryTags = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.primaryTags'))->first();
+		$secondaryTags = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.secondaryTags'))->first();
+		$canonical = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.canonical'))->first();
+		$language = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.language'))->first();
+		$rating = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.rating'))->first();
+		$status = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.status'))->first();
+		
+		$configurationsArray = array('cover' => $cover, 'name' => $name, 'description' => $description, 'parent' => $parent, 'primaryArtists' => $primaryArtists, 'secondaryArtists' => $secondaryArtists, 'primarySeries' => $primarySeries, 'secondarySeries' => $secondarySeries, 'primaryCharacters' => $primaryCharacters, 'secondaryCharacters' => $secondaryCharacters, 'primaryTags' => $primaryTags, 'secondaryTags' => $secondaryTags, 'canonical' => $canonical, 'language' => $language, 'rating' => $rating, 'status' => $status );
+		
+		return $configurationsArray;
 	}
 }

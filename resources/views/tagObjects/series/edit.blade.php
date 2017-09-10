@@ -35,16 +35,11 @@
 			[
 				'tagObject' => $series, 
 				'child' => 'series_child',
-				'namePlaceholder' => 'constants.placeholders.tagObjects.series.name',
-				'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.series.shortDescription',				
-				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.series.description', 
-				'sourcePlaceholder' => 'constants.placeholders.tagObjects.series.source',
-				'childPlaceholder' => 'constants.placeholders.tagObjects.series.child',
-				'nameHelpPlaceholder' => 'constants.placeholders.tagObjects.series.nameHelp',
-				'shortDescriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.series.shortDescriptionHelp',
-				'descriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.series.descriptionHelp',
-				'sourceHelpPlaceholder' => 'constants.placeholders.tagObjects.series.sourceHelp',
-				'childHelpPlaceholder' => 'constants.placeholders.tagObjects.series.childHelp'
+				'namePlaceholder' => $configurations['name'], 
+				'shortDescriptionPlaceholder' => $configurations['shortDescription'],
+				'descriptionPlaceholder' => $configurations['description'], 
+				'sourcePlaceholder' => $configurations['source'],
+				'childPlaceholder' => $configurations['child']
 
 			])
 			

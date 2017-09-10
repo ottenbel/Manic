@@ -36,7 +36,7 @@ Edit Collection - {{{$collection->name}}}
 			
 			{{ Form::hidden('collection_id', $collection->id) }}
 			
-			@include('partials.collection-input', array('collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))
+			@include('partials.collection-input', array('configurations' => $configurations, 'collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))
 			
 			@include('partials.show-collection-content', ['volumes' => $collection->volumes(), 'editVolume' => true, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'edit_chapter', 'scanalatorLinkRoute' => 'edit_scanalator', 'hideVolumes' => false])
 			

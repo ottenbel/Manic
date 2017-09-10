@@ -15,8 +15,20 @@ class ConfigurationSeeder extends Seeder
     {
 		//Do the production seeding
 		
-		$user = User::first();
+		$users = User::all();
+		//Seed the site configuration defaults
 		SeedingHelper::SeedPaginationTable();
-		SeedingHelper::SeedPaginationTable($user);
+		SeedingHelper::SeedPlaceholderTable();
+		
+		//Seed the user configuration
+		foreach ($users as $user)
+		{
+			SeedingHelper::SeedPaginationTable($user);
+			if ($user->has_editor_permission())
+			{
+				SeedingHelper::SeedPlaceholderTable($user);
+			}
+		}
+		
     }
 }

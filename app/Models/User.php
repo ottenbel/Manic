@@ -255,6 +255,14 @@ class User extends Authenticatable
 		return $this->hasMany('App\Models\Configuration\ConfigurationPagination');
 	}
 	
+	/*
+	 * Get all placeholder configuration values associated with the user
+	 */
+	public function placeholder_configuration()
+	{
+		return $this->hasMany('App\Models\Configuration\ConfigurationPlaceholder');
+	}
+	
 	public function has_user_permission()
 	{
 		if (($this->role_id == Config::get('constants.roles.user')) 

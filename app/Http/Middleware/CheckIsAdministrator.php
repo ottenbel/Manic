@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
+use App;
 
 class CheckIsAdministrator
 {
@@ -22,7 +23,7 @@ class CheckIsAdministrator
 		}
 		else
 		{
-			return back()->withInput();
+			App::abort(403, 'Access denied');
 		}
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Redirect;
 use Auth;
+use Config;
 use Input;
 use InterventionImage;
 use ImageUploadHelper;
@@ -30,7 +31,9 @@ class VolumeController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-        return View('volumes.create', array('collection' => $collection, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		$configurations = self::GetConfiguration($collection);
+		
+        return View('volumes.create', array('configurations' => $configurations, 'collection' => $collection, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -92,7 +95,9 @@ class VolumeController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-        return View('volumes.edit', array('volume' => $volume, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		$configurations = self::GetConfiguration();
+		
+        return View('volumes.edit', array('configurations' => $configurations, 'volume' => $volume, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -213,5 +218,26 @@ class VolumeController extends Controller
 			//Return an error message saying that it couldn't create a volume export
 			return Redirect::back()->with(["flashed_warning" => array("Unable to export zipped volume file.")]);
 		}
+	}
+	
+	private static function GetConfiguration($collection = null)
+	{
+		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'volume%')->get();
+		
+		$cover = $configurations->where('key', '=', Config::get('constants.keys.placeholders.volume.cover'))->first();
+		$number = $configurations->where('key', '=', Config::get('constants.keys.placeholders.volume.number'))->first();
+		if (($collection != null) && ($collection->volumes->count() > 0))
+		{
+			$number->value = $collection->volumes()->last()->volume_number + 1;
+		}
+		else
+		{
+			$number->value = 1;
+		}
+		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.volume.name'))->first();
+		
+		$configurationsArray = array('cover' => $cover, 'number' => $number, 'name' => $name);
+		
+		return $configurationsArray;
 	}
 }

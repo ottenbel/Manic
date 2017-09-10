@@ -19,16 +19,11 @@ Create a New Scanalator
 			@include('partials.tagObjects.tag-object-input', 
 			[
 				'child' => 'scanalator_child',
-				'namePlaceholder' => 'constants.placeholders.tagObjects.scanalator.name', 
-				'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.shortDescription',
-				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.scanalator.description', 
-				'sourcePlaceholder' => 'constants.placeholders.tagObjects.scanalator.source',
-				'childPlaceholder' => 'constants.placeholders.tagObjects.scanalator.child',
-				'nameHelpPlaceholder' => 'constants.placeholders.tagObjects.scanalator.nameHelp',
-				'shortDescriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.scanalator.shortDescriptionHelp',
-				'descriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.scanalator.descriptionHelp',
-				'sourceHelpPlaceholder' => 'constants.placeholders.tagObjects.scanalator.sourceHelp',
-				'childHelpPlaceholder' => 'constants.placeholders.tagObjects.scanalator.childHelp'
+				'namePlaceholder' => $configurations['name'], 
+				'shortDescriptionPlaceholder' => $configurations['shortDescription'],
+				'descriptionPlaceholder' => $configurations['description'], 
+				'sourcePlaceholder' => $configurations['source'],
+				'childPlaceholder' => $configurations['child']
 			])
 			
 			{{ Form::submit('Create Scanalator', array('class' => 'btn btn-primary')) }}

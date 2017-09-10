@@ -19,11 +19,11 @@ Create a New Character
 		
 		<div class="form-group">
 			{{ Form::label('parent_series', 'Series') }}
-			<i class="fa fa-question-circle" aria-hidden="true" title="{{Config::get('constants.placeholders.tagObjects.character.parentSeriesHelp')}}"></i>
+			<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['parent']->description}}"></i>
 			@if(($series != null) && (Input::old('parent_series') == null))
-				{{ Form::text('parent_series', $series->name, array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.tagObjects.character.parentSeries'))) }}
+				{{ Form::text('parent_series', $series->name, array('class' => 'form-control', 'placeholder' => $configurations['parent']->value)) }}
 			@else
-				{{ Form::text('parent_series', Input::old('parent_series'), array('class' => 'form-control', 'placeholder' => Config::get('constants.placeholders.tagObjects.character.parentSeries'))) }}
+				{{ Form::text('parent_series', Input::old('parent_series'), array('class' => 'form-control', 'placeholder' => $configurations['parent']->value)) }}
 			@endif
 			@if($errors->has('parent_series'))
 				<div class ="alert alert-danger" id="name_errors">{{$errors->first('parent_series')}}</div>
@@ -33,16 +33,11 @@ Create a New Character
 		@include('partials.tagObjects.tag-object-input', 
 		[
 			'child' => 'character_child',
-			'namePlaceholder' => 'constants.placeholders.tagObjects.character.name', 
-			'descriptionPlaceholder' => 'constants.placeholders.tagObjects.character.description', 
-			'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.character.shortDescription',
-			'sourcePlaceholder' => 'constants.placeholders.tagObjects.character.source',
-			'childPlaceholder' => 'constants.placeholders.tagObjects.character.child',
-			'nameHelpPlaceholder' => 'constants.placeholders.tagObjects.character.nameHelp',
-			'shortDescriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.character.shortDescriptionHelp',
-			'descriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.character.descriptionHelp',
-			'sourceHelpPlaceholder' => 'constants.placeholders.tagObjects.character.sourceHelp',
-			'childHelpPlaceholder' => 'constants.placeholders.tagObjects.character.childHelp'
+			'namePlaceholder' => $configurations['name'],
+			'descriptionPlaceholder' => $configurations['description'], 
+			'shortDescriptionPlaceholder' => $configurations['shortDescription'],
+			'sourcePlaceholder' => $configurations['source'],
+			'childPlaceholder' => $configurations['child']
 		])
 		
 		{{ Form::submit('Create Character', array('class' => 'btn btn-primary')) }}

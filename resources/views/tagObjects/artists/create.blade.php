@@ -19,16 +19,11 @@ Create a New Artist
 			@include('partials.tagObjects.tag-object-input', 
 			[
 				'child' => 'artist_child',
-				'namePlaceholder' => 'constants.placeholders.tagObjects.artist.name', 
-				'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.artist.shortDescription',
-				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.artist.description', 
-				'sourcePlaceholder' => 'constants.placeholders.tagObjects.artist.source',
-				'childPlaceholder' => 'constants.placeholders.tagObjects.artist.child',
-				'nameHelpPlaceholder' => 'constants.placeholders.tagObjects.artist.nameHelp',
-				'shortDescriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.artist.shortDescriptionHelp',
-				'descriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.artist.descriptionHelp',
-				'sourceHelpPlaceholder' => 'constants.placeholders.tagObjects.artist.sourceHelp',
-				'childHelpPlaceholder' => 'constants.placeholders.tagObjects.artist.childHelp'
+				'namePlaceholder' => $configurations['name'], 
+				'shortDescriptionPlaceholder' => $configurations['shortDescription'],
+				'descriptionPlaceholder' => $configurations['description'], 
+				'sourcePlaceholder' => $configurations['source'],
+				'childPlaceholder' => $configurations['child']
  			])
 			
 			{{ Form::submit('Create Artist', array('class' => 'btn btn-primary')) }}

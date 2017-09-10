@@ -14,12 +14,15 @@
 //Collection controller routes
 Route::get('/', 'CollectionController@index')->Name('index_collection');
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'isEditor']], function(){
 	Route::get('/collection/create', 'CollectionController@create')->Name('create_collection');
 	Route::post('/collection', 'CollectionController@store')->Name('store_collection');
 	Route::get('/collection/{collection}/edit', 'CollectionController@edit')->Name('edit_collection');
 	Route::patch('/collection/{collection}', 'CollectionController@update')->Name('update_collection');
 	Route::delete('/collection/{collection}', 'CollectionController@destroy')->Name('delete_collection');
+});
+
+Route::group(['middleware' => 'auth'], function(){
 	Route::get('/collection/{collection}/export', 'CollectionController@export')->Name('export_collection');
 });
 
@@ -27,23 +30,30 @@ Route::get('/collection/{collection}', 'CollectionController@show')->Name('show_
 //End Collection controller routes
 
 //Volume controller routes
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'isEditor']], function(){
 	Route::get('/volume/create/{collection}', 'VolumeController@create')->Name('create_volume');
 	Route::post('/volume', 'VolumeController@store')->Name('store_volume');
 	Route::get('/volume/{volume}/edit', 'VolumeController@edit')->Name('edit_volume');
 	Route::patch('/volume/{volume}', 'VolumeController@update')->Name('update_volume');
 	Route::delete('/volume/{volume}', 'VolumeController@destroy')->Name('delete_volume');
+});
+
+Route::group(['middleware' => 'auth'], function(){
 	Route::get('/volume/{volume}/export', 'VolumeController@export')->Name('export_volume');
 });
+
 //End Volume controller routes
 
 //Chapter controller routes
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'isEditor']], function(){
 	Route::get('/chapter/create/{collection}', 'ChapterController@create')->Name('create_chapter');
 	Route::post('/chapter', 'ChapterController@store')->Name('store_chapter');
 	Route::get('/chapter/{chapter}/edit', 'ChapterController@edit')->Name('edit_chapter');
 	Route::patch('/chapter/{chapter}', 'ChapterController@update')->Name('update_chapter');
 	Route::delete('/chapter/{chapter}', 'ChapterController@destroy')->Name('delete_chapter');
+});
+
+Route::group(['middleware' => 'auth'], function(){
 	Route::get('/chapter/{chapter}/export', 'ChapterController@export')->Name('export_chapter');
 });
 
@@ -51,7 +61,7 @@ Route::get('/chapter/{chapter}/{page?}', 'ChapterController@show')->Name('show_c
 //End Chapter controller routes
 
 //Tag controller routes
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'isEditor']], function(){
 	Route::get('/tag/create', 'TagObjects\Tag\TagController@create')->Name('create_tag');
 	Route::post('/tag', 'TagObjects\Tag\TagController@store')->Name('store_tag');
 	Route::get('/tag/{tag}/edit', 'TagObjects\Tag\TagController@edit')->Name('edit_tag');
@@ -74,7 +84,7 @@ Route::get('/tag_alias', 'TagObjects\Tag\TagAliasController@index')->Name('index
 //End tag controller routes
 
 //Artist controller routes
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'isEditor']], function(){
 	Route::get('/artist/create', 'TagObjects\Artist\ArtistController@create')->Name('create_artist');
 	Route::post('/artist', 'TagObjects\Artist\ArtistController@store')->Name('store_artist');
 	Route::get('/artist/{artist}/edit', 'TagObjects\Artist\ArtistController@edit')->Name('edit_artist');
@@ -97,7 +107,7 @@ Route::get('/artist_alias', 'TagObjects\Artist\ArtistAliasController@index')->Na
 //End artist controller routes
 
 //Series controller routes
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'isEditor']], function(){
 	Route::get('/series/create', 'TagObjects\Series\SeriesController@create')->Name('create_series');
 	Route::post('/series', 'TagObjects\Series\SeriesController@store')->Name('store_series');
 	Route::get('/series/{series}/edit', 'TagObjects\Series\SeriesController@edit')->Name('edit_series');
@@ -120,7 +130,7 @@ Route::get('/series_alias', 'TagObjects\Series\SeriesAliasController@index')->Na
 //End series controller routes
 
 //Scanalator controller routes
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'isEditor']], function(){
 	Route::get('/scanalator/create', 'TagObjects\Scanalator\ScanalatorController@create')->Name('create_scanalator');
 	Route::post('/scanalator', 'TagObjects\Scanalator\ScanalatorController@store')->Name('store_scanalator');
 	Route::get('/scanalator/{scanalator}/edit', 'TagObjects\Scanalator\ScanalatorController@edit')->Name('edit_scanalator');
@@ -143,7 +153,7 @@ Route::get('/scanalator_alias', 'TagObjects\Scanalator\ScanalatorAliasController
 //End scanalator controller routes
 
 //Character controller routes
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'isEditor']], function(){
 	Route::get('/character/create/{series?}', 'TagObjects\Character\CharacterController@create')->Name('create_character');
 	Route::post('/character', 'TagObjects\Character\CharacterController@store')->Name('store_character');
 	Route::get('/character/{character}/edit', 'TagObjects\Character\CharacterController@edit')->Name('edit_character');

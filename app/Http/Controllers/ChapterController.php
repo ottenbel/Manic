@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Redirect;
 use Auth;
+use Config;
 use Input;
 use MappingHelper;
 use ImageUploadHelper;
@@ -37,6 +38,8 @@ class ChapterController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
+		$configurations = self::GetConfiguration();
+		
 		$volumes = $collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
 		{
 			return "Volume $item";	
@@ -62,7 +65,7 @@ class ChapterController extends Controller
 		}
 		else
 		{
-			return View('chapters.create', array('collection' => $collection, 'volumes' => $volumes, 'volumes_array' => $volumes_array, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+			return View('chapters.create', array('configurations' => $configurations, 'collection' => $collection, 'volumes' => $volumes, 'volumes_array' => $volumes_array, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
 		}
     }
 
@@ -271,6 +274,8 @@ class ChapterController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
+		$configurations = self::GetConfiguration();
+		
 		$volumes_array = json_encode($chapter->volume->collection->volumes()->pluck('id'));
 		
 		$volumes = $chapter->volume->collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
@@ -278,7 +283,7 @@ class ChapterController extends Controller
 			return "Volume $item";
 		});
 		
-        return View('chapters.edit', array('chapter' => $chapter, 'volumes' => $volumes, 'volumes_array' => $volumes_array, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+        return View('chapters.edit', array('configurations' => $configurations, 'chapter' => $chapter, 'volumes' => $volumes, 'volumes_array' => $volumes_array, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -514,5 +519,22 @@ class ChapterController extends Controller
 			//Return an error message saying that it couldn't create a chapter export
 			return Redirect::back()->with(["flashed_warning" => array("Unable to export zipped chapter file.")]);
 		}
+	}
+	
+	private static function GetConfiguration()
+	{
+		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'chapter%')->get();
+		
+		$volume = $configurations->where('key', '=', Config::get('constants.keys.placeholders.chapter.volume'))->first();
+		$number = $configurations->where('key', '=', Config::get('constants.keys.placeholders.chapter.number'))->first();
+		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.chapter.name'))->first();
+		$scanalatorPrimary = $configurations->where('key', '=', Config::get('constants.keys.placeholders.chapter.scanalatorPrimary'))->first();
+		$scanalatorSecondary = $configurations->where('key', '=', Config::get('constants.keys.placeholders.chapter.scanalatorSecondary'))->first();
+		$source = $configurations->where('key', '=', Config::get('constants.keys.placeholders.chapter.source'))->first();
+		$images = $configurations->where('key', '=', Config::get('constants.keys.placeholders.chapter.images'))->first();
+		
+		$configurationsArray = array('volume' => $volume, 'number' => $number, 'name' => $name, 'scanalatorPrimary' => $scanalatorPrimary, 'scanalatorSecondary' => $scanalatorSecondary, 'source' => $source, 'images' => $images);
+		
+		return $configurationsArray;
 	}
 }

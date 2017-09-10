@@ -91,7 +91,9 @@ class ScanalatorController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('tagObjects.scanalators.create', array('flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		$configurations = self::GetConfiguration();
+		
+		return View('tagObjects.scanalators.create', array('configurations' => $configurations, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -201,6 +203,8 @@ class ScanalatorController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
+		$configurations = self::GetConfiguration();
+		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
 		
@@ -230,7 +234,7 @@ class ScanalatorController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.scanalators.edit', array('scanalator' => $scanalator, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.scanalators.edit', array('configurations' => $configurations, 'scanalator' => $scanalator, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -316,4 +320,20 @@ class ScanalatorController extends Controller
 		
 		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged scanalator $scanalatorName from the database."));
     }
+	
+	private static function GetConfiguration()
+	{
+		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'scanalator%')->get();
+		
+		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.scanalator.name'))->first();
+		$shortDescription = $configurations->where('key', '=', Config::get('constants.keys.placeholders.scanalator.shortDescription'))->first();
+		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.scanalator.description'))->first();
+		$source = $configurations->where('key', '=', Config::get('constants.keys.placeholders.scanalator.source'))->first();
+		$parent = $configurations->where('key', '=', Config::get('constants.keys.placeholders.scanalator.parent'))->first();
+		$child = $configurations->where('key', '=', Config::get('constants.keys.placeholders.scanalator.child'))->first();
+		
+		$configurationsArray = array('name' => $name, 'shortDescription' => $shortDescription, 'description' => $description, 'source' => $source, 'parent' => $parent, 'child' => $child);
+		
+		return $configurationsArray;
+	}
 }

@@ -91,7 +91,9 @@ class TagController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('tagObjects.tags.create', array('flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		$configurations = self::GetConfiguration();
+		
+		return View('tagObjects.tags.create', array('configurations' => $configurations, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -201,6 +203,8 @@ class TagController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
+		$configurations = self::GetConfiguration();
+		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
 		
@@ -230,7 +234,7 @@ class TagController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.tags.edit', array('tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.tags.edit', array('configurations' => $configurations, 'tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -316,4 +320,20 @@ class TagController extends Controller
 		
 		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged tag $tagName from the database."));
     }
+	
+	private static function GetConfiguration()
+	{
+		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'tag%')->get();
+		
+		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.tag.name'))->first();
+		$shortDescription = $configurations->where('key', '=', Config::get('constants.keys.placeholders.tag.shortDescription'))->first();
+		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.tag.description'))->first();
+		$source = $configurations->where('key', '=', Config::get('constants.keys.placeholders.tag.source'))->first();
+		$parent = $configurations->where('key', '=', Config::get('constants.keys.placeholders.tag.parent'))->first();
+		$child = $configurations->where('key', '=', Config::get('constants.keys.placeholders.tag.child'))->first();
+		
+		$configurationsArray = array('name' => $name, 'shortDescription' => $shortDescription, 'description' => $description, 'source' => $source, 'parent' => $parent, 'child' => $child);
+		
+		return $configurationsArray;
+	}
 }

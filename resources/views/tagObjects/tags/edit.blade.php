@@ -35,16 +35,11 @@ Edit Tag - {{{$tag->name}}}
 			[
 				'tagObject' => $tag, 
 				'child' => 'tag_child',
-				'namePlaceholder' => 'constants.placeholders.tagObjects.tag.name', 
-				'shortDescriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.shortDescription',
-				'descriptionPlaceholder' => 'constants.placeholders.tagObjects.tag.description', 
-				'sourcePlaceholder' => 'constants.placeholders.tagObjects.tag.source',
-				'childPlaceholder' => 'constants.placeholders.tagObjects.tag.child',
-				'nameHelpPlaceholder' => 'constants.placeholders.tagObjects.tag.nameHelp',
-				'shortDescriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.tag.shortDescriptionHelp',
-				'descriptionHelpPlaceholder' => 'constants.placeholders.tagObjects.tag.descriptionHelp',
-				'sourceHelpPlaceholder' => 'constants.placeholders.tagObjects.tag.sourceHelp',
-				'childHelpPlaceholder' => 'constants.placeholders.tagObjects.tag.childHelp'
+				'namePlaceholder' => $configurations['name'], 
+				'shortDescriptionPlaceholder' => $configurations['shortDescription'],
+				'descriptionPlaceholder' => $configurations['description'], 
+				'sourcePlaceholder' => $configurations['source'],
+				'childPlaceholder' => $configurations['child']
 			])
 			
 			{{ Form::submit('Update Tag', array('class' => 'btn btn-primary')) }}

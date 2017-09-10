@@ -3,25 +3,104 @@
 	'keys' => 
 		[
 				'pagination' => 
+				[
+					'collectionsPerPageIndex' => 'pagination_collections_per_page_index',
+					'artistsPerPageIndex' => 'pagination_artists_per_page_index',
+					'charactersPerPageIndex' => 'pagination_characters_per_page_index',
+					'scanalatorsPerPageIndex' => 'pagination_scanalators_per_page_index',
+					'seriesPerPageIndex' => 'pagination_series_per_page_index', 
+					'tagsPerPageIndex' => 'pagination_tags_per_page_index',
+					'artistAliasesPerPageIndex' => 'pagination_artist_aliases_per_page_index',
+					'characterAliasesPerPageIndex' => 'pagination_character_aliases_per_page_index',
+					'scanalatorAliasesPerPageIndex' => 'pagination_scanalator_aliases_per_page_index',
+					'seriesAliasesPerPageIndex' => 'pagination_series_aliases_per_page_index',
+					'tagAliasesPerPageIndex' => 'pagination_tag_aliases_per_page_index',
+					'artistAliasesPerPageParent' => 'pagination_artist_aliases_per_page_parent',
+					'characterAliasesPerPageParent' => 'pagination_character_aliases_per_page_parent',
+					'scanalatorAliasesPerPageParent' => 'pagination_scanalator_aliases_per_page_parent',
+					'seriesAliasesPerPageParent' => 'pagination_series_aliases_per_page_parent',
+					'tagAliasesPerPageParent' => 'pagination_tag_aliases_per_page_parent',
+					'charactersPerPageSeries' => 'pagination_characters_per_page_series'
+				],
+				'placeholders' =>
+				[
+					'artist' => 
 					[
-						'collectionsPerPageIndex' => 'pagination_collections_per_page_index',
-						'artistsPerPageIndex' => 'pagination_artists_per_page_index',
-						'charactersPerPageIndex' => 'pagination_characters_per_page_index',
-						'scanalatorsPerPageIndex' => 'pagination_scanalators_per_page_index',
-						'seriesPerPageIndex' => 'pagination_series_per_page_index', 
-						'tagsPerPageIndex' => 'pagination_tags_per_page_index',
-						'artistAliasesPerPageIndex' => 'pagination_artist_aliases_per_page_index',
-						'characterAliasesPerPageIndex' => 'pagination_character_aliases_per_page_index',
-						'scanalatorAliasesPerPageIndex' => 'pagination_scanalator_aliases_per_page_index',
-						'seriesAliasesPerPageIndex' => 'pagination_series_aliases_per_page_index',
-						'tagAliasesPerPageIndex' => 'pagination_tag_aliases_per_page_index',
-						'artistAliasesPerPageParent' => 'pagination_artist_aliases_per_page_parent',
-						'characterAliasesPerPageParent' => 'pagination_character_aliases_per_page_parent',
-						'scanalatorAliasesPerPageParent' => 'pagination_scanalator_aliases_per_page_parent',
-						'seriesAliasesPerPageParent' => 'pagination_series_aliases_per_page_parent',
-						'tagAliasesPerPageParent' => 'pagination_tag_aliases_per_page_parent',
-						'charactersPerPageSeries' => 'pagination_characters_per_page_series'
+						'name' => 'artist_name',
+						'shortDescription' => 'artist_short_description',
+						'description' => 'artist_description',
+						'source' => 'artist_source',
+						'child' => 'artist_child'
+					],
+					'character' => 
+					[
+						'name' => 'character_name',
+						'shortDescription' => 'character_short_description',
+						'description' => 'character_description',
+						'source' => 'character_source',
+						'parent' => 'character_parent',
+						'child' => 'character_child'
+					],
+					'scanalator' =>
+					[
+						'name' => 'scanalator_name',
+						'shortDescription' => 'scanalator_short_description',
+						'description' => 'scanalator_description',
+						'source' => 'scanalator_source',
+						'child' => 'scanalator_child'
+					],
+					'series' =>
+					[
+						'name' => 'series_name',
+						'shortDescription' => 'series_short_description',
+						'description' => 'series_description',
+						'source' => 'series_source',
+						'child' => 'series_child',
+					],
+					'tag' =>
+					[
+						'name' => 'tag_name',
+						'shortDescription' => 'tag_short_description',
+						'description' => 'tag_description',
+						'source' => 'tag_source',
+						'child' => 'tag_child',
+					],
+					'collection' =>
+					[
+						'cover' => 'collection_cover',
+						'name' => 'collection_name',
+						'description' => 'collection_description',
+						'parent' => 'collection_parent',
+						'primaryArtists' => 'collection_primary_artists',
+						'secondaryArtists' => 'collection_secondary_artists',
+						'primarySeries' => 'collection_primary_series',
+						'secondarySeries' => 'collection_secondary_series',
+						'primaryCharacters' => 'collection_primary_characters',
+						'secondaryCharacters' => 'collection_secondary_characters',
+						'primaryTags' => 'collection_primary_tags',
+						'secondaryTags' => 'collection_secondary_tags',
+						'canonical' => 'collection_canonical',
+						'language' => 'collection_language',
+						'rating' => 'collection_rating',
+						'status' => 'collection_status'
+					],
+					'volume' =>
+					[
+						'cover' => 'volume_cover',
+						'number' => 'volume_number',
+						'name' => 'volume_name'
+					],
+					'chapter' => 
+					[
+						'volume' => 'chapter_volume',
+						'number' => 'chapter_number',
+						'name' => 'chapter_name',
+						'scanalatorPrimary' => 'chapter_primary_scanalators',
+						'scanalatorSecondary' => 'chapter_secondary_scanalators',
+						'source' => 'chapter_source',
+						'images' => 'chapter_images'
 					]
+				]
 		],
 	'sortingStringComparison' => [
 									'aliasListType' => [
@@ -39,132 +118,10 @@
 													 ]
 								 ],
 	 'placeholders' => [
-							'tagObjects' => [
-												'artist' => [
-																'name' => 'Artist Name',
-																'shortDescription' => 'A short description of the artist.',
-																'description' => 'A full description of the artist.',
-																'source' => 'https://en.wikipedia.org/wiki/Artist',
-																'child' => 'Child Artist 1, Child Artist 2',
-																'nameHelp' => 'The name of the artist (required).',
-																'shortDescriptionHelp' => 'A short description of the artist, used to populate the tooltip on the mouseover event (optional).',
-																'descriptionHelp' => 'A full description of the artist (optional).',
-																'sourceHelp' => 'A link for additional information about the artist (optional).',
-																'childHelp' => 'Child artists of the artist (comma delimited/optional).'
-															],
-												'character' => [
-																	'name' => 'Character Name',
-																	'shortDescription' => 'A short description of the character.',
-																	'description' => 'A full description of the character.',
-																	'source' => 'https://en.wikipedia.org/wiki/Character_(arts)',
-																	'parentSeries' => 'Parent Series',
-																	'child' => 'Child Character 1, Child Character 2',
-																	'nameHelp' => 'The name of the character (required).',
-																	'shortDescriptionHelp' => 'A short description of the character, used to populate the tooltip on the mouseover event (optional).',
-																	'descriptionHelp' => 'A full description of the character (optional).',
-																	'sourceHelp' => 'A link for additional information about the character (optional).',
-																	'childHelp' => 'Child characters of the character (comma delimited/optional).',
-																	'parentSeriesHelp' => 'The name of the series that the character will be bound to (required).'
-															   ],
-												'scanalator' => [
-																	'name' => 'Scanalator Name',
-																	'shortDescription' => 'A short description of the scanalator.',
-																	'description' => 'A full description of the scanalator.',
-																	'source' => 'https://en.wikipedia.org/wiki/Translation',
-																	'child' => 'Child Scanalator 1, Child Scanalator 2',
-																	'nameHelp' => 'The name of the scanalator (required).',
-																	'shortDescriptionHelp' => 'A short description of the scanalator, used to populate the tooltip on the mouseover event (optional).',
-																	'descriptionHelp' => 'A full description of the scanalator (optional).',
-																	'sourceHelp' => 'A link for additional information about the scanalator (optional).',
-																	'childHelp' => 'Child scanalators of the scanalator (comma delimited/optional).'
-																],
-												'series' => [
-																'name' => 'Series Name',
-																'shortDescription' => 'A short description of the series.',
-																'description' => 'A full description of the series.',
-																'source' => 'https://en.wikipedia.org/wiki/Series',
-																'child' => 'Child Series 1, Child Series 2',
-																'nameHelp' => 'The name of the series (required).',
-																'shortDescriptionHelp' => 'A short description of the series, used to populate the tooltip on the mouseover event (optional).',
-																'descriptionHelp' => 'A full description of the series (optional).',
-																'sourceHelp' => 'A link for additional information about the series (optional).',
-																'childHelp' => 'Child series of the series (comma delimited/optional).'
-															],
-												'tag' => [
-															'name' => 'Tag Name',
-															'shortDescription' => 'A short description of the tag.',
-															'description' => 'A full description of the tag.',
-															'source' => 'https://en.wikipedia.org/wiki/Tag_(metadata)',
-															'child' => 'Child Tag 1, Child Tag 2',
-															'nameHelp' => 'The name of the tag (required).',
-															'shortDescriptionHelp' => 'A short description of the tag, used to populate the tooltip on the mouseover event (optional).',
-															'descriptionHelp' => 'A full description of the tag (optional).',
-															'sourceHelp' => 'A link for additional information about the tag (optional).',
-															'childHelp' => 'Child tags of the tag (comma delimited/optional).'
-														 ]
-											],
 							'aliases' => [
 											'personal' => 'Personal Alias',
 											'global' => 'Global Alias'
-										 ],
-							'chapters' => [
-												'number' => '1',
-												'name' => 'Chapter Name',
-												'primaryScanalators' => 'SuperScans, Just Another Scanalation Group, Travelling Scanalators',
-												'secondaryScanalators' => 'Various Scans, Some More Scans',
-												'source' => 'https://www.wikipedia.org'
-										  ],
-							'collections' => [
-												'name' => 'Collection Name',
-												'description' => 'Some text describing the collection.',
-												'primaryArtists' => 'Franklin Carmichael,  Lawren Harris, A. Y. Jackson ,  Frank Johnston',
-												'secondaryArtists' => 'Arthur Lismer, J. E. H. MacDonald,  Frederick Varley',
-												'primarySeries' => 'Dresden Files, Harry Potter, Codex Alera',
-												'secondarySeries' => 'Nexus Trilogy, Lord of the Rings, ',
-												'primaryCharacters' => 'Harry Dresden, Harry Potter, Tavi',
-												'secondaryCharacters' => 'Crowl, Tom Riddle, The Vord',
-												'primaryTags' => 'Magic, Urban Fantasy, Politics',
-												'secondaryTags' => 'Mystery, Alien Invasion, Boarding School'
-											 ],
-							'volumes' => [
-											'number' => '1',
-											'name' => 'Volume Name'
-										 ],
-					   
-							'help' => [
-								'chapters' => [
-												'volume_number' => 'The volume that the chapter will be associated with (required).',
-												'number' => 'The number of the chapter in the collection (required/unique to collection).',
-												'name' => 'The name of the chapter (optional).',
-												'scanalator_primary' => 'The main scanalation groups that worked on the chapter (comma delimited/optional).',
-												'scanalator_secondary' => 'Other scanalation groups that worked on the chapter (comma delimited/optional).',
-												'url' => 'The release location where the chapter was obtained (optional).',
-												'images' => 'The files to be uploaded into the chapter as images or a zipped folder (required).'
-											  ],
-								'volumes' => [
-												'cover' => 'The cover image to be displayed for the volume (optional).',
-												'number' => 'The number of the volume in the collection (required/unique to collection)',
-												'name' => 'The name of the volume (optional).'
-											 ],
-								'collections' => [
-													'cover' => 'The cover image to be displayed for the collection (optional).',
-													'name' => 'The name of the collection (required/unique).',
-													'description' => 'A summary describing the contents of the collection (optional).',
-													'parent_id' => 'Create a link between the collection to a parent collection using the unique identifier of the parent collection (optional).',
-													'artist_primary' => 'The main artists that worked on the collection (comma delimited/optional).',
-													'artist_secondary' => 'Secondary artists that worked on the collection (comma delimited/optional).',
-													'series_primary' => "The main series associated with the collection (comma delimited/optional).",
-													'series_secondary' => "Secondary series associated with the collection (comma delimited/optional).",
-													'character_primary' => "The main characters associated with the collection. Characters must already exist on a series before being used and the series must exist on the collection (comma delimited/optional).",
-													'character_secondary' => "Secondary characters associated with the collection. Characters must already exist on a series before being used and the series must exist on the collection (comma delimited/optional).",
-													'tag_primary' => "The main tags associated with the collection (comma delimited/optional).",
-													'tag_secondary' => "Secondary tags associated with the collection  (comma delimited/optional).",
-													'canonical' => "Whether or not the collection is canonical or not (required).",
-													'language' => "The language of the collection contents (required).",
-													'ratings' => "The collection rating (required).",
-													'statuses' => "The collection status (required)."
-												 ]
-							]
+										 ]
 					   ],
 		'roles' => [
 						'user' => 'ddce79e6-8f67-4f18-89d2-af160f1552c5',

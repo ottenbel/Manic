@@ -13,6 +13,7 @@ use MappingHelper;
 use ConfigurationLookupHelper;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
+use App\Models\Configuration\ConfigurationPlaceholder;
 
 class ArtistController extends Controller
 {
@@ -91,7 +92,9 @@ class ArtistController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('tagObjects.artists.create', array('flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		$configurations = self::GetConfiguration();
+		
+		return View('tagObjects.artists.create', array('configurations' => $configurations, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -201,6 +204,8 @@ class ArtistController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
+		$configurations = self::GetConfiguration();
+		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
 		
@@ -231,7 +236,7 @@ class ArtistController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.artists.edit', array('artist' => $artist, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.artists.edit', array('configurations' => $configurations, 'artist' => $artist, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -317,4 +322,19 @@ class ArtistController extends Controller
 		
 		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged artist $artistName from the database."));
     }
+	
+	private static function GetConfiguration()
+	{
+		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'artist%')->get();
+		
+		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.artist.name'))->first();
+		$shortDescription = $configurations->where('key', '=', Config::get('constants.keys.placeholders.artist.shortDescription'))->first();
+		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.artist.description'))->first();
+		$source = $configurations->where('key', '=', Config::get('constants.keys.placeholders.artist.source'))->first();
+		$child = $configurations->where('key', '=', Config::get('constants.keys.placeholders.artist.child'))->first();
+		
+		$configurationsArray = array('name' => $name, 'shortDescription' => $shortDescription, 'description' => $description, 'source' => $source, 'child' => $child);
+		
+		return $configurationsArray;
+	}
 }

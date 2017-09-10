@@ -19,7 +19,7 @@ Create a New Volume
 			
 			{{ Form::hidden('collection_id', $collection->id) }}
 			
-			@include('partials.volume-input')
+			@include('partials.volume-input', array('configurations' => $configurations))
 			
 			@include('partials.show-collection-content', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editVolumeRoute' => 'show_volume', 'chapterLinkRoute' => 'show_chapter', 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => false])
 			<br/>

@@ -94,7 +94,9 @@ class CharacterController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
-		return View('tagObjects.characters.create', array('series' => $series, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		$configurations = self::GetConfiguration();
+		
+		return View('tagObjects.characters.create', array('configurations' => $configurations, 'series' => $series, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -126,7 +128,7 @@ class CharacterController extends Controller
 		$character->url = trim(Input::get('url'));
 		$character->series_id = $parent_series->id;
 		
-		//Delete any character aliases that share the name with the artist to be created.
+		//Delete any character aliases that share the name with the character to be created.
 		$aliases_list = CharacterAlias::where('alias', '=', trim(Input::get('name')))->get();
 		
 		foreach ($aliases_list as $alias)
@@ -226,6 +228,8 @@ class CharacterController extends Controller
 		$flashed_data = $request->session()->get('flashed_data');
 		$flashed_warning = $request->session()->get('flashed_warning');
 		
+		$configurations = self::GetConfiguration();
+		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
 		
@@ -255,7 +259,7 @@ class CharacterController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.characters.edit', array('character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.characters.edit', array('configurations' => $configurations, 'character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
     }
 
     /**
@@ -355,4 +359,20 @@ class CharacterController extends Controller
 		
 		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged character $characterName from the database."));
     }
+	
+	private static function GetConfiguration()
+	{
+		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'character%')->get();
+		
+		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.character.name'))->first();
+		$shortDescription = $configurations->where('key', '=', Config::get('constants.keys.placeholders.character.shortDescription'))->first();
+		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.character.description'))->first();
+		$source = $configurations->where('key', '=', Config::get('constants.keys.placeholders.character.source'))->first();
+		$parent = $configurations->where('key', '=', Config::get('constants.keys.placeholders.character.parent'))->first();
+		$child = $configurations->where('key', '=', Config::get('constants.keys.placeholders.character.child'))->first();
+		
+		$configurationsArray = array('name' => $name, 'shortDescription' => $shortDescription, 'description' => $description, 'source' => $source, 'parent' => $parent, 'child' => $child);
+		
+		return $configurationsArray;
+	}
 }
