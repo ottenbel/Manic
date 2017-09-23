@@ -27,6 +27,7 @@ class AuthServiceProvider extends ServiceProvider
 		'App\Models\TagObjects\Series\SeriesAlias' => 'App\Policies\TagObjects\Series\SeriesAliasPolicy',
 		'App\Models\TagObjects\Tag\TagAlias' => 'App\Policies\TagObjects\Tag\TagAliasPolicy',
 		'App\Models\Configuration\ConfigurationPagination' => 'App\Policies\Configuration\ConfigurationPaginationPolicy',
+		'App\Models\Configuration\ConfigurationPlaceholder' => 'App\Policies\Configuration\ConfigurationPlaceholderPolicy',
     ];
 
     /**

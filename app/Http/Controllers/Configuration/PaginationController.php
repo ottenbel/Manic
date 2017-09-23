@@ -52,7 +52,7 @@ class PaginationController extends Controller
     {
 		$this->validate($request, [
 									'pagination_values.*' => 'required|integer|min:2', 
-									'pagination_values_helpers.*' => 'required|string|max:150'
+									'pagination_values_helpers.*' => 'required|string|max:250'
 									]);
 		$paginationValues = null;
 		

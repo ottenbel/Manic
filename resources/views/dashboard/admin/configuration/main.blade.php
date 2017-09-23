@@ -13,6 +13,11 @@
     <div class="row">
 		<a href="{{route('admin_dashboard_configuration_pagination')}}"><b>Pagination</b></a>
     </div>
+	
+	<div class="row">
+		<a href="{{route('admin_dashboard_configuration_placeholders')}}"><b>Placeholders</b></a>
+	</div>
+	
 </div>
 @endsection
 

@@ -18,7 +18,7 @@ class CreateConfigurationPaginationTable extends Migration
 			$table->uuid('user_id')->nullable();
 			$table->string('key');
 			$table->integer('value');
-			$table->string('description', 150);
+			$table->string('description', 250);
 			$table->integer('priority');
 			$table->uuid('created_by')->nullable();
 			$table->uuid('updated_by')->nullable();
