@@ -74,7 +74,11 @@ class RegisterController extends Controller
 		
 		//Seed the database with configuration values for the user.
 		SeedingHelper::SeedPaginationTable($user);
-		
+		//If the user can edit then seed their placeholder tables
+		if ($user->has_editor_permission())
+		{
+			SeedingHelper::SeedPlaceholderTable($user);
+		}
 		return $user;
     }
 }
