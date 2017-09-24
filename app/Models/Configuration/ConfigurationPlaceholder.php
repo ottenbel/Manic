@@ -8,6 +8,7 @@ class ConfigurationPlaceholder extends BaseManicModel
 {
 	//Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'configuration_placeholder';
+	protected $fillable = array('value', 'description', 'priority');
 	
 	public static function boot()
     {
