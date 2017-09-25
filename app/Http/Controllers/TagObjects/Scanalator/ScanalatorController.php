@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TagObjects\Scanalator;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
@@ -14,7 +14,7 @@ use ConfigurationLookupHelper;
 use App\Models\TagObjects\Scanalator\Scanalator;
 use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 
-class ScanalatorController extends Controller
+class ScanalatorController extends WebController
 {
     /**
      * Display a listing of the resource.
@@ -23,9 +23,7 @@ class ScanalatorController extends Controller
      */
     public function index(Request $request)
     {
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+		$messages = self::GetFlashedMessages($request);
 	
 		$scanalators = null;
 		$scanalator_list_type = trim(strtolower($request->input('type')));
@@ -74,7 +72,7 @@ class ScanalatorController extends Controller
 			$scanalators = $scanalators_used;
 		}		
 		
-		return View('tagObjects.scanalators.index', array('scanalators' => $scanalators->appends(Input::except('page')), 'list_type' => $scanalator_list_type, 'list_order' => $scanalator_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.scanalators.index', array('scanalators' => $scanalators->appends(Input::except('page')), 'list_type' => $scanalator_list_type, 'list_order' => $scanalator_list_order, 'messages' => $messages));
     }
 
     /**
@@ -87,13 +85,10 @@ class ScanalatorController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize(Scanalator::class);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
-		return View('tagObjects.scanalators.create', array('configurations' => $configurations, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.scanalators.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
     /**
@@ -135,12 +130,14 @@ class ScanalatorController extends Controller
 		{	
 			$childCausingLoopsMessage = "The following scanalators (" . implode(", ", $causedLoops) . ") were not attached as children to " . $scanalator->name . " as their addition would cause loops in tag implication.";
 			
-			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_data", array("Partially updated scanalator $scanalator->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially created scanalator $scanalator->name."], [$childCausingLoopsMessage]);
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $messages);
 		}
 		else
 		{
+			$messages = self::BuildFlashedMessagesVariable(["Successfully created scanalator $scanalator->name."], null, null);
 			//Redirect to the scanalator that was created
-			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully created scanalator $scanalator->name."));
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $messages);
 		}
     }
 
@@ -152,9 +149,7 @@ class ScanalatorController extends Controller
      */
     public function show(Request $request, Scanalator $scanalator)
     {
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+        $messages = self::GetFlashedMessages($request);
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
@@ -185,7 +180,7 @@ class ScanalatorController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.scanalators.show', array('scanalator' => $scanalator, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.scanalators.show', array('scanalator' => $scanalator, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
     }
 
     /**
@@ -199,10 +194,7 @@ class ScanalatorController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($scanalator);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
@@ -234,7 +226,7 @@ class ScanalatorController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.scanalators.edit', array('configurations' => $configurations, 'scanalator' => $scanalator, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.scanalators.edit', array('configurations' => $configurations, 'scanalator' => $scanalator, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
     }
 
     /**
@@ -278,12 +270,14 @@ class ScanalatorController extends Controller
 		{	
 			$childCausingLoopsMessage = "The following scanalators (" . implode(", ", $causedLoops) . ") were not attached as children to " . $scanalator->name . " as their addition would cause loops in tag implication.";
 			
-			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_data", array("Partially created scanalator $scanalator->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially updated scanalator $scanalator->name."], [$childCausingLoopsMessage]);
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $messages);
 		}
 		else
-		{		
+		{	
+			$messages = self::BuildFlashedMessagesVariable(["Successfully updated scanalator $scanalator->name."], null, null);
 			//Redirect to the scanalator that was created
-			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully updated scanalator $scanalator->name."));
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $messages);
 		}
     }
 
@@ -318,7 +312,8 @@ class ScanalatorController extends Controller
 		//Force deleting for now, build out functionality for soft deleting later.
 		$scanalator->forceDelete();
 		
-		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged scanalator $scanalatorName from the database."));
+		$messages = self::BuildFlashedMessagesVariable(["Successfully purged scanalator $scanalatorName from the database."], null, null);
+		return redirect()->route('index_collection')->with("messages", $messages);
     }
 	
 	private static function GetConfiguration()

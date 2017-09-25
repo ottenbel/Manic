@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Configuration;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Redirect;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\WebController;
 use Route;
 use Auth;
 use Input;
 use ConfigurationLookupHelper;
 use App\Models\Configuration\ConfigurationPagination;
 
-class PaginationController extends Controller
+class PaginationController extends WebController
 {
     /**
      * Show the form for editing the specified resource.
@@ -35,11 +35,9 @@ class PaginationController extends Controller
 			$paginationValues = ConfigurationPagination::where('user_id', '=', null)->orderBy('priority')->get();
 		}
 		
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+		$messages = self::GetFlashedMessages($request);
 		
-		return View('configuration.pagination.edit', array('paginationValues' => $paginationValues, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('configuration.pagination.edit', array('paginationValues' => $paginationValues, 'messages' => $messages));
     }
 
     /**
@@ -88,11 +86,13 @@ class PaginationController extends Controller
 		
 		if (Route::is('user_update_configuration_pagination'))
 		{
-			return redirect()->route('user_dashboard_configuration_pagination')->with("flashed_success", array("Successfully updated pagination configuration settings for user."));
+			$messages = self::BuildFlashedMessagesVariable(["Successfully updated pagination configuration settings for user."], null, null);
+			return redirect()->route('user_dashboard_configuration_pagination')->with("messages", $messages);
 		}
 		else if (Route::is('admin_update_configuration_pagination'))
 		{
-			return redirect()->route('admin_dashboard_configuration_pagination')->with("flashed_success", array("Successfully updated pagination configuration settings for site."));
+			$messages = self::BuildFlashedMessagesVariable(["Successfully updated pagination configuration settings for site."], null, null);
+			return redirect()->route('admin_dashboard_configuration_pagination')->with("messages", $messages);
 		}
     }
 
@@ -124,6 +124,7 @@ class PaginationController extends Controller
 			 }
 		}
 		
-		return redirect()->route('user_dashboard_configuration_pagination')->with("flashed_success", array("Successfully reset pagination configuration settings for user to site defaults."));
+		$messages = self::BuildFlashedMessagesVariable(["Successfully reset pagination configuration settings for user to site defaults."], null, null);
+		return redirect()->route('user_dashboard_configuration_pagination')->with("messages", $messages);
     }
 }

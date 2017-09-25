@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Configuration;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Redirect;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\WebController;
 use Route;
 use Auth;
 use Input;
 use ConfigurationLookupHelper;
 use App\Models\Configuration\ConfigurationPlaceholder;
 
-class PlaceholderController extends Controller
+class PlaceholderController extends WebController
 {
     /**
      * Show the form for editing the specified resource.
@@ -44,11 +44,9 @@ class PlaceholderController extends Controller
 		$volumes = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'volume');});
 		$chapters = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'chapter');});
 		
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+		$messages = self::GetFlashedMessages($request);
 		
-		return View('configuration.placeholder.edit', array('artists' => $artists, 'characters' => $characters, 'scanalators' => $scanalators, 'series' => $series, 'tags' => $tags, 'collections' => $collections, 'volumes' => $volumes, 'chapters' => $chapters, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('configuration.placeholder.edit', array('artists' => $artists, 'characters' => $characters, 'scanalators' => $scanalators, 'series' => $series, 'tags' => $tags, 'collections' => $collections, 'volumes' => $volumes, 'chapters' => $chapters, 'messages' => $messages));
     }
 
     /**
@@ -97,11 +95,13 @@ class PlaceholderController extends Controller
 		
 		if (Route::is('user_update_configuration_placeholders'))
 		{
-			return redirect()->route('user_dashboard_configuration_placeholders')->with("flashed_success", array("Successfully updated placeholder configuration settings for user."));
+			$messages = self::BuildFlashedMessagesVariable(["Successfully updated placeholder configuration settings for user."], null, null);
+			return redirect()->route('user_dashboard_configuration_placeholders')->with("messages", $messages);
 		}
 		else if (Route::is('admin_update_configuration_placeholders'))
 		{
-			return redirect()->route('admin_dashboard_configuration_placeholders')->with("flashed_success", array("Successfully updated placeholder configuration settings for site."));
+			$messages = self::BuildFlashedMessagesVariable(["Successfully updated placeholder configuration settings for site."], null, null);
+			return redirect()->route('admin_dashboard_configuration_placeholders')->with("messages", $messages);
 		}
     }
 
@@ -133,6 +133,7 @@ class PlaceholderController extends Controller
 			 }
 		}
 		
-		return redirect()->route('user_dashboard_configuration_placeholders')->with("flashed_success", array("Successfully reset placeholder configuration settings for user to site defaults."));
+		$messages = self::BuildFlashedMessagesVariable(["Successfully reset placeholder configuration settings for user to site defaults."], null, null);
+		return redirect()->route('user_dashboard_configuration_placeholders')->with("messages", $messages);
     }
 }

@@ -27,7 +27,7 @@ use App\Models\Status;
 use App\Models\TagObjects\Tag\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
 
-class CollectionController extends Controller
+class CollectionController extends WebController
 {	
     /**
      * Display a listing of the resource.
@@ -36,9 +36,7 @@ class CollectionController extends Controller
      */
     public function index(Request $request)
     {
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+		$messages = self::GetFlashedMessages($request);
 		$search_string = $request->query('search');
 		
 		$collections = null;
@@ -69,7 +67,7 @@ class CollectionController extends Controller
 			$collections->appends(Input::except('page'));
 		}
 		
-		return View('collections.index', array('collections' => $collections, 'search_artists_array' => $searchArtists, 'search_characters_array' => $searchCharacters, 'search_scanalators_array' => $searchScanalators, 'search_series_array' => $searchSeries, 'search_tags_array' => $searchTags, 'search_languages_array' => $searchLanguages, 'search_ratings_array' => $searchRatings, 'search_statues_array' => $searchStatuses, 'search_canonicity_array' => $searchCanonicity, 'invalid_tokens_array' => $invalid_tokens, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('collections.index', array('collections' => $collections, 'search_artists_array' => $searchArtists, 'search_characters_array' => $searchCharacters, 'search_scanalators_array' => $searchScanalators, 'search_series_array' => $searchSeries, 'search_tags_array' => $searchTags, 'search_languages_array' => $searchLanguages, 'search_ratings_array' => $searchRatings, 'search_statues_array' => $searchStatuses, 'search_canonicity_array' => $searchCanonicity, 'invalid_tokens_array' => $invalid_tokens, 'messages' => $messages));
     }
 
     /**
@@ -202,11 +200,13 @@ class CollectionController extends Controller
 				$flashed_warning_array = array_push($flashed_warning_array, $missing_secondary_characters_string);
 			}
 			
-			return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_data", array("Partially created collection $collection->name."))->with("flashed_warning", $flashed_warning_array);
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially created collection $collection->name."], $flashed_warning_array);
+			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
 		}
 		else
 		{
-			return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully created collection $collection->name."));
+			$messages = self::BuildFlashedMessagesVariable(["Successfully created collection $collection->name."], null, null);
+			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
 		}
     }
 	
@@ -218,9 +218,7 @@ class CollectionController extends Controller
      */
     public function show(Request $request, Collection $collection)
     {	
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+		$messages = self::GetFlashedMessages($request);
 		
 		$sibling_collections = null;
 		
@@ -229,7 +227,7 @@ class CollectionController extends Controller
 			$sibling_collections = $collection->parent_collection->child_collections()->where('id', '!=', $collection->id)->get();
 		}
 		
-        return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+        return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections, 'messages' => $messages));
     }
 
     /**
@@ -243,10 +241,7 @@ class CollectionController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($collection);
 		
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+		$messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
         $ratings = Rating::orderBy('priority', 'asc')->get()->pluck('name', 'id');
@@ -254,7 +249,7 @@ class CollectionController extends Controller
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		$collection->load('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
 		
-		return View('collections.edit', array('configurations' => $configurations, 'collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('collections.edit', array('configurations' => $configurations, 'collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages, 'messages' => $messages));
     }
 
     /**
@@ -370,13 +365,15 @@ class CollectionController extends Controller
 				
 				array_push($flashed_warning_array, $missing_secondary_characters_string);
 			}
-		
+			
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially updated collection $collection->name."], $flashed_warning_array);
 			//Redirect to the collection that was created
-			return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_data", array("Partially updated collection $collection->name."))->with("flashed_warning", $flashed_warning_array);
+			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
 		}
 		else
 		{
-			return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully updated collection $collection->name."));
+			$messages = self::BuildFlashedMessagesVariable(["Successfully updated collection $collection->name."], null, null);
+			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
 		}
 	}
 
@@ -396,7 +393,8 @@ class CollectionController extends Controller
 		//Force deleting for now, build out functionality for soft deleting later.
 		$collection->forceDelete();
 		
-		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged collection $collectionName from the database."));
+		$messages = self::BuildFlashedMessagesVariable(["Successfully purged collection $collectionName from the database."], null, null);
+		return redirect()->route('index_collection')->with("messages", $messages);
     }
 	
 	/**
@@ -421,8 +419,9 @@ class CollectionController extends Controller
 		}
 		else
 		{
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to export zipped collection file."]);
 			//Return an error message saying that it couldn't create a collection export
-			return Redirect::back()->with(["flashed_warning" => array("Unable to export zipped collection file.")]);
+			return Redirect::back()->with(["messages" => $messages]);
 		}
 	}
 	

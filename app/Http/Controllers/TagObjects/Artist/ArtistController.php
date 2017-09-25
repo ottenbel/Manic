@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TagObjects\Artist;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
@@ -15,7 +15,7 @@ use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
 use App\Models\Configuration\ConfigurationPlaceholder;
 
-class ArtistController extends Controller
+class ArtistController extends WebController
 {
     /**
      * Display a listing of the resource.
@@ -24,9 +24,7 @@ class ArtistController extends Controller
      */
     public function index(Request $request)
     {		
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+		$messages = self::GetFlashedMessages($request);
 	
 		$artists = null;
 		$artist_list_type = trim(strtolower($request->input('type')));
@@ -75,7 +73,7 @@ class ArtistController extends Controller
 			$artists = $artists_used;
 		}		
 		
-		return View('tagObjects.artists.index', array('artists' => $artists->appends(Input::except('page')), 'list_type' => $artist_list_type, 'list_order' => $artist_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.artists.index', array('artists' => $artists->appends(Input::except('page')), 'list_type' => $artist_list_type, 'list_order' => $artist_list_order, 'messages' => $messages));
     }
 
     /**
@@ -88,13 +86,10 @@ class ArtistController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize(Artist::class);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
-		return View('tagObjects.artists.create', array('configurations' => $configurations, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.artists.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
     /**
@@ -136,12 +131,14 @@ class ArtistController extends Controller
 		{	
 			$childCausingLoopsMessage = "The following artists (" . implode(", ", $causedLoops) . ") were not attached as children to " . $artist->name . " as their addition would cause loops in tag implication.";
 			
-			return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_data", array("Partially created artist $artist->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially created artist $artist->name."], [$childCausingLoopsMessage]);
+			return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $messages);
 		}
 		else
 		{
+			$messages = self::BuildFlashedMessagesVariable(["Successfully created artist $artist->name."], null, null);
 			//Redirect to the artist that was created
-			return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_success", array("Successfully created artist $artist->name."));
+			return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $messages);
 		}
     }
 
@@ -153,9 +150,7 @@ class ArtistController extends Controller
      */
     public function show(Request $request, Artist $artist)
     {
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+        $messages = self::GetFlashedMessages($request);
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
@@ -186,7 +181,7 @@ class ArtistController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.artists.show', array('artist' => $artist, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.artists.show', array('artist' => $artist, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
     }
 
     /**
@@ -200,10 +195,7 @@ class ArtistController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($artist);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
@@ -236,7 +228,7 @@ class ArtistController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.artists.edit', array('configurations' => $configurations, 'artist' => $artist, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.artists.edit', array('configurations' => $configurations, 'artist' => $artist, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
     }
 
     /**
@@ -280,12 +272,14 @@ class ArtistController extends Controller
 		{	
 			$childCausingLoopsMessage = "The following artists (" . implode(", ", $causedLoops) . ") were not attached as children to " . $artist->name . " as their addition would cause loops in tag implication.";
 			
-			return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_data", array("Partially updated artist $artist->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially updated artist $artist->name."], [$childCausingLoopsMessage]);
+			return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $messages);
 		}
 		else
 		{
+			$messages = self::BuildFlashedMessagesVariable(["Successfully updated artist $artist->name."], null, null);
 			//Redirect to the artist that was created
-			return redirect()->route('show_artist', ['artist' => $artist])->with("flashed_success", array("Successfully updated artist $artist->name."));
+			return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $messages);
 		}
     }
 
@@ -320,7 +314,8 @@ class ArtistController extends Controller
 		//Force deleting for now, build out functionality for soft deleting later.
 		$artist->forceDelete();
 		
-		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged artist $artistName from the database."));
+		$messages = self::BuildFlashedMessagesVariable(["Successfully purged artist $artistName from the database."], null, null);
+		return redirect()->route('index_collection')->with("messages", $messages);
     }
 	
 	private static function GetConfiguration()

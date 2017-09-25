@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TagObjects\Scanalator;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
@@ -13,7 +13,7 @@ use ConfigurationLookupHelper;
 use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 use App\Models\TagObjects\Scanalator\Scanalator;
 
-class ScanalatorAliasController extends Controller
+class ScanalatorAliasController extends WebController
 {
     /**
      * Display a listing of the resource.
@@ -22,9 +22,7 @@ class ScanalatorAliasController extends Controller
      */
     public function index(Request $request)
     {
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+		$messages = self::GetFlashedMessages($request);
 		
 		$alias_list_type = trim(strtolower($request->input('type')));
 		$alias_list_order = trim(strtolower($request->input('order')));
@@ -70,7 +68,7 @@ class ScanalatorAliasController extends Controller
 			$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate($paginationCount);
 		}
 		
-		return View('tagObjects.scanalators.alias.index', array('aliases' => $aliases->appends(Input::except('page')), 'list_type' => $alias_list_type, 'list_order' => $alias_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.scanalators.alias.index', array('aliases' => $aliases->appends(Input::except('page')), 'list_type' => $alias_list_type, 'list_order' => $alias_list_order, 'messages' => $messages));
     }
 
     /**
@@ -115,8 +113,9 @@ class ScanalatorAliasController extends Controller
 				
 		$scanalatorAlias->save();
 		
+		$messages = self::BuildFlashedMessagesVariable(["Successfully created alias $scanalatorAlias->alias on scanalator $scanalator->name."], null, null);
 		//Redirect to the scanalator that the alias was created for
-		return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully created alias $scanalatorAlias->alias on scanalator $scanalator->name."));
+		return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $messages);
     }
 
     /**
@@ -134,7 +133,9 @@ class ScanalatorAliasController extends Controller
 		
 		//Force deleting for now, build out functionality for soft deleting later.
 		$scanalatorAlias->forceDelete();
+		
+		$messages = self::BuildFlashedMessagesVariable(["Successfully purged alias from scanalator."], null, null);
 		//redirect to the scanalator that the alias existed for
-		return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("flashed_success", array("Successfully purged alias from scanalator."));
+		return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $messages);
     }
 }

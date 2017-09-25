@@ -22,7 +22,7 @@ use App\Models\TagObjects\Scanalator\Scanalator;
 use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 use App\Models\Volume;
 
-class ChapterController extends Controller
+class ChapterController extends WebController
 {
     /**
      * Show the form for creating a new resource.
@@ -34,10 +34,7 @@ class ChapterController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize(Chapter::class);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
 		$volumes = $collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
@@ -52,20 +49,20 @@ class ChapterController extends Controller
 			//If collection doesn't have any associated volumes prompt the user to create a volume before they create a chapter.
 			$missing_volume_warning = "Creating a chapter on a collection requires a volume for the chapter to belong to.  Create a volume to associate the chapter to before trying to create a chapter.";
 			
-			if ($flashed_warning != null)
+			if ($messages['warning'] != null)
 			{
-				array_push($flashed_warning, $missing_volume_warning);
+				array_push($messages['warning'], $missing_volume_warning);
 			}
 			else
 			{
-				$flashed_warning = array($missing_volume_warning);
+				$messages['warning'] = array($missing_volume_warning);
 			}
 			
-			return View('volumes.create', array('collection' => $collection, 'volumes_array' => $volumes_array,  'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+			return View('volumes.create', array('collection' => $collection, 'volumes_array' => $volumes_array, 'messages' => $messages));
 		}
 		else
 		{
-			return View('chapters.create', array('configurations' => $configurations, 'collection' => $collection, 'volumes' => $volumes, 'volumes_array' => $volumes_array, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+			return View('chapters.create', array('configurations' => $configurations, 'collection' => $collection, 'volumes' => $volumes, 'volumes_array' => $volumes_array, 'messages' => $messages));
 		}
     }
 
@@ -193,8 +190,9 @@ class ChapterController extends Controller
 		}
 		
 		$collection = $volume->collection;
+		$messages = self::BuildFlashedMessagesVariable(["Successfully created new chapter #$chapter->chapter_number on collection $collection->name."], null, null);
 		
-		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully created new chapter #$chapter->chapter_number on collection $collection->name."));
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
     }
 
     /**
@@ -205,9 +203,7 @@ class ChapterController extends Controller
      */
     public function show(Request $request, Chapter $chapter, int $page = 0)
     {
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+        $messages = self::GetFlashedMessages($request);
 		
 		if (is_int($page))
 		{
@@ -256,7 +252,7 @@ class ChapterController extends Controller
 			$last_page_of_previous_chapter = null;
 		}
 		
-		return view('chapters.show', array('collection' => $collection, 'chapter' => $chapter, 'page_number' => $page, 'pages_array' => $pages_array, 'previous_chapter_id' => $previous_chapter_id, 'next_chapter_id' => $next_chapter_id, 'last_page_of_previous_chapter' => $last_page_of_previous_chapter, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return view('chapters.show', array('collection' => $collection, 'chapter' => $chapter, 'page_number' => $page, 'pages_array' => $pages_array, 'previous_chapter_id' => $previous_chapter_id, 'next_chapter_id' => $next_chapter_id, 'last_page_of_previous_chapter' => $last_page_of_previous_chapter, 'messages' => $messages));
     }
 
     /**
@@ -270,10 +266,7 @@ class ChapterController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($chapter);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
 		$volumes_array = json_encode($chapter->volume->collection->volumes()->pluck('id'));
@@ -283,7 +276,7 @@ class ChapterController extends Controller
 			return "Volume $item";
 		});
 		
-        return View('chapters.edit', array('configurations' => $configurations, 'chapter' => $chapter, 'volumes' => $volumes, 'volumes_array' => $volumes_array, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+        return View('chapters.edit', array('configurations' => $configurations, 'chapter' => $chapter, 'volumes' => $volumes, 'volumes_array' => $volumes_array, 'messages' => $messages));
     }
 
     /**
@@ -462,8 +455,9 @@ class ChapterController extends Controller
 		}
 		
 		$collection = $volume->collection;
+		$messages = self::BuildFlashedMessagesVariable(["Successfully updated chapter #$chapter->chapter_number on collection $collection->name."], null, null);
 		
-		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully updated  chapter #$chapter->chapter_number on collection $collection->name."));
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
     }
 
     /**
@@ -486,8 +480,9 @@ class ChapterController extends Controller
 		
 		//Force deleting for now, build out functionality for soft deleting later.
 		$chapter->forceDelete();
+		$messages = self::BuildFlashedMessagesVariable(["Successfully purged chapter $chapterName from the collection."], null, null);
 		
-		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully purged chapter $chapterName from the collection."));
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
     }
 	
 	/**
@@ -517,7 +512,9 @@ class ChapterController extends Controller
 		else
 		{
 			//Return an error message saying that it couldn't create a chapter export
-			return Redirect::back()->with(["flashed_warning" => array("Unable to export zipped chapter file.")]);
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to export zipped chapter file."]); 
+			
+			return Redirect::back()->with(["messages" => $messages]);
 		}
 	}
 	

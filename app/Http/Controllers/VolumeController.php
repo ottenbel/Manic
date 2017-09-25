@@ -15,7 +15,7 @@ use App\Models\Collection;
 use App\Models\Image;
 use App\Models\Volume;
 
-class VolumeController extends Controller
+class VolumeController extends WebController
 {
     /**
      * Show the form for creating a new resource.
@@ -27,13 +27,10 @@ class VolumeController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize(Volume::class);
 		
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+		$messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration($collection);
 		
-        return View('volumes.create', array('configurations' => $configurations, 'collection' => $collection, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+        return View('volumes.create', array('configurations' => $configurations, 'collection' => $collection, 'messages' => $messages));
     }
 
     /**
@@ -76,8 +73,10 @@ class VolumeController extends Controller
 		} 
 		
 		$volume->save();
-				
-		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully created new volume #$volume->volume_number on collection $collection->name."));
+		
+		$messages = self::BuildFlashedMessagesVariable(["Successfully created new volume #$volume->volume_number on collection $collection->name."], null, null);
+		
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
     }
 
     /**
@@ -91,13 +90,10 @@ class VolumeController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($volume);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
-        return View('volumes.edit', array('configurations' => $configurations, 'volume' => $volume, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+        return View('volumes.edit', array('configurations' => $configurations, 'volume' => $volume, 'messages' => $messages));
     }
 
     /**
@@ -162,7 +158,8 @@ class VolumeController extends Controller
 		
 		$volume->save();
 		
-		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully updated volume #$volume->volume_number on collection $collection->name."));
+		$messages = self::BuildFlashedMessagesVariable(["Successfully updated volume #$volume->volume_number on collection $collection->name."], null, null);
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
     }
 
     /**
@@ -186,7 +183,8 @@ class VolumeController extends Controller
 		//Force deleting for now, build out functionality for soft deleting later.
 		$volume->forceDelete();
 		
-		return redirect()->route('show_collection', ['collection' => $collection])->with("flashed_success", array("Successfully purged volume $volumeName from the collection."));
+		$messages = self::BuildFlashedMessagesVariable(["Successfully purged volume $volumeName from the collection."], null, null);
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
     }
 	
 	/**
@@ -215,8 +213,10 @@ class VolumeController extends Controller
 		}
 		else
 		{
+			$messages = self::BuildFlashedMessagesVariable(["Unable to export zipped volume file."], null, null);
+			
 			//Return an error message saying that it couldn't create a volume export
-			return Redirect::back()->with(["flashed_warning" => array("Unable to export zipped volume file.")]);
+			return Redirect::back()->with(["messages" => $messages]);
 		}
 	}
 	

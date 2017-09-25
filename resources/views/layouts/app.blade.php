@@ -85,25 +85,28 @@
 		</noscript>
 		
 		{{-- Add code so that any page can display data that has been flashed to session. --}}
-		@if(!empty($flashed_success))
-			@foreach($flashed_success as $success)
-				<div class="alert alert-success" role="alert">
+		@if(!empty($messages['success']))
+			@foreach($messages['success'] as $success)
+				<div class="alert alert-success alert-dismissable" role="alert">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
 					{{{$success}}}
 				</div>
 			@endforeach
 		@endif
 		
-		@if(!empty($flashed_data))
-			@foreach($flashed_data as $data)
-				<div class="alert alert-info" role="alert">
+		@if(!empty($messages['data']))
+			@foreach($messages['data'] as $data)
+				<div class="alert alert-info alert-dismissable" role="alert">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
 					{{{$data}}}
 				</div>
 			@endforeach
 		@endif
 		
-		@if(!empty($flashed_warning))
-			@foreach($flashed_warning as $warning)
-				<div class="alert alert-warning" role="alert">
+		@if(!empty($messages['warning']))
+			@foreach($messages['warning'] as $warning)
+				<div class="alert alert-warning alert-dismissable" role="alert">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
 					{{{$warning}}}
 				</div>
 			@endforeach

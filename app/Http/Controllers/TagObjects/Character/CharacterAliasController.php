@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TagObjects\Character;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Redirect;
@@ -16,7 +16,7 @@ use App\Models\TagObjects\Character\CharacterAlias;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
 
-class CharacterAliasController extends Controller
+class CharacterAliasController extends WebController
 {
     /**
      * Display a listing of the resource.
@@ -25,9 +25,7 @@ class CharacterAliasController extends Controller
      */
     public function index(Request $request)
     {
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+		$messages = self::GetFlashedMessages($request);
 		
 		$alias_list_type = trim(strtolower($request->input('type')));
 		$alias_list_order = trim(strtolower($request->input('order')));
@@ -73,7 +71,7 @@ class CharacterAliasController extends Controller
 			$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate($paginationCount);
 		}
 		
-		return View('tagObjects.characters.alias.index', array('aliases' => $aliases->appends(Input::except('page')), 'list_type' => $alias_list_type, 'list_order' => $alias_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.characters.alias.index', array('aliases' => $aliases->appends(Input::except('page')), 'list_type' => $alias_list_type, 'list_order' => $alias_list_order, 'messages' => $messages));
     }
 	
     /**
@@ -118,8 +116,9 @@ class CharacterAliasController extends Controller
 				
 		$characterAlias->save();
 		
+		$messages = self::BuildFlashedMessagesVariable(["Successfully created alias $characterAlias->alias on character $character->name."], null, null);
 		//Redirect to the character that the alias was created for
-		return redirect()->route('show_character', ['character' => $character])->with("flashed_success", array("Successfully created alias $characterAlias->alias on character $character->name."));
+		return redirect()->route('show_character', ['character' => $character])->with("messages", $messages);
     }
 
     /**
@@ -137,7 +136,9 @@ class CharacterAliasController extends Controller
 		
 		//Force deleting for now, build out functionality for soft deleting later.
 		$characterAlias->forceDelete();
+		
+		$messages = self::BuildFlashedMessagesVariable(["Successfully purged alias from character."], null, null);
 		//redirect to the character that the alias existed for
-		return redirect()->route('show_character', ['character' => $character])->with("flashed_success", array("Successfully purged alias from character."));
+		return redirect()->route('show_character', ['character' => $character])->with("messages", $messages);
     }
 }

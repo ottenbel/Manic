@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TagObjects\Series;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
@@ -14,7 +14,7 @@ use ConfigurationLookupHelper;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
 
-class SeriesController extends Controller
+class SeriesController extends WebController
 {
     /**
      * Display a listing of the resource.
@@ -23,9 +23,7 @@ class SeriesController extends Controller
      */
     public function index(Request $request)
     {
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+		$messages = self::GetFlashedMessages($request);
 	
 		$series = null;
 		$series_list_type = trim(strtolower($request->input('type')));
@@ -74,7 +72,7 @@ class SeriesController extends Controller
 			$series = $series_used;
 		}		
 		
-		return View('tagObjects.series.index', array('series' => $series->appends(Input::except('page')), 'list_type' => $series_list_type, 'list_order' => $series_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.series.index', array('series' => $series->appends(Input::except('page')), 'list_type' => $series_list_type, 'list_order' => $series_list_order, 'messages' => $messages));
     }
 
     /**
@@ -87,13 +85,10 @@ class SeriesController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize(Series::class);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
-		return View('tagObjects.series.create', array('configurations' => $configurations, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.series.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
     /**
@@ -137,12 +132,14 @@ class SeriesController extends Controller
 		{	
 			$childCausingLoopsMessage = "The following series (" . implode(", ", $causedLoops) . ") were not attached as children to " . $series->name . " as their addition would cause loops in tag implication.";
 			
-			return redirect()->route('show_series', ['series' => $series])->with("flashed_data", array("Partially updated series $series->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially created series $series->name."], [$childCausingLoopsMessage]);
+			return redirect()->route('show_series', ['series' => $series])->with("messages", $messages);
 		}
 		else
 		{
+			$messages = self::BuildFlashedMessagesVariable(["Successfully created series $series->name."], null, null);
 			//Redirect to the series that was created
-			return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully created series $series->name."));
+			return redirect()->route('show_series', ['series' => $series])->with("messages", $messages);
 		}
     }
 
@@ -154,9 +151,7 @@ class SeriesController extends Controller
      */
     public function show(Request $request, Series $series)
     {
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+        $messages = self::GetFlashedMessages($request);
 		
 		$characters_list_type = trim(strtolower($request->input('character_type')));
 		$characters_list_order = trim(strtolower($request->input('character_order')));
@@ -233,7 +228,7 @@ class SeriesController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.series.show', array('series' => $series, 'characters' => $characters->appends(Input::except('character_page')), 'character_list_type' => $characters_list_type, 'character_list_order' => $characters_list_order, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.series.show', array('series' => $series, 'characters' => $characters->appends(Input::except('character_page')), 'character_list_type' => $characters_list_type, 'character_list_order' => $characters_list_order, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
     }
 	
     /**
@@ -247,10 +242,7 @@ class SeriesController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($series);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
@@ -298,7 +290,7 @@ class SeriesController extends Controller
 			}
 		}
 		
-		return View('tagObjects.series.edit', array('configurations' => $configurations, 'series' => $series, 'freeChildren' => $freeChildren, 'lockedChildren' =>$lockedChildren, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.series.edit', array('configurations' => $configurations, 'series' => $series, 'freeChildren' => $freeChildren, 'lockedChildren' =>$lockedChildren, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
     }
 
     /**
@@ -353,12 +345,14 @@ class SeriesController extends Controller
 		{	
 			$childCausingLoopsMessage = "The following series (" . implode(", ", $causedLoops) . ") were not attached as children to " . $series->name . " as their addition would cause loops in tag implication.";
 			
-			return redirect()->route('show_series', ['series' => $series])->with("flashed_data", array("Partially created series $series->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially updated series $series->name."], [$childCausingLoopsMessage]);
+			return redirect()->route('show_series', ['series' => $series])->with("messages", $messages);
 		}
 		else
 		{	
+			$messages = self::BuildFlashedMessagesVariable(["Successfully updated series $series->name."], null, null);
 			//Redirect to the series that was created
-			return redirect()->route('show_series', ['series' => $series])->with("flashed_success", array("Successfully updated series $series->name."));
+			return redirect()->route('show_series', ['series' => $series])->with("messages", $messages);
 		}
     }
 
@@ -378,7 +372,8 @@ class SeriesController extends Controller
 		//Force deleting for now, build out functionality for soft deleting later.
 		$series->forceDelete();
 		
-		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged series $seriesName from the database."));
+		$messages = self::BuildFlashedMessagesVariable(["Successfully purged series $seriesName from the database."], null, null);
+		return redirect()->route('index_collection')->with("messages", $messages);
     }
 	
 	private static function GetConfiguration()

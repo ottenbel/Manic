@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TagObjects\Character;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Redirect;
@@ -17,7 +17,7 @@ use App\Models\TagObjects\Character\CharacterAlias;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
 
-class CharacterController extends Controller
+class CharacterController extends WebController
 {
     /**
      * Display a listing of the resource.
@@ -26,9 +26,7 @@ class CharacterController extends Controller
      */
     public function index(Request $request)
     {
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+		$messages = self::GetFlashedMessages($request);
 		
 		$characters = null;
 		$character_list_type = trim(strtolower($request->input('type')));
@@ -77,7 +75,7 @@ class CharacterController extends Controller
 			$characters = $characters_used;
 		}		
 		
-		return View('tagObjects.characters.index', array('characters' => $characters->appends(Input::except('page')), 'list_type' => $character_list_type, 'list_order' => $character_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.characters.index', array('characters' => $characters->appends(Input::except('page')), 'list_type' => $character_list_type, 'list_order' => $character_list_order, 'messages' => $messages));
     }
 
     /**
@@ -90,13 +88,10 @@ class CharacterController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize(Character::class);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
-		return View('tagObjects.characters.create', array('configurations' => $configurations, 'series' => $series, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.characters.create', array('configurations' => $configurations, 'series' => $series, 'messages' => $messages));
     }
 
     /**
@@ -160,12 +155,14 @@ class CharacterController extends Controller
 				array_push($warnings, $droppedChildrenMessage);
 			}
 			
-			return redirect()->route('show_character', ['character' => $character])->with("flashed_data", array("Partially created character $character->name."))->with("flashed_warning", $warnings);
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially created character $character->name."], $warnings);
+			return redirect()->route('show_character', ['character' => $character])->with("messages", $messages);
 		}
 		else
 		{
+			$messages = self::BuildFlashedMessagesVariable(["Successfully created character $character->name under series $parent_series->name."], null, null);
 			//Redirect to the character that was created
-			return redirect()->route('show_character', ['character' => $character])->with("flashed_success", array("Successfully created character $character->name under series $parent_series->name."));
+			return redirect()->route('show_character', ['character' => $character])->with("messages", $messages);
 		}
     }
 
@@ -177,9 +174,7 @@ class CharacterController extends Controller
      */
     public function show(Request $request, Character $character)
     {
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+        $messages = self::GetFlashedMessages($request);
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
@@ -210,7 +205,7 @@ class CharacterController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.characters.show', array('character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.characters.show', array('character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
     }
 
     /**
@@ -224,10 +219,7 @@ class CharacterController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($character);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
@@ -259,7 +251,7 @@ class CharacterController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.characters.edit', array('configurations' => $configurations, 'character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.characters.edit', array('configurations' => $configurations, 'character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
     }
 
     /**
@@ -317,12 +309,14 @@ class CharacterController extends Controller
 				array_push($warnings, $droppedChildrenMessage);
 			}
 			
-			return redirect()->route('show_character', ['character' => $character])->with("flashed_data", array("Partially updated character $character->name."))->with("flashed_warning", $warnings);
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially updated character $character->name."], $warnings);
+			return redirect()->route('show_character', ['character' => $character])->with("messages", $messages);
 		}
 		else
 		{
+			$messages = self::BuildFlashedMessagesVariable(["Successfully updated character $character->name."], null, null);
 			//Redirect to the character that was created
-			return redirect()->route('show_character', [$character])->with("flashed_success", array("Successfully updated character $character->name."));
+			return redirect()->route('show_character', [$character])->with("messages", $messages);
 		}
     }
 
@@ -354,10 +348,11 @@ class CharacterController extends Controller
 			}
 		}
 		
+		$messages = self::BuildFlashedMessagesVariable(["Successfully purged character $characterName from the database."], null, null);
 		//Force deleting for now, build out functionality for soft deleting later.
 		$character->forceDelete();
 		
-		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged character $characterName from the database."));
+		return redirect()->route('index_collection')->with("messages", $messages);
     }
 	
 	private static function GetConfiguration()

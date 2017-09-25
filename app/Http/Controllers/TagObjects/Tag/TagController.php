@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TagObjects\Tag;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
@@ -14,7 +14,7 @@ use ConfigurationLookupHelper;
 use App\Models\TagObjects\Tag\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
 
-class TagController extends Controller
+class TagController extends WebController
 {
     /**
      * Display a listing of the resource.
@@ -23,9 +23,7 @@ class TagController extends Controller
      */
     public function index(Request $request)
     {
-		$flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+		$messages = self::GetFlashedMessages($request);
 	
 		$tags = null;
 		$tag_list_type = trim(strtolower($request->input('type')));
@@ -74,7 +72,7 @@ class TagController extends Controller
 			$tags = $tags_used;
 		}		
 				
-		return View('tagObjects.tags.index', array('tags' => $tags->appends(Input::except('page')), 'list_type' => $tag_list_type, 'list_order' => $tag_list_order, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.tags.index', array('tags' => $tags->appends(Input::except('page')), 'list_type' => $tag_list_type, 'list_order' => $tag_list_order, 'messages' => $messages));
     }
 
     /**
@@ -87,13 +85,10 @@ class TagController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize(Tag::class);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
-		return View('tagObjects.tags.create', array('configurations' => $configurations, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.tags.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
     /**
@@ -135,12 +130,14 @@ class TagController extends Controller
 		{	
 			$childCausingLoopsMessage = "The following tags (" . implode(", ", $causedLoops) . ") were not attached as children to " . $tag->name . " as their addition would cause loops in tag implication.";
 			
-			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_data", array("Partially updated tag $tag->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially created tag $tag->name."], [$childCausingLoopsMessage]);
+			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $messages);
 		}
 		else
 		{
+			$messages = self::BuildFlashedMessagesVariable(["Successfully created tag $tag->name."], null, null);
 			//Redirect to the tag that was created
-			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_success", array("Successfully created tag $tag->name."));
+			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $messages);
 		}
     }
 
@@ -152,9 +149,7 @@ class TagController extends Controller
      */
     public function show(Request $request, Tag $tag)
     {
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
+        $messages = self::GetFlashedMessages($request);
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
@@ -185,7 +180,7 @@ class TagController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.tags.show', array('tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.tags.show', array('tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
     }
 
     /**
@@ -199,10 +194,7 @@ class TagController extends Controller
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($tag);
 		
-        $flashed_success = $request->session()->get('flashed_success');
-		$flashed_data = $request->session()->get('flashed_data');
-		$flashed_warning = $request->session()->get('flashed_warning');
-		
+        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
@@ -234,7 +226,7 @@ class TagController extends Controller
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.tags.edit', array('configurations' => $configurations, 'tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'flashed_success' => $flashed_success, 'flashed_data' => $flashed_data, 'flashed_warning' => $flashed_warning));
+		return View('tagObjects.tags.edit', array('configurations' => $configurations, 'tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
     }
 
     /**
@@ -278,12 +270,14 @@ class TagController extends Controller
 		{	
 			$childCausingLoopsMessage = "The following tags (" . implode(", ", $causedLoops) . ") were not attached as children to " . $tag->name . " as their addition would cause loops in tag implication.";
 			
-			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_data", array("Partially created tag $tag->name."))->with("flashed_warning", array($childCausingLoopsMessage));
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially updated tag $tag->name."], [$childCausingLoopsMessage]);
+			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $messages);
 		}
 		else
-		{		
+		{
+			$messages = self::BuildFlashedMessagesVariable(["Successfully updated tag $tag->name."], null, null);
 			//Redirect to the tag that was created
-			return redirect()->route('show_tag', ['tag' => $tag])->with("flashed_success", array("Successfully updated tag $tag->name."));
+			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $messages);
 		}
     }
 
@@ -318,7 +312,8 @@ class TagController extends Controller
 		//Force deleting for now, build out functionality for soft deleting later.
 		$tag->forceDelete();
 		
-		return redirect()->route('index_collection')->with("flashed_success", array("Successfully purged tag $tagName from the database."));
+		$messages = self::BuildFlashedMessagesVariable(["Successfully purged tag $tagName from the database."], null, null);
+		return redirect()->route('index_collection')->with("messages", $messages);
     }
 	
 	private static function GetConfiguration()
