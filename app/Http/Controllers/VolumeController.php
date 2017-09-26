@@ -228,7 +228,7 @@ class VolumeController extends Controller
 		$number = $configurations->where('key', '=', Config::get('constants.keys.placeholders.volume.number'))->first();
 		if (($collection != null) && ($collection->volumes->count() > 0))
 		{
-			$number->value = $collection->volumes()->last()->volume_number + 1;
+			$number->value = $collection->volumes()->last->volume_number + 1;
 		}
 		else
 		{
