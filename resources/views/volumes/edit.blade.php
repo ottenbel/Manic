@@ -32,9 +32,9 @@ Edit Volume - {{{$volume->name}}}
 			{{ Form::hidden('collection_id', $volume->collection_id) }}
 			{{ Form::hidden('volume_id', $volume->id) }}
 			
-			@include('partials.volume-input', array('configurations' => $configurations, 'volume' => $volume))
+			@include('partials.volume.input', array('configurations' => $configurations, 'volume' => $volume))
 			
-			@include('partials.show-volume-chapters', ['volume' => $volume, 'editVolume' => false, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'edit_chapter', 'scanalatorLinkRoute' => 'edit_scanalator', 'chapterOnly' => true, 'hideVolumes' => false])
+			@include('partials.volume.show', ['volume' => $volume, 'editVolume' => false, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'edit_chapter', 'scanalatorLinkRoute' => 'edit_scanalator', 'chapterOnly' => true, 'hideVolumes' => false])
 			
 			<br/>
 			

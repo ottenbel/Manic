@@ -37,7 +37,7 @@ Edit Chapter # {{$chapter->chapter_number}} {{{$chapter->name}}}
 			{{ Form::hidden('volume_id', $chapter->volume_id) }}
 			{{ Form::hidden('chapter_id', $chapter->id) }}
 			
-			@include('partials.chapter-input', array('configurations' => $configurations, 'chapter' => $chapter, 'volumes' => $volumes))		
+			@include('partials.chapter.input', array('configurations' => $configurations, 'chapter' => $chapter, 'volumes' => $volumes))		
 			
 			<table class="table table-responsive">
 				@foreach($chapter->pages()->orderBy('page_number', 'asc')->get() as $page)

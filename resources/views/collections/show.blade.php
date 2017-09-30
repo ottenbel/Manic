@@ -241,7 +241,7 @@
 		</div>
 	@endif
 	
-	@include('partials.show-collection-content', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'show_chapter', 'scanalatorLinkRoute' => 'index_collection', 'hideVolumes' => false])
+	@include('partials.collection.show', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'show_chapter', 'scanalatorLinkRoute' => 'index_collection', 'hideVolumes' => false])
 	
 	@if(($collection->parent_collection != null) || (count($collection->child_collections)))
 		<br/>

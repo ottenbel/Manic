@@ -21,7 +21,7 @@ Create a New Chapter
 		<form method="POST" action="{{route('store_chapter')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
-			@include('partials.chapter-input', array('configurations' => $configurations))
+			@include('partials.chapter.input', array('configurations' => $configurations))
 			
 			{{ Form::submit('Create Chapter', array('class' => 'btn btn-primary')) }}
 		</form>

@@ -19,9 +19,9 @@ Create a New Volume
 			
 			{{ Form::hidden('collection_id', $collection->id) }}
 			
-			@include('partials.volume-input', array('configurations' => $configurations))
+			@include('partials.volume.input', array('configurations' => $configurations))
 			
-			@include('partials.show-collection-content', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editVolumeRoute' => 'show_volume', 'chapterLinkRoute' => 'show_chapter', 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => false])
+			@include('partials.collection.show', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editVolumeRoute' => 'show_volume', 'chapterLinkRoute' => 'show_chapter', 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => false])
 			<br/>
 			
 			{{ Form::submit('Create Volume', array('class' => 'btn btn-primary')) }}
