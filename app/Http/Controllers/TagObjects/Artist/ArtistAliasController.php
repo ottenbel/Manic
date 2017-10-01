@@ -2,140 +2,29 @@
 
 namespace App\Http\Controllers\TagObjects\Artist;
 
-use App\Http\Controllers\WebController;
+use App\Http\Controllers\TagObjects\TagObjectAliasController;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Auth;
-use DB;
-use Input;
-use Config;
-use ConfigurationLookupHelper;
-use App\Models\TagObjects\Artist\ArtistAlias;
 use App\Models\TagObjects\Artist\Artist;
+use App\Models\TagObjects\Artist\ArtistAlias;
+use App\Http\Requests\TagObjects\Aliases\StoreArtistAliasRequest;
 
-class ArtistAliasController extends WebController
+class ArtistAliasController extends TagObjectAliasController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index(Request $request)
-    {		
-		$messages = self::GetFlashedMessages($request);
-		
-		$alias_list_type = trim(strtolower($request->input('type')));
-		$alias_list_order = trim(strtolower($request->input('order')));
-		
-		if (($alias_list_type != Config::get('constants.sortingStringComparison.aliasListType.global')) 
-			&& ($alias_list_type != Config::get('constants.sortingStringComparison.aliasListType.personal')) 
-			&& ($alias_list_type != Config::get('constants.sortingStringComparison.aliasListType.mixed')))
-		{
-			$alias_list_type = Config::get('constants.sortingStringComparison.aliasListType.mixed');
-		}
-		
-		if (($alias_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($alias_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			$alias_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-		}
-		
+    {	
 		$aliases = new ArtistAlias();
-		
-		$lookupKey = Config::get('constants.keys.pagination.artistAliasesPerPageIndex');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
-		
-		if (Auth::user())
-		{
-			if ($alias_list_type == Config::get('constants.sortingStringComparison.aliasListType.global'))
-			{
-				$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate($paginationCount);
-			}
-			
-			if ($alias_list_type == Config::get('constants.sortingStringComparison.aliasListType.personal'))
-			{
-				$aliases = $aliases->where('user_id', '=', Auth::user()->id)->orderBy('alias', $alias_list_order)->paginate($paginationCount);
-			}
-			
-			if ($alias_list_type == Config::get('constants.sortingStringComparison.aliasListType.mixed'))
-			{
-				$aliases = $aliases->where('user_id', '=', null)->orWhere('user_id', '=', Auth::user()->id)->orderBy('alias', $alias_list_order)->paginate($paginationCount);
-			}
-		}
-		else
-		{
-			$aliases = new ArtistAlias();
-			$aliases = $aliases->where('user_id', '=', null)->orderBy('alias', $alias_list_order)->paginate($paginationCount);
-		}
-		
-		return View('tagObjects.artists.alias.index', array('aliases' => $aliases->appends(Input::except('page')), 'list_type' => $alias_list_type, 'list_order' => $alias_list_order, 'messages' => $messages));
+		return self::GetAliasIndex($request, $aliases, 'artistAliasesPerPageIndex', 'artists');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store(Request $request, Artist $artist)
+    public function store(StoreArtistAliasRequest $request, Artist $artist)
     {
-		$isGlobalAlias = Input::get('is_global_alias');
-		$isPersonalAlias = Input::get('is_personal_alias');
-		if ($isGlobalAlias)
-		{
-			//Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-			$this->authorize([ArtistAlias::class, true]);
-			
-			$this->validate($request, [
-				'global_alias' => 'required|unique:artists,name|unique:artist_alias,alias,null,null,user_id,NULL|regex:/^[^,:-]+$/']);
-		}
-		else if ($isPersonalAlias)
-		{
-			//Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-			$this->authorize([ArtistAlias::class, false]);
-			
-			$this->validate($request, [
-				'personal_alias' => 'required|unique:artists,name|unique:artist_alias,alias,null,null,user_id,'.Auth::user()->id.'|regex:/^[^,:-]+$/']);
-		}
-		
-		$artistAlias = new ArtistAlias();
-		$artistAlias->artist_id = $artist->id;
-		 
-        if ($isGlobalAlias)
-		{
-			$artistAlias->alias = Input::get('global_alias');
-			$artistAlias->user_id = null;
-		}
-		else
-		{
-			$artistAlias->alias = Input::get('personal_alias');
-			$artistAlias->user_id = Auth::user()->id;
-		}
-		
-		$artistAlias->save();
-		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully created alias $artistAlias->alias on artist $artist->name."], null, null);
-		//Redirect to the artist that the alias was created for
-		return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $messages);
+		$alias = new ArtistAlias();
+		return self::StoreAlias($request, $alias, $artist, 'artist_id', 'artist', 'show_artist');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  ArtistAlias  $artistAlias
-     * @return Response
-     */
     public function destroy(ArtistAlias $artistAlias)
     {
-        //Define authorization in the controller as global variables can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($artistAlias);
-		
-		$artist = $artistAlias->artist_id;
-
-		//Force deleting for now, build out functionality for soft deleting later.
-		$artistAlias->forceDelete();
-		
-		//redirect to the artist that the alias existed for
-		$messages = self::BuildFlashedMessagesVariable(["Successfully purged alias from artist."], null, null);
-		return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $messages);
+		return self::DeleteAlias($artistAlias, 'artist_id', 'artist', 'show_artist');
     }
 }
