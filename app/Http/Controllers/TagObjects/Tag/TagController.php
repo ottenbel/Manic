@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TagObjects\Tag;
 
-use App\Http\Controllers\WebController;
+use App\Http\Controllers\TagObjects\TagObjectController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
@@ -14,80 +14,19 @@ use ConfigurationLookupHelper;
 use App\Models\TagObjects\Tag\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
 
-class TagController extends WebController
+class TagController extends TagObjectController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index(Request $request)
     {
-		$messages = self::GetFlashedMessages($request);
-	
-		$tags = null;
-		$tag_list_type = trim(strtolower($request->input('type')));
-		$tag_list_order = trim(strtolower($request->input('order')));
-		
-		if (($tag_list_type != Config::get('constants.sortingStringComparison.tagListType.usage')) 
-			&& ($tag_list_type != Config::get('constants.sortingStringComparison.tagListType.alphabetic')))
-		{
-			$tag_list_type = Config::get('constants.sortingStringComparison.tagListType.usage');
-		}
-		
-		if (($tag_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($tag_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			if($tag_list_type == Config::get('constants.sortingStringComparison.tagListType.usage'))
-			{
-				$tag_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-			}
-			else
-			{
-				$tag_list_order = Config::get('constants.sortingStringComparison.listOrder.descending');
-			}
-		}
-		
-		$lookupKey = Config::get('constants.keys.pagination.tagsPerPageIndex');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
-		
-		if ($tag_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
-		{
-			$tags = new Tag();
-			$tag_output = $tags->orderBy('name', $tag_list_order)->paginate($paginationCount);
-			
-			$tags = $tag_output;
-		}
-		else
-		{	
-			$tags = new Tag();
-			$tags_used = $tags->join('collection_tag', 'tags.id', '=', 'collection_tag.tag_id')->select('tags.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $tag_list_order)->orderBy('name', 'desc')->paginate($paginationCount);
-			
-			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds tags that aren't used into the dataset used for popularity)
-			
-			/*$tags_not_used = $tags->leftjoin('collection_tag', 'tags.id', '=', 'collection_tag.tag_id')->where('collection_id', '=', null)->select('tags.*', DB::raw('0 as total'))->groupBy('name');
-			
-			$tag_output = $tags_used->union($tags_not_used)->orderBy('total', $tag_list_order)->orderBy('name', 'desc')->get();*/
-			
-			$tags = $tags_used;
-		}		
-				
-		return View('tagObjects.tags.index', array('tags' => $tags->appends(Input::except('page')), 'list_type' => $tag_list_type, 'list_order' => $tag_list_order, 'messages' => $messages));
+		$tags = new Tag();
+		return self::GetTagObjectIndex($request, $tags, 'tagsPerPageIndex', 'tags', 'collection_tag', 'tag_id');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
     public function create(Request $request)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize(Tag::class);
-		
+		$this->authorize(Tag::class);	
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
-		
+		$configurations = self::GetConfiguration('tag');
 		return View('tagObjects.tags.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
@@ -195,7 +134,7 @@ class TagController extends WebController
 		$this->authorize($tag);
 		
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
+		$configurations = self::GetConfiguration('tag');
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
@@ -315,20 +254,4 @@ class TagController extends WebController
 		$messages = self::BuildFlashedMessagesVariable(["Successfully purged tag $tagName from the database."], null, null);
 		return redirect()->route('index_collection')->with("messages", $messages);
     }
-	
-	private static function GetConfiguration()
-	{
-		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'tag%')->get();
-		
-		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.tag.name'))->first();
-		$shortDescription = $configurations->where('key', '=', Config::get('constants.keys.placeholders.tag.shortDescription'))->first();
-		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.tag.description'))->first();
-		$source = $configurations->where('key', '=', Config::get('constants.keys.placeholders.tag.source'))->first();
-		$parent = $configurations->where('key', '=', Config::get('constants.keys.placeholders.tag.parent'))->first();
-		$child = $configurations->where('key', '=', Config::get('constants.keys.placeholders.tag.child'))->first();
-		
-		$configurationsArray = array('name' => $name, 'shortDescription' => $shortDescription, 'description' => $description, 'source' => $source, 'parent' => $parent, 'child' => $child);
-		
-		return $configurationsArray;
-	}
 }

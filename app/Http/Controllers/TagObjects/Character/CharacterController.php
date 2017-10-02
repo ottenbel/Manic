@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TagObjects\Character;
 
-use App\Http\Controllers\WebController;
+use App\Http\Controllers\TagObjects\TagObjectController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Redirect;
@@ -17,80 +17,19 @@ use App\Models\TagObjects\Character\CharacterAlias;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
 
-class CharacterController extends WebController
+class CharacterController extends TagObjectController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index(Request $request)
     {
-		$messages = self::GetFlashedMessages($request);
-		
-		$characters = null;
-		$character_list_type = trim(strtolower($request->input('type')));
-		$character_list_order = trim(strtolower($request->input('order')));
-		
-		if (($character_list_type != Config::get('constants.sortingStringComparison.tagListType.usage')) 
-			&& ($character_list_type != Config::get('constants.sortingStringComparison.tagListType.alphabetic')))
-		{
-			$character_list_type = Config::get('constants.sortingStringComparison.tagListType.usage');
-		}
-		
-		if (($character_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($character_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			if($character_list_type == Config::get('constants.sortingStringComparison.tagListType.usage'))
-			{
-				$character_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-			}
-			else
-			{
-				$character_list_order = Config::get('constants.sortingStringComparison.listOrder.descending');
-			}
-		}
-		
-		$lookupKey = Config::get('constants.keys.pagination.charactersPerPageIndex');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
-		
-		if ($character_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
-		{
-			$characters = new Character();	
-			$character_output = $characters->orderBy('name', $character_list_order)->paginate($paginationCount);
-			
-			$characters = $character_output;
-		}
-		else
-		{	
-			$characters = new Character();
-			$characters_used = $characters->join('character_collection', 'characters.id', '=', 'character_collection.character_id')->select('characters.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $character_list_order)->orderBy('name', 'desc')->paginate($paginationCount);
-			
-			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds characters that aren't used into the dataset used for popularity)
-			
-			/*$characters_not_used = $characters->leftjoin('character_collection', 'characters.id', '=', 'character_collection.character_id')->where('collection_id', '=', null)->select('characters.*', DB::raw('0 as total'))->groupBy('name');
-			
-			$character_output = $characters_used->union($characters_not_used)->orderBy('total', $character_list_order)->orderBy('name', 'desc')->get();*/
-			
-			$characters = $characters_used;
-		}		
-		
-		return View('tagObjects.characters.index', array('characters' => $characters->appends(Input::except('page')), 'list_type' => $character_list_type, 'list_order' => $character_list_order, 'messages' => $messages));
+		$characters = new Character();
+		return self::GetTagObjectIndex($request, $characters, 'charactersPerPageIndex', 'characters', 'character_collection', 'character_id');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
     public function create(Request $request, Series $series = null)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize(Character::class);
-		
+		$this->authorize(Character::class);	
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
-		
+		$configurations = self::GetConfiguration('character');
 		return View('tagObjects.characters.create', array('configurations' => $configurations, 'series' => $series, 'messages' => $messages));
     }
 
@@ -220,7 +159,7 @@ class CharacterController extends WebController
 		$this->authorize($character);
 		
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
+		$configurations = self::GetConfiguration('GetConfiguration');
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
@@ -354,20 +293,4 @@ class CharacterController extends WebController
 		
 		return redirect()->route('index_collection')->with("messages", $messages);
     }
-	
-	private static function GetConfiguration()
-	{
-		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'character%')->get();
-		
-		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.character.name'))->first();
-		$shortDescription = $configurations->where('key', '=', Config::get('constants.keys.placeholders.character.shortDescription'))->first();
-		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.character.description'))->first();
-		$source = $configurations->where('key', '=', Config::get('constants.keys.placeholders.character.source'))->first();
-		$parent = $configurations->where('key', '=', Config::get('constants.keys.placeholders.character.parent'))->first();
-		$child = $configurations->where('key', '=', Config::get('constants.keys.placeholders.character.child'))->first();
-		
-		$configurationsArray = array('name' => $name, 'shortDescription' => $shortDescription, 'description' => $description, 'source' => $source, 'parent' => $parent, 'child' => $child);
-		
-		return $configurationsArray;
-	}
 }

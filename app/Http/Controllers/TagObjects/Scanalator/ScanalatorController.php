@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TagObjects\Scanalator;
 
-use App\Http\Controllers\WebController;
+use App\Http\Controllers\TagObjects\TagObjectController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
@@ -14,80 +14,19 @@ use ConfigurationLookupHelper;
 use App\Models\TagObjects\Scanalator\Scanalator;
 use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 
-class ScanalatorController extends WebController
+class ScanalatorController extends TagObjectController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index(Request $request)
     {
-		$messages = self::GetFlashedMessages($request);
-	
-		$scanalators = null;
-		$scanalator_list_type = trim(strtolower($request->input('type')));
-		$scanalator_list_order = trim(strtolower($request->input('order')));
-		
-		if (($scanalator_list_type != Config::get('constants.sortingStringComparison.tagListType.usage')) 
-			&& ($scanalator_list_type != Config::get('constants.sortingStringComparison.tagListType.alphabetic')))
-		{
-			$scanalator_list_type = Config::get('constants.sortingStringComparison.tagListType.usage');
-		}
-		
-		if (($scanalator_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($scanalator_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			if($scanalator_list_type == Config::get('constants.sortingStringComparison.tagListType.usage'))
-			{
-				$scanalator_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-			}
-			else
-			{
-				$scanalator_list_order = Config::get('constants.sortingStringComparison.listOrder.descending');
-			}
-		}
-		
-		$lookupKey = Config::get('constants.keys.pagination.scanalatorsPerPageIndex');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
-		
-		if ($scanalator_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
-		{
-			$scanalators = new Scanalator();	
-			$scanalator_output = $scanalators->orderBy('name', $scanalator_list_order)->paginate($paginationCount);
-			
-			$scanalators = $scanalator_output;
-		}
-		else
-		{	
-			$scanalators = new Scanalator();
-			$scanalators_used = $scanalators->join('chapter_scanalator', 'scanalators.id', '=', 'chapter_scanalator.scanalator_id')->select('scanalators.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $scanalator_list_order)->orderBy('name', 'desc')->paginate($paginationCount);
-			
-			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds scanalators that aren't used into the dataset used for popularity)
-			
-			/*$scanalators_not_used = $scanalators->leftjoin('chapter_scanalator', 'scanalators.id', '=', 'chapter_scanalator.scanalator_id')->where('collection_id', '=', null)->select('scanalators.*', DB::raw('0 as total'))->groupBy('name');
-			
-			$scanalator_output = $scanalators_used->union($scanalators_not_used)->orderBy('total', $scanalator_list_order)->orderBy('name', 'desc')->get();*/
-			
-			$scanalators = $scanalators_used;
-		}		
-		
-		return View('tagObjects.scanalators.index', array('scanalators' => $scanalators->appends(Input::except('page')), 'list_type' => $scanalator_list_type, 'list_order' => $scanalator_list_order, 'messages' => $messages));
+		$scanalators = new Scanalator();
+		return self::GetTagObjectIndex($request, $scanalators, 'scanalatorsPerPageIndex', 'scanalators', 'chapter_scanalator', 'scanalator_id');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
     public function create(Request $request)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize(Scanalator::class);
-		
+		$this->authorize(Scanalator::class);	
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
-		
+		$configurations = self::GetConfiguration('scanalator');
 		return View('tagObjects.scanalators.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
@@ -195,7 +134,7 @@ class ScanalatorController extends WebController
 		$this->authorize($scanalator);
 		
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
+		$configurations = self::GetConfiguration('scanalator');
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
@@ -316,19 +255,5 @@ class ScanalatorController extends WebController
 		return redirect()->route('index_collection')->with("messages", $messages);
     }
 	
-	private static function GetConfiguration()
-	{
-		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'scanalator%')->get();
-		
-		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.scanalator.name'))->first();
-		$shortDescription = $configurations->where('key', '=', Config::get('constants.keys.placeholders.scanalator.shortDescription'))->first();
-		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.scanalator.description'))->first();
-		$source = $configurations->where('key', '=', Config::get('constants.keys.placeholders.scanalator.source'))->first();
-		$parent = $configurations->where('key', '=', Config::get('constants.keys.placeholders.scanalator.parent'))->first();
-		$child = $configurations->where('key', '=', Config::get('constants.keys.placeholders.scanalator.child'))->first();
-		
-		$configurationsArray = array('name' => $name, 'shortDescription' => $shortDescription, 'description' => $description, 'source' => $source, 'parent' => $parent, 'child' => $child);
-		
-		return $configurationsArray;
-	}
+	
 }

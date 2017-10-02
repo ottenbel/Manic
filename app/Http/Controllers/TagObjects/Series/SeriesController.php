@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TagObjects\Series;
 
-use App\Http\Controllers\WebController;
+use App\Http\Controllers\TagObjects\TagObjectController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
@@ -14,80 +14,19 @@ use ConfigurationLookupHelper;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
 
-class SeriesController extends WebController
+class SeriesController extends TagObjectController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index(Request $request)
     {
-		$messages = self::GetFlashedMessages($request);
-	
-		$series = null;
-		$series_list_type = trim(strtolower($request->input('type')));
-		$series_list_order = trim(strtolower($request->input('order')));
-		
-		if (($series_list_type != Config::get('constants.sortingStringComparison.tagListType.usage')) 
-			&& ($series_list_type != Config::get('constants.sortingStringComparison.tagListType.alphabetic')))
-		{
-			$series_list_type = Config::get('constants.sortingStringComparison.tagListType.usage');
-		}
-		
-		if (($series_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($series_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			if($series_list_type == Config::get('constants.sortingStringComparison.tagListType.usage'))
-			{
-				$series_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-			}
-			else
-			{
-				$series_list_order = Config::get('constants.sortingStringComparison.listOrder.descending');
-			}
-		}
-		
-		$lookupKey = Config::get('constants.keys.pagination.seriesPerPageIndex');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
-		
-		if ($series_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
-		{
-			$series = new Series();
-			$series_output = $series->orderBy('name', $series_list_order)->paginate($paginationCount);
-			
-			$series = $series_output;
-		}
-		else
-		{	
-			$series = new Series();
-			$series_used = $series->join('collection_series', 'series.id', '=', 'collection_series.series_id')->select('series.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $series_list_order)->orderBy('name', 'desc')->paginate($paginationCount);
-			
-			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds series that aren't used into the dataset used for popularity)
-			
-			/*$series_not_used = $series->leftjoin('collection_series', 'series.id', '=', 'collection_series.series_id')->where('collection_id', '=', null)->select('series.*', DB::raw('0 as total'))->groupBy('name');
-			
-			$series_output = $series_used->union($series_not_used)->orderBy('total', $series_list_order)->orderBy('name', 'desc')->get();*/
-			
-			$series = $series_used;
-		}		
-		
-		return View('tagObjects.series.index', array('series' => $series->appends(Input::except('page')), 'list_type' => $series_list_type, 'list_order' => $series_list_order, 'messages' => $messages));
+		$series = new Series();
+		return self::GetTagObjectIndex($request, $series, 'seriesPerPageIndex', 'series', 'collection_series', 'series_id');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
     public function create(Request $request)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize(Series::class);
-		
+		$this->authorize(Series::class);	
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
-		
+		$configurations = self::GetConfiguration('series');
 		return View('tagObjects.series.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
@@ -243,7 +182,7 @@ class SeriesController extends WebController
 		$this->authorize($series);
 		
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
+		$configurations = self::GetConfiguration('series');
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
@@ -375,20 +314,4 @@ class SeriesController extends WebController
 		$messages = self::BuildFlashedMessagesVariable(["Successfully purged series $seriesName from the database."], null, null);
 		return redirect()->route('index_collection')->with("messages", $messages);
     }
-	
-	private static function GetConfiguration()
-	{
-		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'series%')->get();
-		
-		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.series.name'))->first();
-		$shortDescription = $configurations->where('key', '=', Config::get('constants.keys.placeholders.series.shortDescription'))->first();
-		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.series.description'))->first();
-		$source = $configurations->where('key', '=', Config::get('constants.keys.placeholders.series.source'))->first();
-		$parent = $configurations->where('key', '=', Config::get('constants.keys.placeholders.series.parent'))->first();
-		$child = $configurations->where('key', '=', Config::get('constants.keys.placeholders.series.child'))->first();
-		
-		$configurationsArray = array('name' => $name, 'shortDescription' => $shortDescription, 'description' => $description, 'source' => $source, 'parent' => $parent, 'child' => $child);
-		
-		return $configurationsArray;
-	}
 }

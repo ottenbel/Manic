@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\TagObjects\Artist;
 
-use App\Http\Controllers\WebController;
+use App\Http\Controllers\TagObjects\TagObjectController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
@@ -15,80 +15,19 @@ use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
 use App\Models\Configuration\ConfigurationPlaceholder;
 
-class ArtistController extends WebController
+class ArtistController extends TagObjectController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index(Request $request)
     {		
-		$messages = self::GetFlashedMessages($request);
-	
-		$artists = null;
-		$artist_list_type = trim(strtolower($request->input('type')));
-		$artist_list_order = trim(strtolower($request->input('order')));
-		
-		if (($artist_list_type != Config::get('constants.sortingStringComparison.tagListType.usage')) 
-			&& ($artist_list_type != Config::get('constants.sortingStringComparison.tagListType.alphabetic')))
-		{
-			$artist_list_type = Config::get('constants.sortingStringComparison.tagListType.usage');
-		}
-		
-		if (($artist_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($artist_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			if($artist_list_type == Config::get('constants.sortingStringComparison.tagListType.usage'))
-			{
-				$artist_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-			}
-			else
-			{
-				$artist_list_order = Config::get('constants.sortingStringComparison.listOrder.descending');
-			}
-		}
-		
-		$lookupKey = Config::get('constants.keys.pagination.artistsPerPageIndex');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
-		
-		if ($artist_list_type == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
-		{
-			$artists = new artist();
-			$artist_output = $artists->orderBy('name', $artist_list_order)->paginate($paginationCount);
-			
-			$artists = $artist_output;
-		}
-		else
-		{	
-			$artists = new artist();
-			$artists_used = $artists->join('artist_collection', 'artists.id', '=', 'artist_collection.artist_id')->select('artists.*', DB::raw('count(*) as total'))->groupBy('name')->orderBy('total', $artist_list_order)->orderBy('name', 'desc')->paginate($paginationCount);
-			
-			//Leaving this code commented outhere until the paginator handling for union gets fixed in Laravel (this adds artists that aren't used into the dataset used for popularity)
-			
-			/*$artists_not_used = $artists->leftjoin('artist_collection', 'artists.id', '=', 'artist_collection.artist_id')->where('collection_id', '=', null)->select('artists.*', DB::raw('0 as total'))->groupBy('name');
-			
-			$artist_output = $artists_used->union($artists_not_used)->orderBy('total', $artist_list_order)->orderBy('name', 'desc')->get();*/
-			
-			$artists = $artists_used;
-		}		
-		
-		return View('tagObjects.artists.index', array('artists' => $artists->appends(Input::except('page')), 'list_type' => $artist_list_type, 'list_order' => $artist_list_order, 'messages' => $messages));
+		$artists = new artist();
+		return self::GetTagObjectIndex($request, $artists, 'artistsPerPageIndex', 'artists', 'artist_collection', 'artist_id');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
     public function create(Request $request)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize(Artist::class);
-		
+		$this->authorize(Artist::class);	
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
-		
+		$configurations = self::GetConfiguration('artist');
 		return View('tagObjects.artists.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
@@ -196,7 +135,7 @@ class ArtistController extends WebController
 		$this->authorize($artist);
 		
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
+		$configurations = self::GetConfiguration('artist');
 		
 		$global_list_order = trim(strtolower($request->input('global_order')));
 		$personal_list_order = trim(strtolower($request->input('personal_order')));
@@ -318,18 +257,5 @@ class ArtistController extends WebController
 		return redirect()->route('index_collection')->with("messages", $messages);
     }
 	
-	private static function GetConfiguration()
-	{
-		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'artist%')->get();
-		
-		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.artist.name'))->first();
-		$shortDescription = $configurations->where('key', '=', Config::get('constants.keys.placeholders.artist.shortDescription'))->first();
-		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.artist.description'))->first();
-		$source = $configurations->where('key', '=', Config::get('constants.keys.placeholders.artist.source'))->first();
-		$child = $configurations->where('key', '=', Config::get('constants.keys.placeholders.artist.child'))->first();
-		
-		$configurationsArray = array('name' => $name, 'shortDescription' => $shortDescription, 'description' => $description, 'source' => $source, 'child' => $child);
-		
-		return $configurationsArray;
-	}
+	
 }
