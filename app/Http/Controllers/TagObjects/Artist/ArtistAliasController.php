@@ -6,7 +6,7 @@ use App\Http\Controllers\TagObjects\TagObjectAliasController;
 use Illuminate\Http\Request;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
-use App\Http\Requests\TagObjects\Aliases\StoreArtistAliasRequest;
+use App\Http\Requests\TagObjects\Artist\Alias\StoreArtistAliasRequest;
 
 class ArtistAliasController extends TagObjectAliasController
 {

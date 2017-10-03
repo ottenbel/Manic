@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\TagObjects\Aliases;
+namespace App\Http\Requests\TagObjects\Series\Alias;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\TagObjects\Series\SeriesAlias;

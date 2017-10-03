@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\TagObjects\Aliases;
+namespace App\Http\Requests\TagObjects\Scanalator\Alias;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\TagObjects\Character\CharacterAlias;
+use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 
-class StoreCharacterAliasRequest extends FormRequest
+class StoreScanalatorAliasRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,8 +17,8 @@ class StoreCharacterAliasRequest extends FormRequest
 		$isGlobalAlias = $this->get('is_global_alias');
 		$isPersonalAlias = $this->get('is_personal_alias');
 		
-		if ($isGlobalAlias){ return $this->user()->can('create', [CharacterAlias::class, true]); }
-		else if ($isPersonalAlias) { return $this->user()->can('create', [CharacterAlias::class, false]); }
+		if ($isGlobalAlias){ return $this->user()->can('create', [ScanalatorAlias::class, true]); }
+		else if ($isPersonalAlias) { return $this->user()->can('create', [ScanalatorAlias::class, false]); }
 		else { return false; }
     }
 
@@ -35,13 +35,13 @@ class StoreCharacterAliasRequest extends FormRequest
 		if ($isGlobalAlias) 
 		{
 			return [
-				'global_alias' => 'required|unique:characters,name|unique:character_alias,alias,null,null,user_id,NULL|regex:/^[^,:-]+$/',
+				'global_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias,null,null,user_id,NULL|regex:/^[^,:-]+$/',
 			];
 		}
 		else if ($isPersonalAlias)
 		{
 			return [
-				'personal_alias' => 'required|unique:characters,name|unique:character_alias,alias,null,null,user_id,'.$this->user()->id.'|regex:/^[^,:-]+$/',
+				'personal_alias' => 'required|unique:scanalators,name|unique:scanalator_alias,alias,null,null,user_id,'.$this->user()->id.'|regex:/^[^,:-]+$/',
 			];
 		}
     }

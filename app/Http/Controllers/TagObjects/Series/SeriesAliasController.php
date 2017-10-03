@@ -6,7 +6,7 @@ use App\Http\Controllers\TagObjects\TagObjectAliasController;
 use Illuminate\Http\Request;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
-use App\Http\Requests\TagObjects\Aliases\StoreSeriesAliasRequest;
+use App\Http\Requests\TagObjects\Series\Alias\StoreSeriesAliasRequest;
 
 class SeriesAliasController extends TagObjectAliasController
 {

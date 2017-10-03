@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\TagObjects\Aliases;
+namespace App\Http\Requests\TagObjects\Tag\Alias;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\TagObjects\Tag\TagAlias;

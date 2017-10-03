@@ -6,7 +6,7 @@ use App\Http\Controllers\TagObjects\TagObjectAliasController;
 use Illuminate\Http\Request;
 use App\Models\TagObjects\Scanalator\Scanalator;
 use App\Models\TagObjects\Scanalator\ScanalatorAlias;
-use App\Http\Requests\TagObjects\Aliases\StoreScanalatorAliasRequest;
+use App\Http\Requests\TagObjects\Scanalator\Alias\StoreScanalatorAliasRequest;
 
 class ScanalatorAliasController extends TagObjectAliasController
 {

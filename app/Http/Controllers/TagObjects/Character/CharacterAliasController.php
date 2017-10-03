@@ -6,7 +6,7 @@ use App\Http\Controllers\TagObjects\TagObjectAliasController;
 use Illuminate\Http\Request;
 use App\Models\TagObjects\Character\Character;
 use App\Models\TagObjects\Character\CharacterAlias;
-use App\Http\Requests\TagObjects\Aliases\StoreCharacterAliasRequest;
+use App\Http\Requests\TagObjects\Character\Alias\StoreCharacterAliasRequest;
 
 class CharacterAliasController extends TagObjectAliasController
 {
