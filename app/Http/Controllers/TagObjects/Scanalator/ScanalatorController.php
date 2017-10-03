@@ -220,39 +220,10 @@ class ScanalatorController extends TagObjectController
 		}
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Scanalator  $scanalator
-     * @return Response
-     */
     public function destroy(Scanalator $scanalator)
     {
-        //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($scanalator);
-		
-		$scanalatorName = $scanalator->name;
-		
-		$parents = $scanalator->parents()->get();
-		$children = $scanalator->children()->get();
-		
-		//Ensure passed through relationships are sustained after deleting intermediary
-		foreach ($parents as $parent)
-		{
-			foreach ($children as $child)
-			{
-				if ($parent->children()->where('id', '=', $child->id)->count() == 0)
-				{
-					$parent->children()->attach($child);
-				}
-			}
-		}
-		
-		//Force deleting for now, build out functionality for soft deleting later.
-		$scanalator->forceDelete();
-		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully purged scanalator $scanalatorName from the database."], null, null);
-		return redirect()->route('index_collection')->with("messages", $messages);
+        return self::DestroyTagObject($scanalator, 'scanalator');
     }
 	
 	

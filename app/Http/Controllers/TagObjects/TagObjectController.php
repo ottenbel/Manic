@@ -22,6 +22,32 @@ class TagObjectController extends WebController
 		return View('tagObjects.'.$tagType.'.index', array($tagType => $tagObjects->appends(Input::except('page')), 'list_type' => $orderAndSorting['type'], 'list_order' => $orderAndSorting['order'], 'messages' => $messages));
 	}
 	
+	protected static function DestroyTagObject($object, $objectType)
+	{
+		$objectName = $object->name;
+		
+		$parents = $object->parents()->get();
+		$children = $object->children()->get();
+		
+		//Ensure passed through relationships are sustained after deleting the intermediary
+		foreach ($parents as $parent)
+		{
+			foreach ($children as $child)
+			{
+				if ($parent->children()->where('id', '=', $child->id)->count() == 0)
+				{
+					$parent->children()->attach($child);
+				}
+			}
+		}
+		
+		//Force deleting for now, build out functionality for soft deleting later.
+		$object->forceDelete();
+		
+		$messages = self::BuildFlashedMessagesVariable(["Successfully purged $objectType $objectName from the database."], null, null);
+		return redirect()->route('index_collection')->with("messages", $messages);
+	}
+	
 	protected static function GetConfiguration($tagType)
 	{
 		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', $tagType.'%')->get();

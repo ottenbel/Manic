@@ -295,23 +295,9 @@ class SeriesController extends TagObjectController
 		}
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Series  $series
-     * @return Response
-     */
     public function destroy(Series $series)
     {
-        //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($series);
-		
-		$seriesName = $series->name;
-		
-		//Force deleting for now, build out functionality for soft deleting later.
-		$series->forceDelete();
-		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully purged series $seriesName from the database."], null, null);
-		return redirect()->route('index_collection')->with("messages", $messages);
+        return self::DestroyTagObject($series, 'series');
     }
 }

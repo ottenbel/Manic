@@ -259,38 +259,9 @@ class CharacterController extends TagObjectController
 		}
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Character  $character
-     * @return Response
-     */
     public function destroy(Character $character)
     {
-        //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($character);
-		
-		$characterName = $character->name;
-		
-		$parents = $character->parents()->get();
-		$children = $character->children()->get();
-		
-		//Ensure passed through relationships are sustained after deleting intermediary
-		foreach ($parents as $parent)
-		{
-			foreach ($children as $child)
-			{
-				if ($parent->children()->where('id', '=', $child->id)->count() == 0)
-				{
-					$parent->children()->attach($child);
-				}
-			}
-		}
-		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully purged character $characterName from the database."], null, null);
-		//Force deleting for now, build out functionality for soft deleting later.
-		$character->forceDelete();
-		
-		return redirect()->route('index_collection')->with("messages", $messages);
+		return self::DestroyTagObject($character, 'character');
     }
 }
