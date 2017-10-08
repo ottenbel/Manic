@@ -32,6 +32,12 @@ Edit Character - {{{$character->name}}}
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 			
+			<div class="form-group">
+				{{ Form::label('parent_series', 'Series', array('style' => 'display:none')) }}
+				{{ Form::text('parent_series', $character->series()->first()->name, array('class' => 'form-control', 'style' => 'display:none')) }}
+			</div>
+
+			
 			@include('partials.tagObjects.tag-object-input', 
 			[
 				'tagObject' => $character, 

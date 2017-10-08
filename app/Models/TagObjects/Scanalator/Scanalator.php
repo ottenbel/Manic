@@ -8,6 +8,7 @@ class Scanalator extends BaseManicModel
 {
     //Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'scanalators';
+	protected $fillable = ['name', 'short_description', 'description', 'url'];
 	
 	public static function boot()
     {

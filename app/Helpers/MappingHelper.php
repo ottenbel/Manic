@@ -296,7 +296,7 @@ class MappingHelper
 					if (($merged->isEmpty()) || (($merged->count() == ($ancestorCount + $descendantCount)) 
 						&& ($merged->where('id', '=', $scanalator->id)->isEmpty())))
 					{
-						$artist->children()->attach($scanalatorChild);
+						$scanalator->children()->attach($scanalatorChild);
 					}
 					else
 					{

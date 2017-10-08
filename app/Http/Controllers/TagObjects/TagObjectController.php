@@ -96,6 +96,27 @@ class TagObjectController extends WebController
 		return ['type' => $listType, 'order' => $listOrder];
 	}
 	
+	protected static function GetAliasShowOrdering(Request $request)
+	{
+		$globalListOrder = trim(strtolower($request->input('global_order')));
+		$personalListOrder = trim(strtolower($request->input('personal_order')));
+		
+		if (($globalListOrder != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($globalListOrder != Config::get('constants.sortingStringComparison.listOrder.descending')))
+		{
+			$globalListOrder = Config::get('constants.sortingStringComparison.listOrder.ascending');
+		}
+		
+		if (($personalListOrder != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
+			&& ($personalListOrder != Config::get('constants.sortingStringComparison.listOrder.descending')))
+		{
+			$personalListOrder = Config::get('constants.sortingStringComparison.listOrder.ascending');
+		}
+		
+		return ['global' => $globalListOrder, 'personal' => $personalListOrder];
+		
+	}
+	
 	private static function GetTagObjects($tagObjects, $paginationKey, $tagType, $pivotTableName, $tagIDField, $orderAndSorting)
 	{
 		$lookupKey = Config::get('constants.keys.pagination.'.$paginationKey);

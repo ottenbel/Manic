@@ -13,6 +13,8 @@ use MappingHelper;
 use ConfigurationLookupHelper;
 use App\Models\TagObjects\Tag\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
+use App\Http\Requests\TagObjects\Tag\StoreTagRequest;
+use App\Http\Requests\TagObjects\Tag\UpdateTagRequest;
 
 class TagController extends TagObjectController
 {
@@ -30,194 +32,28 @@ class TagController extends TagObjectController
 		return View('tagObjects.tags.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store(Request $request)
+    public function store(StoreTagRequest $request)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize(Tag::class);
-		
-        $this->validate($request, [
-			'name' => 'required|unique:tags|regex:/^[^,:-]+$/',
-			'url' => 'URL',
-		]);
-		
 		$tag = new Tag();
-		$tag->name = trim(Input::get('name'));
-		$tag->short_description = trim(Input::get('short_description'));
-		$tag->description = trim(Input::get('description'));
-		$tag->url = trim(Input::get('url'));
-		
-		//Delete any tag aliases that share the name with the artist to be created.
-		$aliases_list = TagAlias::where('alias', '=', trim(Input::get('name')))->get();
-		
-		foreach ($aliases_list as $alias)
-		{
-			$alias->delete();
-		}
-		
-		$tag->save();
-		
-		$tag->children()->detach();
-		$tagChildrenArray = array_unique(array_map('trim', explode(',', Input::get('tag_child'))));
-		$causedLoops = MappingHelper::MapTagChildren($tag, $tagChildrenArray);
-		
-		if (count($causedLoops))
-		{	
-			$childCausingLoopsMessage = "The following tags (" . implode(", ", $causedLoops) . ") were not attached as children to " . $tag->name . " as their addition would cause loops in tag implication.";
-			
-			$messages = self::BuildFlashedMessagesVariable(null, ["Partially created tag $tag->name."], [$childCausingLoopsMessage]);
-			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $messages);
-		}
-		else
-		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully created tag $tag->name."], null, null);
-			//Redirect to the tag that was created
-			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $messages);
-		}
+		return self::CreateOrUpdateTag($request, $tag, 'created');
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
+	
     public function show(Request $request, Tag $tag)
     {
-        $messages = self::GetFlashedMessages($request);
-		
-		$global_list_order = trim(strtolower($request->input('global_order')));
-		$personal_list_order = trim(strtolower($request->input('personal_order')));
-		
-		if (($global_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($global_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			$global_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-		}
-		
-		if (($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			$personal_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-		}
-		
-		$lookupKey = Config::get('constants.keys.pagination.tagAliasesPerPageParent');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
-		
-		$global_aliases = $tag->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate($paginationCount, ['*'], 'global_alias_page');
-		$global_aliases->appends(Input::except('global_alias_page'));
-		
-		$personal_aliases = null;
-		
-		if (Auth::check())
-		{
-			$personal_aliases = $tag->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate($paginationCount, ['*'], 'personal_alias_page');
-			$personal_aliases->appends(Input::except('personal_alias_page'));
-		}
-		
-		return View('tagObjects.tags.show', array('tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
+        return self::GetTagToDisplay($request, $tag, 'show');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function edit(Request $request, Tag $tag)
     {
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($tag);
-		
-        $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration('tag');
-		
-		$global_list_order = trim(strtolower($request->input('global_order')));
-		$personal_list_order = trim(strtolower($request->input('personal_order')));
-		
-		if (($global_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($global_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			$global_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-		}
-		
-		if (($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			$personal_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-		}
-		
-		$lookupKey = Config::get('constants.keys.pagination.tagAliasesPerPageParent');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
-		
-		$global_aliases = $tag->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate($paginationCount, ['*'], 'global_alias_page');
-		$global_aliases->appends(Input::except('global_alias_page'));
-		
-		$personal_aliases = null;
-		
-		if (Auth::check())
-		{
-			$personal_aliases = $tag->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate($paginationCount, ['*'], 'personal_alias_page');
-			$personal_aliases->appends(Input::except('personal_alias_page'));
-		}
-		
-		return View('tagObjects.tags.edit', array('configurations' => $configurations, 'tag' => $tag, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
+		return self::GetTagToDisplay($request, $tag, 'edit', $configurations);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, Tag $tag)
+    public function update(UpdateTagRequest $request, Tag $tag)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize($tag);
-		
-		$this->validate($request, [
-		'name' => ['required',
-					Rule::unique('tags')->ignore($tag->id),
-					'regex:/^[^,:-]+$/'],
-				'url' => 'URL',
-		]);
-		
-		$tag->name = trim(Input::get('name'));
-		$tag->short_description = trim(Input::get('short_description'));
-		$tag->description = trim(Input::get('description'));
-		$tag->url = trim(Input::get('url'));
-		
-		//Delete any tag aliases that share the name with the artist to be created.
-		$aliases_list = TagAlias::where('alias', '=', trim(Input::get('name')))->get();
-		
-		foreach ($aliases_list as $alias)
-		{
-			$alias->delete();
-		}
-		
-		$tag->save();
-		
-		$tag->children()->detach();
-		$tagChildrenArray = array_unique(array_map('trim', explode(',', Input::get('tag_child'))));
-		$causedLoops = MappingHelper::MapTagChildren($tag, $tagChildrenArray);
-		
-		if (count($causedLoops))
-		{	
-			$childCausingLoopsMessage = "The following tags (" . implode(", ", $causedLoops) . ") were not attached as children to " . $tag->name . " as their addition would cause loops in tag implication.";
-			
-			$messages = self::BuildFlashedMessagesVariable(null, ["Partially updated tag $tag->name."], [$childCausingLoopsMessage]);
-			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $messages);
-		}
-		else
-		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully updated tag $tag->name."], null, null);
-			//Redirect to the tag that was created
-			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $messages);
-		}
+		return self::CreateOrUpdateTag($request, $tag, 'updated');
     }
 
     public function destroy(Tag $tag)
@@ -225,4 +61,50 @@ class TagController extends TagObjectController
 		$this->authorize($tag);
 		return self::DestroyTagObject($tag, 'tag');
     }
+	
+	protected static function CreateOrUpdateTag($request, $tag, $action)
+	{
+		TagAlias::where('alias', '=', trim(Input::get('name')))->delete();
+		$tag->fill($request->only(['name', 'short_description', 'description', 'url']));
+		$tag->save();
+		
+		$tag->children()->detach();
+		$tagChildrenArray = array_unique(array_map('trim', explode(',', Input::get('tag_child'))));
+		$causedLoops = MappingHelper::MapTagChildren($tag, $tagChildrenArray);
+		
+		if (count($causedLoops))
+		{	
+			$childCausingLoopsMessage = "The following tags (" . implode(", ", $causedLoops) . ") were not attached as children to " . $tag->name . " as their addition would cause loops in tag implication.";
+			
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially $action tag $tag->name."], [$childCausingLoopsMessage]);
+			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $messages);
+		}
+		else
+		{
+			$messages = self::BuildFlashedMessagesVariable(["Successfully $action tag $tag->name."], null, null);
+			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $messages);
+		}
+	}
+	
+	protected static function GetTagToDisplay($request, $tag, $route, $configurations = null)
+	{
+		$messages = self::GetFlashedMessages($request);
+		$aliasOrdering = self::GetAliasShowOrdering($request);
+		
+		$lookupKey = Config::get('constants.keys.pagination.tagAliasesPerPageParent');
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
+		$globalAliases = $tag->aliases()->where('user_id', '=', null)->orderBy('alias', $aliasOrdering['global'])->paginate($paginationCount, ['*'], 'global_alias_page');
+		$globalAliases->appends(Input::except('global_alias_page'));
+		
+		$personalAliases = null;
+		
+		if (Auth::check())
+		{
+			$personalAliases = $tag->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $aliasOrdering['personal'])->paginate($paginationCount, ['*'], 'personal_alias_page');
+			$personalAliases->appends(Input::except('personal_alias_page'));
+		}
+		
+		return View('tagObjects.tags.'.$route, array('configurations' => $configurations, 'tag' => $tag, 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $globalAliases, 'personal_aliases' => $personalAliases, 'messages' => $messages));
+	}
 }

@@ -16,6 +16,8 @@ use App\Models\TagObjects\Character\Character;
 use App\Models\TagObjects\Character\CharacterAlias;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
+use App\Http\Requests\TagObjects\Character\StoreCharacterRequest;
+use App\Http\Requests\TagObjects\Character\UpdateCharacterRequest;
 
 class CharacterController extends TagObjectController
 {
@@ -33,43 +35,48 @@ class CharacterController extends TagObjectController
 		return View('tagObjects.characters.create', array('configurations' => $configurations, 'series' => $series, 'messages' => $messages));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store(Request $request)
+    public function store(StoreCharacterRequest $request)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize(Character::class);
+		$parentSeries = Series::where('name', '=', trim(Input::get('parent_series')))->first();
 		
-		$this->validate($request, [
-		'name' => 'required|unique:characters|regex:/^[^,:-]+$/',
-				'url' => 'URL',
-		]);
-		
-		$parent_series = Series::where('name', '=', trim(Input::get('parent_series')))->first();
-		
-		if ($parent_series == null)
+		if ($parentSeries == null)
 		{
 			return Redirect::back()->withErrors(['parent_series' => 'A character must have a valid parent series associated with it.'])->withInput();
 		}
 		
 		$character = new Character();
-		$character->name = trim(Input::get('name'));
-		$character->short_description = trim(Input::get('short_description'));
-		$character->description = trim(Input::get('description'));
-		$character->url = trim(Input::get('url'));
-		$character->series_id = $parent_series->id;
+		$character->series_id = $parentSeries->id;
 		
-		//Delete any character aliases that share the name with the character to be created.
-		$aliases_list = CharacterAlias::where('alias', '=', trim(Input::get('name')))->get();
-		
-		foreach ($aliases_list as $alias)
-		{
-			$alias->delete();
-		}
-		
+		return self::CreateOrUpdateCharacter($request, $character, 'created');
+    }
+
+    public function show(Request $request, Character $character)
+    {
+        return self::GetCharacterToDisplay($request, $character, 'show');
+    }
+
+    public function edit(Request $request, Character $character)
+    {
+		$this->authorize($character);
+		$configurations = self::GetConfiguration('character');
+        return self::GetCharacterToDisplay($request, $character, 'edit', $configurations);
+    }
+
+    public function update(UpdateCharacterRequest $request, Character $character)
+    {		
+		return self::CreateOrUpdateCharacter($request, $character, 'updated');
+    }
+
+    public function destroy(Character $character)
+    {
+		$this->authorize($character);
+		return self::DestroyTagObject($character, 'character');
+    }
+	
+	protected static function CreateOrUpdateCharacter($request, $character, $action)
+	{
+		CharacterAlias::where('alias', '=', trim(Input::get('name')))->delete();
+		$character->fill($request->only(['name', 'short_description', 'description', 'url']));
 		$character->save();
 		
 		$droppedChildren = array();
@@ -94,174 +101,37 @@ class CharacterController extends TagObjectController
 				array_push($warnings, $droppedChildrenMessage);
 			}
 			
-			$messages = self::BuildFlashedMessagesVariable(null, ["Partially created character $character->name."], $warnings);
+			$seriesName = $character->series->name;
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially $action character $character->name under series $seriesName."], $warnings);
 			return redirect()->route('show_character', ['character' => $character])->with("messages", $messages);
 		}
 		else
 		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully created character $character->name under series $parent_series->name."], null, null);
-			//Redirect to the character that was created
+			$seriesName = $character->series->name;
+			$messages = self::BuildFlashedMessagesVariable(["Successfully $action character $character->name under series $seriesName."], null, null);
 			return redirect()->route('show_character', ['character' => $character])->with("messages", $messages);
 		}
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show(Request $request, Character $character)
-    {
-        $messages = self::GetFlashedMessages($request);
-		
-		$global_list_order = trim(strtolower($request->input('global_order')));
-		$personal_list_order = trim(strtolower($request->input('personal_order')));
-		
-		if (($global_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($global_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			$global_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-		}
-		
-		if (($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			$personal_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-		}
+	}
+	
+	protected static function GetCharacterToDisplay($request, $character, $route, $configurations = null)
+	{
+		$messages = self::GetFlashedMessages($request);
+		$aliasOrdering = self::GetAliasShowOrdering($request);
 		
 		$lookupKey = Config::get('constants.keys.pagination.characterAliasesPerPageParent');
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
-		$global_aliases = $character->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate($paginationCount, ['*'], 'global_alias_page');
-		$global_aliases ->appends(Input::except('global_alias_page'));
+		$globalAliases = $character->aliases()->where('user_id', '=', null)->orderBy('alias', $aliasOrdering['global'])->paginate($paginationCount, ['*'], 'global_alias_page');
+		$globalAliases->appends(Input::except('global_alias_page'));
 		
-		$personal_aliases = null;
-		
-		if (Auth::check())
-		{
-			$personal_aliases = $character->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate($paginationCount, ['*'], 'personal_alias_page');
-			$personal_aliases->appends(Input::except('personal_alias_page'));
-		}
-		
-		return View('tagObjects.characters.show', array('character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit(Request $request, Character $character)
-    {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize($character);
-		
-        $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration('GetConfiguration');
-		
-		$global_list_order = trim(strtolower($request->input('global_order')));
-		$personal_list_order = trim(strtolower($request->input('personal_order')));
-		
-		if (($global_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($global_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			$global_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-		}
-		
-		if (($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.ascending')) 
-			&& ($personal_list_order != Config::get('constants.sortingStringComparison.listOrder.descending')))
-		{
-			$personal_list_order = Config::get('constants.sortingStringComparison.listOrder.ascending');
-		}
-		
-		$lookupKey = Config::get('constants.keys.pagination.characterAliasesPerPageParent');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
-		
-		$global_aliases = $character->aliases()->where('user_id', '=', null)->orderBy('alias', $global_list_order)->paginate($paginationCount, ['*'], 'global_alias_page');
-		$global_aliases->appends(Input::except('global_alias_page'));
-		
-		$personal_aliases = null;
+		$personalAliases = null;
 		
 		if (Auth::check())
 		{
-			$personal_aliases = $character->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $personal_list_order)->paginate($paginationCount, ['*'], 'personal_alias_page');
-			$personal_aliases->appends(Input::except('personal_alias_page'));
+			$personalAliases = $character->aliases()->where('user_id', '=', Auth::user()->id)->orderBy('alias', $aliasOrdering['personal'])->paginate($paginationCount, ['*'], 'personal_alias_page');
+			$personalAliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.characters.edit', array('configurations' => $configurations, 'character' => $character, 'global_list_order' => $global_list_order, 'personal_list_order' => $personal_list_order, 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, Character $character)
-    {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize($character);
-		
-		$this->validate($request, [
-		'name' => ['required',
-					Rule::unique('characters')->ignore($character->id),
-					'regex:/^[^,:-]+$/'],
-				'url' => 'URL',
-		]);
-		
-		$character->name = trim(Input::get('name'));
-		$character->short_description = trim(Input::get('short_description'));
-		$character->description = trim(Input::get('description'));
-		$character->url = trim(Input::get('url'));
-		
-		//Delete any character aliases that share the name with the character to be created.
-		$aliases_list = CharacterAlias::where('alias', '=', trim(Input::get('name')))->get();
-		
-		foreach ($aliases_list as $alias)
-		{
-			$alias->delete();
-		}
-		
-		$character->save();
-		
-		$droppedChildren = array();
-		
-		$character->children()->detach();
-		$characterChildrenArray = array_unique(array_map('trim', explode(',', Input::get('character_child'))));
-		$causedLoops = MappingHelper::MapCharacterChildren($character, $characterChildrenArray, $droppedChildren);
-			
-		$warnings = array();
-		
-		if ((count($causedLoops) > 0) || (count ($droppedChildren) > 0))
-		{	
-			if (count($causedLoops) > 0)
-			{
-				$childCausingLoopsMessage = "The following characters (" . implode(", ", $causedLoops) . ") were not attached as children to " . $character->name . " as their addition would cause loops in tag implication.";
-				array_push($warnings, $childCausingLoopsMessage);
-			}
-			
-			if (count($droppedChildren) > 0)
-			{
-				$droppedChildrenMessage = "The following characters (" . implode(", ", $droppedChildren) . ") were not attached as children to " . $character->name . " as they could not be found attached to " . $character->series->name . " or a child series of it.";
-				array_push($warnings, $droppedChildrenMessage);
-			}
-			
-			$messages = self::BuildFlashedMessagesVariable(null, ["Partially updated character $character->name."], $warnings);
-			return redirect()->route('show_character', ['character' => $character])->with("messages", $messages);
-		}
-		else
-		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully updated character $character->name."], null, null);
-			//Redirect to the character that was created
-			return redirect()->route('show_character', [$character])->with("messages", $messages);
-		}
-    }
-
-    public function destroy(Character $character)
-    {
-		$this->authorize($character);
-		return self::DestroyTagObject($character, 'character');
-    }
+		return View('tagObjects.characters.'.$route, array('configurations' => $configurations, 'character' => $character, 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $globalAliases, 'personal_aliases' => $personalAliases, 'messages' => $messages));
+	}
 }
