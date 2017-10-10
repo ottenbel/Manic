@@ -26,6 +26,8 @@ use App\Models\TagObjects\Series\SeriesAlias;
 use App\Models\Status;
 use App\Models\TagObjects\Tag\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
+use App\Http\Requests\Collection\StoreCollectionRequest;
+use App\Http\Requests\Collection\UpdateCollectionRequest;
 
 class CollectionController extends WebController
 {	
@@ -70,156 +72,24 @@ class CollectionController extends WebController
 		return View('collections.index', array('collections' => $collections, 'search_artists_array' => $searchArtists, 'search_characters_array' => $searchCharacters, 'search_scanalators_array' => $searchScanalators, 'search_series_array' => $searchSeries, 'search_tags_array' => $searchTags, 'search_languages_array' => $searchLanguages, 'search_ratings_array' => $searchRatings, 'search_statues_array' => $searchStatuses, 'search_canonicity_array' => $searchCanonicity, 'invalid_tokens_array' => $invalid_tokens, 'messages' => $messages));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
     public function create(Request $request)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize(Collection::class);
-		
-		$ratings = Rating::orderBy('priority', 'asc')->get()->pluck('name', 'id');
-		$statuses = Status::orderBy('priority', 'asc')->get()->pluck('name', 'id');
-		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
-		
+		$this->authorize(Collection::class);		
+		$dropdowns = self::GetDropdowns();
 		$configurations = self::GetConfiguration();
 		
-		return View('collections.create', array('configurations' => $configurations, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages));
+		return View('collections.create', array('configurations' => $configurations, 'ratings' => $dropdowns['ratings'], 'statuses' => $dropdowns['statuses'], 'languages' => $dropdowns['languages']));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store(Request $request)
+    public function store(StoreCollectionRequest $request)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize(Collection::class);
-		
-		$this->validate($request, [
-			'name' => 'required|unique:collections,name',
-			'parent_id' => 'nullable|exists:collections,id',
-			'artist_primary' => 'regex:/^[^:-]+$/',
-			'artist_secondary' => 'regex:/^[^:-]+$/',
-			'series_primary' => 'regex:/^[^:-]+$/',
-			'series_secondary' => 'regex:/^[^:-]+$/',
-			'character_primary' => 'regex:/^[^:-]+$/',
-			'character_secondary' => 'regex:/^[^:-]+$/',
-			'tag_primary' => 'regex:/^[^:-]+$/',
-			'tag_secondary' => 'regex:/^[^:-]+$/',
-			'rating' => 'nullable|exists:ratings,id',
-			'status' => 'nullable|exists:statuses,id',
-			'language' => 'nullable|exists:languages,id',
-			'image' => 'nullable|image'
-		]);
-		
 		$collection = new Collection();
-		$collection->name = trim(Input::get('name'));
-		$collection->parent_id = trim(Input::get('parent_id'));
-		$collection->description = trim(Input::get('description'));
-		if (Input::has('canonical'))
-		{
-			$collection->canonical = true;
-		}
-		else
-		{
-			$collection->canonical = false;
-		}
-		$collection->status_id = Input::get('statuses');
-		$collection->rating_id = Input::get('ratings');
-		$collection->language_id = Input::get('language');
-		
-		//Handle uploading cover here
-		if ($request->hasFile('image')) 
-		{
-			//Get posted image
-			$file = $request->file('image');	
-			$image = ImageUploadHelper::UploadImage($file);
-			$collection->cover = $image->id;
-		}
-		else if (Input::has('delete_cover'))
-		{
-			$collection->cover = null;
-		}
-		
-		$collection->save();
-		
-		//Explode the artists arrays to be processed (if commonalities exist force to primary)
-		$artist_primary_array = array_map('trim', explode(',', Input::get('artist_primary')));
-		$artist_secondary_array = array_diff(array_map('trim', explode(',', Input::get('artist_secondary'))), $artist_primary_array);
-	
-		$collection->artists()->detach();
-		MappingHelper::MapArtists($collection, $artist_primary_array, true);
-		MappingHelper::MapArtists($collection, $artist_secondary_array, false);
-		
-		//Explode the series arrays to be processed (if commonalities exist force to primary)
-		$series_primary_array = array_map('trim', explode(',', Input::get('series_primary')));
-		$series_secondary_array = array_diff(array_map('trim', explode(',', Input::get('series_secondary'))), $series_primary_array);
-	
-		$collection->series()->detach();
-		MappingHelper::MapSeries($collection, $series_primary_array, true);
-		MappingHelper::MapSeries($collection, $series_secondary_array, false);
-
-		//Explode the character arrays to be processed (if commonalities exist force to primary)
-		$characters_primary_array = array_map('trim', explode(',', Input::get('character_primary')));
-		$characters_secondary_array = array_diff(array_map('trim', explode(',', Input::get('character_secondary'))), $characters_primary_array);
-		
-		$collection->characters()->detach();
-		$missing_primary_characters = MappingHelper::MapCharacters($collection, $characters_primary_array, true);
-		$missing_secondary_characters = MappingHelper::MapCharacters($collection, $characters_secondary_array, false);
-		
-		$missing_characters = array_unique(array_merge($missing_primary_characters, $missing_secondary_characters));
-		
-		//Explode the tags array to be processed (if commonalities exist force to primary)
-		$tags_primary_array = array_map('trim', explode(',', Input::get('tag_primary')));
-		$tags_secondary_array = array_diff(array_map('trim', explode(',', Input::get('tag_secondary'))), $tags_primary_array);
-		
-		$collection->tags()->detach();
-		MappingHelper::MapTags($collection, $tags_primary_array, true);
-		MappingHelper::MapTags($collection, $tags_secondary_array, false);
-		
-		//Redirect to the collection that was created
-		if (count($missing_characters))
-		{
-			$flashed_warning_array = array();
-			
-			if (count($missing_primary_characters))
-			{
-				$missing_primary_characters_string = "Missing primary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missing_primary_characters) . ".";
-				
-				$flashed_warning_array = array_push($flashed_warning_array, $missing_primary_characters_string);
-			}
-			
-			if (count($missing_secondary_characters))
-			{
-				$missing_secondary_characters_string = "Missing secondary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missing_secondary_characters) . ".";
-				
-				$flashed_warning_array = array_push($flashed_warning_array, $missing_secondary_characters_string);
-			}
-			
-			$messages = self::BuildFlashedMessagesVariable(null, ["Partially created collection $collection->name."], $flashed_warning_array);
-			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
-		}
-		else
-		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully created collection $collection->name."], null, null);
-			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
-		}
+		return self::CreateOrUpdateCollection($request, $collection, 'created');
     }
 	
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function show(Request $request, Collection $collection)
     {	
 		$messages = self::GetFlashedMessages($request);
-		
 		$sibling_collections = null;
 		
 		if($collection->parent_collection != null)
@@ -230,164 +100,26 @@ class CollectionController extends WebController
         return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections, 'messages' => $messages));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function edit(Request $request, Collection $collection)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($collection);
-		
 		$messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
-		
-        $ratings = Rating::orderBy('priority', 'asc')->get()->pluck('name', 'id');
-		$statuses = Status::orderBy('priority', 'asc')->get()->pluck('name', 'id');
-		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
+        $dropdowns = self::GetDropdowns();
 		$collection->load('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
 		
-		return View('collections.edit', array('configurations' => $configurations, 'collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages, 'messages' => $messages));
+		return View('collections.edit', array('configurations' => $configurations, 'collection' => $collection, 'ratings' => $dropdowns['ratings'], 'statuses' => $dropdowns['statuses'], 'languages' => $dropdowns['languages'], 'messages' => $messages));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, Collection $collection)
+    public function update(UpdateCollectionRequest $request, Collection $collection)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize($collection);
-		
-		$collection_id = $collection->id;
-        $this->validate($request, [
-			'name' => ['required',
-						Rule::unique('collections')->ignore($collection->id)],
-			'parent_id' => 'nullable|exists:collections,id',
-			'artist_primary' => 'regex:/^[^:-]+$/',
-			'artist_secondary' => 'regex:/^[^:-]+$/',
-			'series_primary' => 'regex:/^[^:-]+$/',
-			'series_secondary' => 'regex:/^[^:-]+$/',
-			'character_primary' => 'regex:/^[^:-]+$/',
-			'character_secondary' => 'regex:/^[^:-]+$/',
-			'tag_primary' => 'regex:/^[^:-]+$/',
-			'tag_secondary' => 'regex:/^[^:-]+$/',
-			'rating' => 'nullable|exists:ratings,id',
-			'status' => 'nullable|exists:statuses,id',
-			'language' => 'nullable|exists:languages,id',
-			'image' => 'nullable|image'
-		]);
-		
-		$collection->name = trim(Input::get('name'));
-		$collection->parent_id = trim(Input::get('parent_id'));
-		$collection->description = trim(Input::get('description'));
-		if (Input::has('canonical'))
-		{
-			$collection->canonical = true;
-		}
-		else
-		{
-			$collection->canonical = false;
-		}
-		$collection->status_id = Input::get('statuses');
-		$collection->rating_id = Input::get('ratings');
-		$collection->language_id = Input::get('language');
 		$collection->updated_by = Auth::user()->id;
-		
-		//Handle uploading cover here
-		if ($request->hasFile('image')) 
-		{
-			//Get posted image
-			$file = $request->file('image');	
-			$image = ImageUploadHelper::UploadImage($file);
-			$collection->cover = $image->id;
-		}
-		else if (Input::has('delete_cover'))
-		{
-			$collection->cover = null;
-		}
-		
-		$collection->save();
-		
-		//Explode the artists arrays to be processed (if commonalities exist force to primary)
-		$artist_primary_array = array_map('trim', explode(',', Input::get('artist_primary')));
-		$artist_secondary_array = array_diff(array_map('trim', explode(',', Input::get('artist_secondary'))), $artist_primary_array);
-	
-		$collection->artists()->detach();
-		MappingHelper::MapArtists($collection, $artist_primary_array, true);
-		MappingHelper::MapArtists($collection, $artist_secondary_array, false);
-		
-		//Explode the series arrays to be processed (if commonalities exist force to primary)
-		$series_primary_array = array_map('trim', explode(',', Input::get('series_primary')));
-		$series_secondary_array = array_diff(array_map('trim', explode(',', Input::get('series_secondary'))), $series_primary_array);
-	
-		$collection->series()->detach();
-		MappingHelper::MapSeries($collection, $series_primary_array, true);
-		MappingHelper::MapSeries($collection, $series_secondary_array, false);
-		
-		//Explode the character arrays to be processed (if commonalities exist force to primary)
-		$characters_primary_array = array_map('trim', explode(',', Input::get('character_primary')));
-		$characters_secondary_array = array_diff(array_map('trim', explode(',', Input::get('character_secondary'))), $characters_primary_array);
-		
-		$collection->characters()->detach();
-		$missing_primary_characters = MappingHelper::MapCharacters($collection, $characters_primary_array, true);
-		$missing_secondary_characters = MappingHelper::MapCharacters($collection, $characters_secondary_array, false);
-		
-		$missing_characters = array_unique(array_merge($missing_primary_characters, $missing_secondary_characters));
-		
-		//Explode the tags array to be processed (if commonalities exist force to primary)
-		$tags_primary_array = array_map('trim', explode(',', Input::get('tag_primary')));
-		$tags_secondary_array = array_diff(array_map('trim', explode(',', Input::get('tag_secondary'))), $tags_primary_array);
-		
-		$collection->tags()->detach();
-		MappingHelper::MapTags($collection, $tags_primary_array, true);
-		MappingHelper::MapTags($collection, $tags_secondary_array, false);
-		
-		//Redirect to the collection that was created
-		if (count($missing_characters))
-		{
-			$flashed_warning_array = array();
-			
-			if (count($missing_primary_characters))
-			{
-				$missing_primary_characters_string = "Missing primary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missing_primary_characters) . ". ";
-				
-				array_push($flashed_warning_array, $missing_primary_characters_string);
-			}
-			
-			if (count($missing_secondary_characters))
-			{
-				$missing_secondary_characters_string = "Missing secondary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missing_secondary_characters) . ". ";
-				
-				array_push($flashed_warning_array, $missing_secondary_characters_string);
-			}
-			
-			$messages = self::BuildFlashedMessagesVariable(null, ["Partially updated collection $collection->name."], $flashed_warning_array);
-			//Redirect to the collection that was created
-			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
-		}
-		else
-		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully updated collection $collection->name."], null, null);
-			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
-		}
+		return self::CreateOrUpdateCollection($request, $collection, 'updated');
 	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function destroy(Collection $collection)
     {
-        //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize($collection);
-		
+		$this->authorize($collection);	
 		$collectionName = $collection->name;
 		
 		//Force deleting for now, build out functionality for soft deleting later.
@@ -425,28 +157,109 @@ class CollectionController extends WebController
 		}
 	}
 	
+	protected static function CreateOrUpdateCollection($request, $collection, $action)
+	{
+		$collection->fill($request->only(['name', 'parent_id', 'description', 'status_id', 'rating_id', 'language_id']));
+		$collection->canonical = $request->has('canonical');
+		
+		//Handle uploading cover here
+		if ($request->hasFile('image')) 
+		{
+			//Get posted image
+			$file = $request->file('image');	
+			$image = ImageUploadHelper::UploadImage($file);
+			$collection->cover = $image->id;
+		}
+		else if (Input::has('delete_cover'))
+		{
+			$collection->cover = null;
+		}
+		
+		$collection->save();
+		
+		//Explode the artists arrays to be processed (if commonalities exist force to primary)
+		$primaryArtists = array_map('trim', explode(',', Input::get('artist_primary')));
+		$secondaryArtists = array_diff(array_map('trim', explode(',', Input::get('artist_secondary'))), $primaryArtists);
+	
+		$collection->artists()->detach();
+		MappingHelper::MapArtists($collection, $primaryArtists, true);
+		MappingHelper::MapArtists($collection, $secondaryArtists, false);
+		
+		//Explode the series arrays to be processed (if commonalities exist force to primary)
+		$primarySeries = array_map('trim', explode(',', Input::get('series_primary')));
+		$secondarySeries = array_diff(array_map('trim', explode(',', Input::get('series_secondary'))), $primarySeries);
+	
+		$collection->series()->detach();
+		MappingHelper::MapSeries($collection, $primarySeries, true);
+		MappingHelper::MapSeries($collection, $secondarySeries, false);
+
+		//Explode the character arrays to be processed (if commonalities exist force to primary)
+		$primaryCharacters = array_map('trim', explode(',', Input::get('character_primary')));
+		$secondaryCharacters = array_diff(array_map('trim', explode(',', Input::get('character_secondary'))), $primaryCharacters);
+		
+		$collection->characters()->detach();
+		$missingPrimaryCharacters = MappingHelper::MapCharacters($collection, $primaryCharacters, true);
+		$missingSecondaryCharacters = MappingHelper::MapCharacters($collection, $secondaryCharacters, false);
+		
+		$missingCharacters = array_unique(array_merge($missingPrimaryCharacters, $missingSecondaryCharacters));
+		
+		//Explode the tags array to be processed (if commonalities exist force to primary)
+		$primaryTags = array_map('trim', explode(',', Input::get('tag_primary')));
+		$secondaryTags = array_diff(array_map('trim', explode(',', Input::get('tag_secondary'))), $primaryTags);
+		
+		$collection->tags()->detach();
+		MappingHelper::MapTags($collection, $primaryTags, true);
+		MappingHelper::MapTags($collection, $secondaryTags, false);
+		
+		//Redirect to the collection that was created
+		if (count($missingCharacters))
+		{
+			$flashedWarnings = array();
+			
+			if (count($missingPrimaryCharacters))
+			{
+				$missingPrimaryCharacters_string = "Missing primary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missingPrimaryCharacters) . ".";
+				
+				$flashedWarnings = array_push($flashedWarnings, $missingPrimaryCharacters_string);
+			}
+			
+			if (count($missingSecondaryCharacters))
+			{
+				$missingSecondaryCharacters_string = "Missing secondary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missingSecondaryCharacters) . ".";
+				
+				$flashedWarnings = array_push($flashedWarnings, $missingSecondaryCharacters_string);
+			}
+			
+			$messages = self::BuildFlashedMessagesVariable(null, ["Partially $action collection $collection->name."], $flashedWarnings);
+			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+		}
+		else
+		{
+			$messages = self::BuildFlashedMessagesVariable(["Successfully $action collection $collection->name."], null, null);
+			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+		}
+	}
+	
+	private static function GetDropdowns()
+	{
+		$ratings = Rating::orderBy('priority', 'asc')->get()->pluck('name', 'id');
+		$statuses = Status::orderBy('priority', 'asc')->get()->pluck('name', 'id');
+		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
+		
+		return ['ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages];
+	}
+	
 	private static function GetConfiguration()
 	{
 		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'collection%')->get();
+		$keys = ['cover', 'name', 'description', 'parent', 'primaryArtists', 'secondaryArtists', 'primarySeries', 'secondarySeries', 'primaryCharacters', 'secondaryCharacters', 'primaryTags', 'secondaryTags', 'canonical', 'language', 'rating', 'status'];
+		$configurationsArray = [];
 		
-		$cover = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.cover'))->first();
-		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.name'))->first();
-		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.description'))->first();
-		$parent = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.parent'))->first();
-		$primaryArtists = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.primaryArtists'))->first();
-		$secondaryArtists = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.secondaryArtists'))->first();
-		$primarySeries = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.primarySeries'))->first();
-		$secondarySeries = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.secondarySeries'))->first();
-		$primaryCharacters = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.primaryCharacters'))->first();
-		$secondaryCharacters = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.secondaryCharacters'))->first();
-		$primaryTags = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.primaryTags'))->first();
-		$secondaryTags = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.secondaryTags'))->first();
-		$canonical = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.canonical'))->first();
-		$language = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.language'))->first();
-		$rating = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.rating'))->first();
-		$status = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.status'))->first();
-		
-		$configurationsArray = array('cover' => $cover, 'name' => $name, 'description' => $description, 'parent' => $parent, 'primaryArtists' => $primaryArtists, 'secondaryArtists' => $secondaryArtists, 'primarySeries' => $primarySeries, 'secondarySeries' => $secondarySeries, 'primaryCharacters' => $primaryCharacters, 'secondaryCharacters' => $secondaryCharacters, 'primaryTags' => $primaryTags, 'secondaryTags' => $secondaryTags, 'canonical' => $canonical, 'language' => $language, 'rating' => $rating, 'status' => $status );
+		foreach ($keys as $key)
+		{
+			$value = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.'.$key))->first();
+			$configurationsArray = array_merge($configurationsArray, [$key => $value]);
+		}
 		
 		return $configurationsArray;
 	}

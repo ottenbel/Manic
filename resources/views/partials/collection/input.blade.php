@@ -166,31 +166,31 @@
 </div>
 
 <div class="form-group">
-	{{ Form::label('language', 'Language') }}
+	{{ Form::label('language_id', 'Language') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['language']->description}}"></i>
-	@if((!empty($collection)) && ($collection->language != null) && (Input::old('language') == null))
-		{{ Form::select('language', $languages, $collection->language->id) }}
+	@if((!empty($collection)) && ($collection->language != null) && (Input::old('language_id') == null))
+		{{ Form::select('language_id', $languages, $collection->language->id) }}
 	@else
-		{{ Form::select('language', $languages, Input::old('language')) }}
+		{{ Form::select('language_id', $languages, Input::old('language_id')) }}
 	@endif
 </div>
 
 <div class="form-group">
-	{{ Form::label('ratings', 'Rating: ') }}
+	{{ Form::label('rating_id', 'Rating: ') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['rating']->description}}"></i>
-	@if((!empty($collection)) && ($collection->rating != null) && (Input::old('ratings') == null))
-		{{ Form::select('ratings', $ratings, $collection->rating->id) }}
+	@if((!empty($collection)) && ($collection->rating != null) && (Input::old('rating_id') == null))
+		{{ Form::select('rating_id', $ratings, $collection->rating->id) }}
 	@else
-		{{ Form::select('ratings', $ratings, Input::old('ratings')) }}
+		{{ Form::select('rating_id', $ratings, Input::old('rating_id')) }}
 	@endif
 </div>
 
 <div class="form-group">
-	{{ Form::label('statuses', 'Status: ') }}
+	{{ Form::label('status_id', 'Status: ') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['status']->description}}"></i>
-	@if((!empty($collection)) && ($collection->status != null) && (Input::old('statuses') == null))
-		{{ Form::select('statuses', $statuses, $collection->status->id) }}
+	@if((!empty($collection)) && ($collection->status != null) && (Input::old('status_id') == null))
+		{{ Form::select('status_id', $statuses, $collection->status->id) }}
 	@else
-		{{ Form::select('statuses', $statuses, Input::old('statuses')) }}
+		{{ Form::select('status_id', $statuses, Input::old('status_id')) }}
 	@endif
 </div>

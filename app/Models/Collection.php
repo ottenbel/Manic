@@ -8,6 +8,7 @@ class Collection extends BaseManicModel
 {
 	//Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'collections';
+	protected $fillable = ['name', 'parent_id', 'description', 'canonical', 'status_id', 'rating_id', 'language_id'];
 	
 	public static function boot()
     {

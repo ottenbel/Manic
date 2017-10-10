@@ -51,19 +51,14 @@ class TagObjectController extends WebController
 	protected static function GetConfiguration($tagType)
 	{
 		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', $tagType.'%')->get();
+		$keys = ['name', 'shortDescription', 'description', 'source', 'parent', 'child'];
 		
-		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.'.$tagType.'.name'))->first();
-		$shortDescription = $configurations->where('key', '=', Config::get('constants.keys.placeholders.'.$tagType.'.shortDescription'))->first();
-		$description = $configurations->where('key', '=', Config::get('constants.keys.placeholders.'.$tagType.'.description'))->first();
-		$source = $configurations->where('key', '=', Config::get('constants.keys.placeholders.'.$tagType.'.source'))->first();
-		$parent = $configurations->where('key', '=', Config::get('constants.keys.placeholders.'.$tagType.'.parent'))->first();
-		$child = $configurations->where('key', '=', Config::get('constants.keys.placeholders.'.$tagType.'.child'))->first();
+		$configurationsArray = array();
 		
-		$configurationsArray = array('name' => $name, 'shortDescription' => $shortDescription, 'description' => $description, 'source' => $source, 'child' => $child);
-		
-		if ($parent != null)
+		foreach ($keys as $key)
 		{
-			$configurationsArray = array_merge($configurationsArray, ['parent' => $parent]);
+			$value = $configurations->where('key', '=', Config::get('constants.keys.placeholders.'.$tagType.'.'.$key))->first();
+			$configurationsArray = array_merge($configurationsArray, [$key => $value]);
 		}
 		
 		return $configurationsArray;
