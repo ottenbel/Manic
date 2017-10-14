@@ -47,7 +47,7 @@ class CharacterController extends TagObjectController
 		$character = new Character();
 		$character->series_id = $parentSeries->id;
 		
-		return self::CreateOrUpdateCharacter($request, $character, 'created');
+		return self::InsertOrUpdate($request, $character, 'created');
     }
 
     public function show(Request $request, Character $character)
@@ -64,7 +64,7 @@ class CharacterController extends TagObjectController
 
     public function update(UpdateCharacterRequest $request, Character $character)
     {		
-		return self::CreateOrUpdateCharacter($request, $character, 'updated');
+		return self::InsertOrUpdate($request, $character, 'updated');
     }
 
     public function destroy(Character $character)
@@ -73,7 +73,7 @@ class CharacterController extends TagObjectController
 		return self::DestroyTagObject($character, 'character');
     }
 	
-	protected static function CreateOrUpdateCharacter($request, $character, $action)
+	private static function InsertOrUpdate($request, $character, $action)
 	{
 		CharacterAlias::where('alias', '=', trim(Input::get('name')))->delete();
 		$character->fill($request->only(['name', 'short_description', 'description', 'url']));
@@ -113,7 +113,7 @@ class CharacterController extends TagObjectController
 		}
 	}
 	
-	protected static function GetCharacterToDisplay($request, $character, $route, $configurations = null)
+	private static function GetCharacterToDisplay($request, $character, $route, $configurations = null)
 	{
 		$messages = self::GetFlashedMessages($request);
 		$aliasOrdering = self::GetAliasShowOrdering($request);

@@ -36,7 +36,7 @@ class ArtistController extends TagObjectController
     public function store(StoreArtistRequest $request)
     {
 		$artist = new Artist();
-		return self::CreateOrUpdateArtist($request, $artist, 'created');
+		return self::InsertOrUpdate($request, $artist, 'created');
     }
 
     public function show(Request $request, Artist $artist)
@@ -53,7 +53,7 @@ class ArtistController extends TagObjectController
 	
     public function update(UpdateArtistRequest $request, Artist $artist)
     {		
-		return self::CreateOrUpdateArtist($request, $artist, 'updated');
+		return self::InsertOrUpdate($request, $artist, 'updated');
     }
 
     public function destroy(Artist $artist)
@@ -62,7 +62,7 @@ class ArtistController extends TagObjectController
 		return self::DestroyTagObject($artist, 'artist');
     }
 	
-	protected static function CreateOrUpdateArtist($request, $artist, $action)
+	private static function InsertOrUpdate($request, $artist, $action)
 	{
 		ArtistAlias::where('alias', '=', trim(Input::get('name')))->delete();
 		$artist->fill($request->only(['name', 'short_description', 'description', 'url']));
@@ -86,7 +86,7 @@ class ArtistController extends TagObjectController
 		}
 	}
 	
-	protected static function GetArtistToDisplay($request, $artist, $route, $configurations = null)
+	private static function GetArtistToDisplay($request, $artist, $route, $configurations = null)
 	{
 		$messages = self::GetFlashedMessages($request);
 		$aliasOrdering = self::GetAliasShowOrdering($request);

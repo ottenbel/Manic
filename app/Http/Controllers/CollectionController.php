@@ -84,7 +84,7 @@ class CollectionController extends WebController
     public function store(StoreCollectionRequest $request)
     {
 		$collection = new Collection();
-		return self::CreateOrUpdateCollection($request, $collection, 'created');
+		return self::InsertOrUpdate($request, $collection, 'created');
     }
 	
     public function show(Request $request, Collection $collection)
@@ -114,7 +114,7 @@ class CollectionController extends WebController
     public function update(UpdateCollectionRequest $request, Collection $collection)
     {
 		$collection->updated_by = Auth::user()->id;
-		return self::CreateOrUpdateCollection($request, $collection, 'updated');
+		return self::InsertOrUpdate($request, $collection, 'updated');
 	}
 
     public function destroy(Collection $collection)
@@ -157,7 +157,7 @@ class CollectionController extends WebController
 		}
 	}
 	
-	protected static function CreateOrUpdateCollection($request, $collection, $action)
+	private static function InsertOrUpdate($request, $collection, $action)
 	{
 		$collection->fill($request->only(['name', 'parent_id', 'description', 'status_id', 'rating_id', 'language_id']));
 		$collection->canonical = $request->has('canonical');

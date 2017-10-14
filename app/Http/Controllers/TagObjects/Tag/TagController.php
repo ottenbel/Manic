@@ -35,7 +35,7 @@ class TagController extends TagObjectController
     public function store(StoreTagRequest $request)
     {
 		$tag = new Tag();
-		return self::CreateOrUpdateTag($request, $tag, 'created');
+		return self::InsertOrUpdate($request, $tag, 'created');
     }
 	
     public function show(Request $request, Tag $tag)
@@ -53,7 +53,7 @@ class TagController extends TagObjectController
 
     public function update(UpdateTagRequest $request, Tag $tag)
     {
-		return self::CreateOrUpdateTag($request, $tag, 'updated');
+		return self::InsertOrUpdate($request, $tag, 'updated');
     }
 
     public function destroy(Tag $tag)
@@ -62,7 +62,7 @@ class TagController extends TagObjectController
 		return self::DestroyTagObject($tag, 'tag');
     }
 	
-	protected static function CreateOrUpdateTag($request, $tag, $action)
+	private static function InsertOrUpdate($request, $tag, $action)
 	{
 		TagAlias::where('alias', '=', trim(Input::get('name')))->delete();
 		$tag->fill($request->only(['name', 'short_description', 'description', 'url']));
@@ -86,7 +86,7 @@ class TagController extends TagObjectController
 		}
 	}
 	
-	protected static function GetTagToDisplay($request, $tag, $route, $configurations = null)
+	private static function GetTagToDisplay($request, $tag, $route, $configurations = null)
 	{
 		$messages = self::GetFlashedMessages($request);
 		$aliasOrdering = self::GetAliasShowOrdering($request);

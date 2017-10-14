@@ -35,7 +35,7 @@ class ScanalatorController extends TagObjectController
     public function store(StoreScanalatorRequest $request)
     {
 		$scanalator = new Scanalator();
-		return self::CreateOrUpdateScanalator($request, $scanalator, 'created');
+		return self::InsertOrUpdate($request, $scanalator, 'created');
     }
 
     public function show(Request $request, Scanalator $scanalator)
@@ -52,7 +52,7 @@ class ScanalatorController extends TagObjectController
 
     public function update(UpdateScanalatorRequest $request, Scanalator $scanalator)
     {
-		return self::CreateOrUpdateScanalator($request, $scanalator, 'update');
+		return self::InsertOrUpdate($request, $scanalator, 'update');
     }
 
     public function destroy(Scanalator $scanalator)
@@ -61,7 +61,7 @@ class ScanalatorController extends TagObjectController
         return self::DestroyTagObject($scanalator, 'scanalator');
     }
 	
-	protected static function CreateOrUpdateScanalator($request, $scanalator, $action)
+	private static function InsertOrUpdate($request, $scanalator, $action)
 	{
 		ScanalatorAlias::where('alias', '=', trim(Input::get('name')))->delete();
 		$scanalator->fill($request->only(['name', 'short_description', 'description', 'url']));
@@ -85,7 +85,7 @@ class ScanalatorController extends TagObjectController
 		}
 	}
 	
-	protected static function GetScanalatorToDisplay($request, $scanalator, $route, $configurations = null)
+	private static function GetScanalatorToDisplay($request, $scanalator, $route, $configurations = null)
 	{
 		$messages = self::GetFlashedMessages($request);
 		$aliasOrdering = self::GetAliasShowOrdering($request);

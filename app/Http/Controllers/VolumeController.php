@@ -14,17 +14,13 @@ use FileExportHelper;
 use App\Models\Collection;
 use App\Models\Image;
 use App\Models\Volume;
+use App\Http\Requests\Volume\StoreVolumeRequest;
+use App\Http\Requests\Volume\UpdateVolumeRequest;
 
 class VolumeController extends WebController
 {
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
     public function create(Request $request, Collection $collection)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize(Volume::class);
 		
 		$messages = self::GetFlashedMessages($request);
@@ -33,33 +29,20 @@ class VolumeController extends WebController
         return View('volumes.create', array('configurations' => $configurations, 'collection' => $collection, 'messages' => $messages));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
-    public function store(Request $request)
+    public function store(StoreVolumeRequest $request)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize(Volume::class);
+		$collectionId = trim(Input::get('collection_id'));		
+		$collection = Collection::where('id', '=', $collectionId)->first();
 		
-        $this->validate($request, [
-			'collection_id' => 'required|exists:collections,id',
-			'volume_number' => ['required',
-						'integer',
-						'min:0',
-						Rule::unique('volumes')->where(function ($query){
-							$query->where('collection_id', trim(Input::get('collection_id')));
-						})],
-			'image' => 'nullable|image'
-		]);
-		
-		$collection_id = trim(Input::get('collection_id'));
-		
-		$collection = Collection::where('id', '=', $collection_id)->first();
+		if ($collection == null)
+		{
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Failed at creating a new volume. Unable to find existing collection."]);
+			
+			return Redirect::back()->withInput()->with("messages", $messages);
+		}
 		
 		$volume = new Volume();
-		$volume->collection_id = $collection_id;
+		$volume->collection_id = $collection->id;
 		$volume->volume_number = trim(Input::get('volume_number'));
 		$volume->name = trim(Input::get('name'));
 		
@@ -79,15 +62,8 @@ class VolumeController extends WebController
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function edit(Request $request, Volume $volume)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($volume);
 		
         $messages = self::GetFlashedMessages($request);
@@ -96,29 +72,8 @@ class VolumeController extends WebController
         return View('volumes.edit', array('configurations' => $configurations, 'volume' => $volume, 'messages' => $messages));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function update(Request $request, Volume $volume)
-    {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
-		$this->authorize($volume);
-		
-        $this->validate($request, [
-			'collection_id' => 'required|exists:collections,id',
-			'volume_number' => ['required',
-						'integer',
-						'min:0',
-						Rule::unique('volumes')->where(function ($query){
-							$query->where('collection_id', trim(Input::get('collection_id')))
-							->where('id', '!=', trim(Input::get('volume_id')));
-						})],
-			'image' => 'nullable|image'
-		]);
-		
+    public function update(UpdateVolumeRequest $request, Volume $volume)
+    {		
 		$volumeNumber = trim(Input::get('volume_number'));
 		
 		if ($volume->chapters()->count() > 0)
@@ -162,15 +117,8 @@ class VolumeController extends WebController
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function destroy(Volume $volume)
     {
-        //Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($volume);
 		
 		$collection = $volume->collection;
@@ -187,15 +135,8 @@ class VolumeController extends WebController
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
     }
 	
-	/**
-     * Export the specified as a zip file.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function export(Volume $volume)
     {
-		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($volume);
 		
 		$fileExport = FileExportHelper::ExportVolume($volume);
@@ -228,7 +169,7 @@ class VolumeController extends WebController
 		$number = $configurations->where('key', '=', Config::get('constants.keys.placeholders.volume.number'))->first();
 		if (($collection != null) && ($collection->volumes->count() > 0))
 		{
-			$number->value = $collection->volumes()->last->volume_number + 1;
+			$number->value = $collection->volumes->last()->volume_number + 1;
 		}
 		else
 		{

@@ -35,7 +35,7 @@ class SeriesController extends TagObjectController
     public function store(StoreSeriesRequest $request)
     {
 		$series = new Series();
-		return self::CreateOrUpdateSeries($request, $series, 'created');
+		return self::InsertOrUpdate($request, $series, 'created');
     }
 
     /**
@@ -135,7 +135,7 @@ class SeriesController extends TagObjectController
 
     public function update(UpdateSeriesRequest $request, Series $series)
     {
-		return self::CreateOrUpdateSeries($request, $series, 'updated');
+		return self::InsertOrUpdate($request, $series, 'updated');
     }
 
     public function destroy(Series $series)
@@ -144,7 +144,7 @@ class SeriesController extends TagObjectController
         return self::DestroyTagObject($series, 'series');
     }
 	
-	protected static function CreateOrUpdateSeries($request, $series, $action)
+	private static function InsertOrUpdate($request, $series, $action)
 	{
 		SeriesAlias::where('alias', '=', trim(Input::get('name')))->delete();
 		$series->fill($request->only(['name', 'short_description', 'description', 'url']));
