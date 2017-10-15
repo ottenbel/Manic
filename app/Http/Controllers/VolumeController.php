@@ -32,14 +32,7 @@ class VolumeController extends WebController
     public function store(StoreVolumeRequest $request)
     {
 		$collectionId = trim(Input::get('collection_id'));		
-		$collection = Collection::where('id', '=', $collectionId)->first();
-		
-		if ($collection == null)
-		{
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Failed at creating a new volume. Unable to find existing collection."]);
-			
-			return Redirect::back()->withInput()->with("messages", $messages);
-		}
+		$collection = Collection::where('id', '=', $collectionId)->firstOrFail();
 		
 		$volume = new Volume();
 		$volume->collection_id = $collection->id;
