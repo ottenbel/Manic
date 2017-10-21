@@ -24,7 +24,7 @@ Edit Chapter # {{$chapter->chapter_number}} {{{$chapter->name}}}
 						{{ csrf_field() }}
 						{{method_field('DELETE')}}
 						
-						{{ Form::submit('Delete Chapter', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
+						{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Chapter', array('type' => 'submit', 'class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
 					</form>
 				</div>
 			@endcan

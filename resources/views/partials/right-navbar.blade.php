@@ -10,24 +10,34 @@
 		Tags<span class="caret"></span>
 	</a>
 	<ul class="dropdown-menu" role="menu">
-		<li><a href="{{ route('index_artist') }}">Artist</a><li>
-		<li><a href="{{ route('index_character') }}">Character</a><li>
-		<li><a href="{{ route('index_scanalator') }}">Scanalator</a><li>
-		<li><a href="{{ route('index_series') }}">Series</a><li>
-		<li><a href="{{ route('index_tag') }}">Tag</a><li>
+		<li><a href="{{ route('index_artist') }}"><i class="fa fa-paint-brush" aria-hidden="true"></i>
+ Artist</a><li>
+		<li><a href="{{ route('index_character') }}"><i class="fa fa-users" aria-hidden="true"></i>
+ Character</a><li>
+		<li><a href="{{ route('index_scanalator') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+ Scanalator</a><li>
+		<li><a href="{{ route('index_series') }}"><i class="fa fa-book" aria-hidden="true"></i>
+ Series</a><li>
+		<li><a href="{{ route('index_tag') }}"><i class="fa fa-tags" aria-hidden="true"></i>
+ Tag</a><li>
 		<h6 class="dropdown-header">Aliases</h6>
-		<li><a href="{{ route('index_artist_alias') }}">Artist Aliases</a><li>
-		<li><a href="{{ route('index_character_alias') }}">Character Aliases</a><li>
-		<li><a href="{{ route('index_scanalator_alias') }}">Scanalator Aliases</a><li>
-		<li><a href="{{ route('index_series_alias') }}">Series Aliases</a><li>
-		<li><a href="{{ route('index_tag_alias') }}">Tag Aliases</a><li>
+		<li><a href="{{ route('index_artist_alias') }}"><i class="fa fa-paint-brush" aria-hidden="true"></i>
+ Artist Aliases</a><li>
+		<li><a href="{{ route('index_character_alias') }}"><i class="fa fa-users" aria-hidden="true"></i>
+ Character Aliases</a><li>
+		<li><a href="{{ route('index_scanalator_alias') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+ Scanalator Aliases</a><li>
+		<li><a href="{{ route('index_series_alias') }}"><i class="fa fa-book" aria-hidden="true"></i>
+ Series Aliases</a><li>
+		<li><a href="{{ route('index_tag_alias') }}"><i class="fa fa-tags" aria-hidden="true"></i>
+ Tag Aliases</a><li>
 	</ul>
 </li>
 
 <!-- Authentication Links -->
 @if (Auth::guest())
-	<li><a href="{{ route('login') }}">Login</a></li>
-	<li><a href="{{ route('register') }}">Register</a></li>
+	<li><a href="{{ route('login') }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a></li>
+	<li><a href="{{ route('register') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
 @else
 	<!-- Add general checks on roles once all policies have been created -->
 	@if((Route::is('show_collection')) && (!empty($collection)) && ((Auth::User()->can('create', App\Models\Chapter::class)) 
@@ -39,15 +49,16 @@
 			<ul class="dropdown-menu" role="menu">
 				@if(count($collection->volumes))
 					@can('create', App\Models\Chapter::class)
-						<li><a href="{{route('create_chapter', ['collection' => $collection])}}">Add Chapter</a></li>
+						<li><a href="{{route('create_chapter', ['collection' => $collection])}}"><i class="fa fa-file" aria-hidden="true"></i> Add Chapter</a></li>
 					@endcan
 				@endif
 				@can('create', App\Models\Volume::class)
-					<li><a href="{{route('create_volume', ['collection' => $collection])}}">Add Volume</a><li>
+					<li><a href="{{route('create_volume', ['collection' => $collection])}}"><i class="fa fa-folder" aria-hidden="true"></i> Add Volume</a><li>
 				@endcan
 				@if((!empty($collection)))
 					@can('update', $collection)
-						<li><a href="{{route('edit_collection', ['collection' => $collection])}}">Edit Collection</a><li>
+						<li><a href="{{route('edit_collection', ['collection' => $collection])}}"><i class="fa fa-pencil" aria-hidden="true"></i>
+ Edit Collection</a><li>
 					@endcan
 				@endif
 			</ul>
@@ -59,7 +70,8 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $chapter)
-					<li><a href="{{route('edit_chapter', ['chapter' => $chapter])}}">Edit Chapter</a><li>
+					<li><a href="{{route('edit_chapter', ['chapter' => $chapter])}}"><i class="fa fa-pencil" aria-hidden="true"></i>
+ Edit Chapter</a><li>
 				@endcan
 			</ul>
 		</li>
@@ -69,14 +81,16 @@
 				Collection <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="{{route('show_collection', ['collection' => $collection])}}">View Collection</a><li>
+				<li><a href="{{route('show_collection', ['collection' => $collection])}}"><i class="fa fa-eye" aria-hidden="true"></i> View Collection</a><li>
 				@if(count($collection->volumes))
 					@can('create', App\Models\Chapter::class)
-						<li><a href="{{route('create_chapter', ['collection' => $collection])}}">Add Chapter</a></li>
+						<li><a href="{{route('create_chapter', ['collection' => $collection])}}"><i class="fa fa-file" aria-hidden="true"></i>
+ Add Chapter</a></li>
 					@endcan
 				@endif
 				@can('create', App\Models\Volume::class)
-					<li><a href="{{route('create_volume', ['collection' => $collection])}}">Add Volume</a><li>
+					<li><a href="{{route('create_volume', ['collection' => $collection])}}"><i class="fa fa-folder" aria-hidden="true"></i>
+ Add Volume</a><li>
 				@endcan
 			</ul>
 		</li>
@@ -86,7 +100,7 @@
 				Chapter <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="{{route('show_chapter', ['chapter' => $chapter])}}">View Chapter</a><li>
+				<li><a href="{{route('show_chapter', ['chapter' => $chapter])}}"><i class="fa fa-eye" aria-hidden="true"></i> View Chapter</a><li>
 			</ul>
 		</li>
 	@elseif ((Route::is('show_tag')) && (!empty($tag)) && ((Auth::User()->can('update', $tag)) ))
@@ -96,7 +110,8 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $tag)
-					<li><a href="{{route('edit_tag', ['tag' => $tag])}}">Edit Tag</a><li>
+					<li><a href="{{route('edit_tag', ['tag' => $tag])}}"><i class="fa fa-pencil" aria-hidden="true"></i>
+ Edit Tag</a><li>
 				@endcan
 			</ul>
 		</li>
@@ -106,7 +121,7 @@
 				Tag <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="{{route('show_tag', ['tag' => $tag])}}">View Tag</a><li>
+				<li><a href="{{route('show_tag', ['tag' => $tag])}}"><i class="fa fa-eye" aria-hidden="true"></i> View Tag</a><li>
 			</ul>
 		</li>
 	@elseif ((Route::is('show_artist')) && (!empty($artist)) && ((Auth::User()->can('update', $artist))))
@@ -116,7 +131,8 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $artist)
-					<li><a href="{{route('edit_artist', ['artist' => $artist])}}">Edit Artist</a><li>
+					<li><a href="{{route('edit_artist', ['artist' => $artist])}}"><i class="fa fa-pencil" aria-hidden="true"></i>
+ Edit Artist</a><li>
 				@endcan
 			</ul>
 		</li>
@@ -126,7 +142,7 @@
 				Artist <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="{{route('show_artist', ['artist' => $artist])}}">View Artist</a><li>
+				<li><a href="{{route('show_artist', ['artist' => $artist])}}"><i class="fa fa-eye" aria-hidden="true"></i> View Artist</a><li>
 			</ul>
 		</li>
 	@elseif ((Route::is('show_character')) && (!empty($character)) && (Auth::User()->can('update', $character)))	
@@ -136,7 +152,8 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $character)
-					<li><a href="{{route('edit_character', ['character' => $character])}}">Edit Character</a><li>
+					<li><a href="{{route('edit_character', ['character' => $character])}}"><i class="fa fa-pencil" aria-hidden="true"></i>
+ Edit Character</a><li>
 				@endcan
 			</ul>
 		</li>
@@ -146,7 +163,7 @@
 				Character <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="{{route('show_character', ['character' => $character])}}">View Character</a><li>
+				<li><a href="{{route('show_character', ['character' => $character])}}"><i class="fa fa-eye" aria-hidden="true"></i> View Character</a><li>
 			</ul>
 		</li>
 	@elseif ((Route::is('show_series')) && (!empty($series)) && ((Auth::User()->can('update', $series)) 
@@ -157,10 +174,11 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('create', App\Models\TagObjects\Character\Character::class)
-					<li><a href="{{route('create_character', ['series' => $series])}}">Add Character</a><li>
+					<li><a href="{{route('create_character', ['series' => $series])}}"><i class="fa fa-user" aria-hidden="true"></i> Add Character</a><li>
 				@endcan
 				@can('update', $series)
-					<li><a href="{{route('edit_series', ['series' => $series])}}">Edit Series</a><li>
+					<li><a href="{{route('edit_series', ['series' => $series])}}"><i class="fa fa-pencil" aria-hidden="true"></i>
+ Edit Series</a><li>
 				@endcan
 			</ul>
 		</li>
@@ -171,9 +189,9 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('create', App\Models\TagObjects\Character\Character::class)
-					<li><a href="{{route('create_character', ['series' => $series])}}">Add Character</a><li>
+					<li><a href="{{route('create_character', ['series' => $series])}}"><i class="fa fa-user" aria-hidden="true"></i> Add Character</a><li>
 				@endcan
-				<li><a href="{{route('show_series', ['series' => $series])}}">View Series</a><li>
+				<li><a href="{{route('show_series', ['series' => $series])}}"><i class="fa fa-eye" aria-hidden="true"></i> View Series</a><li>
 			</ul>
 		</li>
 	@elseif ((Route::is('show_scanalator')) && (!empty($scanalator)) && ((Auth::User()->can('update', $scanalator))))
@@ -183,7 +201,8 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('update', $scanalator)
-					<li><a href="{{route('edit_scanalator', ['scanalator' => $scanalator])}}">Edit Scanalator</a><li>
+					<li><a href="{{route('edit_scanalator', ['scanalator' => $scanalator])}}"><i class="fa fa-pencil" aria-hidden="true"></i>
+ Edit Scanalator</a><li>
 				@endcan
 			</ul>
 		</li>
@@ -193,7 +212,7 @@
 				Scanalator <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu" role="menu">
-				<li><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}">View Scanalator</a><li>
+				<li><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}"><i class="fa fa-eye" aria-hidden="true"></i> View Scanalator</a><li>
 			</ul>
 		</li>
 	@endif
@@ -209,7 +228,8 @@
 			</a>
 			<ul class="dropdown-menu" role="menu">
 				@can('create', App\Models\Collection::class)
-					<li><a href="{{route('create_collection')}}">Collection</a></li>
+					<li><a href="{{route('create_collection')}}"><i class="fa fa-archive" aria-hidden="true"></i>
+ Collection</a></li>
 				@endcan
 				@if((Auth::user()->can('create', App\Models\TagObjects\Tag\Tag::class)) 
 					|| (Auth::user()->can('create', App\Models\TagObjects\Artist\Artist::class)) 
@@ -221,19 +241,20 @@
 					<h6 class="dropdown-header">Tags</h6>
 			
 					@can('create', App\Models\TagObjects\Artist\Artist::class)
-						<li><a href="{{ route('create_artist') }}">Artist</a><li>
+						<li><a href="{{ route('create_artist') }}"><i class="fa fa-paint-brush" aria-hidden="true"></i> Artist</a><li>
 					@endcan
 					@can('create', App\Models\TagObjects\Character\Character::class)
-						<li><a href="{{ route('create_character') }}">Character</a><li>
+						<li><a href="{{ route('create_character') }}"><i class="fa fa-users" aria-hidden="true"></i> Character</a><li>
 					@endcan
 					@can('create', App\Models\TagObjects\Scanalator\Scanalator::class)
-						<li><a href="{{ route('create_scanalator') }}">Scanalator</a><li>
+						<li><a href="{{ route('create_scanalator') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Scanalator</a><li>
 					@endcan
 					@can('create', App\Models\TagObjects\Series\Series::class)
-						<li><a href="{{ route('create_series') }}">Series</a><li>
+						<li><a href="{{ route('create_series') }}"><i class="fa fa-book" aria-hidden="true"></i>
+ Series</a><li>
 					@endcan
 					@can('create', App\Models\TagObjects\Tag\Tag::class)
-						<li><a href="{{route('create_tag')}}">Tag</a><li>
+						<li><a href="{{route('create_tag')}}"><i class="fa fa-tags" aria-hidden="true"></i> Tag</a><li>
 					@endcan
 				@endif
 			</ul>
@@ -247,18 +268,18 @@
 
 		<ul class="dropdown-menu" role="menu">
 			<li>
-				<a href="{{route('user_dashboard_main')}}">User Dashboard</a>
+				<a href="{{route('user_dashboard_main')}}"><i class="fa fa-user-circle-o" aria-hidden="true"></i> User Dashboard</a>
 			</li>
 			@if(Auth::user()->has_administrator_permission())
 				<li>
-					<a href="{{route('admin_dashboard_main')}}">Admin Dashboard</a>
+					<a href="{{route('admin_dashboard_main')}}"><i class="fa fa-user-circle" aria-hidden="true"></i> Admin Dashboard</a>
 				</li>	
 			@endif
 			<li>
 				<a href="{{ url('/logout') }}"
 					onclick="event.preventDefault();
 							 document.getElementById('logout-form').submit();">
-					Logout
+					<i class="fa fa-sign-out" aria-hidden="true"></i> Logout
 				</a>
 
 				<form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">

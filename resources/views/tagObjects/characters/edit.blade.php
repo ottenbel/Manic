@@ -20,7 +20,7 @@ Edit Character - {{{$character->name}}}
 						{{ csrf_field() }}
 						{{method_field('DELETE')}}
 						
-						{{ Form::submit('Delete Character', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
+						{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Character', array('type' => 'submit', 'class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
 					</form>
 				</div>
 			@endcan

@@ -172,7 +172,7 @@
 							{{ csrf_field() }}
 							{{method_field('DELETE')}}
 							
-							{{ Form::submit('Delete Alias', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
+							{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Alias', array('type' => 'submit', 'class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
 						</form>
 					</div>
 					@endcan
@@ -224,7 +224,7 @@
 									{{ csrf_field() }}
 									{{method_field('DELETE')}}
 									
-									{{ Form::submit('Delete Alias', array('class' => 'btn btn-danger', 'onclick' => 'ConfirmDelete(event)')) }}
+									{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Alias', array('type' => 'submit','class' => 'btn btn-danger', 'onclick' => 'ConfirmDelete(event)')) }}
 								</form>
 							</div>
 						@endcan

@@ -21,7 +21,7 @@
 						{{ csrf_field() }}
 						{{method_field('DELETE')}}
 						
-						{{ Form::submit('Delete Series', array('class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
+						{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Series', array('type' => 'submit', 'class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
 					</form>
 				</div>
 			@endcan

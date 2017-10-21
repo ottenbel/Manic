@@ -4,22 +4,30 @@
 	@else
 		<span class="{{$primaryComponentSpanClass}}">
 	@endif
-		<a href="{{route($componentRouteName, [$componentObjectName => $componentTagObject])}}">{{{$componentTagObject->name}}}</a>
-	</span>
 @elseif ($secondary)
 	@if(($componentTagObject->short_description != null) && ($componentTagObject->short_description != ""))
 		<span class="{{$secondaryComponentSpanClass}}" title="{{$componentTagObject->short_description}}">
 	@else
 		<span class="{{$secondaryComponentSpanClass}}">
 	@endif
-		<a href="{{route($componentRouteName, [$componentObjectName => $componentTagObject])}}">{{{$componentTagObject->name}}}</a>
-	</span>
 @else
 	@if(($componentTagObject->short_description != null) && ($componentTagObject->short_description != ""))
 		<span class="{{$elseComponentSpanClass}}" title="{{$componentTagObject->short_description}}">
 	@else
 		<span class="{{$elseComponentSpanClass}}">
 	@endif
-		<a href="{{route($componentRouteName, [$componentObjectName => $componentTagObject])}}">{{{$componentTagObject->name}}}</a>
-	</span>
 @endif
+<a href="{{route($componentRouteName, [$componentObjectName => $componentTagObject])}}">
+@if($componentObjectName == 'artist')
+	<i class="fa fa-paint-brush" aria-hidden="true"></i>
+@elseif($componentObjectName == 'character')
+	<i class="fa fa-user" aria-hidden="true"></i>
+@elseif($componentObjectName == 'series')
+	<i class="fa fa-book" aria-hidden="true"></i>
+@elseif($componentObjectName == 'scanalator')
+	<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+@elseif($componentObjectName == 'tag')
+	<i class="fa fa-tag" aria-hidden="true"></i>
+@endif
+ {{{$componentTagObject->name}}}</a>
+</span>
