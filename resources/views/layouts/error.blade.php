@@ -67,12 +67,12 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        @include('partials.navbar.left')
+                        
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
-                        @include('partials.navbar.right')
+                        @include('partials.navbar.right-error')
                     </ul>
                 </div>
             </div>
@@ -88,7 +88,7 @@
 		@if(!empty($messages['success']))
 			@foreach($messages['success'] as $success)
 				<div class="alert alert-success alert-dismissable" role="alert">
-					<a href="#" class="close" data-dismiss="alert" aria-label="close">Ã—</a>
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
 					{{{$success}}}
 				</div>
 			@endforeach
@@ -97,7 +97,7 @@
 		@if(!empty($messages['data']))
 			@foreach($messages['data'] as $data)
 				<div class="alert alert-info alert-dismissable" role="alert">
-					<a href="#" class="close" data-dismiss="alert" aria-label="close">Ã—</a>
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
 					{{{$data}}}
 				</div>
 			@endforeach
@@ -106,7 +106,7 @@
 		@if(!empty($messages['warning']))
 			@foreach($messages['warning'] as $warning)
 				<div class="alert alert-warning alert-dismissable" role="alert">
-					<a href="#" class="close" data-dismiss="alert" aria-label="close">Ã—</a>
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
 					{{{$warning}}}
 				</div>
 			@endforeach

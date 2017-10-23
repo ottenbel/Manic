@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('error.app')
 
 @section('title')
 	CSRF Token Mismatch Error
