@@ -18,17 +18,18 @@ class ConfigurationSeeder extends Seeder
 		$users = User::all();
 		//Seed the site configuration defaults
 		SeedingHelper::SeedPaginationTable();
+		SeedingHelper::SeedRatingRestrictionTable();
 		SeedingHelper::SeedPlaceholderTable();
 		
 		//Seed the user configuration
 		foreach ($users as $user)
 		{
 			SeedingHelper::SeedPaginationTable($user);
+			SeedingHelper::SeedRatingRestrictionTable($user);
 			if ($user->has_editor_permission())
 			{
 				SeedingHelper::SeedPlaceholderTable($user);
 			}
 		}
-		
     }
 }

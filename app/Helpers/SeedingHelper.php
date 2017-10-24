@@ -4,7 +4,9 @@ namespace App\Helpers;
 
 use App\Models\Configuration\ConfigurationPagination;
 use App\Models\Configuration\ConfigurationPlaceholder;
+use App\Models\Configuration\ConfigurationRatingRestriction;
 use App\Models\User;
+use App\Models\Rating;
 
 class SeedingHelper
 {
@@ -48,7 +50,6 @@ class SeedingHelper
 	public static function SeedPlaceholderTable($seedUser = null)
 	{
 		$user = null;
-		$existingConfigurationSettings = null;
 		
 		if ($seedUser == null)
 		{  
@@ -57,7 +58,6 @@ class SeedingHelper
 		else
 		{
 			$user = $seedUser;
-			$existingConfigurationSettings = ConfigurationPlaceholder::where('user_id','=', null);
 		}
 		
 		//Artists
@@ -130,6 +130,29 @@ class SeedingHelper
 	}
 	
 	/*
+	 * The function used by the database seeder to seed the placeholder table for a given user.
+	 */
+	public static function SeedRatingRestrictionTable($seedUser = null)
+	{
+		$user = null;
+		$ratings = Rating::all();
+		
+		if ($seedUser == null)
+		{  
+			$user = User::first();
+		}
+		else
+		{
+			$user = $seedUser;
+		}
+		
+		foreach ($ratings as $rating)
+		{
+			self::SeedRatingRestrictionRow($user, $seedUser, $rating->id, true, $rating->priority);
+		}
+	}
+	
+	/*
 	 * The private function used to seed a pagination row for a given user.
 	 */
 	private static function SeedPaginationRow($user, $seedUser, $key, $value, $description, $priority)
@@ -140,12 +163,18 @@ class SeedingHelper
 			$userID = $seedUser->id;
 		}
 		
-		$paginationConfiguration = ConfigurationPagination::firstOrCreate(['user_id' => $userID, 'key' => $key], ['value' => $value, 'description' => $description, 'priority' => $priority]);
-		$paginationConfiguration->created_by = $user->id;
-		$paginationConfiguration->updated_by = $user->id;
+		$paginationConfiguration = ConfigurationPagination::where('user_id', '=', $userID)->where('key', '=', $key)->first();
 		
-		if (!($paginationConfiguration->exists()))
+		if ($paginationConfiguration == null)
 		{
+			$paginationConfiguration = new ConfigurationPagination();
+			$paginationConfiguration->user_id = $userID;
+			$paginationConfiguration->key = $key;
+			
+			$paginationConfiguration->fill(['value' => $value, 'description' => $description, 'priority' => $priority]);
+			$paginationConfiguration->created_by = $user->id;
+			$paginationConfiguration->updated_by = $user->id;
+			
 			$paginationConfiguration->save();
 		}
 	}
@@ -161,15 +190,47 @@ class SeedingHelper
 			$userID = $seedUser->id;
 		}
 		
-		$placeholderConfiguration = ConfigurationPlaceholder::firstOrCreate(['user_id' => $userID, 'key' => $key], ['value' => $value, 'description' => $description, 'priority' => $priority]);
-		$placeholderConfiguration->created_by = $user->id;
-		$placeholderConfiguration->updated_by = $user->id;
-		
-		if (!($placeholderConfiguration->exists()))
+		$placeholderConfiguration = ConfigurationPlaceholder::where('user_id', '=', $userID)->where('key', '=', $key)->first();
+		if ($placeholderConfiguration == null)
 		{
+			$placeholderConfiguration = new ConfigurationPlaceholder();
+			$placeholderConfiguration->user_id = $userID;
+			$placeholderConfiguration->key = $key;
+			
+			$placeholderConfiguration->fill(['value' => $value, 'description' => $description, 'priority' => $priority]);
+			$placeholderConfiguration->created_by = $user->id;
+			$placeholderConfiguration->updated_by = $user->id;
+			
 			$placeholderConfiguration->save();
 		}
 	}
+	
+	/*
+	 * The private function used to seed a rating restriction row for a given user.
+	 */
+	 private static function SeedRatingRestrictionRow($user, $seedUser, $rating_id, $display, $priority)
+	 {
+		$userID = null;
+		if (!is_null($seedUser))
+		{
+			$userID = $seedUser->id;
+		}
+		
+		$ratingRestrictionConfiguration = ConfigurationRatingRestriction::where('user_id', '=', $userID)->where('rating_id', '=', $rating_id)->first();
+		
+		if ($ratingRestrictionConfiguration == null)
+		{
+			$ratingRestrictionConfiguration = new ConfigurationRatingRestriction();
+			$ratingRestrictionConfiguration->user_id = $userID;
+			$ratingRestrictionConfiguration->rating_id = $rating_id;
+			
+			$ratingRestrictionConfiguration->fill(['display' => $display, 'priority' => $priority]);
+			$ratingRestrictionConfiguration->created_by = $user->id;
+			$ratingRestrictionConfiguration->updated_by = $user->id;
+			
+			$ratingRestrictionConfiguration->save();
+		}
+	 }
 }
 
 ?>
