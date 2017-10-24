@@ -25,7 +25,7 @@ class CreateConfigurationPlaceholderTable extends Migration
 			$table->timestamps();
 			$table->softDeletes();
 			$table->primary('id');
-			$table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+			$table->foreign('user_id')->references('id')->on('users');
 			$table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
 			$table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
 			$table->unique(['user_id', 'key']);
