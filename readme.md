@@ -7,9 +7,9 @@ Manic is an open source project for hosting and sharing comics/manga/etc. It was
 # Installation Instructions
 
 1. Run composer install
-2. Run php artisan key:generate
-3. Copy .env.example to .env
+2. Copy .env.example to .env
 	1. Configure .env file to match your environment
+3. Run php artisan key:generate 
 4. Modify the UserSeeder.php file to use desired email address instead of the default admin@email.com address
 5. Run php artisan migrate --seed
 6. Create a soft link between the storage directory and the public directory by running the following command. 
