@@ -1,23 +1,31 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "ottenbel/Manic",
+    "description": "Manic is an open source project for hosting and sharing comics/manga/etc.",
+    "keywords": ["comics", "manga", "manhua", "manhwa"],
     "license": "MIT",
     "type": "project",
     "require": {
         "php": ">=5.6.4",
+        "ext-imagick": "*",
+        "ext-zip": "*",
+        "ext-mysql": "*",
+
         "laravel/framework": "5.4.*",
-        "webpatser/laravel-uuid": "^2.0",
-        "robloach/component-installer": "^0.2.3",
-        "components/bootstrap-default": "^3.3",
-        "components/jquery": "^3.1",
-      "components/jqueryui": "^1.12",
-      "laravelcollective/html": "5.4.*",
         "laravel/tinker": "^1.0",
+        "webpatser/laravel-uuid": "^2.0",
+        "laravelcollective/html": "5.4.*",
         "intervention/image": "^2.3",
         "iatstuti/laravel-cascade-soft-deletes": "1.2.*",
-		"chumper/zipper": "1.0.x"
+        "chumper/zipper": "1.0.x"
     },
+    "_comment": [
+        {
+            "robloach/component-installer": "^0.2.3",
+            "components/bootstrap-default": "^3.3",
+            "components/jquery": "^3.1",
+            "components/jqueryui": "^1.12"
+        }
+    ],
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
@@ -39,15 +47,19 @@
         ]
     },
     "scripts": {
-        "post-root-package-install": [
-            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        "init": [
+            "php -r \"if(!file_exists('.env')){throw new Exception('Please generate a .env file.');};\""
         ],
         "post-create-project-cmd": [
             "php artisan key:generate"
         ],
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "php artisan optimize"
+            "php artisan folders:generate",
+            "php artisan optimize",
+            "php artisan key:generate",
+            "php artisan migrate --seed",
+            "php artisan storage:link"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
