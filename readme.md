@@ -10,40 +10,23 @@ Manic is an open source project for hosting and sharing comics/manga/etc. It was
 	* ImageMagick
 	* Zip
 * Composer
+* Python2
+* NodeJS
+	* Either Yarn or NPM
 
 ## Installation Instructions
 
-1. With composer:
+1. Create and configure `.env`.
+	* `.env.example` is given as an example. Feel free to copy and edit.
+2. Modify `database/seeds/UserSeeder.php` to use desired email address.
+3. With composer:
 
 	```shell
 	composer install
 	```
-2. Create and configure `.env`.
-	* `.env.example` is given as an example. Feel free to copy and edit.
-3. With php:
+4. With yarn:
 	```shell
-	php artisan key:generate 
+	yarn install
+	yarn run dev
 	```
-4. Modify `database/seeds/UserSeeder.php` to use desired email address.
-5. With php:
-	```shell
-	php artisan migrate --seed
-	```
-6. Create a soft link between the storage directory and the public directory with php:
-	```shell
-	php artisan storage:link
-	```
-7. Create an the following directory structure under the app/public directory ensuring the correct ownership.
-	```
-	app/public
-	└── images
-		├── full
-		├── thumbs
-		├── tmp
-		└── export
-			├── chapters
-			├── volumes
-			└── collections
-	```
-8. Set up a cron job to call the Laravel scheduler.
-9. Copy the relevant directories (bootstrap, font awesome, jquery, jquery-ui) from the components directory to the relevant subdirectories (css, js) under the public directory.
+5. Set up a cron job to call the Laravel scheduler.
