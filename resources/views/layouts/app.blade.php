@@ -14,8 +14,6 @@
     <link href="/css/app.css" rel="stylesheet">
 	<link href="/css/tag.css" rel="stylesheet">
 	<link href="/css/volume.css" rel="stylesheet">
-	<link href="/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 	<!--Font awesome-->
 	
      <!-- Scripts -->
@@ -24,8 +22,6 @@
 	<script src="/js/autocomplete/search.js"></script>
 	<!-- The version of Jquery installed through composer doesn't appear to include the necessary .css file-->
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-	<script src="/js/jquery/jquery.min.js"></script>
-	<script src="/js/jquery-ui/jquery-ui.min.js"></script>
 	
 	<link href="/css/search.css" rel="stylesheet">
 	
