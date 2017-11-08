@@ -8,7 +8,7 @@
         "php": ">=5.6.4",
         "ext-imagick": "*",
         "ext-zip": "*",
-        "ext-mysql": "*",
+        "ext-mysqli": "*",
 
         "laravel/framework": "5.4.*",
         "laravel/tinker": "^1.0",
@@ -39,7 +39,7 @@
         ]
     },
     "scripts": {
-        "init": [
+        "pre-install-cmd": [
             "php -r \"if(!file_exists('.env')){throw new Exception('Please generate a .env file.');};\""
         ],
         "post-create-project-cmd": [
