@@ -19,4 +19,9 @@ class ConfigurationRatingRestriction extends BaseManicModel
 	{
 		return $this->belongsTo('App\Models\User');
 	}
+	
+	public function rating()
+	{
+		return $this->belongsTo('App\Models\Rating');
+	}
 }

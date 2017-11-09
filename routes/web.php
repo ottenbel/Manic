@@ -188,15 +188,20 @@ Route::group(['middleware' => 'auth'], function(){
 	
 	//User pagination settings
 	Route::get('/user/configuration/pagination', 'Configuration\PaginationController@edit')->Name('user_dashboard_configuration_pagination');
-	Route::patch('user/configuration/pagination/', 'Configuration\PaginationController@update')->Name('user_update_configuration_pagination');
-	Route::delete('user/configuration/pagination/', 'Configuration\PaginationController@reset')->Name('user_reset_configuration_pagination');
+	Route::patch('/user/configuration/pagination/', 'Configuration\PaginationController@update')->Name('user_update_configuration_pagination');
+	Route::delete('/user/configuration/pagination/', 'Configuration\PaginationController@reset')->Name('user_reset_configuration_pagination');
+
+	//User rating restriction settings
+	Route::get('/user/configuration/rating_restriction', 'Configuration\RatingRestrictionController@edit')->Name('user_dashboard_configuration_rating_restriction');
+	Route::patch('/user/configuration/rating_restriction/', 'Configuration\RatingRestrictionController@update')->Name('user_update_configuration_rating_restriction');
+	Route::delete('/user/configuration/rating_restriction/', 'Configuration\RatingRestrictionController@reset')->Name('user_reset_configuration_rating_restriction');
 });
 
 Route::group(['middleware' => ['auth', 'isEditor']], function(){
 	//User placeholder settings
 	Route::get('/user/configuration/placeholders', 'Configuration\PlaceholderController@edit')->Name('user_dashboard_configuration_placeholders');
-	Route::patch('user/configuration/placeholders/', 'Configuration\PlaceholderController@update')->Name('user_update_configuration_placeholders');
-	Route::delete('user/configuration/placeholders/', 'Configuration\PlaceholderController@reset')->Name('user_reset_configuration_placeholders');
+	Route::patch('/user/configuration/placeholders/', 'Configuration\PlaceholderController@update')->Name('user_update_configuration_placeholders');
+	Route::delete('/user/configuration/placeholders/', 'Configuration\PlaceholderController@reset')->Name('user_reset_configuration_placeholders');
 });
 
 //Admin dashboard
@@ -206,9 +211,14 @@ Route::group(['middleware' => ['auth', 'isAdministrator']], function(){
 	
 	//Site pagination settings
 	Route::get('/admin/configuration/pagination', 'Configuration\PaginationController@edit')->Name('admin_dashboard_configuration_pagination');
-	Route::patch('admin/configuration/pagination/', 'Configuration\PaginationController@update')->Name('admin_update_configuration_pagination');
+	Route::patch('/admin/configuration/pagination/', 'Configuration\PaginationController@update')->Name('admin_update_configuration_pagination');
 	
-	//User placeholder settings
+	//Site placeholder settings
 	Route::get('/admin/configuration/placeholders', 'Configuration\PlaceholderController@edit')->Name('admin_dashboard_configuration_placeholders');
-	Route::patch('admin/configuration/placeholders/', 'Configuration\PlaceholderController@update')->Name('admin_update_configuration_placeholders');
+	Route::patch('/admin/configuration/placeholders/', 'Configuration\PlaceholderController@update')->Name('admin_update_configuration_placeholders');
+	
+	//Site rating restriction settings
+	Route::get('/admin/configuration/rating_restriction', 'Configuration\RatingRestrictionController@edit')->Name('admin_dashboard_configuration_rating_restriction');
+	Route::patch('/admin/configuration/rating_restriction/', 'Configuration\RatingRestrictionController@update')->Name('admin_update_configuration_rating_restriction');
+	Route::delete('/admin/configuration/rating_restriction/', 'Configuration\RatingRestrictionController@reset')->Name('admin_reset_configuration_rating_restriction');
 });
