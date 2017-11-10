@@ -220,5 +220,4 @@ Route::group(['middleware' => ['auth', 'isAdministrator']], function(){
 	//Site rating restriction settings
 	Route::get('/admin/configuration/rating_restriction', 'Configuration\RatingRestrictionController@edit')->Name('admin_dashboard_configuration_rating_restriction');
 	Route::patch('/admin/configuration/rating_restriction/', 'Configuration\RatingRestrictionController@update')->Name('admin_update_configuration_rating_restriction');
-	Route::delete('/admin/configuration/rating_restriction/', 'Configuration\RatingRestrictionController@reset')->Name('admin_reset_configuration_rating_restriction');
 });

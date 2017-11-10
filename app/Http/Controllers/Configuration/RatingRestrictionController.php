@@ -48,7 +48,44 @@ class RatingRestrictionController extends WebController
      */
     public function update(Request $request)
     {
+		$ratingRestrictions = null;
 		
+		//Authentication check
+		if (Route::is('user_update_configuration_rating_restriction'))
+		{ 
+			$this->authorize([ConfigurationRatingRestriction::class, false]); 
+			$ratingRestrictions = ConfigurationRatingRestriction::where('user_id', '=', Auth::user()->id)->orderBy('priority')->get();
+		}
+		else if (Route::is('admin_update_configuration_rating_restriction'))
+		{ 
+			$this->authorize([ConfigurationRatingRestriction::class, true]); 
+			$ratingRestrictions = ConfigurationRatingRestriction::where('user_id', '=', null)->orderBy('priority')->get();
+		}
+		
+		for ($i = 0; $i < $ratingRestrictions->count(); $i++)
+		{
+			$ratingRestriction = $ratingRestrictions[$i];
+			
+			$value = Input::has("rating_restriction_values.".$ratingRestriction->rating_id);
+			
+			if ($ratingRestriction->display != $value)
+			{
+				$ratingRestriction->display = $value;
+				$ratingRestriction->updated_by = Auth::user()->id;
+				$ratingRestriction->save();
+			}
+		}
+		
+		if (Route::is('user_update_configuration_rating_restriction'))
+		{
+			$messages = self::BuildFlashedMessagesVariable(["Successfully updated rating restriction configuration settings for user."], null, null);
+			return redirect()->route('user_dashboard_configuration_rating_restriction')->with("messages", $messages);
+		}
+		else if (Route::is('admin_update_configuration_rating_restriction'))
+		{
+			$messages = self::BuildFlashedMessagesVariable(["Successfully updated rating restriction configuration settings for site."], null, null);
+			return redirect()->route('admin_dashboard_configuration_rating_restriction')->with("messages", $messages);
+		}
     }
 
     /**

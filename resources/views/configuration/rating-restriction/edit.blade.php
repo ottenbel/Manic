@@ -52,6 +52,10 @@
 						@else
 							{{ Form::checkbox("rating_restriction_values[$ratingRestriction->rating_id]", null, Input::old("rating_restriction_values[$ratingRestriction->rating_id]"))}}
 						@endif
+						
+						@if($errors->has("rating_restriction_values.".$ratingRestriction->rating_id))
+							<div class ="alert alert-danger" id="paginationValueError">{{$errors->first("rating_restriction_values.".$ratingRestriction->rating_id)}}</div>
+						@endif
 					</div>
 				@endforeach
 			</div>
