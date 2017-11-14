@@ -18,7 +18,7 @@ Manic is an open source project for hosting and sharing comics/manga/etc. It was
 
 1. Create and configure `.env`.
 	* `.env.example` is given as an example. Feel free to copy and edit.
-2. Modify `database/seeds/UserSeeder.php` to use desired email address.
+2. Modify `database/seeds/UserSeeder.php` to use desired email address and password.
 3. With composer:
 
 	```shell
