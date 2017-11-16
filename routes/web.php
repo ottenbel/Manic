@@ -17,47 +17,66 @@ Route::get('/', 'CollectionController@index')->Name('index_collection');
 Route::group(['middleware' => ['auth', 'isEditor']], function(){
 	Route::get('/collection/create', 'CollectionController@create')->Name('create_collection');
 	Route::post('/collection', 'CollectionController@store')->Name('store_collection');
+});
+
+Route::group(['middleware' => ['auth', 'isEditor', 'canInteractWithCollection']], function(){
 	Route::get('/collection/{collection}/edit', 'CollectionController@edit')->Name('edit_collection');
 	Route::patch('/collection/{collection}', 'CollectionController@update')->Name('update_collection');
 	Route::delete('/collection/{collection}', 'CollectionController@destroy')->Name('delete_collection');
 });
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'canInteractWithCollection']], function(){
 	Route::get('/collection/{collection}/export', 'CollectionController@export')->Name('export_collection');
 });
 
-Route::get('/collection/{collection}', 'CollectionController@show')->Name('show_collection');
+Route::group(['middleware' => 'canInteractWithCollection'], function(){
+	Route::get('/collection/{collection}', 'CollectionController@show')->Name('show_collection');
+});
 //End Collection controller routes
 
 //Volume controller routes
-Route::group(['middleware' => ['auth', 'isEditor']], function(){
+Route::group(['middleware' => ['auth', 'isEditor', 'canInteractWithCollection']], function(){
 	Route::get('/volume/create/{collection}', 'VolumeController@create')->Name('create_volume');
+});
+
+Route::group(['middleware' => ['auth', 'isEditor']], function(){
 	Route::post('/volume', 'VolumeController@store')->Name('store_volume');
+});
+
+Route::group(['middleware' => ['auth', 'isEditor', 'canInteractWithVolume']], function(){
 	Route::get('/volume/{volume}/edit', 'VolumeController@edit')->Name('edit_volume');
 	Route::patch('/volume/{volume}', 'VolumeController@update')->Name('update_volume');
 	Route::delete('/volume/{volume}', 'VolumeController@destroy')->Name('delete_volume');
 });
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'canInteractWithVolume']], function(){
 	Route::get('/volume/{volume}/export', 'VolumeController@export')->Name('export_volume');
 });
 
 //End Volume controller routes
 
 //Chapter controller routes
-Route::group(['middleware' => ['auth', 'isEditor']], function(){
+Route::group(['middleware' => ['auth', 'isEditor', 'canInteractWithCollection']], function(){
 	Route::get('/chapter/create/{collection}', 'ChapterController@create')->Name('create_chapter');
+});
+
+Route::group(['middleware' => ['auth', 'isEditor']], function(){
 	Route::post('/chapter', 'ChapterController@store')->Name('store_chapter');
+});
+
+Route::group(['middleware' => ['auth', 'isEditor', 'canInteractWithChapter']], function(){
 	Route::get('/chapter/{chapter}/edit', 'ChapterController@edit')->Name('edit_chapter');
 	Route::patch('/chapter/{chapter}', 'ChapterController@update')->Name('update_chapter');
 	Route::delete('/chapter/{chapter}', 'ChapterController@destroy')->Name('delete_chapter');
 });
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => ['auth', 'canInteractWithChapter']], function(){
 	Route::get('/chapter/{chapter}/export', 'ChapterController@export')->Name('export_chapter');
 });
 
-Route::get('/chapter/{chapter}/{page?}', 'ChapterController@show')->Name('show_chapter');
+Route::group(['middleware' => 'canInteractWithChapter'], function(){
+	Route::get('/chapter/{chapter}/{page?}', 'ChapterController@show')->Name('show_chapter');
+});
 //End Chapter controller routes
 
 //Tag controller routes
