@@ -96,6 +96,25 @@ class RatingRestrictionController extends WebController
      */
     public function reset(Request $request)
     { 
+		$this->authorize(ConfigurationRatingRestriction::class);
 		
+		$userRatingRestrictionValues = Auth::user()->rating_restriction_configuration()->orderBy('priority')->get();
+		$siteRatingRestrictionValues = ConfigurationRatingRestriction::where('user_id', '=', null)->orderBy('priority')->get();
+		
+		for ($i = 0; $i < $userRatingRestrictionValues->count(); $i++)
+		{
+			$userRatingRestriction = $userRatingRestrictionValues[$i];
+			$globalRatingRestriction = $siteRatingRestrictionValues->where('rating_id', $userRatingRestriction->rating_id)->first();
+			 
+			if ($userRatingRestriction->display != $globalRatingRestriction->display)
+			{
+				$userRatingRestriction->display = $globalRatingRestriction->display;
+				$userRatingRestriction->updated_by = Auth::user()->id;
+				$userRatingRestriction->save();
+			}
+		}
+		
+		$messages = self::BuildFlashedMessagesVariable(["Successfully reset rating restriction configuration settings for user to site defaults."], null, null);
+		return redirect()->route('user_dashboard_configuration_rating_restriction')->with("messages", $messages);
     }
 }
