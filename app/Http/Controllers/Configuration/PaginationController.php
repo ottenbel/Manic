@@ -79,7 +79,6 @@ class PaginationController extends WebController
 			{
 				$paginationValue->value = $value;
 				$paginationValue->description = $helper;
-				$paginationValue->updated_by = Auth::user()->id;
 				$paginationValue->save();
 			}
 		}
@@ -119,7 +118,6 @@ class PaginationController extends WebController
 			 {
 				$userPagination->value = $globalPagination->value;
 				$userPagination->description = $globalPagination->description;
-				$userPagination->updated_by = Auth::user()->id;
 				$userPagination->save();
 			 }
 		}

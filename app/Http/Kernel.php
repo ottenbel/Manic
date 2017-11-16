@@ -55,5 +55,9 @@ class Kernel extends HttpKernel
 		'isEditor' => \App\Http\Middleware\CheckIsEditor::class,
 		'isAdministrator' => \App\Http\Middleware\CheckIsAdministrator::class,
 		'isOwner' => \App\Http\Middleware\CheckIsOwner::class,
+		'canInteractWithCollection' => \App\Http\Middleware\CanInteractWithCollection::class,
+		'canInteractWithVolume' => \App\Http\Middleware\CanInteractWithVolume::class,
+		'canInteractWithChapter' => \App\Http\Middleware\CanInteractWithChapter::class,
+		
     ];
 }

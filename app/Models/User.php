@@ -263,6 +263,14 @@ class User extends Authenticatable
 		return $this->hasMany('App\Models\Configuration\ConfigurationPlaceholder');
 	}
 	
+	/*
+	 * Get all rating restriction configuration values associated with the user
+	 */
+	public function rating_restriction_configuration()
+	{
+		return $this->hasMany('App\Models\Configuration\ConfigurationRatingRestriction');
+	}
+	
 	public function has_user_permission()
 	{
 		if (($this->role_id == Config::get('constants.roles.user')) 
