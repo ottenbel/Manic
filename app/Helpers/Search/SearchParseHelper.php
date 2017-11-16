@@ -147,7 +147,7 @@ class SearchParseHelper
 		}
 		
 		//Build the search query
-		$query = new Collection();
+		$query = $collections;
 		
 		$i = 0;
 		foreach($searchCanonicity as $canonicity)

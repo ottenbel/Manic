@@ -28,6 +28,7 @@ use App\Models\TagObjects\Tag\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
 use App\Http\Requests\Collection\StoreCollectionRequest;
 use App\Http\Requests\Collection\UpdateCollectionRequest;
+use App\Models\Configuration\ConfigurationRatingRestriction;
 
 class CollectionController extends WebController
 {	
@@ -53,6 +54,22 @@ class CollectionController extends WebController
 		$searchCanonicity = null;
 		$invalid_tokens = null;
 		
+		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
+		$ratingRestrictions = null;
+		if(Auth::check())
+		{
+			$ratingRestrictions = Auth::user()->rating_restriction_configuration->where('display', '=', false);
+		}
+		else
+		{
+			$ratingRestrictions = ConfigurationRatingRestriction::where('user_id', '=', null)->where('display', '=', false)->get();
+		}
+		
+		foreach ($ratingRestrictions as $ratingRestriction)
+		{
+			$collections = $collections->where('rating_id', '!=', $ratingRestriction->rating_id);
+		}
+		
 		//No search is conducted
 		if ($search_string ==  "")
 		{
@@ -60,7 +77,7 @@ class CollectionController extends WebController
 			$lookupKey = Config::get('constants.keys.pagination.collectionsPerPageIndex');
 			$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		
-			$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status')->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
+			$collections = $collections->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
 			$collections->appends(Input::except('page'));
 		}
 		else //Filter the collections return based on the search string
