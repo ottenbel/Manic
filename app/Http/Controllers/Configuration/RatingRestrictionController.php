@@ -71,7 +71,6 @@ class RatingRestrictionController extends WebController
 			if ($ratingRestriction->display != $value)
 			{
 				$ratingRestriction->display = $value;
-				$ratingRestriction->updated_by = Auth::user()->id;
 				$ratingRestriction->save();
 			}
 		}
@@ -109,7 +108,6 @@ class RatingRestrictionController extends WebController
 			if ($userRatingRestriction->display != $globalRatingRestriction->display)
 			{
 				$userRatingRestriction->display = $globalRatingRestriction->display;
-				$userRatingRestriction->updated_by = Auth::user()->id;
 				$userRatingRestriction->save();
 			}
 		}

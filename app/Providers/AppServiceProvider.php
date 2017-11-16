@@ -30,6 +30,9 @@ use App\Observers\TagObjects\Tag\TagObserver;
 use App\Models\TagObjects\Tag\TagAlias;
 use App\Observers\TagObjects\Tag\TagAliasObserver;
 
+use App\Models\Configuration\ConfigurationRatingRestriction;
+use App\Observers\Configuration\RatingRestriction\RatingRestrictionObserver;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -53,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
 		SeriesAlias::observe(SeriesAliasObserver::class);
 		Tag::observe(TagObserver::class);
 		TagAlias::observe(TagAliasObserver::class);
+		ConfigurationRatingRestriction::observe(RatingRestrictionObserver::class);
     }
 
     /**
