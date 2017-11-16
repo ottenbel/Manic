@@ -172,6 +172,7 @@ class SeedingHelper
 			$paginationConfiguration->key = $key;
 			
 			$paginationConfiguration->fill(['value' => $value, 'description' => $description, 'priority' => $priority]);
+			
 			$paginationConfiguration->created_by = $user->id;
 			$paginationConfiguration->updated_by = $user->id;
 			
@@ -198,9 +199,9 @@ class SeedingHelper
 			$placeholderConfiguration->key = $key;
 			
 			$placeholderConfiguration->fill(['value' => $value, 'description' => $description, 'priority' => $priority]);
+			
 			$placeholderConfiguration->created_by = $user->id;
 			$placeholderConfiguration->updated_by = $user->id;
-			
 			$placeholderConfiguration->save();
 		}
 	}
@@ -225,9 +226,9 @@ class SeedingHelper
 			$ratingRestrictionConfiguration->rating_id = $rating_id;
 			
 			$ratingRestrictionConfiguration->fill(['display' => $display, 'priority' => $priority]);
+
 			$ratingRestrictionConfiguration->created_by = $user->id;
 			$ratingRestrictionConfiguration->updated_by = $user->id;
-			
 			$ratingRestrictionConfiguration->save();
 		}
 	 }

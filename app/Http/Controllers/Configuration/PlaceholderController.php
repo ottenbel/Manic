@@ -88,7 +88,6 @@ class PlaceholderController extends WebController
 			{
 				$placeholderValue->value = $value;
 				$placeholderValue->description = $helper;
-				$placeholderValue->updated_by = Auth::user()->id;
 				$placeholderValue->save();
 			}
 		}
@@ -128,7 +127,6 @@ class PlaceholderController extends WebController
 			 {
 				$userPlaceholder->value = $globalPagination->value;
 				$userPlaceholder->description = $globalPagination->description;
-				$userPlaceholder->updated_by = Auth::user()->id;
 				$userPlaceholder->save();
 			 }
 		}
