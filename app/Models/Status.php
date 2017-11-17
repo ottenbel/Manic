@@ -8,6 +8,7 @@ class Status extends BaseManicModel
 {
     //Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'statuses';
+	protected $fillable = ['name', 'priority'];
 	
 	public static function boot()
     {

@@ -8,6 +8,7 @@ class Language extends BaseManicModel
 {
 	//Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'languages';
+	protected $fillable = ['name', 'description', 'url'];
 	
 	public static function boot()
     {

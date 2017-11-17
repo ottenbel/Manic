@@ -11,6 +11,7 @@ class Role extends Model
     use SoftDeletes;
 	
 	protected $table = 'roles';
+	protected $fillable = ['name', 'priority'];
 	
 	/*
      * Indicates if the IDs are auto-incrementing.

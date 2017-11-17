@@ -17,12 +17,16 @@ class UserSeeder extends Seeder
 		//Do the production seeding
 		$role = Role::where('id', '=', $userRole)->first();
 		
-		$user = new User;
-		$user->name = 'admin';
-		$user->email = 'admin@email.com';
-		$user->password = bcrypt('password');
-		$user->api_token = str_random(60);
-		$user->role_id = $role->id;
-		$user->save();
+		$user = User::first();
+		if ($user == null)
+		{
+			$user = new User;
+			$user->name = 'admin';
+			$user->email = 'admin@email.com';
+			$user->password = bcrypt('password');
+			$user->api_token = str_random(60);
+			$user->role_id = $role->id;
+			$user->save();
+		}
     }
 }
