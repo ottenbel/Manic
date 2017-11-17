@@ -37,12 +37,12 @@ class GenerateFolders extends Command
      */
     public function handle()
     {
-        $folders = array('app/public/images/full', 'app/public/images/thumbs', 'app/public/images/tmp', 'app/public/images/export/chapters', 'app/public/images/export/volumes', 'app/public/images/export/collections');
+        $folders = array('storage/app/public/images/full', 'storage/app/public/images/thumbs', 'storage/app/public/images/tmp', 'storage/app/public/images/export/chapters', 'storage/app/public/images/export/volumes', 'storage/app/public/images/export/collections');
         $this->output->progressStart(count($folders));
         foreach($folders as $folder)
         {
             if (!file_exists($folder)) {
-                mkdir($folder, '755', true);
+                mkdir($folder, 0755, true);
             }
             $this->output->progressAdvance();
         }
