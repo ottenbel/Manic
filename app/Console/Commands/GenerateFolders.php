@@ -37,7 +37,7 @@ class GenerateFolders extends Command
      */
     public function handle()
     {
-        $folders = array('storage/app/public/images/full', 'storage/app/public/images/thumbs', 'storage/app/public/images/tmp', 'storage/app/public/images/export/chapters', 'storage/app/public/images/export/volumes', 'storage/app/public/images/export/collections');
+        $folders = array('storage/app/public/images/full', 'storage/app/public/images/thumb', 'storage/app/public/images/tmp', 'storage/app/public/images/export/chapters', 'storage/app/public/images/export/volumes', 'storage/app/public/images/export/collections');
         $this->output->progressStart(count($folders));
         foreach($folders as $folder)
         {
