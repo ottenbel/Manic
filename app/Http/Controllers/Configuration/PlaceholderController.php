@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\WebController;
 use Route;
 use Auth;
+use DB;
 use Input;
 use ConfigurationLookupHelper;
 use App\Models\Configuration\ConfigurationPlaceholder;
@@ -69,28 +70,46 @@ class PlaceholderController extends WebController
 			$this->authorize([ConfigurationPlaceholder::class, false]);
 			$placeholderValues = Auth::user()->placeholder_configuration()->orderBy('priority')->get();
 		}
-		else if (Route::is('admin_update_configuration_pagination'))
+		else if (Route::is('admin_update_configuration_placeholders'))
 		{ 
 			$this->authorize([ConfigurationPlaceholder::class, true]); 
 			$placeholderValues = ConfigurationPlaceholder::where('user_id', '=', null)->orderBy('priority')->get();
 		}
 		
-		//Update all values
-		//foreach ($placeholderValues as $placeholderValue)
-		for ($i = 0; $i < $placeholderValues->count(); $i++)
+		DB::beginTransaction();
+		try
 		{
-			$placeholderValue = $placeholderValues[$i];
-			
-			$value = Input::get("placeholder_values.".$placeholderValue->key);
-			$helper = Input::get("placeholder_values_helpers.".$placeholderValue->key);
-			
-			if (($placeholderValue->value != $value) || ($placeholderValue->description != $helper))
+			//Update all values
+			for ($i = 0; $i < $placeholderValues->count(); $i++)
 			{
-				$placeholderValue->value = $value;
-				$placeholderValue->description = $helper;
-				$placeholderValue->save();
+				$placeholderValue = $placeholderValues[$i];
+				
+				$value = Input::get("placeholder_values.".$placeholderValue->key);
+				$helper = Input::get("placeholder_values_helpers.".$placeholderValue->key);
+				
+				if (($placeholderValue->value != $value) || ($placeholderValue->description != $helper))
+				{
+					$placeholderValue->value = $value;
+					$placeholderValue->description = $helper;
+					$placeholderValue->save();
+				}
 			}
 		}
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully update placeholder configuration settings based on site configuration."]);
+			if (Route::is('user_update_configuration_placeholders'))
+			{
+				return redirect()->route('user_dashboard_configuration_placeholders')->with(["messages" => $messages])->withInput();
+			}
+			else if (Route::is('admin_update_configuration_placeholders'))
+			{
+				return redirect()->route('admin_dashboard_configuration_placeholders')->with(["messages" => $messages])->withInput();
+			}
+		}
+		
+		DB::commit();
 		
 		if (Route::is('user_update_configuration_placeholders'))
 		{
@@ -114,22 +133,34 @@ class PlaceholderController extends WebController
     { 
 		$this->authorize(ConfigurationPlaceholder::class); 
 		
-		$userPlaceholderValues = Auth::user()->placeholder_configuration()->orderBy('priority')->get();
-		$sitePlaceholderValues = ConfigurationPlaceholder::where('user_id', '=', null)->orderBy('priority')->get();
-		
-		for ($i = 0; $i < $userPlaceholderValues->count(); $i++)
+		DB::beginTransaction();
+		try
 		{
-			$userPlaceholder = $userPlaceholderValues[$i];
-			$globalPagination = $sitePlaceholderValues->where('key', $userPlaceholder->key)->first();
-			 
-			 if (($userPlaceholder->value != $globalPagination->value) 
-				 || ($userPlaceholder->description != $globalPagination->description))
-			 {
-				$userPlaceholder->value = $globalPagination->value;
-				$userPlaceholder->description = $globalPagination->description;
-				$userPlaceholder->save();
-			 }
+			$userPlaceholderValues = Auth::user()->placeholder_configuration()->orderBy('priority')->get();
+			$sitePlaceholderValues = ConfigurationPlaceholder::where('user_id', '=', null)->orderBy('priority')->get();
+			
+			for ($i = 0; $i < $userPlaceholderValues->count(); $i++)
+			{
+				$userPlaceholder = $userPlaceholderValues[$i];
+				$globalPagination = $sitePlaceholderValues->where('key', $userPlaceholder->key)->first();
+				 
+				 if (($userPlaceholder->value != $globalPagination->value) 
+					 || ($userPlaceholder->description != $globalPagination->description))
+				 {
+					$userPlaceholder->value = $globalPagination->value;
+					$userPlaceholder->description = $globalPagination->description;
+					$userPlaceholder->save();
+				 }
+			}
 		}
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully reset placeholder configuration settings based on site configuration."]);
+			return redirect()->route('user_dashboard_configuration_placeholders')->with(["messages" => $messages])->withInput();
+		}
+		
+		DB::commit();
 		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully reset placeholder configuration settings for user to site defaults."], null, null);
 		return redirect()->route('user_dashboard_configuration_placeholders')->with("messages", $messages);
