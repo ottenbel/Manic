@@ -138,7 +138,7 @@ class RatingRestrictionController extends WebController
 		{
 			DB::rollBack();
 			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully reset rating restriction settings based on site configuration."]);
-			return redirect()->route('user_dashboard_configuration_rating_restriction')->with(["messages" => $messages])->withInput();
+			return redirect()->route('user_dashboard_configuration_rating_restriction')->with(["messages" => $messages]);
 		}
 		DB::commit();
 		

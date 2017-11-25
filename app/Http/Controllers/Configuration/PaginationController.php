@@ -148,7 +148,7 @@ class PaginationController extends WebController
 		{
 			DB::rollBack();
 			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully reset pagination configuration settings based on site configuration."]);
-			return redirect()->route('user_dashboard_configuration_pagination')->with(["messages" => $messages])->withInput();
+			return redirect()->route('user_dashboard_configuration_pagination')->with(["messages" => $messages]);
 		}
 		
 		DB::commit();

@@ -157,7 +157,7 @@ class PlaceholderController extends WebController
 		{
 			DB::rollBack();
 			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully reset placeholder configuration settings based on site configuration."]);
-			return redirect()->route('user_dashboard_configuration_placeholders')->with(["messages" => $messages])->withInput();
+			return redirect()->route('user_dashboard_configuration_placeholders')->with(["messages" => $messages]);
 		}
 		
 		DB::commit();
