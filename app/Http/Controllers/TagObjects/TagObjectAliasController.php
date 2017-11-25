@@ -4,7 +4,9 @@ namespace App\Http\Controllers\TagObjects;
 
 use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Auth;
+use DB;
 use Input;
 use Config;
 use ConfigurationLookupHelper;
@@ -22,23 +24,34 @@ class TagObjectAliasController extends WebController
 	
 	protected static function StoreAlias($request, $alias, $parentObject, $aliasIDField, $objectType, $showRoute)
 	{
-		$isGlobalAlias = Input::get('is_global_alias');
-		$isPersonalAlias = Input::get('is_personal_alias');
-		
-		$alias->{$aliasIDField} = $parentObject->id;
-		 
-        if ($isGlobalAlias)
+		DB::beginTransaction();
+		try
 		{
-			$alias->alias = Input::get('global_alias');
-			$alias->user_id = null;
+			$isGlobalAlias = Input::get('is_global_alias');
+			$isPersonalAlias = Input::get('is_personal_alias');
+			
+			$alias->{$aliasIDField} = $parentObject->id;
+			 
+			if ($isGlobalAlias)
+			{
+				$alias->alias = Input::get('global_alias');
+				$alias->user_id = null;
+			}
+			else
+			{
+				$alias->alias = Input::get('personal_alias');
+				$alias->user_id = Auth::user()->id;
+			}
+			
+			$alias->save();
 		}
-		else
+		catch (\Exception $e)
 		{
-			$alias->alias = Input::get('personal_alias');
-			$alias->user_id = Auth::user()->id;
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully add alias to $objectType."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
 		}
-		
-		$alias->save();
+		DB::commit();
 		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully created alias $alias->alias on $objectType  $parentObject->name."], null, null);
 		//Redirect to the object that the alias was created for
@@ -47,10 +60,21 @@ class TagObjectAliasController extends WebController
 	
 	protected static function DeleteAlias($alias, $parentIDField, $objectType, $showRoute)
 	{
-		$object = $alias->{$parentIDField};
+		DB::beginTransaction();
+		try
+		{
+			$object = $alias->{$parentIDField};
 
-		//Force deleting for now, build out functionality for soft deleting later.
-		$alias->forceDelete();
+			//Force deleting for now, build out functionality for soft deleting later.
+			$alias->forceDelete();
+		}
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully purge alias from $objectType."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		//redirect to the object that the alias existed for
 		$messages = self::BuildFlashedMessagesVariable(["Successfully purged alias from $objectType."], null, null);
