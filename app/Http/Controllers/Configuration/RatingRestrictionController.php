@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\WebController;
 use Route;
 use Auth;
+use DB;
 use Input;
 use ConfigurationLookupHelper;
 use App\Models\Configuration\ConfigurationRatingRestriction;
@@ -62,18 +63,36 @@ class RatingRestrictionController extends WebController
 			$ratingRestrictions = ConfigurationRatingRestriction::where('user_id', '=', null)->orderBy('priority')->get();
 		}
 		
-		for ($i = 0; $i < $ratingRestrictions->count(); $i++)
+		DB::beginTransaction();
+		try
 		{
-			$ratingRestriction = $ratingRestrictions[$i];
-			
-			$value = Input::has("rating_restriction_values.".$ratingRestriction->rating_id);
-			
-			if ($ratingRestriction->display != $value)
+			for ($i = 0; $i < $ratingRestrictions->count(); $i++)
 			{
-				$ratingRestriction->display = $value;
-				$ratingRestriction->save();
+				$ratingRestriction = $ratingRestrictions[$i];
+				
+				$value = Input::has("rating_restriction_values.".$ratingRestriction->rating_id);
+				
+				if ($ratingRestriction->display != $value)
+				{
+					$ratingRestriction->display = $value;
+					$ratingRestriction->save();
+				}
 			}
 		}
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully update rating restriction settings based on site configuration."]);
+			if (Route::is('user_update_configuration_rating_restriction'))
+			{
+				return redirect()->route('user_dashboard_configuration_rating_restriction')->with(["messages" => $messages])->withInput();
+			}
+			else if (Route::is('admin_update_configuration_rating_restriction'))
+			{
+				return redirect()->route('admin_dashboard_configuration_rating_restriction')->with(["messages" => $messages])->withInput();
+			}
+		}
+		DB::commit();
 		
 		if (Route::is('user_update_configuration_rating_restriction'))
 		{
@@ -97,20 +116,31 @@ class RatingRestrictionController extends WebController
     { 
 		$this->authorize(ConfigurationRatingRestriction::class);
 		
-		$userRatingRestrictionValues = Auth::user()->rating_restriction_configuration()->orderBy('priority')->get();
-		$siteRatingRestrictionValues = ConfigurationRatingRestriction::where('user_id', '=', null)->orderBy('priority')->get();
-		
-		for ($i = 0; $i < $userRatingRestrictionValues->count(); $i++)
+		DB::beginTransaction();
+		try
 		{
-			$userRatingRestriction = $userRatingRestrictionValues[$i];
-			$globalRatingRestriction = $siteRatingRestrictionValues->where('rating_id', $userRatingRestriction->rating_id)->first();
-			 
-			if ($userRatingRestriction->display != $globalRatingRestriction->display)
+			$userRatingRestrictionValues = Auth::user()->rating_restriction_configuration()->orderBy('priority')->get();
+			$siteRatingRestrictionValues = ConfigurationRatingRestriction::where('user_id', '=', null)->orderBy('priority')->get();
+			
+			for ($i = 0; $i < $userRatingRestrictionValues->count(); $i++)
 			{
-				$userRatingRestriction->display = $globalRatingRestriction->display;
-				$userRatingRestriction->save();
+				$userRatingRestriction = $userRatingRestrictionValues[$i];
+				$globalRatingRestriction = $siteRatingRestrictionValues->where('rating_id', $userRatingRestriction->rating_id)->first();
+				 
+				if ($userRatingRestriction->display != $globalRatingRestriction->display)
+				{
+					$userRatingRestriction->display = $globalRatingRestriction->display;
+					$userRatingRestriction->save();
+				}
 			}
 		}
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully reset rating restriction settings based on site configuration."]);
+			return redirect()->route('user_dashboard_configuration_rating_restriction')->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully reset rating restriction configuration settings for user to site defaults."], null, null);
 		return redirect()->route('user_dashboard_configuration_rating_restriction')->with("messages", $messages);
