@@ -5,6 +5,7 @@ namespace App\Http\Controllers\TagObjects\Tag;
 use App\Http\Controllers\TagObjects\TagObjectController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Redirect;
 use Auth;
 use DB;
 use Input;
@@ -35,7 +36,7 @@ class TagController extends TagObjectController
     public function store(StoreTagRequest $request)
     {
 		$tag = new Tag();
-		return self::InsertOrUpdate($request, $tag, 'created');
+		return self::InsertOrUpdate($request, $tag, 'created', 'create');
     }
 	
     public function show(Request $request, Tag $tag)
@@ -53,7 +54,7 @@ class TagController extends TagObjectController
 
     public function update(UpdateTagRequest $request, Tag $tag)
     {
-		return self::InsertOrUpdate($request, $tag, 'updated');
+		return self::InsertOrUpdate($request, $tag, 'updated', 'update');
     }
 
     public function destroy(Tag $tag)
@@ -62,15 +63,26 @@ class TagController extends TagObjectController
 		return self::DestroyTagObject($tag, 'tag');
     }
 	
-	private static function InsertOrUpdate($request, $tag, $action)
+	private static function InsertOrUpdate($request, $tag, $action, $errorAction)
 	{
-		TagAlias::where('alias', '=', trim(Input::get('name')))->delete();
-		$tag->fill($request->only(['name', 'short_description', 'description', 'url']));
-		$tag->save();
-		
-		$tag->children()->detach();
-		$tagChildrenArray = array_unique(array_map('trim', explode(',', Input::get('tag_child'))));
-		$causedLoops = MappingHelper::MapTagChildren($tag, $tagChildrenArray);
+		DB::beginTransaction();
+		try
+		{
+			TagAlias::where('alias', '=', trim(Input::get('name')))->delete();
+			$tag->fill($request->only(['name', 'short_description', 'description', 'url']));
+			$tag->save();
+			
+			$tag->children()->detach();
+			$tagChildrenArray = array_unique(array_map('trim', explode(',', Input::get('tag_child'))));
+			$causedLoops = MappingHelper::MapTagChildren($tag, $tagChildrenArray);
+		}
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction tag $tag->name."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		if (count($causedLoops))
 		{	

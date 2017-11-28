@@ -5,6 +5,7 @@ namespace App\Http\Controllers\TagObjects\Series;
 use App\Http\Controllers\TagObjects\TagObjectController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Redirect;
 use Auth;
 use DB;
 use Input;
@@ -35,7 +36,7 @@ class SeriesController extends TagObjectController
     public function store(StoreSeriesRequest $request)
     {
 		$series = new Series();
-		return self::InsertOrUpdate($request, $series, 'created');
+		return self::InsertOrUpdate($request, $series, 'created', 'create');
     }
 
     /**
@@ -135,7 +136,7 @@ class SeriesController extends TagObjectController
 
     public function update(UpdateSeriesRequest $request, Series $series)
     {
-		return self::InsertOrUpdate($request, $series, 'updated');
+		return self::InsertOrUpdate($request, $series, 'updated', 'update');
     }
 
     public function destroy(Series $series)
@@ -144,27 +145,38 @@ class SeriesController extends TagObjectController
         return self::DestroyTagObject($series, 'series');
     }
 	
-	private static function InsertOrUpdate($request, $series, $action)
+	private static function InsertOrUpdate($request, $series, $action, $errorAction)
 	{
-		SeriesAlias::where('alias', '=', trim(Input::get('name')))->delete();
-		$series->fill($request->only(['name', 'short_description', 'description', 'url']));
-		$series->save();
-		
-		$lockedChildren = collect();
-		$children = $series->children()->get();
-		
-		foreach ($children as $child)
+		DB::beginTransaction();
+		try
 		{
-			//Check whether or not removing the parent child relationship can be done without breaking series/character relationship mapping on collections
-			if (!(($child->children()->count() == 0) && ($child->usage_count() == 0)))
+			SeriesAlias::where('alias', '=', trim(Input::get('name')))->delete();
+			$series->fill($request->only(['name', 'short_description', 'description', 'url']));
+			$series->save();
+			
+			$lockedChildren = collect();
+			$children = $series->children()->get();
+			
+			foreach ($children as $child)
 			{
-				$lockedChildren->push($child);
+				//Check whether or not removing the parent child relationship can be done without breaking series/character relationship mapping on collections
+				if (!(($child->children()->count() == 0) && ($child->usage_count() == 0)))
+				{
+					$lockedChildren->push($child);
+				}
 			}
+			
+			$series->children()->detach();
+			$seriesChildrenArray = array_unique(array_map('trim', explode(',', Input::get('series_child'))));
+			$causedLoops = MappingHelper::MapSeriesChildren($series, $seriesChildrenArray, $lockedChildren);
 		}
-		
-		$series->children()->detach();
-		$seriesChildrenArray = array_unique(array_map('trim', explode(',', Input::get('series_child'))));
-		$causedLoops = MappingHelper::MapSeriesChildren($series, $seriesChildrenArray, $lockedChildren);
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction series $series->name."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		if (count($causedLoops))
 		{	

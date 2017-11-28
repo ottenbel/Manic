@@ -5,6 +5,7 @@ namespace App\Http\Controllers\TagObjects\Artist;
 use App\Http\Controllers\TagObjects\TagObjectController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Redirect;
 use Auth;
 use DB;
 use Input;
@@ -36,7 +37,7 @@ class ArtistController extends TagObjectController
     public function store(StoreArtistRequest $request)
     {
 		$artist = new Artist();
-		return self::InsertOrUpdate($request, $artist, 'created');
+		return self::InsertOrUpdate($request, $artist, 'created', 'create');
     }
 
     public function show(Request $request, Artist $artist)
@@ -53,7 +54,7 @@ class ArtistController extends TagObjectController
 	
     public function update(UpdateArtistRequest $request, Artist $artist)
     {		
-		return self::InsertOrUpdate($request, $artist, 'updated');
+		return self::InsertOrUpdate($request, $artist, 'updated', 'update');
     }
 
     public function destroy(Artist $artist)
@@ -62,15 +63,26 @@ class ArtistController extends TagObjectController
 		return self::DestroyTagObject($artist, 'artist');
     }
 	
-	private static function InsertOrUpdate($request, $artist, $action)
+	private static function InsertOrUpdate($request, $artist, $action, $errorAction)
 	{
-		ArtistAlias::where('alias', '=', trim(Input::get('name')))->delete();
-		$artist->fill($request->only(['name', 'short_description', 'description', 'url']));
-		$artist->save();
-		
-		$artist->children()->detach();
-		$artistChildrenArray = array_unique(array_map('trim', explode(',', Input::get('artist_child'))));
-		$causedLoops = MappingHelper::MapArtistChildren($artist, $artistChildrenArray);
+		DB::beginTransaction();
+		try
+		{
+			ArtistAlias::where('alias', '=', trim(Input::get('name')))->delete();
+			$artist->fill($request->only(['name', 'short_description', 'description', 'url']));
+			$artist->save();
+			
+			$artist->children()->detach();
+			$artistChildrenArray = array_unique(array_map('trim', explode(',', Input::get('artist_child'))));
+			$causedLoops = MappingHelper::MapArtistChildren($artist, $artistChildrenArray);
+		}
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction artist $artist->name."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		if (count($causedLoops))
 		{	

@@ -47,7 +47,7 @@ class CharacterController extends TagObjectController
 		$character = new Character();
 		$character->series_id = $parentSeries->id;
 		
-		return self::InsertOrUpdate($request, $character, 'created');
+		return self::InsertOrUpdate($request, $character, 'created', 'create');
     }
 
     public function show(Request $request, Character $character)
@@ -64,7 +64,7 @@ class CharacterController extends TagObjectController
 
     public function update(UpdateCharacterRequest $request, Character $character)
     {		
-		return self::InsertOrUpdate($request, $character, 'updated');
+		return self::InsertOrUpdate($request, $character, 'updated', 'update');
     }
 
     public function destroy(Character $character)
@@ -73,17 +73,28 @@ class CharacterController extends TagObjectController
 		return self::DestroyTagObject($character, 'character');
     }
 	
-	private static function InsertOrUpdate($request, $character, $action)
+	private static function InsertOrUpdate($request, $character, $action, $errorAction)
 	{
-		CharacterAlias::where('alias', '=', trim(Input::get('name')))->delete();
-		$character->fill($request->only(['name', 'short_description', 'description', 'url']));
-		$character->save();
-		
-		$droppedChildren = array();
-		
-		$character->children()->detach();
-		$characterChildrenArray = array_unique(array_map('trim', explode(',', Input::get('character_child'))));
-		$causedLoops = MappingHelper::MapCharacterChildren($character, $characterChildrenArray, $droppedChildren);
+		DB::beginTransaction();
+		try
+		{
+			CharacterAlias::where('alias', '=', trim(Input::get('name')))->delete();
+			$character->fill($request->only(['name', 'short_description', 'description', 'url']));
+			$character->save();
+			
+			$droppedChildren = array();
+			
+			$character->children()->detach();
+			$characterChildrenArray = array_unique(array_map('trim', explode(',', Input::get('character_child'))));
+			$causedLoops = MappingHelper::MapCharacterChildren($character, $characterChildrenArray, $droppedChildren);
+		}
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction character $character->name."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		if ((count($causedLoops) > 0) || (count($droppedChildren) > 0))
 		{

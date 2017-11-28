@@ -5,6 +5,7 @@ namespace App\Http\Controllers\TagObjects\Scanalator;
 use App\Http\Controllers\TagObjects\TagObjectController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Redirect;
 use Auth;
 use DB;
 use Input;
@@ -35,7 +36,7 @@ class ScanalatorController extends TagObjectController
     public function store(StoreScanalatorRequest $request)
     {
 		$scanalator = new Scanalator();
-		return self::InsertOrUpdate($request, $scanalator, 'created');
+		return self::InsertOrUpdate($request, $scanalator, 'created', 'create');
     }
 
     public function show(Request $request, Scanalator $scanalator)
@@ -52,7 +53,7 @@ class ScanalatorController extends TagObjectController
 
     public function update(UpdateScanalatorRequest $request, Scanalator $scanalator)
     {
-		return self::InsertOrUpdate($request, $scanalator, 'update');
+		return self::InsertOrUpdate($request, $scanalator, 'updated', 'update');
     }
 
     public function destroy(Scanalator $scanalator)
@@ -61,15 +62,26 @@ class ScanalatorController extends TagObjectController
         return self::DestroyTagObject($scanalator, 'scanalator');
     }
 	
-	private static function InsertOrUpdate($request, $scanalator, $action)
+	private static function InsertOrUpdate($request, $scanalator, $action, $errorAction)
 	{
-		ScanalatorAlias::where('alias', '=', trim(Input::get('name')))->delete();
-		$scanalator->fill($request->only(['name', 'short_description', 'description', 'url']));
-		$scanalator->save();
-		
-		$scanalator->children()->detach();
-		$scanalatorChildrenArray = array_unique(array_map('trim', explode(',', Input::get('scanalator_child'))));
-		$causedLoops = MappingHelper::MapScanalatorChildren($scanalator, $scanalatorChildrenArray);
+		DB::beginTransaction();
+		try
+		{
+			ScanalatorAlias::where('alias', '=', trim(Input::get('name')))->delete();
+			$scanalator->fill($request->only(['name', 'short_description', 'description', 'url']));
+			$scanalator->save();
+			
+			$scanalator->children()->detach();
+			$scanalatorChildrenArray = array_unique(array_map('trim', explode(',', Input::get('scanalator_child'))));
+			$causedLoops = MappingHelper::MapScanalatorChildren($scanalator, $scanalatorChildrenArray);
+		}
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction scanalator $scanalator->name."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		if (count($causedLoops))
 		{	

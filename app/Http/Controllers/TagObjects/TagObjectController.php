@@ -4,10 +4,11 @@ namespace App\Http\Controllers\TagObjects;
 
 use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Auth;
+use DB;
 use Input;
 use Config;
-use DB;
 use ConfigurationLookupHelper;
 use App\Models\Configuration\ConfigurationPlaceholder;
 
@@ -24,25 +25,36 @@ class TagObjectController extends WebController
 	
 	protected static function DestroyTagObject($object, $objectType)
 	{
-		$objectName = $object->name;
-		
-		$parents = $object->parents()->get();
-		$children = $object->children()->get();
-		
-		//Ensure passed through relationships are sustained after deleting the intermediary
-		foreach ($parents as $parent)
+		DB::beginTransaction();
+		try
 		{
-			foreach ($children as $child)
+			$objectName = $object->name;
+		
+			$parents = $object->parents()->get();
+			$children = $object->children()->get();
+			
+			//Ensure passed through relationships are sustained after deleting the intermediary
+			foreach ($parents as $parent)
 			{
-				if ($parent->children()->where('id', '=', $child->id)->count() == 0)
+				foreach ($children as $child)
 				{
-					$parent->children()->attach($child);
+					if ($parent->children()->where('id', '=', $child->id)->count() == 0)
+					{
+						$parent->children()->attach($child);
+					}
 				}
 			}
+			
+			//Force deleting for now, build out functionality for soft deleting later.
+			$object->forceDelete();
 		}
-		
-		//Force deleting for now, build out functionality for soft deleting later.
-		$object->forceDelete();
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully purge $objectType $objectName from the database."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully purged $objectType $objectName from the database."], null, null);
 		return redirect()->route('index_collection')->with("messages", $messages);
