@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Redirect;
 use Auth;
+use DB;
 use Input;
 use Config;
+use Storage;
 use MappingHelper;
 use SearchParseHelper;
 use ImageUploadHelper;
@@ -91,17 +94,18 @@ class CollectionController extends WebController
 
     public function create(Request $request)
     {
-		$this->authorize(Collection::class);		
+		$this->authorize(Collection::class);
+		$messages = self::GetFlashedMessages($request);
 		$dropdowns = self::GetDropdowns();
 		$configurations = self::GetConfiguration();
 		
-		return View('collections.create', array('configurations' => $configurations, 'ratings' => $dropdowns['ratings'], 'statuses' => $dropdowns['statuses'], 'languages' => $dropdowns['languages']));
+		return View('collections.create', array('configurations' => $configurations, 'ratings' => $dropdowns['ratings'], 'statuses' => $dropdowns['statuses'], 'languages' => $dropdowns['languages'], 'messages' => $messages));
     }
 
     public function store(StoreCollectionRequest $request)
     {
 		$collection = new Collection();
-		return self::InsertOrUpdate($request, $collection, 'created');
+		return self::InsertOrUpdate($request, $collection, 'created', 'create');
     }
 	
     public function show(Request $request, Collection $collection)
@@ -131,16 +135,29 @@ class CollectionController extends WebController
     public function update(UpdateCollectionRequest $request, Collection $collection)
     {
 		$collection->updated_by = Auth::user()->id;
-		return self::InsertOrUpdate($request, $collection, 'updated');
+		return self::InsertOrUpdate($request, $collection, 'updated', 'update');
 	}
 
     public function destroy(Collection $collection)
     {
-		$this->authorize($collection);	
-		$collectionName = $collection->name;
+		$this->authorize($collection);
+		$collectionName = "";		
 		
-		//Force deleting for now, build out functionality for soft deleting later.
-		$collection->forceDelete();
+		DB::beginTransaction();
+		try
+		{
+			$collectionName = $collection->name;
+		
+			//Force deleting for now, build out functionality for soft deleting later.
+			$collection->forceDelete();
+		}
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully delete collection $collectionName."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully purged collection $collectionName from the database."], null, null);
 		return redirect()->route('index_collection')->with("messages", $messages);
@@ -174,59 +191,78 @@ class CollectionController extends WebController
 		}
 	}
 	
-	private static function InsertOrUpdate($request, $collection, $action)
+	private static function InsertOrUpdate($request, $collection, $action, $errorAction)
 	{
-		$collection->fill($request->only(['name', 'parent_id', 'description', 'status_id', 'rating_id', 'language_id']));
-		$collection->canonical = $request->has('canonical');
-		
-		//Handle uploading cover here
-		if ($request->hasFile('image')) 
+		DB::beginTransaction();
+		try
 		{
-			//Get posted image
-			$file = $request->file('image');	
-			$image = ImageUploadHelper::UploadImage($file);
-			$collection->cover = $image->id;
-		}
-		else if (Input::has('delete_cover'))
-		{
-			$collection->cover = null;
-		}
+			$collection->fill($request->only(['name', 'parent_id', 'description', 'status_id', 'rating_id', 'language_id']));
+			$collection->canonical = $request->has('canonical');
+			
+			//Handle uploading cover here
+			if ($request->hasFile('image')) 
+			{
+				//Get posted image
+				$file = $request->file('image');	
+				$image = ImageUploadHelper::UploadImage($file);
+				$collection->cover = $image->id;
+			}
+			else if (Input::has('delete_cover'))
+			{
+				$collection->cover = null;
+			}
+			
+			$collection->save();
+			
+			//Explode the artists arrays to be processed (if commonalities exist force to primary)
+			$primaryArtists = array_map('trim', explode(',', Input::get('artist_primary')));
+			$secondaryArtists = array_diff(array_map('trim', explode(',', Input::get('artist_secondary'))), $primaryArtists);
 		
-		$collection->save();
+			$collection->artists()->detach();
+			MappingHelper::MapArtists($collection, $primaryArtists, true);
+			MappingHelper::MapArtists($collection, $secondaryArtists, false);
+			
+			//Explode the series arrays to be processed (if commonalities exist force to primary)
+			$primarySeries = array_map('trim', explode(',', Input::get('series_primary')));
+			$secondarySeries = array_diff(array_map('trim', explode(',', Input::get('series_secondary'))), $primarySeries);
 		
-		//Explode the artists arrays to be processed (if commonalities exist force to primary)
-		$primaryArtists = array_map('trim', explode(',', Input::get('artist_primary')));
-		$secondaryArtists = array_diff(array_map('trim', explode(',', Input::get('artist_secondary'))), $primaryArtists);
-	
-		$collection->artists()->detach();
-		MappingHelper::MapArtists($collection, $primaryArtists, true);
-		MappingHelper::MapArtists($collection, $secondaryArtists, false);
-		
-		//Explode the series arrays to be processed (if commonalities exist force to primary)
-		$primarySeries = array_map('trim', explode(',', Input::get('series_primary')));
-		$secondarySeries = array_diff(array_map('trim', explode(',', Input::get('series_secondary'))), $primarySeries);
-	
-		$collection->series()->detach();
-		MappingHelper::MapSeries($collection, $primarySeries, true);
-		MappingHelper::MapSeries($collection, $secondarySeries, false);
+			$collection->series()->detach();
+			MappingHelper::MapSeries($collection, $primarySeries, true);
+			MappingHelper::MapSeries($collection, $secondarySeries, false);
 
-		//Explode the character arrays to be processed (if commonalities exist force to primary)
-		$primaryCharacters = array_map('trim', explode(',', Input::get('character_primary')));
-		$secondaryCharacters = array_diff(array_map('trim', explode(',', Input::get('character_secondary'))), $primaryCharacters);
-		
-		$collection->characters()->detach();
-		$missingPrimaryCharacters = MappingHelper::MapCharacters($collection, $primaryCharacters, true);
-		$missingSecondaryCharacters = MappingHelper::MapCharacters($collection, $secondaryCharacters, false);
-		
-		$missingCharacters = array_unique(array_merge($missingPrimaryCharacters, $missingSecondaryCharacters));
-		
-		//Explode the tags array to be processed (if commonalities exist force to primary)
-		$primaryTags = array_map('trim', explode(',', Input::get('tag_primary')));
-		$secondaryTags = array_diff(array_map('trim', explode(',', Input::get('tag_secondary'))), $primaryTags);
-		
-		$collection->tags()->detach();
-		MappingHelper::MapTags($collection, $primaryTags, true);
-		MappingHelper::MapTags($collection, $secondaryTags, false);
+			//Explode the character arrays to be processed (if commonalities exist force to primary)
+			$primaryCharacters = array_map('trim', explode(',', Input::get('character_primary')));
+			$secondaryCharacters = array_diff(array_map('trim', explode(',', Input::get('character_secondary'))), $primaryCharacters);
+			
+			$collection->characters()->detach();
+			$missingPrimaryCharacters = MappingHelper::MapCharacters($collection, $primaryCharacters, true);
+			$missingSecondaryCharacters = MappingHelper::MapCharacters($collection, $secondaryCharacters, false);
+			
+			$missingCharacters = array_unique(array_merge($missingPrimaryCharacters, $missingSecondaryCharacters));
+			
+			//Explode the tags array to be processed (if commonalities exist force to primary)
+			$primaryTags = array_map('trim', explode(',', Input::get('tag_primary')));
+			$secondaryTags = array_diff(array_map('trim', explode(',', Input::get('tag_secondary'))), $primaryTags);
+			
+			$collection->tags()->detach();
+			MappingHelper::MapTags($collection, $primaryTags, true);
+			MappingHelper::MapTags($collection, $secondaryTags, false);
+		}
+		catch (\Exception $e)
+		{	
+			$cover = $collection->cover_image;
+			DB::rollBack();
+			//Delete the cover image from the file system if the image isn't being used anywhere else
+			if (($collection->cover != null) && ($collection->cover_image->exists))
+			{
+				Storage::delete($cover->name);
+				Storage::delete($cover->thumbnail);
+			}
+			
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction collection $collection->name."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		//Redirect to the collection that was created
 		if (count($missingCharacters))
