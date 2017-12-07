@@ -252,8 +252,9 @@ class CollectionController extends WebController
 		{	
 			$cover = $collection->cover_image;
 			DB::rollBack();
+			$coverImage = Image::where('id', '=', $collection->cover_image->id)->first();
 			//Delete the cover image from the file system if the image isn't being used anywhere else
-			if (($collection->cover != null) && ($collection->cover_image->exists))
+			if (($collection->cover != null) && ($coverImage == null)) 
 			{
 				Storage::delete($cover->name);
 				Storage::delete($cover->thumbnail);
