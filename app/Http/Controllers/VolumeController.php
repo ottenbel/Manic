@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Redirect;
 use Auth;
+use DB;
 use Config;
 use Input;
+use Storage;
 use InterventionImage;
 use ImageUploadHelper;
 use FileExportHelper;
@@ -31,27 +33,48 @@ class VolumeController extends WebController
 
     public function store(StoreVolumeRequest $request)
     {
-		$collectionId = trim(Input::get('collection_id'));		
-		$collection = Collection::where('id', '=', $collectionId)->firstOrFail();
-		
 		$volume = new Volume();
-		$volume->collection_id = $collection->id;
-		$volume->volume_number = trim(Input::get('volume_number'));
-		$volume->name = trim(Input::get('name'));
 		
-		//Handle uploading cover here
-		if ($request->hasFile('image')) 
+		DB::beginTransaction();
+		try
 		{
-			//Get posted image
-			$file = $request->file('image');
-			$image = ImageUploadHelper::UploadImage($file);
-			$volume->cover = $image->id;
-		} 
-		
-		$volume->save();
+			$collectionId = trim(Input::get('collection_id'));		
+			$collection = Collection::where('id', '=', $collectionId)->firstOrFail();
+			
+			$volume->collection_id = $collection->id;
+			$volume->volume_number = trim(Input::get('volume_number'));
+			$volume->name = trim(Input::get('name'));
+			
+			//Handle uploading cover here
+			if ($request->hasFile('image')) 
+			{
+				//Get posted image
+				$file = $request->file('image');
+				$image = ImageUploadHelper::UploadImage($file);
+				$volume->cover = $image->id;
+			} 
+			
+			$volume->save();
+		}
+		catch (\Exception $e)
+		{
+			$cover = $volume->cover_image;
+			DB::rollBack();
+			
+			$coverImage = Image::where('id', '=', $volume->cover_image->id)->first();
+			//Delete the cover image from the file system if the image isn't being used anywhere else
+			if (($collection->cover != null) && ($coverImage == null)) 
+			{
+				Storage::delete($cover->name);
+				Storage::delete($cover->thumbnail);
+			}
+			
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully create volume $volume->name."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully created new volume #$volume->volume_number on collection $collection->name."], null, null);
-		
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
     }
 
@@ -66,45 +89,68 @@ class VolumeController extends WebController
     }
 
     public function update(UpdateVolumeRequest $request, Volume $volume)
-    {		
-		$volumeNumber = trim(Input::get('volume_number'));
+    {
+		$collection = null;
 		
-		if ($volume->chapters()->count() > 0)
-		{			
-			if (($volume->next_volume()->first() != null) && ($volume->next_volume()->first()->chapters()->count() > 0) && ($volumeNumber > $volume->next_volume()->first()->volume_number))
-			{
-				$nextVolumeNumber = $volume->next_volume()->first()->volume_number;
+		DB::beginTransaction();
+		try
+		{
+			$volumeNumber = trim(Input::get('volume_number'));
+		
+			if ($volume->chapters()->count() > 0)
+			{			
+				if (($volume->next_volume()->first() != null) && ($volume->next_volume()->first()->chapters()->count() > 0) && ($volumeNumber > $volume->next_volume()->first()->volume_number))
+				{
+					$nextVolumeNumber = $volume->next_volume()->first()->volume_number;
+					
+					return Redirect::back()->withErrors(['volume_number' => "Volume number must be less than $nextVolumeNumber"])->withInput();
+				}
 				
-				return Redirect::back()->withErrors(['volume_number' => "Volume number must be less than $nextVolumeNumber"])->withInput();
+				else if (($volume->previous_volume()->first() != null) && ($volume->previous_volume()->first()->chapters()->count() > 0) && ($volumeNumber < $volume->previous_volume()->first()->volume_number))
+				{
+					$previousVolumeNumber = $volume->previous_volume()->first()->volume_number;
+					
+					return Redirect::back()->withErrors(['volume_number' => "Volume number must be greater than $previousVolumeNumber"])->withInput();
+				}
 			}
 			
-			else if (($volume->previous_volume()->first() != null) && ($volume->previous_volume()->first()->chapters()->count() > 0) && ($volumeNumber < $volume->previous_volume()->first()->volume_number))
+			$collection = $volume->collection;
+			
+			$volume->volume_number = $volumeNumber;
+			$volume->name = trim(Input::get('name'));
+			
+			//Handle uploading cover here
+			if ($request->hasFile('image')) 
 			{
-				$previousVolumeNumber = $volume->previous_volume()->first()->volume_number;
-				
-				return Redirect::back()->withErrors(['volume_number' => "Volume number must be greater than $previousVolumeNumber"])->withInput();
+				//Get posted image
+				$file = $request->file('image');
+				$image = ImageUploadHelper::UploadImage($file);
+				$volume->cover = $image->id;
 			}
+			else if (Input::has('delete_cover'))
+			{
+				$volume->cover = null;
+			}
+			
+			$volume->save();
 		}
-		
-		$collection = $volume->collection;
-		
-		$volume->volume_number = $volumeNumber;
-		$volume->name = trim(Input::get('name'));
-		
-		//Handle uploading cover here
-		if ($request->hasFile('image')) 
+		catch (\Exception $e)
 		{
-			//Get posted image
-			$file = $request->file('image');
-			$image = ImageUploadHelper::UploadImage($file);
-			$volume->cover = $image->id;
+			$cover = $volume->cover_image;
+			DB::rollBack();
+			
+			$coverImage = Image::where('id', '=', $volume->cover_image->id)->first();
+			//Delete the cover image from the file system if the image isn't being used anywhere else
+			if (($collection->cover != null) && ($coverImage == null)) 
+			{
+				Storage::delete($cover->name);
+				Storage::delete($cover->thumbnail);
+			}
+			
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully update volume $volume->name."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
 		}
-		else if (Input::has('delete_cover'))
-		{
-			$volume->cover = null;
-		}
-		
-		$volume->save();
+		DB::commit();
 		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully updated volume #$volume->volume_number on collection $collection->name."], null, null);
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
@@ -113,16 +159,27 @@ class VolumeController extends WebController
     public function destroy(Volume $volume)
     {
 		$this->authorize($volume);
+		$volumeName = "";
 		
-		$collection = $volume->collection;
-		$volumeName = $volume->name;
-		if ($volumeName == null)
+		DB::beginTransaction();
+		try
 		{
-			$volumeName = "";
+			$collection = $volume->collection;
+			if ($volumeName != null)
+			{
+				$volumeName = $volume->name;
+			}
+			
+			//Force deleting for now, build out functionality for soft deleting later.
+			$volume->forceDelete();
 		}
-		
-		//Force deleting for now, build out functionality for soft deleting later.
-		$volume->forceDelete();
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully delete volume $volumeName."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully purged volume $volumeName from the collection."], null, null);
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
