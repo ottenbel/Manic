@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Redirect;
 use Auth;
 use Config;
+use DB;
 use Input;
 use MappingHelper;
 use ImageUploadHelper;
@@ -63,38 +64,65 @@ class ChapterController extends WebController
     }
 
     public function store(StoreChapterRequest $request)
-    {		
-		$volume = Volume::where('id', '=', trim(Input::get('volume_id')))->first();	
+    {
+		$chapter = null;
+		$collection = null;
 		
-		$chapter = new Chapter();
-		$chapter->volume_id = $volume->id;
-		$chapter->fill($request->only(['chapter_number', 'name', 'source']));
-		$chapter->save();
-		
-		//Explode the scanalators arrays to be processed (if commonalities exist force to primary)
-		$primaryScanalators = array_map('trim', explode(',', Input::get('scanalator_primary')));
-		$secondaryScanalators = array_diff(array_map('trim', explode(',', Input::get('scanalator_secondary'))), $primaryScanalators);
-		
-		$chapter->scanalators()->detach();
-		MappingHelper::MapScanalators($chapter, $primaryScanalators, true);
-		MappingHelper::MapScanalators($chapter, $secondaryScanalators, false);
-		
-		$pageNumber = 0;
-		foreach(Input::file('images') as $file)
+		DB::beginTransaction();
+		try
 		{
-			$fileExtension = File::mimeType($file);
+			$volume = Volume::where('id', '=', trim(Input::get('volume_id')))->first();	
+		
+			$chapter = new Chapter();
+			$chapter->volume_id = $volume->id;
+			$chapter->fill($request->only(['chapter_number', 'name', 'source']));
+			$chapter->save();
 			
-			if($fileExtension == "application/zip")
+			//Explode the scanalators arrays to be processed (if commonalities exist force to primary)
+			$primaryScanalators = array_map('trim', explode(',', Input::get('scanalator_primary')));
+			$secondaryScanalators = array_diff(array_map('trim', explode(',', Input::get('scanalator_secondary'))), $primaryScanalators);
+			
+			$chapter->scanalators()->detach();
+			MappingHelper::MapScanalators($chapter, $primaryScanalators, true);
+			MappingHelper::MapScanalators($chapter, $secondaryScanalators, false);
+			
+			$pageNumber = 0;
+			foreach(Input::file('images') as $file)
 			{
-				ImageUploadHelper::UploadZip($chapter, $pageNumber, $file);
-			}
-			else
-			{
-				$image = ImageUploadHelper::UploadImage($file);
-				$chapter->pages()->attach($image, ['page_number' => $pageNumber]);	
-				$pageNumber++;
+				$fileExtension = File::mimeType($file);
+				
+				if($fileExtension == "application/zip")
+				{
+					ImageUploadHelper::UploadZip($chapter, $pageNumber, $file);
+				}
+				else
+				{
+					$image = ImageUploadHelper::UploadImage($file);
+					$chapter->pages()->attach($image, ['page_number' => $pageNumber]);	
+					$pageNumber++;
+				}
 			}
 		}
+		catch (\Exception $e)
+		{
+			$pages = $chapter->pages()->get();
+			DB::rollBack();
+			
+			foreach ($pages as $page)
+			{
+				$pageImage = Image::where('id', '=', $page->id)->first();
+				
+				if (($page != null) && ($pageImage == null)) 
+				{
+					Storage::delete($page->name);
+					Storage::delete($page->thumbnail);
+				}
+			}
+			
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully create chapter $chapter->name."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
 		$collection = $volume->collection;
 		$messages = self::BuildFlashedMessagesVariable(["Successfully created new chapter #$chapter->chapter_number on collection $collection->name."], null, null);
@@ -176,80 +204,105 @@ class ChapterController extends WebController
     
     public function update(UpdateChapterRequest $request, Chapter $chapter)
     {
+		$collection = null;
 		
-		$deletePagesArray = Input::get('delete_pages');
-		$updatePagesArray = Input::get('chapter_pages');	
-		
-		if(($updatePagesArray != null) && (count(array_unique($updatePagesArray)) != count($updatePagesArray)))
+		DB::beginTransaction();
+		try
 		{
-			//Duplicate page number provided throw an error
-			return Redirect::back()->withErrors(['page_uniqueness' => 'All page numbers must be unique.'])->withInput();
-		}
-		
-		if (($deletePagesArray != null) && (count($deletePagesArray) == count($updatePagesArray)) && (count(Input::file('images')) == 0))
-		{
-			return Redirect::back()->withErrors(['page_requirement' => 'A chapter must have at least one page associated with it.'])->withInput();
-		}
-		
-        $volume = Volume::where('id', '=', trim(Input::get('volume_id')))->firstOrFail();
-		$chapter->volume_id = $volume->id;
-		$chapter->fill($request->only(['chapter_number', 'name', 'source']));
-		$chapter->save();
-		
-		//Explode the scanalators arrays to be processed (if commonalities exist force to primary)
-		$primaryScanalators = array_map('trim', explode(',', Input::get('scanalator_primary')));
-		$secondaryScanalators = array_diff(array_map('trim', explode(',', Input::get('scanalator_secondary'))), $primaryScanalators);
-		
-		$chapter->scanalators()->detach();
-		MappingHelper::MapScanalators($chapter, $primaryScanalators, true);
-		MappingHelper::MapScanalators($chapter, $secondaryScanalators, false);
-		
-		$pages = $chapter->pages;
+			$deletePagesArray = Input::get('delete_pages');
+			$updatePagesArray = Input::get('chapter_pages');	
+			
+			if(($updatePagesArray != null) && (count(array_unique($updatePagesArray)) != count($updatePagesArray)))
+			{
+				//Duplicate page number provided throw an error
+				return Redirect::back()->withErrors(['page_uniqueness' => 'All page numbers must be unique.'])->withInput();
+			}
+			
+			if (($deletePagesArray != null) && (count($deletePagesArray) == count($updatePagesArray)) && (count(Input::file('images')) == 0))
+			{
+				return Redirect::back()->withErrors(['page_requirement' => 'A chapter must have at least one page associated with it.'])->withInput();
+			}
+			
+			$volume = Volume::where('id', '=', trim(Input::get('volume_id')))->firstOrFail();
+			$chapter->volume_id = $volume->id;
+			$chapter->fill($request->only(['chapter_number', 'name', 'source']));
+			$chapter->save();
+			
+			//Explode the scanalators arrays to be processed (if commonalities exist force to primary)
+			$primaryScanalators = array_map('trim', explode(',', Input::get('scanalator_primary')));
+			$secondaryScanalators = array_diff(array_map('trim', explode(',', Input::get('scanalator_secondary'))), $primaryScanalators);
+			
+			$chapter->scanalators()->detach();
+			MappingHelper::MapScanalators($chapter, $primaryScanalators, true);
+			MappingHelper::MapScanalators($chapter, $secondaryScanalators, false);
+			
+			$pages = $chapter->pages;
 
-		//Detach all existing pages
-		$chapter->pages()->detach();
-		
-		$highest_page_number = 0;
-		//Update the existing pages depending on user input
-		foreach ($pages as $page)
-		{
-			//If page has not been marked for deletion re-add it to the chapter.
-			if (($deletePagesArray == null) || (!(array_key_exists("$page->id", $deletePagesArray))))
+			//Detach all existing pages
+			$chapter->pages()->detach();
+			
+			$highest_page_number = 0;
+			//Update the existing pages depending on user input
+			foreach ($pages as $page)
 			{
-				$image = Image::where('id', '=', $page->id)->first();
-				$pageNumber = $updatePagesArray["$page->id"];
-				
-				$chapter->pages()->attach($image, ['page_number' => $pageNumber]);
-				
-				if ($pageNumber > $highest_page_number)
+				//If page has not been marked for deletion re-add it to the chapter.
+				if (($deletePagesArray == null) || (!(array_key_exists("$page->id", $deletePagesArray))))
 				{
-					$highest_page_number = $pageNumber;
+					$image = Image::where('id', '=', $page->id)->first();
+					$pageNumber = $updatePagesArray["$page->id"];
+					
+					$chapter->pages()->attach($image, ['page_number' => $pageNumber]);
+					
+					if ($pageNumber > $highest_page_number)
+					{
+						$highest_page_number = $pageNumber;
+					}
 				}
 			}
-		}
-		if (Input::file('images') != null)
-		{
-			$pageNumber = $highest_page_number + 1;
-			foreach(Input::file('images') as $file)
+			if (Input::file('images') != null)
 			{
-				$fileExtension = File::mimeType($file);
-				
-				if($fileExtension == "application/zip")
+				$pageNumber = $highest_page_number + 1;
+				foreach(Input::file('images') as $file)
 				{
-					ImageUploadHelper::UploadZip($chapter, $pageNumber, $file);
-				}
-				else
-				{				
-					$image = ImageUploadHelper::UploadImage($file);
-					$chapter->pages()->attach($image, ['page_number' => $pageNumber]);	
-					$pageNumber++;
+					$fileExtension = File::mimeType($file);
+					
+					if($fileExtension == "application/zip")
+					{
+						ImageUploadHelper::UploadZip($chapter, $pageNumber, $file);
+					}
+					else
+					{				
+						$image = ImageUploadHelper::UploadImage($file);
+						$chapter->pages()->attach($image, ['page_number' => $pageNumber]);	
+						$pageNumber++;
+					}
 				}
 			}
+			
+			$collection = $volume->collection;
 		}
+		catch (\Exception $e)
+		{
+			$pages = $chapter->pages()->get();
+			DB::rollBack();
+			
+			foreach ($pages as $page)
+			{
+				$pageImage = Image::where('id', '=', $page->id)->first();
+				
+				if (($page != null) && ($pageImage == null)) 
+				{
+					Storage::delete($page->name);
+					Storage::delete($page->thumbnail);
+				}
+			}
+			
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully update chapter $chapter->name."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
 		
-		$collection = $volume->collection;
 		$messages = self::BuildFlashedMessagesVariable(["Successfully updated chapter #$chapter->chapter_number on collection $collection->name."], null, null);
-		
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
     }
 
@@ -257,15 +310,29 @@ class ChapterController extends WebController
     {
 		$this->authorize($chapter);
 		
-		$collection = $chapter->collection;
-		$chapterName = $chapter->name;
-		if ($chapterName == null)
-		{
-			$chapterName = "";
-		}
+		$collection = null;
+		$chapterName = "";
 		
-		//Force deleting for now, build out functionality for soft deleting later.
-		$chapter->forceDelete();
+		DB::beginTransaction();
+		try
+		{
+			$collection = $chapter->collection;
+			if ($chapter->name = null)
+			{
+				$chapterName = $chapter->name;
+			}
+			
+			//Force deleting for now, build out functionality for soft deleting later.
+			$chapter->forceDelete();
+		}
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully delete chapter $chapterName."]);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
+		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully purged chapter $chapterName from the collection."], null, null);
 		
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
