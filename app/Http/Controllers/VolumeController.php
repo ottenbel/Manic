@@ -60,8 +60,12 @@ class VolumeController extends WebController
 		{
 			$cover = $volume->cover_image;
 			DB::rollBack();
+			$coverImage= null;
+			if ($cover != null)
+			{
+				$coverImage = Image::where('id', '=', $volume->cover_image->id)->first();
+			}
 			
-			$coverImage = Image::where('id', '=', $volume->cover_image->id)->first();
 			//Delete the cover image from the file system if the image isn't being used anywhere else
 			if (($collection->cover != null) && ($coverImage == null)) 
 			{

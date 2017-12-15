@@ -9,6 +9,7 @@ use Auth;
 use Config;
 use DB;
 use Input;
+use LookupHelper;
 use MappingHelper;
 use ImageUploadHelper;
 use InterventionImage;
@@ -79,8 +80,8 @@ class ChapterController extends WebController
 			$chapter->save();
 			
 			//Explode the scanalators arrays to be processed (if commonalities exist force to primary)
-			$primaryScanalators = array_map('trim', explode(',', Input::get('scanalator_primary')));
-			$secondaryScanalators = array_diff(array_map('trim', explode(',', Input::get('scanalator_secondary'))), $primaryScanalators);
+			$primaryScanalators = array_map('LookupHelper::GetScanalatorName', array_map('trim', explode(',', Input::get('scanalator_primary'))));
+			$secondaryScanalators = array_diff(array_map('LookupHelper::GetScanalatorName', array_map('trim', explode(',', Input::get('scanalator_secondary')))), $primaryScanalators);
 			
 			$chapter->scanalators()->detach();
 			MappingHelper::MapScanalators($chapter, $primaryScanalators, true);
@@ -229,8 +230,8 @@ class ChapterController extends WebController
 			$chapter->save();
 			
 			//Explode the scanalators arrays to be processed (if commonalities exist force to primary)
-			$primaryScanalators = array_map('trim', explode(',', Input::get('scanalator_primary')));
-			$secondaryScanalators = array_diff(array_map('trim', explode(',', Input::get('scanalator_secondary'))), $primaryScanalators);
+			$primaryScanalators = array_map('LookupHelper::GetScanalatorName', array_map('trim', explode(',', Input::get('scanalator_primary'))));
+			$secondaryScanalators = array_diff(array_map('LookupHelper::GetScanalatorName', array_map('trim', explode(',', Input::get('scanalator_secondary')))), $primaryScanalators);
 			
 			$chapter->scanalators()->detach();
 			MappingHelper::MapScanalators($chapter, $primaryScanalators, true);

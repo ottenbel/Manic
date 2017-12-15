@@ -15,6 +15,7 @@ use SearchParseHelper;
 use ImageUploadHelper;
 use InterventionImage;
 use FileExportHelper;
+use LookupHelper;
 use ConfigurationLookupHelper;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
@@ -215,24 +216,24 @@ class CollectionController extends WebController
 			$collection->save();
 			
 			//Explode the artists arrays to be processed (if commonalities exist force to primary)
-			$primaryArtists = array_map('trim', explode(',', Input::get('artist_primary')));
-			$secondaryArtists = array_diff(array_map('trim', explode(',', Input::get('artist_secondary'))), $primaryArtists);
+			$primaryArtists = array_map('LookupHelper::GetArtistName', array_map('trim', explode(',', Input::get('artist_primary'))));
+			$secondaryArtists = array_diff(array_map('LookupHelper::GetArtistName', array_map('trim', explode(',', Input::get('artist_secondary')))), $primaryArtists);
 		
 			$collection->artists()->detach();
 			MappingHelper::MapArtists($collection, $primaryArtists, true);
 			MappingHelper::MapArtists($collection, $secondaryArtists, false);
 			
 			//Explode the series arrays to be processed (if commonalities exist force to primary)
-			$primarySeries = array_map('trim', explode(',', Input::get('series_primary')));
-			$secondarySeries = array_diff(array_map('trim', explode(',', Input::get('series_secondary'))), $primarySeries);
+			$primarySeries = array_map('LookupHelper::GetSeriesName', array_map('trim', explode(',', Input::get('series_primary'))));
+			$secondarySeries = array_diff(array_map('LookupHelper::GetSeriesName', array_map('trim', explode(',', Input::get('series_secondary')))), $primarySeries);
 		
 			$collection->series()->detach();
 			MappingHelper::MapSeries($collection, $primarySeries, true);
 			MappingHelper::MapSeries($collection, $secondarySeries, false);
 
 			//Explode the character arrays to be processed (if commonalities exist force to primary)
-			$primaryCharacters = array_map('trim', explode(',', Input::get('character_primary')));
-			$secondaryCharacters = array_diff(array_map('trim', explode(',', Input::get('character_secondary'))), $primaryCharacters);
+			$primaryCharacters = array_map('LookupHelper::GetCharacterName', array_map('trim', explode(',', Input::get('character_primary'))));
+			$secondaryCharacters = array_diff(array_map('LookupHelper::GetCharacterName', array_map('trim', explode(',', Input::get('character_secondary')))), $primaryCharacters);
 			
 			$collection->characters()->detach();
 			$missingPrimaryCharacters = MappingHelper::MapCharacters($collection, $primaryCharacters, true);
@@ -241,8 +242,8 @@ class CollectionController extends WebController
 			$missingCharacters = array_unique(array_merge($missingPrimaryCharacters, $missingSecondaryCharacters));
 			
 			//Explode the tags array to be processed (if commonalities exist force to primary)
-			$primaryTags = array_map('trim', explode(',', Input::get('tag_primary')));
-			$secondaryTags = array_diff(array_map('trim', explode(',', Input::get('tag_secondary'))), $primaryTags);
+			$primaryTags = array_map('LookupHelper::GetTagName', array_map('trim', explode(',', Input::get('tag_primary'))));
+			$secondaryTags = array_diff(array_map('LookupHelper::GetTagName', array_map('trim', explode(',', Input::get('tag_secondary')))), $primaryTags);
 			
 			$collection->tags()->detach();
 			MappingHelper::MapTags($collection, $primaryTags, true);
@@ -251,8 +252,13 @@ class CollectionController extends WebController
 		catch (\Exception $e)
 		{	
 			$cover = $collection->cover_image;
+			$coverImage = null;
 			DB::rollBack();
-			$coverImage = Image::where('id', '=', $collection->cover_image->id)->first();
+			if ($cover != null)
+			{
+				$coverImage = Image::where('id', '=', $collection->cover_image->id)->first();
+			}
+			
 			//Delete the cover image from the file system if the image isn't being used anywhere else
 			if (($collection->cover != null) && ($coverImage == null)) 
 			{
