@@ -21,12 +21,12 @@ class CharacterAliasPolicy
     {
 		//Global tags are public so we won't use the can view check on those 
 		if ($characterAlias->user_id == $user->id)
-		{
-			return true;
+		{ 
+			return true; 
 		}
 		else
-		{
-			return false;
+		{ 
+			return false; 
 		}
     }
 
@@ -40,11 +40,11 @@ class CharacterAliasPolicy
     {
         if ($isGlobal)
 		{
-			return $user->has_editor_permission();
+			return $user->hasPermissionTo('Create Global Character Alias');
 		}
 		else
 		{
-			return $user->has_user_permission();
+			return $user->hasPermissionTo('Create Personal Character Alias');
 		}
     }
 
@@ -59,11 +59,11 @@ class CharacterAliasPolicy
     {
         if ($characterAlias->user_id == null)
 		{
-			return $user->has_editor_permission();
+			return $user->hasPermissionTo('Delete Global Character Alias');
 		}
 		else if ($characterAlias->user_id == $user->id)
 		{
-			return true;
+			return $user->hasPermissionTo('Delete Personal Character Alias');
 		}
 		else
 		{

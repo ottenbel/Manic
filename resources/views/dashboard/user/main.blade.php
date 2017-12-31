@@ -10,9 +10,11 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
-        <a href="{{route('user_dashboard_configuration_main')}}"><b>Configuration</b></a>
-    </div>
+	@if((Auth::user()->can('Edit Personal Pagination Settings')) || (Auth::user()->can('Edit Personal Placeholder Settings')) || (Auth::user()->can('Edit Personal Rating Restriction Settings')))
+		<div class="row">
+			<a href="{{route('user_dashboard_configuration_main')}}"><b>Configuration</b></a>
+		</div>
+	@endif
 </div>
 @endsection
 

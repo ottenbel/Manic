@@ -31,7 +31,7 @@ class ArtistPolicy
      */
     public function create(User $user)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Create Artist');
     }
 
 	 /**
@@ -43,7 +43,7 @@ class ArtistPolicy
      */
     public function update(User $user, Artist $artist)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Edit Artist');
     }
 
     /**
@@ -55,6 +55,6 @@ class ArtistPolicy
      */
     public function delete(User $user, Artist $artist)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Delete Artist');
     }
 }

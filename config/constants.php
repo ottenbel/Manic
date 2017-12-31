@@ -122,12 +122,6 @@
 											'personal' => 'Personal Alias',
 											'global' => 'Global Alias'
 										 ]
-					   ],
-		'roles' => [
-						'user' => 'ddce79e6-8f67-4f18-89d2-af160f1552c5',
-						'editor' => 'd0ff589b-b2a7-4402-88ae-a8b2d1e868bf',
-						'administrator' => '8a5cdf00-75e9-406c-902c-594030ed0a2f',
-						'owner' => '75f5c752-9e8d-4969-bb4b-0e0bac28d4b5'
-				   ]
+					   ]
 	];
 ?>

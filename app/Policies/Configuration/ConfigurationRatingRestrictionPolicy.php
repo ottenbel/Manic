@@ -11,7 +11,7 @@ class ConfigurationRatingRestrictionPolicy
     use HandlesAuthorization;
 
 	 /**
-     * Determine whether the user can update the chapter.
+     * Determine whether the user can update the configuration setting.
      *
      * @param  \App\User  $user
      * @return mixed
@@ -20,23 +20,22 @@ class ConfigurationRatingRestrictionPolicy
     {
         if ($isSiteConfig)
 		{
-			if ($user->has_administrator_permission())
-				{ return true; }
-			else
-				{ return false; }
+			return $user->hasPermissionTo('Edit Global Rating Restriction Settings');
 		}
 		else
-			{ return true; }
+		{ 
+			return $user->hasPermissionTo('Edit Personal Rating Restriction Settings');
+		}
     }
 
     /**
-     * Determine whether the user can reset the chapter.
+     * Determine whether the user can reset the configuration setting.
      *
      * @param  \App\User  $user
      * @return mixed
      */
     public function reset(User $user)
     {
-        return true;
+        return $user->hasPermissionTo('Edit Personal Rating Restriction Settings');
     }
 }

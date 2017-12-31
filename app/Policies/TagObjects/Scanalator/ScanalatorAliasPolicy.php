@@ -40,11 +40,11 @@ class ScanalatorAliasPolicy
     {
         if ($isGlobal)
 		{
-			return $user->has_editor_permission();
+			return $user->hasPermissionTo('Create Global Scanalator Alias');
 		}
 		else
 		{
-			return $user->has_user_permission();
+			return $user->hasPermissionTo('Create Personal Scanalator Alias');
 		}
     }
 
@@ -59,11 +59,11 @@ class ScanalatorAliasPolicy
     {
         if ($scanalatorAlias->user_id == null)
 		{
-			return $user->has_editor_permission();
+			return $user->hasPermissionTo('Delete Global Scanalator Alias');
 		}
 		else if ($scanalatorAlias->user_id == $user->id)
 		{
-			return true;
+			return $user->hasPermissionTo('Delete Personal Scanalator Alias');
 		}
 		else
 		{

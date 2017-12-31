@@ -12,11 +12,7 @@ class UserSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
-		$userRole = Config::get('constants.roles.owner');
-		//Do the production seeding
-		$role = Role::where('id', '=', $userRole)->first();
-		
+    {		
 		$user = User::first();
 		if ($user == null)
 		{
@@ -24,9 +20,11 @@ class UserSeeder extends Seeder
 			$user->name = 'admin';
 			$user->email = 'admin@email.com';
 			$user->password = bcrypt('password');
-			$user->api_token = str_random(60);
-			$user->role_id = $role->id;
 			$user->save();
+			$user->assignRole('user');
+			$user->assignRole('editor');
+			$user->assignRole('administrator');
+			$user->assignRole('owner');
 		}
     }
 }

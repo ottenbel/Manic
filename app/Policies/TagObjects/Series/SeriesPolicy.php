@@ -31,7 +31,7 @@ class SeriesPolicy
      */
     public function create(User $user)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Create Series');
     }
 
 	 /**
@@ -43,7 +43,7 @@ class SeriesPolicy
      */
     public function update(User $user, Series $series)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Edit Series');
     }
 
     /**
@@ -55,14 +55,7 @@ class SeriesPolicy
      */
     public function delete(User $user, Series $series)
     {
-		if (($user->has_editor_permission()) && ($series->children()->count() == 0) && ($series->characters()->count() == 0))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-        
+		return (($user->hasPermissionTo('Delete Series')) && ($series->children()->count() == 0) 
+			&& ($series->characters()->count() == 0));
     }
 }

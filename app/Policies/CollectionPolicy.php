@@ -31,7 +31,7 @@ class CollectionPolicy
      */
     public function create(User $user)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Create Collection');
     }
 
 	 /**
@@ -43,7 +43,7 @@ class CollectionPolicy
      */
     public function update(User $user, Collection $collection)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Edit Collection');
     }
 
     /**
@@ -55,7 +55,7 @@ class CollectionPolicy
      */
     public function delete(User $user, Collection $collection)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Delete Collection');
     }
 	
 	/**
@@ -67,6 +67,6 @@ class CollectionPolicy
      */
     public function export(User $user, Collection $collection)
     {
-        return $user->has_user_permission();
+        return $user->hasPermissionTo('Export Collection');
     }
 }

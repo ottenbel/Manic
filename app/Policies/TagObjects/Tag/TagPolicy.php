@@ -31,7 +31,7 @@ class TagPolicy
      */
     public function create(User $user)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Create Tag');
     }
 
 	 /**
@@ -43,7 +43,7 @@ class TagPolicy
      */
     public function update(User $user, Tag $tag)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Edit Tag');
     }
 
     /**
@@ -55,6 +55,6 @@ class TagPolicy
      */
     public function delete(User $user, Tag $tag)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Delete Tag');
     }
 }

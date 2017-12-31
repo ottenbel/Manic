@@ -270,7 +270,9 @@
 			<li>
 				<a href="{{route('user_dashboard_main')}}"><i class="fa fa-user-circle-o" aria-hidden="true"></i> User Dashboard</a>
 			</li>
-			@if(Auth::user()->has_administrator_permission())
+			@if((Auth::user()->can('Edit Global Pagination Settings')) 
+				|| (Auth::user()->can('Edit Global Placeholder Settings')) 
+				|| (Auth::user()->can('Edit Global Rating Restriction Settings')))
 				<li>
 					<a href="{{route('admin_dashboard_main')}}"><i class="fa fa-user-circle" aria-hidden="true"></i> Admin Dashboard</a>
 				</li>	

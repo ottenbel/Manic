@@ -31,7 +31,7 @@ class ScanalatorPolicy
      */
     public function create(User $user)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Create Scanalator');
     }
 
 	 /**
@@ -43,7 +43,7 @@ class ScanalatorPolicy
      */
     public function update(User $user, Scanalator $scanalator)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Edit Scanalator');
     }
 
     /**
@@ -55,6 +55,6 @@ class ScanalatorPolicy
      */
     public function delete(User $user, Scanalator $scanalator)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Delete Scanalator');
     }
 }

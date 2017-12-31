@@ -31,7 +31,7 @@ class ChapterPolicy
      */
     public function create(User $user)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Create Chapter');
     }
 
 	 /**
@@ -43,7 +43,7 @@ class ChapterPolicy
      */
     public function update(User $user, Chapter $chapter)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Edit Chapter');
     }
 
     /**
@@ -55,7 +55,7 @@ class ChapterPolicy
      */
     public function delete(User $user, Chapter $chapter)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Delete Chapter');
     }
 	
 	/**
@@ -67,6 +67,6 @@ class ChapterPolicy
      */
     public function export(User $user, Chapter $chapter)
     {
-        return $user->has_user_permission();
+        return $user->hasPermissionTo('Export Chapter');
     }
 }

@@ -31,7 +31,7 @@ class CharacterPolicy
      */
     public function create(User $user)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Create Character');
     }
 
 	 /**
@@ -43,7 +43,7 @@ class CharacterPolicy
      */
     public function update(User $user, Character $character)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Edit Character');
     }
 
     /**
@@ -55,6 +55,6 @@ class CharacterPolicy
      */
     public function delete(User $user, Character $character)
     {
-        return $user->has_editor_permission();
+        return $user->hasPermissionTo('Delete Character');
     }
 }

@@ -20,13 +20,13 @@ class ArtistAliasPolicy
     public function view(User $user, ArtistAlias $artistAlias)
     {
 		//Global tags are public so we won't use the can view check on those 
-		if ($artistAlias->user_id == $user->id)
-		{
-			return true;
+		if ($artistAlias->user_id == $user->id) 
+		{ 
+			return true; 
 		}
-		else
-		{
-			return false;
+		else 
+		{ 
+			return false; 
 		}
     }
 
@@ -40,11 +40,11 @@ class ArtistAliasPolicy
     {
         if ($isGlobal)
 		{
-			return $user->has_editor_permission();
+			return $user->hasPermissionTo('Create Global Artist Alias');
 		}
 		else
 		{
-			return $user->has_user_permission();
+			return $user->hasPermissionTo('Create Personal Artist Alias');
 		}
     }
 
@@ -59,11 +59,11 @@ class ArtistAliasPolicy
     {
         if ($artistAlias->user_id == null)
 		{
-			return $user->has_editor_permission();
+			return $user->hasPermissionTo('Delete Global Artist Alias');
 		}
 		else if ($artistAlias->user_id == $user->id)
 		{
-			return true;
+			return $user->hasPermissionTo('Delete Personal Artist Alias');
 		}
 		else
 		{

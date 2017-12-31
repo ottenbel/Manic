@@ -11,7 +11,7 @@ class ConfigurationPaginationPolicy
     use HandlesAuthorization;
 
 	 /**
-     * Determine whether the user can update the chapter.
+     * Determine whether the user can update the pagination settings.
      *
      * @param  \App\User  $user
      * @return mixed
@@ -20,23 +20,22 @@ class ConfigurationPaginationPolicy
     {
         if ($isSiteConfig)
 		{
-			if ($user->has_administrator_permission())
-				{ return true; }
-			else
-				{ return false; }
+			return $user->hasPermissionTo('Edit Global Pagination Settings');
 		}
 		else
-			{ return true; }
+		{ 
+			return $user->hasPermissionTo('Edit Personal Pagination Settings'); 
+		}
     }
 
     /**
-     * Determine whether the user can reset the chapter.
+     * Determine whether the user can reset the pagination settings.
      *
      * @param  \App\User  $user
      * @return mixed
      */
     public function reset(User $user)
     {
-        return true;
+        return $user->hasPermissionTo('Edit Personal Pagination Settings');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 use Config;
 
 class User extends Authenticatable
@@ -12,6 +13,7 @@ class User extends Authenticatable
     use Notifiable;
     use Uuids;
 	use SoftDeletes;
+	use HasRoles;
 	
     /**
      * The attributes that are mass assignable.
@@ -19,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'api_token', 'role_id',
+        'name', 'email', 'password',
     ];
 
     /**
@@ -28,7 +30,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'api_token',
+        'password', 'remember_token',
     ];
 
     /**
@@ -269,59 +271,5 @@ class User extends Authenticatable
 	public function rating_restriction_configuration()
 	{
 		return $this->hasMany('App\Models\Configuration\ConfigurationRatingRestriction');
-	}
-	
-	public function has_user_permission()
-	{
-		if (($this->role_id == Config::get('constants.roles.user')) 
-			|| ($this->role_id == Config::get('constants.roles.editor')) 
-			|| ($this->role_id == Config::get('constants.roles.administrator')) 
-			|| ($this->role_id == Config::get('constants.roles.owner')))
-		{
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
-	}
-	
-	public function has_editor_permission()
-	{
-		if (($this->role_id == Config::get('constants.roles.editor')) 
-			|| ($this->role_id == Config::get('constants.roles.administrator')) 
-			|| ($this->role_id == Config::get('constants.roles.owner')))
-		{
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
-	}
-	
-	public function has_administrator_permission()
-	{
-		if (($this->role_id == Config::get('constants.roles.administrator')) 
-			|| ($this->role_id == Config::get('constants.roles.owner')))
-		{
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
-	}
-	
-	public function has_owner_permission()
-	{
-		if ($this->role_id == Config::get('constants.roles.owner'))
-		{
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
 	}
 }

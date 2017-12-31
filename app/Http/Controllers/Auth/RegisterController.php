@@ -68,18 +68,13 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-			'api_token' => str_random(60),
-			'role_id' => Config::get('constants.roles.user'),
         ]);
+		$user->assignRole('user');
 		
 		//Seed the database with configuration values for the user.
 		SeedingHelper::SeedPaginationTable($user);
 		SeedingHelper::SeedRatingRestrictionTable($user);
-		//If the user can edit then seed their placeholder tables
-		if ($user->has_editor_permission())
-		{
-			SeedingHelper::SeedPlaceholderTable($user);
-		}
+		SeedingHelper::SeedPlaceholderTable($user);
 		return $user;
     }
 }

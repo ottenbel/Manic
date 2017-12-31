@@ -26,10 +26,7 @@ class ConfigurationSeeder extends Seeder
 		{
 			SeedingHelper::SeedPaginationTable($user);
 			SeedingHelper::SeedRatingRestrictionTable($user);
-			if ($user->has_editor_permission())
-			{
-				SeedingHelper::SeedPlaceholderTable($user);
-			}
+			SeedingHelper::SeedPlaceholderTable($user);
 		}
     }
 }

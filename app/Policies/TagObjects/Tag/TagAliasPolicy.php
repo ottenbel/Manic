@@ -40,11 +40,11 @@ class TagAliasPolicy
     {
         if ($isGlobal)
 		{
-			return $user->has_editor_permission();
+			return $user->hasPermissionTo('Create Global Tag Alias');
 		}
 		else
 		{
-			return $user->has_user_permission();
+			return $user->hasPermissionTo('Create Personal Tag Alias');
 		}
     }
 
@@ -59,11 +59,11 @@ class TagAliasPolicy
     {
         if ($tagAlias->user_id == null)
 		{
-			return $user->has_editor_permission();
+			return $user->hasPermissionTo('Delete Global Tag Alias');
 		}
 		else if ($tagAlias->user_id == $user->id)
 		{
-			return true;
+			return $user->hasPermissionTo('Delete Personal Tag Alias');
 		}
 		else
 		{

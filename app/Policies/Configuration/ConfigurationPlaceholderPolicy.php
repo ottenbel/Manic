@@ -11,7 +11,7 @@ class ConfigurationPlaceholderPolicy
     use HandlesAuthorization;
 
 	 /**
-     * Determine whether the user can update the chapter.
+     * Determine whether the user can update the placeholder settings.
      *
      * @param  \App\User  $user
      * @return mixed
@@ -20,23 +20,22 @@ class ConfigurationPlaceholderPolicy
     {
         if ($isSiteConfig)
 		{
-			if ($user->has_administrator_permission() || ($user->has_editor_permission()))
-				{ return true; }
-			else
-				{ return false; }
+			return $user->hasPermissionTo('Edit Global Placeholder Settings');
 		}
 		else
-			{ return true; }
+		{ 
+			return $user->hasPermissionTo('Edit Personal Placeholder Settings');
+		}
     }
 
     /**
-     * Determine whether the user can reset the chapter.
+     * Determine whether the user can reset the placeholder settings.
      *
      * @param  \App\User  $user
      * @return mixed
      */
     public function reset(User $user)
     {
-        return true;
+        return $user->hasPermissionTo('Edit Personal Placeholder Settings');
     }
 }
