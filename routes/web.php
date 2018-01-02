@@ -298,3 +298,21 @@ Route::group(['middleware' => ['auth', 'permission:Edit Global Placeholder Setti
 	Route::get('/admin/configuration/rating_restriction', 'Configuration\RatingRestrictionController@edit')->Name('admin_dashboard_configuration_rating_restriction');
 	Route::patch('/admin/configuration/rating_restriction/', 'Configuration\RatingRestrictionController@update')->Name('admin_update_configuration_rating_restriction');
 });	
+
+Route::group(['middleware' => ['auth', 'permission:Create Permission|Edit Permission|Delete Permission']], function(){	
+	Route::get('/admin/permission', 'RolesAndPermissions\PermissionsController@index')->Name('index_permission');
+});	
+
+Route::group(['middleware' => ['auth', 'permission:Create Permission']], function(){
+	Route::get('/admin/permission/create', 'RolesAndPermissions\PermissionsController@create')->Name('create_permission');
+	Route::post('/admin/permission', 'RolesAndPermissions\PermissionsController@store')->Name('store_permission');
+});
+
+Route::group(['middleware' => ['auth', 'permission:Edit Permission']], function(){
+	Route::get('/admin/permission/{permission}/edit', 'RolesAndPermissions\PermissionsController@edit')->Name('edit_permission');
+	Route::patch('/admin/permission/{permission}', 'RolesAndPermissions\PermissionsController@update')->Name('update_permission');
+});
+
+Route::group(['middleware' => ['auth', 'permission:Delete Permission']], function(){
+	Route::delete('/admin/permission/{permission}', 'RolesAndPermissions\PermissionsController@destroy')->Name('delete_permission');
+});

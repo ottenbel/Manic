@@ -65,6 +65,15 @@ class RolesAndPermissionsSeeder extends Seeder
 		Permission::create(['name' => 'Edit Global Pagination Settings']);
 		Permission::create(['name' => 'Edit Global Placeholder Settings']);
 		Permission::create(['name' => 'Edit Global Rating Restriction Settings']);
+		Permission::create(['name' => 'Create Language']);
+		Permission::create(['name' => 'Edit Language']);
+		Permission::create(['name' => 'Delete Language']);
+		Permission::create(['name' => 'Create Status']);
+		Permission::create(['name' => 'Edit Status']);
+		Permission::create(['name' => 'Delete Status']);
+		Permission::create(['name' => 'Create Rating']);
+		Permission::create(['name' => 'Edit Rating']);
+		Permission::create(['name' => 'Delete Rating']);
 		Permission::create(['name' => 'Modify User Level Account Permissions and Roles']);
 		Permission::create(['name' => 'Modify Editor Level Account Permissions and Roles']);
 		Permission::create(['name' => 'Assign User Level Permissions and Roles To Account To Account']);
@@ -77,7 +86,7 @@ class RolesAndPermissionsSeeder extends Seeder
 		Permission::create(['name' => 'Assign Owner Level Permissions and Roles']);
 		Permission::create(['name' => 'Remove Administrator Level Permissions and Roles']);
 		Permission::create(['name' => 'Remove Owner Level Permissions and Roles']);
-		Permission::create(['name' => 'Create Role']); 
+		Permission::create(['name' => 'Create Role']);
 		Permission::create(['name' => 'Edit Role']);
 		Permission::create(['name' => 'Delete Role']);
 		Permission::create(['name' => 'Create Permission']);
@@ -140,6 +149,15 @@ class RolesAndPermissionsSeeder extends Seeder
 		$role->givePermissionTo('Edit Personal Placeholder Settings');
 		
 		$role = Role::create(['name' => 'administrator']);
+		$role->givePermissionTo('Create Language');
+		$role->givePermissionTo('Edit Language');
+		$role->givePermissionTo('Delete Language');
+		$role->givePermissionTo('Create Status');
+		$role->givePermissionTo('Edit Status');
+		$role->givePermissionTo('Delete Status');
+		$role->givePermissionTo('Create Rating');
+		$role->givePermissionTo('Edit Rating');
+		$role->givePermissionTo('Delete Rating');
 		$role->givePermissionTo('Edit Global Pagination Settings');
 		$role->givePermissionTo('Edit Global Placeholder Settings');
 		$role->givePermissionTo('Edit Global Rating Restriction Settings');

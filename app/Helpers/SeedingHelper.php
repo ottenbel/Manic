@@ -42,6 +42,7 @@ class SeedingHelper
 		self::SeedPaginationRow($user, $seedUser, "pagination_series_aliases_per_page_parent", 10, "The number of series aliases to be displayed per parent page.", 14);
 		self::SeedPaginationRow($user, $seedUser, "pagination_tag_aliases_per_page_parent", 10, "The number of tag aliases to be displayed per parent page.", 15);
 		self::SeedPaginationRow($user, $seedUser, "pagination_characters_per_page_series", 12, "The number of tag aliases to be displayed per parent series page.", 16);
+		self::SeedPaginationRow($user, $seedUser, "pagination_permissions_per_page_index", 30, "The number of permisisons to be displayed per index page.", 17);
 	}
 	
 	/*
@@ -127,6 +128,9 @@ class SeedingHelper
 		self::SeedPlaceholderRow($user, $seedUser, "chapter_secondary_scanalators", "Various Scans, Some More Scans", "Other scanalation groups that worked on the chapter (comma delimited/optional).", 4);
 		self::SeedPlaceholderRow($user, $seedUser, "chapter_source", "https://www.wikipedia.org", "The release location where the chapter was obtained (optional).", 5);
 		self::SeedPlaceholderRow($user, $seedUser, "chapter_images", "", "The files to be uploaded into the chapter as images or a zipped folder (required).", 6);
+		
+		//Permission
+		self::SeedPlaceholderRow($user, $seedUser, "permission_name", "Permission Name", "The name of the permission to be created", 0);
 	}
 	
 	/*

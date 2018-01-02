@@ -215,6 +215,31 @@
 				<li><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}"><i class="fa fa-eye" aria-hidden="true"></i> View Scanalator</a><li>
 			</ul>
 		</li>
+	@elseif(Route::is('index_permission'))
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+				Permissions & Roles <span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu" role="menu">
+				@can('create', Spatie\Permission\Models\Permission::class)
+					<li><a href="{{ route('create_permission') }}"><i class="fa fa-unlock" aria-hidden="true"></i>
+	Create Permission</a><li>
+				@endcan
+			</ul>
+		</li>
+	@elseif(Route::is('create_permission') || Route::is('edit_permission'))
+				<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+				Permissions & Roles <span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu" role="menu">
+				@if(Auth::user()->can('create', Spatie\Permission\Models\Permission::class) || ((!empty($permission)) && (Auth::user()->can('update', $permission))) || ((!empty($permission)) && (Auth::user()->can('delete', $permission))))
+					<li><a href="{{ route('index_permission') }}"><i class="fa fa-unlock" aria-hidden="true"></i>
+	Permissions</a><li>
+				@endif
+			</ul>
+		</li>
+
 	@endif
 	@if ((Auth::user()->can('create', App\Models\Collection::class)) 
 			|| (Auth::user()->can('create', App\Models\TagObjects\Tag\Tag::class)) 

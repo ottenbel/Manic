@@ -16,7 +16,11 @@
 		</div>
 	@endif
 	
-	
+	@if((Auth::user()->can('Create Permission')) || (Auth::user()->can('Edit Permission')) || (Auth::user()->can('Delete Permission')))
+		<div class="row">
+			<a href="{{route('index_permission')}}"><b>Permissions</b></a>
+		</div>
+	@endif
 </div>
 @endsection
 
