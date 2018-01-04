@@ -29,7 +29,8 @@ class AuthServiceProvider extends ServiceProvider
 		'App\Models\Configuration\ConfigurationPagination' => 'App\Policies\Configuration\ConfigurationPaginationPolicy',
 		'App\Models\Configuration\ConfigurationPlaceholder' => 'App\Policies\Configuration\ConfigurationPlaceholderPolicy',
 		'App\Models\Configuration\ConfigurationRatingRestriction' => 'App\Policies\Configuration\ConfigurationRatingRestrictionPolicy',
-		'Spatie\Permission\Models\Permission' => 'App\Policies\RolesAndPermissions\PermissionPolicy'
+		'Spatie\Permission\Models\Permission' => 'App\Policies\RolesAndPermissions\PermissionPolicy',
+		'Spatie\Permission\Models\Role' => 'App\Policies\RolesAndPermissions\RolePolicy'
     ];
 
     /**

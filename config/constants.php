@@ -21,7 +21,8 @@
 					'seriesAliasesPerPageParent' => 'pagination_series_aliases_per_page_parent',
 					'tagAliasesPerPageParent' => 'pagination_tag_aliases_per_page_parent',
 					'charactersPerPageSeries' => 'pagination_characters_per_page_series',
-					'permissionsPerPageIndex' => 'pagination_permissions_per_page_index'
+					'permissionsPerPageIndex' => 'pagination_permissions_per_page_index',
+					'rolesPerPageIndex' => 'pagination_roles_per_page_index'
 				],
 				'placeholders' =>
 				[

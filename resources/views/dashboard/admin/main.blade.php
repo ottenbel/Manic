@@ -21,6 +21,12 @@
 			<a href="{{route('index_permission')}}"><b>Permissions</b></a>
 		</div>
 	@endif
+	
+	@if((Auth::user()->can('Create Role')) || (Auth::user()->can('Edit Role')) || (Auth::user()->can('Delete Role')))
+		<div class="row">
+			<a href="{{route('index_role')}}"><b>Roles</b></a>
+		</div>
+	@endif
 </div>
 @endsection
 
