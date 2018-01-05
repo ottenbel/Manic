@@ -15,7 +15,7 @@ Create Permission - {{{$permission->name}}}
 		<div class="col-xs-8"><h1>Edit Permission</h1></div>
 		@can('delete', $permission)
 			<div class="col-xs-4 text-right">
-				<form method="POST" action="{{route('delete_permission', ['permission' => $permission])}}">
+				<form method="POST" action="{{route('admin_delete_permission', ['permission' => $permission])}}">
 					{{ csrf_field() }}
 					{{method_field('DELETE')}}
 					
@@ -25,7 +25,7 @@ Create Permission - {{{$permission->name}}}
 		@endcan
 	</div>
 	
-	<form method="POST" action="{{route('update_permission', ['permission' => $permission])}}" enctype="multipart/form-data">
+	<form method="POST" action="{{route('admin_update_permission', ['permission' => $permission])}}" enctype="multipart/form-data">
 		{{ csrf_field() }}
 		{{method_field('PATCH')}}
 	

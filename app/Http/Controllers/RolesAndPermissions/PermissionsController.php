@@ -58,7 +58,7 @@ class PermissionsController extends WebController
 		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully created new permission $permissionName."], null, null);
 		
-		return redirect()->route('index_permission')->with("messages", $messages);
+		return redirect()->route('admin_index_permission')->with("messages", $messages);
 	}
 	
 	public function edit(Request $request, Permission $permission)
@@ -89,7 +89,7 @@ class PermissionsController extends WebController
 		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully updated permission."], null, null);
 		
-		return redirect()->route('index_permission')->with("messages", $messages);
+		return redirect()->route('admin_index_permission')->with("messages", $messages);
 	}
 	
 	public function destroy(Permission $permission)
@@ -110,6 +110,6 @@ class PermissionsController extends WebController
 		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully deleted permission $permission->name."], null, null);
 		
-		return redirect()->route('index_permission')->with("messages", $messages);
+		return redirect()->route('admin_index_permission')->with("messages", $messages);
 	}
 }

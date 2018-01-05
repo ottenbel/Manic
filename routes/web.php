@@ -301,41 +301,41 @@ Route::group(['middleware' => ['auth', 'permission:Edit Global Placeholder Setti
 
 //Permissions
 	Route::group(['middleware' => ['auth', 'permission:Create Permission|Edit Permission|Delete Permission']], function(){	
-		Route::get('/admin/permission', 'RolesAndPermissions\PermissionsController@index')->Name('index_permission');
+		Route::get('/admin/permission', 'RolesAndPermissions\PermissionsController@index')->Name('admin_index_permission');
 	});	
 
 	Route::group(['middleware' => ['auth', 'permission:Create Permission']], function(){
-		Route::get('/admin/permission/create', 'RolesAndPermissions\PermissionsController@create')->Name('create_permission');
-		Route::post('/admin/permission', 'RolesAndPermissions\PermissionsController@store')->Name('store_permission');
+		Route::get('/admin/permission/create', 'RolesAndPermissions\PermissionsController@create')->Name('admin_create_permission');
+		Route::post('/admin/permission', 'RolesAndPermissions\PermissionsController@store')->Name('admin_store_permission');
 	});
 
 	Route::group(['middleware' => ['auth', 'permission:Edit Permission']], function(){
-		Route::get('/admin/permission/{permission}/edit', 'RolesAndPermissions\PermissionsController@edit')->Name('edit_permission');
-		Route::patch('/admin/permission/{permission}', 'RolesAndPermissions\PermissionsController@update')->Name('update_permission');
+		Route::get('/admin/permission/{permission}/edit', 'RolesAndPermissions\PermissionsController@edit')->Name('admin_edit_permission');
+		Route::patch('/admin/permission/{permission}', 'RolesAndPermissions\PermissionsController@update')->Name('admin_update_permission');
 	});
 
 	Route::group(['middleware' => ['auth', 'permission:Delete Permission']], function(){
-		Route::delete('/admin/permission/{permission}', 'RolesAndPermissions\PermissionsController@destroy')->Name('delete_permission');
+		Route::delete('/admin/permission/{permission}', 'RolesAndPermissions\PermissionsController@destroy')->Name('admin_delete_permission');
 	});
 //End Permissions
 
 //Roles
-	Route::group(['middleware' => ['auth', 'permission:Create Role|Edit Role|Delete Role']], function(){	
-		Route::get('/admin/role', 'RolesAndPermissions\RolesController@index')->Name('index_role');
-		Route::get('/admin/role/{role}', 'RolesAndPermissions\RolesController@show')->Name('show_role');
-	});
-	
 	Route::group(['middleware' => ['auth', 'permission:Create Role']], function(){
-		Route::get('/admin/role/create', 'RolesAndPermissions\RolesController@create')->Name('create_role');
-		Route::post('/admin/role', 'RolesAndPermissions\RolesController@store')->Name('store_role');
+		Route::get('/admin/role/create', 'RolesAndPermissions\RolesController@create')->Name('admin_create_role');
+		Route::post('/admin/role', 'RolesAndPermissions\RolesController@store')->Name('admin_store_role');
 	});
 	
 	Route::group(['middleware' => ['auth', 'permission:Edit Role']], function(){
-		Route::get('/admin/role/{role}/edit', 'RolesAndPermissions\RolesController@edit')->Name('edit_role');
-		Route::patch('/admin/role/{role}', 'RolesAndPermissions\RolesController@update')->Name('update_role');
+		Route::get('/admin/role/{role}/edit', 'RolesAndPermissions\RolesController@edit')->Name('admin_edit_role');
+		Route::patch('/admin/role/{role}', 'RolesAndPermissions\RolesController@update')->Name('admin_update_role');
+	});
+		
+	Route::group(['middleware' => ['auth', 'permission:Delete Role']], function(){
+		Route::delete('/admin/role/{role}', 'RolesAndPermissions\RolesController@destroy')->Name('admin_delete_role');
 	});
 	
-	Route::group(['middleware' => ['auth', 'permission:Delete Role']], function(){
-		Route::delete('/admin/role/{role}', 'RolesAndPermissions\RolesController@destroy')->Name('delete_role');
+	Route::group(['middleware' => ['auth', 'permission:Create Role|Edit Role|Delete Role']], function(){	
+		Route::get('/admin/role', 'RolesAndPermissions\RolesController@index')->Name('admin_index_role');
+		Route::get('/admin/role/{role}', 'RolesAndPermissions\RolesController@show')->Name('admin_show_role');
 	});
 //End Roles

@@ -6,7 +6,7 @@
 				{{$permission->name}}
 			</td>
 			<td class="col-xs-2">
-				<a class="btn btn-success btn-sm" href="{{route('edit_permission', $permission)}}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+				<a class="btn btn-success btn-sm" href="{{route('admin_edit_permission', $permission)}}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
 			</td>
 			@endcan
 			@cannot('update', $permission)

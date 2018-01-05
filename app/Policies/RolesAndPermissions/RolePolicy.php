@@ -55,6 +55,6 @@ class RolePolicy
      */
     public function delete(User $user, Role $role)
     {
-        return $user->hasPermissionTo('Delete Role');
+        return (($user->hasPermissionTo('Delete Role')) && (User::role($role->name)->get()->count() == 0));
     }
 }

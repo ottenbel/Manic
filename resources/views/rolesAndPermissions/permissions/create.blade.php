@@ -13,7 +13,7 @@ Create a New Permission
 	@can('create', Spatie\Permission\Models\Permission::class)
 		<h1>Create a New Permission</h1>
 		
-		<form method="POST" action="{{route('store_permission')}}" enctype="multipart/form-data">
+		<form method="POST" action="{{route('admin_store_permission')}}" enctype="multipart/form-data">
 			{{ csrf_field() }}
 			
 			@include('partials.rolesAndPermissions.permissions.permission-input')

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\RolesAndPermissions\Permissions;
+namespace App\Http\Requests\RolesAndPermissions\Roles;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

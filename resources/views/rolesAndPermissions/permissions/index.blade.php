@@ -14,7 +14,7 @@
 		@if($permissions->count() == 0)
 			@can('create', Spatie\Permission\Models\Permission::class)
 				<div class="text-center">
-					No permissions have been found in the database. Add a new permission <a href = "{{route('create_permission')}}">here.</a>
+					No permissions have been found in the database. Add a new permission <a href = "{{route('admin_create_permission')}}">here.</a>
 				</div>
 			@endcan
 			@cannot('create', Spatie\Permission\Models\Permission::class)

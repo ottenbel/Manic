@@ -18,13 +18,13 @@
 	
 	@if((Auth::user()->can('Create Permission')) || (Auth::user()->can('Edit Permission')) || (Auth::user()->can('Delete Permission')))
 		<div class="row">
-			<a href="{{route('index_permission')}}"><b>Permissions</b></a>
+			<a href="{{route('admin_index_permission')}}"><b>Permissions</b></a>
 		</div>
 	@endif
 	
 	@if((Auth::user()->can('Create Role')) || (Auth::user()->can('Edit Role')) || (Auth::user()->can('Delete Role')))
 		<div class="row">
-			<a href="{{route('index_role')}}"><b>Roles</b></a>
+			<a href="{{route('admin_index_role')}}"><b>Roles</b></a>
 		</div>
 	@endif
 </div>

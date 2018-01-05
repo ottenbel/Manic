@@ -55,6 +55,6 @@ class PermissionPolicy
      */
     public function delete(User $user, Permission $permission)
     {
-        return $user->hasPermissionTo('Delete Permission');
+        return (($user->hasPermissionTo('Delete Permission')) && (User::Permission($permission->name)->get()->count() == 0));
     }
 }
