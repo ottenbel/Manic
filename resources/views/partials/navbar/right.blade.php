@@ -23,6 +23,8 @@
 	@include('partials.navbar.components.right.rolesAndPermissions.permission')
 	@include('partials.navbar.components.right.rolesAndPermissions.role')
 	
+	@include('partials.navbar.components.right.user.admin.user')
+	
 	@include('partials.navbar.components.right.create-dropdown')
 	@include('partials.navbar.components.right.user')
 @endif

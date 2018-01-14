@@ -32,7 +32,7 @@ class AdminUserController extends WebController
 		$lookupKey = Config::get('constants.keys.pagination.usersPerPageIndex');
 		$paginationUsersPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 			
-		$users = new User()
+		$users = new User();
 		$users = $users->orderBy('name', 'asc')->paginate($paginationUsersPerPageIndexCount);
 		
 		return View('user.admin.user.index', array('users' => $users, 'messages' => $messages));
@@ -40,6 +40,10 @@ class AdminUserController extends WebController
 	
 	public function show(Request $request, User $user)
     {	
-		//Retrieve role and permission information for the user
+		$messages = self::GetFlashedMessages($request);
+		$roles = $user->roles;
+		$permissions = $user->permissions;
+		
+		return View ('user.admin.user.show', array('user' => $user, 'roles' => $roles, 'permissions' => $permissions));
 	}
 }
