@@ -27,6 +27,12 @@
 			<a href="{{route('admin_index_role')}}"><b>Roles</b></a>
 		</div>
 	@endif
+	
+	@can('View User Index')
+		<div class="row">
+			<a href="{{route('admin_index_user')}}"><b>Users</b></a>
+		</div>
+	@endcan
 </div>
 @endsection
 

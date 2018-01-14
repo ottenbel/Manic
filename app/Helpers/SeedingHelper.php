@@ -43,7 +43,8 @@ class SeedingHelper
 		self::SeedPaginationRow($user, $seedUser, "pagination_tag_aliases_per_page_parent", 10, "The number of tag aliases to be displayed per parent page.", 15);
 		self::SeedPaginationRow($user, $seedUser, "pagination_characters_per_page_series", 12, "The number of tag aliases to be displayed per parent series page.", 16);
 		self::SeedPaginationRow($user, $seedUser, "pagination_permissions_per_page_index", 30, "The number of permisisons to be displayed per index page.", 17);
-		self::SeedPaginationRow($user, $seedUser, "pagination_roles_per_page_index", 30, "The number of permisisons to be displayed per index page.", 18);
+		self::SeedPaginationRow($user, $seedUser, "pagination_roles_per_page_index", 30, "The number of roles to be displayed per index page.", 18);
+		self::SeedPaginationRow($user, $seedUser, "pagination_users_per_page_index", 30, "The number of users to be displayed per index page.", 19);
 	}
 	
 	/*

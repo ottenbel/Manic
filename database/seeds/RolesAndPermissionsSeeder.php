@@ -74,24 +74,15 @@ class RolesAndPermissionsSeeder extends Seeder
 		Permission::create(['name' => 'Create Rating']);
 		Permission::create(['name' => 'Edit Rating']);
 		Permission::create(['name' => 'Delete Rating']);
-		Permission::create(['name' => 'Modify User Level Account Permissions and Roles']);
-		Permission::create(['name' => 'Modify Editor Level Account Permissions and Roles']);
-		Permission::create(['name' => 'Assign User Level Permissions and Roles To Account To Account']);
-		Permission::create(['name' => 'Assign Editor Level Permissions and Roles To Account']);
-		Permission::create(['name' => 'Remove User Level Permissions and Roles From Account']);
-		Permission::create(['name' => 'Remove Editor Level Permissions and Roles From Account']);
-		Permission::create(['name' => 'Modify Administrator Level Account Permissions and Roles']);
-		Permission::create(['name' => 'Modify Owner Level Account Permissions and Roles']);
-		Permission::create(['name' => 'Assign Administrator Level Permissions and Roles']);
-		Permission::create(['name' => 'Assign Owner Level Permissions and Roles']);
-		Permission::create(['name' => 'Remove Administrator Level Permissions and Roles']);
-		Permission::create(['name' => 'Remove Owner Level Permissions and Roles']);
+		Permission::create(['name' => 'View User']);
+		Permission::create(['name' => 'View User Index']);
 		Permission::create(['name' => 'Create Role']);
 		Permission::create(['name' => 'Edit Role']);
 		Permission::create(['name' => 'Delete Role']);
 		Permission::create(['name' => 'Create Permission']);
 		Permission::create(['name' => 'Edit Permission']);
 		Permission::create(['name' => 'Delete Permission']);
+		Permission::create(['name' => 'Edit User Roles and Permissions']);
 		
         // create roles and assign existing permissions
         $role = Role::create(['name' => 'user']);
@@ -161,25 +152,16 @@ class RolesAndPermissionsSeeder extends Seeder
 		$role->givePermissionTo('Edit Global Pagination Settings');
 		$role->givePermissionTo('Edit Global Placeholder Settings');
 		$role->givePermissionTo('Edit Global Rating Restriction Settings');
-		$role->givePermissionTo('Modify User Level Account Permissions and Roles');
-		$role->givePermissionTo('Modify Editor Level Account Permissions and Roles');
-		$role->givePermissionTo('Assign User Level Permissions and Roles To Account To Account');
-		$role->givePermissionTo('Assign Editor Level Permissions and Roles To Account');
-		$role->givePermissionTo('Remove User Level Permissions and Roles From Account');
-		$role->givePermissionTo('Remove Editor Level Permissions and Roles From Account');
+		$role->givePermissionTo('View User');
+		$role->givePermissionTo('View User Index');
 		
 		$role = Role::create(['name' => 'owner']);
-		$role->givePermissionTo('Modify Administrator Level Account Permissions and Roles');
-		$role->givePermissionTo('Modify Owner Level Account Permissions and Roles');
-		$role->givePermissionTo('Assign Administrator Level Permissions and Roles');
-		$role->givePermissionTo('Assign Owner Level Permissions and Roles');
-		$role->givePermissionTo('Remove Administrator Level Permissions and Roles');
-		$role->givePermissionTo('Remove Owner Level Permissions and Roles');
 		$role->givePermissionTo('Create Role');
 		$role->givePermissionTo('Edit Role');
 		$role->givePermissionTo('Delete Role');
 		$role->givePermissionTo('Create Permission');
 		$role->givePermissionTo('Edit Permission');
 		$role->givePermissionTo('Delete Permission');
+		$role->givePermissionTo('Edit User Roles and Permissions');
     }
 }
