@@ -44,6 +44,6 @@ class AdminUserController extends WebController
 		$roles = $user->roles;
 		$permissions = $user->permissions;
 		
-		return View ('user.admin.user.show', array('user' => $user, 'roles' => $roles, 'permissions' => $permissions));
+		return View ('user.admin.user.show', array('user' => $user, 'roles' => $roles, 'permissions' => $permissions, 'messages' => $messages));
 	}
 }

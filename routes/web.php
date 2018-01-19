@@ -343,4 +343,7 @@ Route::group(['middleware' => ['auth', 'permission:Edit Global Placeholder Setti
 	Route::get('/admin/user/{user}', 'User\Admin\AdminUserController@show')->Name('admin_show_user');
 	
 	Route::get('/admin/user/{user}/rolesandpermissions/edit', 'User\Admin\UserRolesAndPermissionsController@edit')->Name('admin_edit_user_roles_and_permissions');
+	Route::patch('/admin/user/{user}/rolesandpermissions', 'User\Admin\UserRolesAndPermissionsController@update')->Name('admin_update_user_roles_and_permissions');
+	
+	
 //End Roles

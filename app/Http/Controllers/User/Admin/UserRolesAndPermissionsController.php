@@ -7,24 +7,102 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use App\Http\Requests\RolesAndPermissions\Roles\StoreRoleRequest;
-use App\Http\Requests\RolesAndPermissions\Roles\UpdateRoleRequest;
-use User;
+use App\Http\Requests\User\Admin\User\RolesAndPermissions\UpdateRolesAndPermissionsRequest;
+use App\Models\User;
 use Auth;
 use DB;
 use Config;
 use Input;
-use ConfigurationLookupHelper;
 
 class UserRolesAndPermissionsController extends WebController
 {
-	public function edit(Request $request, User $user)
-    {
-		
+	public function __construct()
+	{
+		$this->middleware(['auth', 'permission:Edit User Roles and Permissions']);
 	}
 	
-	public function update(UpdateRoleRequest $request, User $user)
+	public function edit(Request $request, User $user)
     {
+		$messages = self::GetFlashedMessages($request);
 		
+		$roles = new Role();
+		$roles = $roles->orderby('id', 'asc')->get(); 
+		
+		foreach($roles as &$role)
+		{
+			$role['hasValue'] = $user->roles->contains('id', $role->id);
+		}
+		
+		$permissions = new Permission();
+		$permissions = $permissions->orderby('id', 'asc')->get(); 
+		
+		foreach($permissions as &$permission)
+		{
+			$permission['hasValue'] = $user->permissions->contains('id', $permission->id);
+		}
+		
+		return View('user.admin.user.rolesAndPermissions.edit', array('user' => $user, 'roles' => $roles, 'permissions' => $permissions, 'messages' => $messages));
+	}
+	
+	public function update(UpdateRolesAndPermissionsRequest $request, User $user)
+    {
+		$successMessages = array();
+		$infoMessages = array();
+		$warningMessages = array();
+		
+		DB::beginTransaction();
+		try
+		{
+			//handle updating roles
+			$roles = Role::all();
+			
+			foreach($roles as $role)
+			{
+				//The string replace is due to spaces being replaced with underscores in the request
+				if (Input::has("role-".str_replace(" ", "_", $role->name)) 
+					&& (!($user->hasRole($role->name))))
+				{
+					$user->assignRole($role->name);
+				}
+				//The string replace is due to spaces being replaced with underscores in the request
+				else if ((!(Input::has("role-".str_replace(" ", "_", $role->name)))) 
+					&& ($user->hasRole($role->name)))
+				{
+					$user->removeRole($role->name);
+				}
+			}
+			
+			//handle updating permissions
+			$permissions = Permission::all();
+			
+			foreach($permissions as $permission)
+			{
+				//The string replace is due to spaces being replaced with underscores in the request
+				if (Input::has("permission-".str_replace(" ", "_", $permission->name)) 
+					&& (!($user->hasDirectPermission($permission->name))))
+				{
+					$user->givePermissionTo($permission->name);
+				}
+				//The string replace is due to spaces being replaced with underscores in the request
+				else if ((!(Input::has("permission-".str_replace(" ", "_", $permission->name)))) 
+					&& ($user->hasDirectPermission($permission->name)))
+				{
+					$user->revokePermissionTo($permission->name);
+				}
+			}
+		}
+		catch (\Exception $e)
+		{
+			DB::rollBack();
+			array_push($warningMessages, "Unable to successfully update roles and permissions for user $user->name.");
+			$messages = self::BuildFlashedMessagesVariable($successMessages, $infoMessages, $warningMessages);
+			return Redirect::back()->with(["messages" => $messages])->withInput();
+		}
+		DB::commit();
+		
+		array_push($successMessages, "Successfully updated user roles and permissions.");
+		$messages = self::BuildFlashedMessagesVariable($successMessages, $infoMessages, $warningMessages);
+		
+		return redirect()->route('admin_show_user', ['user' => $user])->with("messages", $messages);
 	}
 }

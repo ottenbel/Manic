@@ -24,6 +24,7 @@
 	@can('Edit User Roles and Permissions')
 	<div class="row">
 		<a class="btn btn-success btn-sm" href="{{route('admin_edit_user_roles_and_permissions', $user)}}"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Roles and Permissions</a>
+		<br/>
 	</div>
 		
 	@endcan
