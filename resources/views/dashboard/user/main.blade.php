@@ -15,6 +15,13 @@
 			<a href="{{route('user_dashboard_configuration_main')}}"><b>Configuration</b></a>
 		</div>
 	@endif
+	
+	@include('partials.user.admin.user.rolesAndPermissions.show-content', 
+	[
+		'user' => Auth::user(),
+		'roles' => Auth::user()->roles, 
+		'permissions' => Auth::user()->permissions
+	])			
 </div>
 @endsection
 

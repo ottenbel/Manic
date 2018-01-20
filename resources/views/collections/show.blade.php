@@ -212,7 +212,12 @@
 				</div>
 				<div class="col-md-10">
 					@if ($collection->created_by_user != null)
-						<a href="/user/{{$collection->id}}">{{{$collection->created_by_user->name}}}</a> @ {{$collection->created_at}}
+						@if(Auth::check() && Auth::user()->hasPermissionTo('View User'))
+							<a href="{{route('admin_show_user', ['user' => $collection->created_by_user])}}">{{$collection->created_by_user->name}}</a>
+						@else
+							{{$collection->created_by_user->name}}
+						@endif
+					 @ {{$collection->created_at}}
 					@else
 						Unknown @ {{$collection->created_at}}
 					@endif
@@ -225,7 +230,12 @@
 				</div>
 				<div class="col-md-10">
 					@if($collection->updated_by_user != null)
-						<a href="/user/{{$collection->id}}">{{{$collection->updated_by_user->name}}}</a> @ {{$collection->updated_at}}
+						@if(Auth::check() && Auth::user()->hasPermissionTo('View User'))
+							<a href="{{route('admin_show_user', ['user' => $collection->updated_by_user])}}">{{$collection->updated_by_user->name}}</a>
+						@else
+							{{$collection->created_by_user->name}}
+						@endif
+						 @ {{$collection->updated_at}}
 					@else
 						Unknown @ {{$collection->updated_at}}
 					@endif

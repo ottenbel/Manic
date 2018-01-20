@@ -10,6 +10,7 @@
 
 @section('content')
 <div class="container">
+	<h1>Permissions</h1>
 	<div class="row">
 		@if($permissions->count() == 0)
 			@can('create', Spatie\Permission\Models\Permission::class)

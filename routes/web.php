@@ -304,6 +304,10 @@ Route::group(['middleware' => ['auth', 'permission:Edit Global Placeholder Setti
 		Route::get('/admin/permission', 'RolesAndPermissions\PermissionsController@index')->Name('admin_index_permission');
 	});	
 
+	Route::group(['middleware' => 'auth'], function(){
+		Route::get('/user/permission', 'RolesAndPermissions\PermissionsController@index')->Name('user_index_permission');
+	});
+	
 	Route::group(['middleware' => ['auth', 'permission:Create Permission']], function(){
 		Route::get('/admin/permission/create', 'RolesAndPermissions\PermissionsController@create')->Name('admin_create_permission');
 		Route::post('/admin/permission', 'RolesAndPermissions\PermissionsController@store')->Name('admin_store_permission');
@@ -337,6 +341,11 @@ Route::group(['middleware' => ['auth', 'permission:Edit Global Placeholder Setti
 	Route::group(['middleware' => ['auth', 'permission:Create Role|Edit Role|Delete Role']], function(){	
 		Route::get('/admin/role', 'RolesAndPermissions\RolesController@index')->Name('admin_index_role');
 		Route::get('/admin/role/{role}', 'RolesAndPermissions\RolesController@show')->Name('admin_show_role');
+	});
+	
+	Route::group(['middleware' => 'auth', ], function(){
+		Route::get('/user/role', 'RolesAndPermissions\RolesController@index')->Name('user_index_role');
+		Route::get('/user/role/{role}', 'RolesAndPermissions\RolesController@show')->Name('user_show_role');
 	});
 	
 	Route::get('/admin/user', 'User\Admin\AdminUserController@index')->Name('admin_index_user');
