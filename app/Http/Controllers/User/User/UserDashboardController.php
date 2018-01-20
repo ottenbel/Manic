@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\User\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AdminController extends Controller
+class UserDashboardController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -24,7 +24,7 @@ class AdminController extends Controller
      */
     public function main()
     {
-        return view('dashboard.admin.main');
+        return view('user.user.dashboard.main');
     }
 	
 	/**
@@ -34,6 +34,6 @@ class AdminController extends Controller
      */
     public function configuration()
     {
-        return view('dashboard.admin.configuration.main');
+        return view('user.user.dashboard.configuration.main');
     }
 }

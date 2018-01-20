@@ -250,8 +250,8 @@ Auth::routes();
 
 //User dashboards
 Route::group(['middleware' => 'auth'], function(){
-	Route::get('/user', 'Dashboard\UserController@main')->Name('user_dashboard_main');
-	Route::get('/user/configuration', 'Dashboard\UserController@configuration')->Name('user_dashboard_configuration_main');
+	Route::get('/user', 'User\User\UserDashboardController@main')->Name('user_dashboard_main');
+	Route::get('/user/configuration', 'User\User\UserDashboardController@configuration')->Name('user_dashboard_configuration_main');
 });
 
 Route::group(['middleware' => ['auth', 'permission:Edit Personal Pagination Settings']], function(){
@@ -277,8 +277,8 @@ Route::group(['middleware' => ['auth', 'permission:Edit Personal Placeholder Set
 
 //Admin dashboard
 Route::group(['middleware' => ['auth', 'permission:Edit Global Pagination Settings|Edit Global Placeholder Settings|Edit Global Rating Restriction Settings']], function(){
-	Route::get('/admin', 'Dashboard\AdminController@main')->Name('admin_dashboard_main');
-	Route::get('/admin/configuration', 'Dashboard\AdminController@configuration')->Name('admin_dashboard_configuration_main');
+	Route::get('/admin', 'User\Admin\AdminDashboardController@main')->Name('admin_dashboard_main');
+	Route::get('/admin/configuration', 'User\Admin\AdminDashboardController@configuration')->Name('admin_dashboard_configuration_main');
 });
 
 Route::group(['middleware' => ['auth', 'permission:Edit Global Pagination Settings']], function(){
