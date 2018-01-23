@@ -12,156 +12,134 @@ class RolesAndPermissionsSeeder extends Seeder
         app()['cache']->forget('spatie.permission.cache');
 
         // create permissions
-        Permission::create(['name' => 'Export Collection']);
-		Permission::create(['name' => 'Export Volume']);
-		Permission::create(['name' => 'Export Chapter']);
-		Permission::create(['name' => 'Create Personal Artist Alias']);
-		Permission::create(['name' => 'Delete Personal Artist Alias']);
-		Permission::create(['name' => 'Create Personal Character Alias']);
-		Permission::create(['name' => 'Delete Personal Character Alias']);
-		Permission::create(['name' => 'Create Personal Scanalator Alias']);
-		Permission::create(['name' => 'Delete Personal Scanalator Alias']);
-		Permission::create(['name' => 'Create Personal Series Alias']);
-		Permission::create(['name' => 'Delete Personal Series Alias']);
-		Permission::create(['name' => 'Create Personal Tag Alias']);
-		Permission::create(['name' => 'Delete Personal Tag Alias']);
-		Permission::create(['name' => 'Edit Personal Pagination Settings']);
-		Permission::create(['name' => 'Edit Personal Rating Restriction Settings']);
-		Permission::create(['name' => 'Create Collection']);
-		Permission::create(['name' => 'Edit Collection']);
-		Permission::create(['name' => 'Delete Collection']);
-		Permission::create(['name' => 'Create Volume']);
-		Permission::create(['name' => 'Edit Volume']);
-		Permission::create(['name' => 'Delete Volume']);
-		Permission::create(['name' => 'Create Chapter']);
-		Permission::create(['name' => 'Edit Chapter']);
-		Permission::create(['name' => 'Delete Chapter']);
-		Permission::create(['name' => 'Create Artist']);
-		Permission::create(['name' => 'Edit Artist']);
-		Permission::create(['name' => 'Delete Artist']);
-		Permission::create(['name' => 'Create Global Artist Alias']);
-		Permission::create(['name' => 'Delete Global Artist Alias']);
-		Permission::create(['name' => 'Create Character']);
-		Permission::create(['name' => 'Edit Character']);
-		Permission::create(['name' => 'Delete Character']);
-		Permission::create(['name' => 'Create Global Character Alias']);
-		Permission::create(['name' => 'Delete Global Character Alias']);
-		Permission::create(['name' => 'Create Scanalator']);
-		Permission::create(['name' => 'Edit Scanalator']);
-		Permission::create(['name' => 'Delete Scanalator']);
-		Permission::create(['name' => 'Create Global Scanalator Alias']);
-		Permission::create(['name' => 'Delete Global Scanalator Alias']);
-		Permission::create(['name' => 'Create Series']);
-		Permission::create(['name' => 'Edit Series']);
-		Permission::create(['name' => 'Delete Series']);
-		Permission::create(['name' => 'Create Global Series Alias']);
-		Permission::create(['name' => 'Delete Global Series Alias']);
-		Permission::create(['name' => 'Create Tag']);
-		Permission::create(['name' => 'Edit Tag']);
-		Permission::create(['name' => 'Delete Tag']);
-		Permission::create(['name' => 'Create Global Tag Alias']);
-		Permission::create(['name' => 'Delete Global Tag Alias']);
-		Permission::create(['name' => 'Edit Personal Placeholder Settings']);
-		Permission::create(['name' => 'Edit Global Pagination Settings']);
-		Permission::create(['name' => 'Edit Global Placeholder Settings']);
-		Permission::create(['name' => 'Edit Global Rating Restriction Settings']);
-		Permission::create(['name' => 'Create Language']);
-		Permission::create(['name' => 'Edit Language']);
-		Permission::create(['name' => 'Delete Language']);
-		Permission::create(['name' => 'Create Status']);
-		Permission::create(['name' => 'Edit Status']);
-		Permission::create(['name' => 'Delete Status']);
-		Permission::create(['name' => 'Create Rating']);
-		Permission::create(['name' => 'Edit Rating']);
-		Permission::create(['name' => 'Delete Rating']);
-		Permission::create(['name' => 'View User']);
-		Permission::create(['name' => 'View User Index']);
-		Permission::create(['name' => 'Create Role']);
-		Permission::create(['name' => 'Edit Role']);
-		Permission::create(['name' => 'Delete Role']);
-		Permission::create(['name' => 'Create Permission']);
-		Permission::create(['name' => 'Edit Permission']);
-		Permission::create(['name' => 'Delete Permission']);
-		Permission::create(['name' => 'Edit User Roles and Permissions']);
+		self::SeedPermissionRow('Export Collection');
+        self::SeedPermissionRow('Export Volume');
+		self::SeedPermissionRow('Export Chapter');
+		self::SeedPermissionRow('Create Personal Artist Alias');
+		self::SeedPermissionRow('Delete Personal Artist Alias');
+		self::SeedPermissionRow('Create Personal Character Alias');
+		self::SeedPermissionRow('Delete Personal Character Alias');
+		self::SeedPermissionRow('Create Personal Scanalator Alias');
+		self::SeedPermissionRow('Delete Personal Scanalator Alias');
+		self::SeedPermissionRow('Create Personal Series Alias');
+		self::SeedPermissionRow('Delete Personal Series Alias');
+		self::SeedPermissionRow('Create Personal Tag Alias');
+		self::SeedPermissionRow('Delete Personal Tag Alias');
+		self::SeedPermissionRow('Edit Personal Pagination Settings');
+		self::SeedPermissionRow('Edit Personal Rating Restriction Settings');
+		self::SeedPermissionRow('Create Collection');
+		self::SeedPermissionRow('Edit Collection');
+		self::SeedPermissionRow('Delete Collection');
+		self::SeedPermissionRow('Create Volume');
+		self::SeedPermissionRow('Edit Volume');
+		self::SeedPermissionRow('Delete Volume');
+		self::SeedPermissionRow('Create Chapter');
+		self::SeedPermissionRow('Edit Chapter');
+		self::SeedPermissionRow('Delete Chapter');
+		self::SeedPermissionRow('Create Artist');
+		self::SeedPermissionRow('Edit Artist');
+		self::SeedPermissionRow('Delete Artist');
+		self::SeedPermissionRow('Create Global Artist Alias');
+		self::SeedPermissionRow('Delete Global Artist Alias');
+		self::SeedPermissionRow('Create Character');
+		self::SeedPermissionRow('Edit Character');
+		self::SeedPermissionRow('Delete Character');
+		self::SeedPermissionRow('Create Global Character Alias');
+		self::SeedPermissionRow('Delete Global Character Alias');
+		self::SeedPermissionRow('Create Scanalator');
+		self::SeedPermissionRow('Edit Scanalator');
+		self::SeedPermissionRow('Delete Scanalator');
+		self::SeedPermissionRow('Create Global Scanalator Alias');
+		self::SeedPermissionRow('Delete Global Scanalator Alias');
+		self::SeedPermissionRow('Create Series');
+		self::SeedPermissionRow('Edit Series');
+		self::SeedPermissionRow('Delete Series');
+		self::SeedPermissionRow('Create Global Series Alias');
+		self::SeedPermissionRow('Delete Global Series Alias');
+		self::SeedPermissionRow('Create Tag');
+		self::SeedPermissionRow('Edit Tag');
+		self::SeedPermissionRow('Delete Tag');
+		self::SeedPermissionRow('Create Global Tag Alias');
+		self::SeedPermissionRow('Delete Global Tag Alias');
+		self::SeedPermissionRow('Edit Personal Placeholder Settings');
+		self::SeedPermissionRow('Edit Global Pagination Settings');
+		self::SeedPermissionRow('Edit Global Placeholder Settings');
+		self::SeedPermissionRow('Edit Global Rating Restriction Settings');
+		self::SeedPermissionRow('Create Language');
+		self::SeedPermissionRow('Edit Language');
+		self::SeedPermissionRow('Delete Language');
+		self::SeedPermissionRow('Create Status');
+		self::SeedPermissionRow('Edit Status');
+		self::SeedPermissionRow('Delete Status');
+		self::SeedPermissionRow('Create Rating');
+		self::SeedPermissionRow('Edit Rating');
+		self::SeedPermissionRow('Delete Rating');
+		self::SeedPermissionRow('View User');
+		self::SeedPermissionRow('View User Index');
+		self::SeedPermissionRow('Create Role');
+		self::SeedPermissionRow('Edit Role');
+		self::SeedPermissionRow('Delete Role');
+		self::SeedPermissionRow('Create Permission');
+		self::SeedPermissionRow('Edit Permission');
+		self::SeedPermissionRow('Delete Permission');
+		self::SeedPermissionRow('Edit User Roles and Permissions');
 		
         // create roles and assign existing permissions
-        $role = Role::create(['name' => 'user']);
-        $role->givePermissionTo('Export Collection');
-		$role->givePermissionTo('Export Volume');
-		$role->givePermissionTo('Export Chapter');
-		$role->givePermissionTo('Create Personal Artist Alias');
-		$role->givePermissionTo('Delete Personal Artist Alias');
-		$role->givePermissionTo('Create Personal Character Alias');
-		$role->givePermissionTo('Delete Personal Character Alias');
-		$role->givePermissionTo('Create Personal Scanalator Alias');
-		$role->givePermissionTo('Delete Personal Scanalator Alias');
-		$role->givePermissionTo('Create Personal Series Alias');
-		$role->givePermissionTo('Delete Personal Series Alias');
-		$role->givePermissionTo('Create Personal Tag Alias');
-		$role->givePermissionTo('Delete Personal Tag Alias');
-		$role->givePermissionTo('Edit Personal Pagination Settings');
-		$role->givePermissionTo('Edit Personal Rating Restriction Settings');
+		self::SeedRoleAndPermissions('user', 
+		[
+			'Export Collection', 'Export Volume', 'Export Chapter', 'Create Personal Artist Alias', 
+			'Delete Personal Artist Alias', 'Create Personal Character Alias', 'Delete Personal Character Alias', 
+			'Create Personal Scanalator Alias', 'Delete Personal Scanalator Alias', 'Create Personal Series Alias', 
+			'Delete Personal Series Alias', 'Create Personal Tag Alias', 'Delete Personal Tag Alias', 
+			'Edit Personal Pagination Settings', 'Edit Personal Rating Restriction Settings'
+		]);
 		
-		$role = Role::create(['name' => 'editor']);
-		$role->givePermissionTo('Create Collection');
-		$role->givePermissionTo('Edit Collection');
-		$role->givePermissionTo('Delete Collection');
-		$role->givePermissionTo('Create Volume');
-		$role->givePermissionTo('Edit Volume');
-		$role->givePermissionTo('Delete Volume');
-		$role->givePermissionTo('Create Chapter');
-		$role->givePermissionTo('Edit Chapter');
-		$role->givePermissionTo('Delete Chapter');
-		$role->givePermissionTo('Create Artist');
-		$role->givePermissionTo('Edit Artist');
-		$role->givePermissionTo('Delete Artist');
-		$role->givePermissionTo('Create Global Artist Alias');
-		$role->givePermissionTo('Delete Global Artist Alias');
-		$role->givePermissionTo('Create Character');
-		$role->givePermissionTo('Edit Character');
-		$role->givePermissionTo('Delete Character');
-		$role->givePermissionTo('Create Global Character Alias');
-		$role->givePermissionTo('Delete Global Character Alias');
-		$role->givePermissionTo('Create Scanalator');
-		$role->givePermissionTo('Edit Scanalator');
-		$role->givePermissionTo('Delete Scanalator');
-		$role->givePermissionTo('Create Global Scanalator Alias');
-		$role->givePermissionTo('Delete Global Scanalator Alias');
-		$role->givePermissionTo('Create Series');
-		$role->givePermissionTo('Edit Series');
-		$role->givePermissionTo('Delete Series');
-		$role->givePermissionTo('Create Global Series Alias');
-		$role->givePermissionTo('Delete Global Series Alias');
-		$role->givePermissionTo('Create Tag');
-		$role->givePermissionTo('Edit Tag');
-		$role->givePermissionTo('Delete Tag');
-		$role->givePermissionTo('Create Global Tag Alias');
-		$role->givePermissionTo('Delete Global Tag Alias');
-		$role->givePermissionTo('Edit Personal Placeholder Settings');
+		self::SeedRoleAndPermissions('editor', 
+		[
+			'Create Collection', 'Edit Collection', 'Delete Collection', 'Create Volume', 'Edit Volume', 'Delete Volume', 'Create Chapter', 'Edit Chapter', 'Delete Chapter', 'Create Artist', 'Edit Artist', 'Delete Artist', 
+			'Create Global Artist Alias', 'Delete Global Artist Alias', 'Create Character', 'Edit Character', 
+			'Delete Character', 'Create Global Character Alias', 'Delete Global Character Alias', 'Create Scanalator', 
+			'Edit Scanalator', 'Delete Scanalator', 'Create Global Scanalator Alias', 'Delete Global Scanalator Alias', 'Create Series', 'Edit Series', 'Delete Series', 'Create Global Series Alias', 'Delete Global Series Alias', 'Create Tag', 'Edit Tag', 'Delete Tag', 'Create Global Tag Alias', 'Delete Global Tag Alias', 
+			'Edit Personal Placeholder Settings'
+		]);
 		
-		$role = Role::create(['name' => 'administrator']);
-		$role->givePermissionTo('Create Language');
-		$role->givePermissionTo('Edit Language');
-		$role->givePermissionTo('Delete Language');
-		$role->givePermissionTo('Create Status');
-		$role->givePermissionTo('Edit Status');
-		$role->givePermissionTo('Delete Status');
-		$role->givePermissionTo('Create Rating');
-		$role->givePermissionTo('Edit Rating');
-		$role->givePermissionTo('Delete Rating');
-		$role->givePermissionTo('Edit Global Pagination Settings');
-		$role->givePermissionTo('Edit Global Placeholder Settings');
-		$role->givePermissionTo('Edit Global Rating Restriction Settings');
-		$role->givePermissionTo('View User');
-		$role->givePermissionTo('View User Index');
+		self::SeedRoleAndPermissions('administrator', 
+		[
+			'Create Language', 'Edit Language', 'Delete Language', 'Create Status', 'Edit Status', 'Delete Status', 
+			'Create Rating', 'Edit Rating', 'Delete Rating', 'Edit Global Pagination Settings', 
+			'Edit Global Placeholder Settings', 'Edit Global Rating Restriction Settings', 'View User', 'View User Index'
+		]);
 		
-		$role = Role::create(['name' => 'owner']);
-		$role->givePermissionTo('Create Role');
-		$role->givePermissionTo('Edit Role');
-		$role->givePermissionTo('Delete Role');
-		$role->givePermissionTo('Create Permission');
-		$role->givePermissionTo('Edit Permission');
-		$role->givePermissionTo('Delete Permission');
-		$role->givePermissionTo('Edit User Roles and Permissions');
+		self::SeedRoleAndPermissions('owner', 
+		[
+			'Create Role', 'Edit Role', 'Delete Role', 'Create Permission', 'Edit Permission', 'Delete Permission', 
+			'Edit User Roles and Permissions'
+		]);
     }
+	
+	private static function SeedPermissionRow($name)
+	{
+		$permission = Permission::where('name', '=', $name)->first();
+		if ($permission == null)
+		{
+			Permission::create(['name' => $name]);
+		}
+	}
+	
+	private static function SeedRoleAndPermissions($name, $permissions)
+	{
+		$role = Role::where('name', '=', $name)->first();
+		if ($role == null)
+		{
+			$role = Role::create(['name' => $name]);
+			foreach($permissions as $permission)
+			{
+				$per = Permission::where('name', '=', $permission)->first();
+				if ($per != null)
+				{
+					$role->givePermissionTo($permission);
+				}
+			}
+		}
+	}
 }
