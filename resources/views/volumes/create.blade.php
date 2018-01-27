@@ -5,7 +5,7 @@ Create a New Volume
 @endsection
 
 @section('head')
-
+	<script src="/js/confirmdelete.js"></script>
 @endsection
 
 @section('content')
@@ -21,7 +21,7 @@ Create a New Volume
 			
 			@include('partials.volume.input', array('configurations' => $configurations))
 			
-			@include('partials.collection.show', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editVolumeRoute' => 'show_volume', 'chapterLinkRoute' => 'show_chapter', 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => false])
+			@include('partials.collection.show', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => false])
 			<br/>
 			
 			{{ Form::submit('Create Volume', array('class' => 'btn btn-primary')) }}

@@ -12,9 +12,9 @@ Update Role - {{$role->name}}
 <div class="container">
 	@can('create', Spatie\Permission\Models\Role::class)
 		<div class="row">
-			<div class="col-xs-8"><h1>Update Role</h1></div>
+			<div class="col-xs-10"><h1>Update Role</h1></div>
 			@can('delete', $role)
-				<div class="col-xs-4 text-right">
+				<div class="col-xs-2 text-right">
 					<form method="POST" action="{{route('admin_delete_role', ['role' => $role])}}">
 						{{ csrf_field() }}
 						{{method_field('DELETE')}}

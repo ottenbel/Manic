@@ -38,7 +38,7 @@ Edit Collection - {{{$collection->name}}}
 			
 			@include('partials.collection.input', array('configurations' => $configurations, 'collection' => $collection, 'ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages))
 			
-			@include('partials.collection.show', ['volumes' => $collection->volumes(), 'editVolume' => true, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'edit_chapter', 'scanalatorLinkRoute' => 'edit_scanalator', 'hideVolumes' => false])
+			@include('partials.collection.show', ['volumes' => $collection->volumes(), 'editVolume' => true, 'editChapter' => true, 'scanalatorLinkRoute' => 'edit_scanalator', 'hideVolumes' => false])
 			
 			<br/>
 			{{ Form::submit('Update Collection', array('class' => 'btn btn-primary')) }}

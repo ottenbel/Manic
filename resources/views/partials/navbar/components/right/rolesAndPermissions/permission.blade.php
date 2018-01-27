@@ -59,7 +59,7 @@
 			@endif
 		</ul>
 	</li>
-elseif(Route::is('user_index_permission'))
+@elseif(Route::is('user_index_permission'))
 	<li class="dropdown">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 			Permissions & Roles <span class="caret"></span>

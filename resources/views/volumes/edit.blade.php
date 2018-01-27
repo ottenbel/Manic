@@ -34,7 +34,10 @@ Edit Volume - {{{$volume->name}}}
 			
 			@include('partials.volume.input', array('configurations' => $configurations, 'volume' => $volume))
 			
-			@include('partials.volume.show', ['volume' => $volume, 'editVolume' => false, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'edit_chapter', 'scanalatorLinkRoute' => 'edit_scanalator', 'chapterOnly' => true, 'hideVolumes' => false])
+			@include('partials.volume.show', 
+			[
+			'volume' => $volume, 'editVolume' => false, 'editChapter' => true, 'scanalatorLinkRoute' => 'edit_scanalator', 'chapterOnly' => true, 'hideVolumes' => false
+			])
 			
 			<br/>
 			

@@ -39,10 +39,10 @@
 			@endcan
 			@if(Auth::user()->can('Create Role') || Auth::user()->can('Edit Role') || Auth::user()->can('Delete Role') || Auth::user()->can('Create Permission') || Auth::user()->can('Edit Permission') || Auth::user()->can('Delete Permission'))
 				<h6 class="dropdown-header">Permissions & Roles</h6>
-				@if(Auth::user()->can('Create Role') || Auth::user()->can('Edit Role') || Auth::user()->can('Delete Role'))
+				@if(Auth::user()->can('Create Permission') || Auth::user()->can('Edit Permission') || Auth::user()->can('Delete Permission'))
 					<li><a href="{{ route('admin_index_permission') }}"><i class="fa fa-unlock" aria-hidden="true"></i> Permissions</a><li>
 				@endif
-				@if(Auth::user()->can('Create Permission') || Auth::user()->can('Edit Permission') || Auth::user()->can('Delete Permission'))
+				@if(Auth::user()->can('Create Role') || Auth::user()->can('Edit Role') || Auth::user()->can('Delete Role'))
 					<li><a href="{{ route('admin_index_role') }}"><i class="fa fa-object-group" aria-hidden="true"></i> Roles</a><li>
 				@endif
 			@endif

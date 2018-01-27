@@ -1,10 +1,22 @@
 <div class="container">
 	<div class="row">
-		<div class="col-md-10">
+		<div class="col-md-8">
 			<h2>{{{$tagObject->name}}}</h2>
 		</div>
-		<div class="row col-md-2 text-right">
-			<a class="btn btn-success btn-sm" href="{{route('index_collection', ['search' => $tagObjectName . ':' . $tagObject->name])}}"><i class="fa fa-search" aria-hidden="true"></i> Search</a>
+		<div class="row col-md-4">
+			<span style="float:right">
+				<a class="btn btn-success btn-sm" href="{{route('index_collection', ['search' => $tagObjectName . ':' . $tagObject->name])}}"><i class="fa fa-search" aria-hidden="true"></i> Search</a>
+			</span>
+			@if(Auth::check() && (Auth::user()->can('delete', $tagObject)) && (Auth::user()->cannot('update', $tagObject)))
+				<span style="float:right">
+					<form method="POST" action="{{route($deleteRoute, [$tagObjectName => $tagObject])}}">
+						{{ csrf_field() }}
+						{{method_field('DELETE')}}
+						
+						{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete '.$titleTagObjectName, array('type' => 'submit', 'class' => 'btn btn-sm btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
+					</form>
+				</span>
+			@endif
 		</div>
 	</div>
 	
@@ -172,7 +184,7 @@
 							{{ csrf_field() }}
 							{{method_field('DELETE')}}
 							
-							{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Alias', array('type' => 'submit', 'class' => 'btn btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
+							{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Alias', array('type' => 'submit', 'class' => 'btn btn-danger btn-sm', 'onclick' =>'ConfirmDelete(event)')) }}
 						</form>
 					</div>
 					@endcan
@@ -224,7 +236,7 @@
 									{{ csrf_field() }}
 									{{method_field('DELETE')}}
 									
-									{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Alias', array('type' => 'submit','class' => 'btn btn-danger', 'onclick' => 'ConfirmDelete(event)')) }}
+									{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Alias', array('type' => 'submit','class' => 'btn btn-danger btn-sm', 'onclick' => 'ConfirmDelete(event)')) }}
 								</form>
 							</div>
 						@endcan

@@ -12,8 +12,8 @@
 <div id="{{$volume->id}}_panel" class="volume_panel">
 	@if(($volume->cover_image != null) && ($chapterOnly != true))
 		<div id="cover" class="col-md-2">
-			@if($editVolume)
-				<a href="{{route($editVolumeRoute, ['volume' => $volume])}}"><img src="{{asset($volume->cover_image->thumbnail)}}" class="img-responsive img-rounded" alt="Volume Cover" height="100%" width="100%"</a>
+			@if((Auth::check()) && (($editVolume && Auth::user()->can('Edit Volume')) || (Auth::user()->can('Edit Volume') && Auth::user()->cannot('Edit Collection'))))
+				<a href="{{route('edit_volume', ['volume' => $volume])}}"><img src="{{asset($volume->cover_image->thumbnail)}}" class="img-responsive img-rounded" alt="Volume Cover" height="100%" width="100%"</a>
 			@else
 				<img src="{{asset($volume->cover_image->thumbnail)}}" class="img-responsive img-rounded" alt="Volume Cover" height="100%" width="100%">
 			@endif
@@ -23,8 +23,8 @@
 		<div>
 	@endif
 	
-		@if($editVolume)
-			<a href="{{route($editVolumeRoute, ['volume' => $volume])}}"><h4>
+		@if((Auth::check()) && (($editVolume && Auth::user()->can('update', $volume)) || (Auth::user()->can('update', $volume) && Auth::user()->cannot('Edit Collection'))))
+			<a href="{{route('edit_volume', ['volume' => $volume])}}"><h4>
 				@if($volume->name != null && $volume->name != "")
 					Volume {{$volume->volume_number}} - {{{$volume->name}}}
 				@else
@@ -33,24 +33,46 @@
 			</h4></a>
 		@endif
 		
-		@if(Route::is('show_collection') && ($volume->chapters->count() > 1))
-			@can('export', $volume)
-				<div>
-					<a class="btn btn-sm btn-success" id="export_volume_button" href="{{route('export_volume', $volume)}}" role="button" onclick="ConfirmExport(this, event)"><i class="fa fa-download" aria-hidden="true"></i> Download Volume</a>
-				</div>
-			@endcan
-		@endif
+		<div class="row">
+			@if(Route::is('show_collection') && ($volume->chapters->count() > 1))
+				@can('export', $volume)
+					<span style="float:left">
+						<a class="btn btn-sm btn-success" id="export_volume_button" href="{{route('export_volume', $volume)}}" role="button" onclick="ConfirmExport(this, event)"><i class="fa fa-download" aria-hidden="true"></i> Download Volume</a>
+					</span>
+				@endcan
+			@endif
+		
+			@if((Auth::check()) && (Auth::user()->cannot('update', $volume) && Auth::user()->can('delete', $volume)))
+				<span style="float:left">
+					<form method="POST" action="{{route('delete_volume', ['volume' => $volume])}}">
+						{{ csrf_field() }}
+						{{method_field('DELETE')}}
+						
+						{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Volume', array('type' => 'submit', 'class' => 'btn btn-sm btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
+					</form>
+				</span>
+			@endif
+		</div>
 		
 		<table width="100%">
 			@foreach($volume->chapters()->orderBy('chapter_number', 'asc')->get() as $chapter)
 				<tr>
 					@if($chapter->name != null && $chapter->name != "")
 						<td>
-							<a href="{{route($chapterLinkRoute, ['chapter' => $chapter])}}">Chapter {{$chapter->chapter_number}}</a> - {{{$chapter->name}}}
+							@if($editChapter && (Auth::check()) && (Auth::user()->can('Edit Chapter')))
+								<a href="{{route('edit_chapter', ['chapter' => $chapter])}}">Chapter {{$chapter->chapter_number}}</a> - {{{$chapter->name}}}
+							@else
+								<a href="{{route('show_chapter', ['chapter' => $chapter])}}">Chapter {{$chapter->chapter_number}}</a> - {{{$chapter->name}}}
+							@endif
+							
 						</td>
 					@else
 						<td>
-							<a href="{{route($chapterLinkRoute, ['chapter' => $chapter])}}">Chapter {{$chapter->chapter_number}}</a>
+							@if($editChapter && (Auth::check()) && (Auth::user()->can('Edit Chapter')))
+								<a href="{{route('edit_chapter', ['chapter' => $chapter])}}">Chapter {{$chapter->chapter_number}}</a>
+							@else
+								<a href="{{route('show_chapter', ['chapter' => $chapter])}}">Chapter {{$chapter->chapter_number}}</a>
+							@endif
 						</td>
 					@endif
 					<td>
@@ -64,7 +86,12 @@
 												'tagObjectCountClass' => 'scanalator_count',
 												'componentToken' => 'scanalator'])
 									@else
-										<span class="primary_scanalators"><a href="{{route($scanalatorLinkRoute, ['scanalator' => $scanalator])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+										@if(($scanalatorLinkRoute == 'edit_scanalator') && (Auth::check()) && (Auth::user()->can('Edit Scanalator')))
+											<span class="primary_scanalators"><a href="{{route('edit_scanalator', ['scanalator' => $scanalator])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+										@else
+											<span class="primary_scanalators"><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+										@endif
+										
 									@endif
 								@endforeach
 								
@@ -76,7 +103,12 @@
 												'tagObjectCountClass' => 'scanalator_count',
 												'componentToken' => 'scanalator'])
 									@else
-										<span class="secondary_scanalators"><a href="{{route($scanalatorLinkRoute, ['scanalator' => $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+										@if(($scanalatorLinkRoute == 'edit_scanalator') && (Auth::check()) && (Auth::user()->can('Edit Scanalator')))
+											<span class="secondary_scanalators"><a href="{{route('edit_scanalator', ['scanalator' => $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+										@else
+											<span class="secondary_scanalators"><a href="{{route('show_scanalator', ['scanalator' => $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+										@endif
+										
 									@endif
 									
 								@endforeach

@@ -17,6 +17,7 @@
 		'associatedType' => 'collections', 
 		'aliasTagObjectName' => 'characterAlias', 
 		'showRoute' => 'show_character', 
+		'deleteRoute' => 'delete_character',
 		'storeAliasRoute' => 'store_character_alias',
 		'deleteTagObjectRoute' => 'delete_character_alias',
 		'globalAliasDisplayClass' => 'global_character_alias', 

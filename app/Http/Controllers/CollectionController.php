@@ -280,14 +280,14 @@ class CollectionController extends WebController
 			{
 				$missingPrimaryCharacters_string = "Missing primary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missingPrimaryCharacters) . ".";
 				
-				$flashedWarnings = array_push($flashedWarnings, $missingPrimaryCharacters_string);
+				array_push($flashedWarnings, $missingPrimaryCharacters_string);
 			}
 			
 			if (count($missingSecondaryCharacters))
 			{
 				$missingSecondaryCharacters_string = "Missing secondary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missingSecondaryCharacters) . ".";
 				
-				$flashedWarnings = array_push($flashedWarnings, $missingSecondaryCharacters_string);
+				array_push($flashedWarnings, $missingSecondaryCharacters_string);
 			}
 			
 			$messages = self::BuildFlashedMessagesVariable(null, ["Partially $action collection $collection->name."], $flashedWarnings);

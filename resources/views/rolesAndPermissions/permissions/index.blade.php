@@ -5,7 +5,7 @@
 @endsection
 
 @section('head')
-
+	<script src="/js/confirmdelete.js"></script>
 @endsection
 
 @section('content')

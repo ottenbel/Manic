@@ -17,6 +17,7 @@
 		'associatedType' => 'collections', 
 		'aliasTagObjectName' => 'artistAlias', 
 		'showRoute' => 'show_artist', 
+		'deleteRoute' => 'delete_artist',
 		'storeAliasRoute' => 'store_artist_alias',
 		'deleteTagObjectRoute' => 'delete_artist_alias',
 		'globalAliasDisplayClass' => 'global_artist_alias', 

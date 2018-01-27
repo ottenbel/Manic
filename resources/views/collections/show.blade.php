@@ -5,7 +5,8 @@
 @endsection
 
 @section('head')
-<script src="/js/handleexport.js"></script>
+	<script src="/js/handleexport.js"></script>
+	<script src="/js/confirmdelete.js"></script>
 @endsection
 
 @section('content')
@@ -23,13 +24,15 @@
 			<div id="collection_short_info">
 		@endif
 			<div class="row">
-				@if(Route::is('show_collection') && ($collection->volumes->count() > 1))
-					@can('export', $collection)
-						<div class="col-md-8">
-					@endcan
-					@cannot('export', $collection)
+				@if((Route::is('show_collection') && ($collection->volumes->count() > 1)) 
+					|| ((Auth::check()) && (Auth::user()->can('delete', $collection)) && (Auth::user()->cannot('update', $collection))))
+					@if((Auth::check()) && (Auth::user()->can('export', $collection) && (Auth::user()->can('delete', $collection) && (Auth::user()->cannot('update', $collection)))))
+						<div class="col-md-6">
+					@elseif(Auth::check() && (Auth::user()->can('export', $collection) || (Auth::user()->can('delete', $collection) && (Auth::user()->cannot('update', $collection)))))
+						<div class="col-md-9">
+					@else
 						<div class="col-md-12">
-					@endcan
+					@endif
 				@else
 					<div class="col-md-12">
 				@endif
@@ -38,10 +41,21 @@
 				
 				@if(Route::is('show_collection') && ($collection->volumes->count() > 1))
 					@can('export', $collection)
-						<div class="col-md-4 text-right">
+						<span style="float:right">
 							<a class="btn btn-sm btn-success" id="export_collection_button" href="{{route('export_collection', $collection)}}" role="button" onclick="ConfirmExport(this, event)"><i class="fa fa-download" aria-hidden="true"></i> Download Collection</a>
-						</div>
+						</style>
 					@endcan
+				@endif
+				
+				@if((Auth::check()) && (Auth::user()->can('delete', $collection)) && (Auth::user()->cannot('update', $collection)))
+					<span style="float:left">
+						<form method="POST" action="{{route('delete_collection', ['collection' => $collection])}}">
+							{{ csrf_field() }}
+							{{method_field('DELETE')}}
+							
+							{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Collection', array('type' => 'submit', 'class' => 'btn btn-sm btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
+						</form>
+					</span>
 				@endif
 			</div>
 			
@@ -251,7 +265,10 @@
 		</div>
 	@endif
 	
-	@include('partials.collection.show', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'show_chapter', 'scanalatorLinkRoute' => 'index_collection', 'hideVolumes' => false])
+	@include('partials.collection.show', 
+	[
+	'volumes' => $collection->volumes(), 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'index_collection', 'hideVolumes' => false
+	])
 	
 	@if(($collection->parent_collection != null) || (count($collection->child_collections)))
 		<br/>

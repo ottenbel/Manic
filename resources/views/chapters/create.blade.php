@@ -9,6 +9,7 @@ Create a New Chapter
 	var volumes = {!!$volumes_array!!};
 </script>
 <script src="/js/autocomplete/scanalator.js"></script>
+<script src="/js/confirmdelete.js"></script>
 <script src="/js/dynamicallydisplayselectedvolume.js"></script>
 @endsection
 

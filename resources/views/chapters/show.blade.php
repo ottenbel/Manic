@@ -14,6 +14,7 @@
 	var chapter_id = "{{$chapter->id}}"
 	var collection_id = "{{$collection->id}}";
 </script>
+<script src="/js/confirmdelete.js"></script>
 <script src="/js/viewer.js"></script>
 <script src="/js/handleexport.js"></script>
 @endsection
@@ -75,12 +76,24 @@
 				</div>
 			@endif
 			
-			@can('export', $chapter)
-				<br/>
-				<div class="row">
-					<a class="btn btn-sm btn-success" id="export_chapter_button" href="{{route('export_chapter', $chapter)}}" role="button" onclick="ConfirmExport(this, event)"><i class="fa fa-download" aria-hidden="true"></i> Download Chapter</a>
-				</div>
-			@endcan
+			<div class="row">
+				@can('export', $chapter)
+					<span style="float:left">
+						<a class="btn btn-sm btn-success" id="export_chapter_button" href="{{route('export_chapter', $chapter)}}" role="button" onclick="ConfirmExport(this, event)"><i class="fa fa-download" aria-hidden="true"></i> Download Chapter</a>
+					</span>
+				@endcan
+				
+				@if(Auth::check() && (Auth::user()->can('delete', $chapter)) && (Auth::user()->cannot('update', $chapter)))
+					<span style="foat:right">
+						<form method="POST" action="{{route('delete_chapter', ['chapter' => $chapter])}}">
+							{{ csrf_field() }}
+							{{method_field('DELETE')}}
+							
+							{{ Form::button('<i class="fa fa-trash-o" aria-hidden="true"></i> Delete Chapter', array('type' => 'submit', 'class' => 'btn btn-sm btn-danger', 'onclick' =>'ConfirmDelete(event)')) }}
+						</form>
+					</span>
+				@endif
+			</div>
 		</div>
 	@endif
 </div>

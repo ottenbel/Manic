@@ -3,7 +3,7 @@
 @else
 	<span class="{{$tagObjectClass}}">
 @endif
-	<a href="{{route('index_collection', ['search' => '$componentToken:'. $tagObject->name])}}">
+	<a href="{{route('index_collection', ['search' => $componentToken.':'. $tagObject->name])}}">
 		@if($componentToken == 'artist')
 		<i class="fa fa-paint-brush" aria-hidden="true"></i>
 		@elseif($componentToken == 'character')

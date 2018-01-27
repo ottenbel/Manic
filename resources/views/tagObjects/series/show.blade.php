@@ -17,6 +17,7 @@
 		'associatedType' => 'collections', 
 		'aliasTagObjectName' => 'seriesAlias', 
 		'showRoute' => 'show_series', 
+		'deleteRoute' => 'delete_series',
 		'storeAliasRoute' => 'store_series_alias',
 		'deleteTagObjectRoute' => 'delete_series_alias',
 		'globalAliasDisplayClass' => 'global_series_alias', 

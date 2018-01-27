@@ -9,9 +9,15 @@
 </div>
 
 @if(Route::is('create_chapter'))
-	@include('partials.collection.show', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'show_chapter', 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => true])
+	@include('partials.collection.show', 
+		[
+		'volumes' => $collection->volumes(), 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => true
+		])
 @elseif(Route::is('edit_chapter'))
-	@include('partials.collection.show', ['volumes' => $chapter->collection->volumes(), 'editVolume' => false, 'editVolumeRoute' => 'edit_volume', 'chapterLinkRoute' => 'edit_chapter', 'scanalatorLinkRoute' => 'edit_scanalator', 'hideVolumes' => true])
+	@include('partials.collection.show', 
+	[
+	'volumes' => $chapter->collection->volumes(), 'editVolume' => false, 'editChapter' => true, 'scanalatorLinkRoute' => 'edit_scanalator', 'hideVolumes' => true
+	])
 @endif
 <br/>
 <div class="form-group">
