@@ -35,7 +35,17 @@ use App\Http\Requests\Collection\UpdateCollectionRequest;
 use App\Models\Configuration\ConfigurationRatingRestriction;
 
 class CollectionController extends WebController
-{	
+{
+	public function __construct()
+    {
+		$this->middleware('auth')->except(['index', 'show']);
+		$this->middleware('canInteractWithCollection')->except(['index', 'create', 'store']);
+		$this->middleware('permission:Create Collection')->only(['create', 'store']);
+		$this->middleware('permission:Edit Collection')->only(['edit', 'update']);
+		$this->middleware('permission:Delete Collection')->only('destroy');
+		$this->middleware('permission:Export Collection')->only('export');
+	}
+	
     /**
      * Display a listing of the resource.
      *

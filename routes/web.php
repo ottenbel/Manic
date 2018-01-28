@@ -13,27 +13,14 @@
 
 //Collection controller routes
 	Route::get('/', 'CollectionController@index')->Name('index_collection');
-
-	Route::group(['middleware' => ['auth', 'permission:Create Collection']], function(){
-		Route::get('/collection/create', 'CollectionController@create')->Name('create_collection');
-		Route::post('/collection', 'CollectionController@store')->Name('store_collection');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Edit Collection', 'canInteractWithCollection']], function(){
-		Route::get('/collection/{collection}/edit', 'CollectionController@edit')->Name('edit_collection');
-		Route::patch('/collection/{collection}', 'CollectionController@update')->Name('update_collection');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Delete Collection', 'canInteractWithCollection']], function(){
-		Route::delete('/collection/{collection}', 'CollectionController@destroy')->Name('delete_collection');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Export Collection', 'canInteractWithCollection']], function(){
-		Route::get('/collection/{collection}/export', 'CollectionController@export')->Name('export_collection');
-	});
-
-	Route::group(['middleware' => 'canInteractWithCollection'], function(){
-		Route::get('/collection/{collection}', 'CollectionController@show')->Name('show_collection');
+	Route::prefix('collection')->group(function () {
+		Route::get('/create', 'CollectionController@create')->Name('create_collection');
+		Route::post('/', 'CollectionController@store')->Name('store_collection');
+		Route::get('/{collection}/edit', 'CollectionController@edit')->Name('edit_collection');
+		Route::patch('/{collection}', 'CollectionController@update')->Name('update_collection');
+		Route::delete('/{collection}', 'CollectionController@destroy')->Name('delete_collection');
+		Route::get('/{collection}/export', 'CollectionController@export')->Name('export_collection');
+		Route::get('/{collection}', 'CollectionController@show')->Name('show_collection');
 	});
 //End Collection controller routes
 
