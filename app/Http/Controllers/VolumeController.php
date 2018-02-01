@@ -21,6 +21,17 @@ use App\Http\Requests\Volume\UpdateVolumeRequest;
 
 class VolumeController extends WebController
 {
+	public function __construct()
+    {
+		$this->middleware('auth');
+		$this->middleware('permission:Create Volume')->only(['create', 'store']);
+		$this->middleware('canInteractWithCollection')->only('create');
+		$this->middleware('canInteractWithVolume')->except(['create', 'store']);
+		$this->middleware('permission:Edit Volume')->only(['edit', 'update']);
+		$this->middleware('permission:Delete Volume')->only('destroy');
+		$this->middleware('permission:Export Volume')->only('export');
+	}
+	
     public function create(Request $request, Collection $collection)
     {
 		$this->authorize(Volume::class);

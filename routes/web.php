@@ -25,25 +25,13 @@
 //End Collection controller routes
 
 //Volume controller routes
-	Route::group(['middleware' => ['auth', 'permission:Create Volume', 'canInteractWithCollection']], function(){
-		Route::get('/volume/create/{collection}', 'VolumeController@create')->Name('create_volume');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Create Volume']], function(){
-		Route::post('/volume', 'VolumeController@store')->Name('store_volume');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Edit Volume', 'canInteractWithVolume']], function(){
-		Route::get('/volume/{volume}/edit', 'VolumeController@edit')->Name('edit_volume');
-		Route::patch('/volume/{volume}', 'VolumeController@update')->Name('update_volume');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Delete Volume', 'canInteractWithVolume']], function(){
-		Route::delete('/volume/{volume}', 'VolumeController@destroy')->Name('delete_volume');
-	});
-		
-	Route::group(['middleware' => ['auth', 'permission:Export Volume', 'canInteractWithVolume']], function(){
-		Route::get('/volume/{volume}/export', 'VolumeController@export')->Name('export_volume');
+	Route::prefix('volume')->group(function () {
+		Route::get('/create/{collection}', 'VolumeController@create')->Name('create_volume');
+		Route::post('/', 'VolumeController@store')->Name('store_volume');
+		Route::get('/{volume}/edit', 'VolumeController@edit')->Name('edit_volume');
+		Route::patch('/{volume}', 'VolumeController@update')->Name('update_volume');
+		Route::delete('/{volume}', 'VolumeController@destroy')->Name('delete_volume');
+		Route::get('/{volume}/export', 'VolumeController@export')->Name('export_volume');
 	});
 //End Volume controller routes
 
