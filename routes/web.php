@@ -36,29 +36,14 @@
 //End Volume controller routes
 
 //Chapter controller routes
-	Route::group(['middleware' => ['auth', 'permission:Create Chapter', 'canInteractWithCollection']], function(){
-		Route::get('/chapter/create/{collection}', 'ChapterController@create')->Name('create_chapter');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Create Chapter']], function(){
-		Route::post('/chapter', 'ChapterController@store')->Name('store_chapter');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Edit Chapter', 'canInteractWithChapter']], function(){
-		Route::get('/chapter/{chapter}/edit', 'ChapterController@edit')->Name('edit_chapter');
-		Route::patch('/chapter/{chapter}', 'ChapterController@update')->Name('update_chapter');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Delete Chapter', 'canInteractWithChapter']], function(){
-		Route::delete('/chapter/{chapter}', 'ChapterController@destroy')->Name('delete_chapter');
-	});
-		
-	Route::group(['middleware' => ['auth', 'permission:Export Chapter', 'canInteractWithChapter']], function(){
-		Route::get('/chapter/{chapter}/export', 'ChapterController@export')->Name('export_chapter');
-	});
-
-	Route::group(['middleware' => 'canInteractWithChapter'], function(){
-		Route::get('/chapter/{chapter}/{page?}', 'ChapterController@show')->Name('show_chapter');
+	Route::prefix('chapter')->group(function () {
+		Route::get('/create/{collection}', 'ChapterController@create')->Name('create_chapter');
+		Route::post('/', 'ChapterController@store')->Name('store_chapter');
+		Route::get('/{chapter}/edit', 'ChapterController@edit')->Name('edit_chapter');
+		Route::patch('/{chapter}', 'ChapterController@update')->Name('update_chapter');
+		Route::delete('/{chapter}', 'ChapterController@destroy')->Name('delete_chapter');
+		Route::get('/{chapter}/export', 'ChapterController@export')->Name('export_chapter');
+		Route::get('/{chapter}/{page?}', 'ChapterController@show')->Name('show_chapter');
 	});
 //End Chapter controller routes
 

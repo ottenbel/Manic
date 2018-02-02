@@ -28,6 +28,17 @@ use App\Http\Requests\Chapter\UpdateChapterRequest;
 
 class ChapterController extends WebController
 {
+	public function __construct()
+    {
+		$this->middleware('auth')->except('show');
+		$this->middleware('permission:Create Chapter')->only(['create', 'store']);
+		$this->middleware('canInteractWithCollection')->only('create');
+		$this->middleware('canInteractWithChapter')->except(['create', 'store']);
+		$this->middleware('permission:Edit Chapter')->only(['edit', 'update']);
+		$this->middleware('permission:Delete Chapter')->only('destroy');
+		$this->middleware('permission:Export Chapter')->only('export');
+	}
+	
     public function create(Request $request, Collection $collection)
     {
 		$this->authorize(Chapter::class);
