@@ -19,6 +19,14 @@ use App\Http\Requests\TagObjects\Series\UpdateSeriesRequest;
 
 class SeriesController extends TagObjectController
 {
+	public function __construct()
+    {
+		$this->middleware('auth')->except(['index', 'show']);
+		$this->middleware('permission:Create Series')->only(['create', 'store']);
+		$this->middleware('permission:Edit Series')->only(['edit', 'update']);
+		$this->middleware('permission:Delete Series')->only('destroy');
+	}
+	
     public function index(Request $request)
     {
 		$series = new Series();

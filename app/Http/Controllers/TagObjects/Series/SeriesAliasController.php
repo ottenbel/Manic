@@ -10,6 +10,13 @@ use App\Http\Requests\TagObjects\Series\Alias\StoreSeriesAliasRequest;
 
 class SeriesAliasController extends TagObjectAliasController
 {
+	public function __construct()
+    {
+		$this->middleware('auth')->except('index');
+		$this->middleware('permission:Create Personal Series Alias|Create Global Series Alias')->only(['create', 'store']);
+		$this->middleware('permission:Delete Personal Series Alias|Delete Global Series Alias')->only('destroy');
+	}
+	
     public function index(Request $request)
     {
 		$aliases = new SeriesAlias();

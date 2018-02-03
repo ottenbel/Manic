@@ -91,36 +91,27 @@ Route::namespace('TagObjects\Artist')->group(function () {
 	//End artist alias controller routes
 });
 
-//Series controller routes
-	Route::group(['middleware' => ['auth', 'permission:Create Series']], function(){
-		Route::get('/series/create', 'TagObjects\Series\SeriesController@create')->Name('create_series');
-		Route::post('/series', 'TagObjects\Series\SeriesController@store')->Name('store_series');
-	});
+Route::namespace('TagObjects\Series')->group(function () {
+	//Series controller routes
+		Route::prefix('series')->group(function () {
+			Route::get('/create', 'SeriesController@create')->Name('create_series');
+			Route::post('/', 'SeriesController@store')->Name('store_series');
+			Route::get('/{series}/edit', 'SeriesController@edit')->Name('edit_series');
+			Route::patch('/{series}', 'SeriesController@update')->Name('update_series');
+			Route::delete('/{series}', 'SeriesController@destroy')->Name('delete_series');
+			Route::get('/', 'SeriesController@index')->Name('index_series');
+			Route::get('/{series}', 'SeriesController@show')->Name('show_series');
+		});
+	//End series controller routes
 	
-	Route::group(['middleware' => ['auth', 'permission:Edit Series']], function(){
-		Route::get('/series/{series}/edit', 'TagObjects\Series\SeriesController@edit')->Name('edit_series');
-		Route::patch('/series/{series}', 'TagObjects\Series\SeriesController@update')->Name('update_series');
-	});
-	
-	Route::group(['middleware' => ['auth', 'permission:Delete Series']], function(){
-		Route::delete('/series/{series}', 'TagObjects\Series\SeriesController@destroy')->Name('delete_series');
-	});
-	
-	Route::get('/series', 'TagObjects\Series\SeriesController@index')->Name('index_series');
-	Route::get('/series/{series}', 'TagObjects\Series\SeriesController@show')->Name('show_series');
-
 	//Series alias controller routes
-	Route::group(['middleware' => ['auth', 'permission:Create Personal Series Alias|Create Global Series Alias']], function(){
-		Route::post('/series_alias/{series}', 'TagObjects\Series\SeriesAliasController@store')->Name('store_series_alias');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Delete Personal Series Alias|Delete Global Series Alias']], function(){
-		Route::delete('/series_alias/{seriesAlias}', 'TagObjects\Series\SeriesAliasController@destroy')->Name('delete_series_alias');
-	});
-	
-	Route::get('/series_alias', 'TagObjects\Series\SeriesAliasController@index')->Name('index_series_alias');
+		Route::prefix('series_alias')->group(function () {
+			Route::post('/{series}', 'SeriesAliasController@store')->Name('store_series_alias');
+			Route::delete('/{seriesAlias}', 'SeriesAliasController@destroy')->Name('delete_series_alias');
+			Route::get('/', 'SeriesAliasController@index')->Name('index_series_alias');
+		});
 	//End series alias controller routes
-//End series controller routes
+});
 
 //Scanalator controller routes
 	Route::group(['middleware' => ['auth', 'permission:Create Scanalator']], function(){
