@@ -135,36 +135,27 @@ Route::namespace('TagObjects\Scanalator')->group(function () {
 	//End scanalator alias controller routes
 });
 
-//Character controller routes
-	Route::group(['middleware' => ['auth', 'permission:Create Character']], function(){
-		Route::get('/character/create/{series?}', 'TagObjects\Character\CharacterController@create')->Name('create_character');
-		Route::post('/character', 'TagObjects\Character\CharacterController@store')->Name('store_character');
-	});
+Route::namespace('TagObjects\Character')->group(function () {
+	//Character controller routes	
+		Route::prefix('character')->group(function () {
+			Route::get('/create/{series?}', 'CharacterController@create')->Name('create_character');
+			Route::post('/', 'CharacterController@store')->Name('store_character');
+			Route::get('/{character}/edit', 'CharacterController@edit')->Name('edit_character');
+			Route::patch('/{character}', 'CharacterController@update')->Name('update_character');
+			Route::delete('/{character}', 'CharacterController@destroy')->Name('delete_character');
+			Route::get('/', 'CharacterController@index')->Name('index_character');
+			Route::get('/{character}', 'CharacterController@show')->Name('show_character');
+		});
+	//End Character controller routes
 	
-	Route::group(['middleware' => ['auth', 'permission:Edit Character']], function(){
-		Route::get('/character/{character}/edit', 'TagObjects\Character\CharacterController@edit')->Name('edit_character');
-		Route::patch('/character/{character}', 'TagObjects\Character\CharacterController@update')->Name('update_character');
-	});
-	
-	Route::group(['middleware' => ['auth', 'permission:Delete Character']], function(){
-		Route::delete('/character/{character}', 'TagObjects\Character\CharacterController@destroy')->Name('delete_character');
-	});
-	
-	Route::get('/character', 'TagObjects\Character\CharacterController@index')->Name('index_character');
-	Route::get('/character/{character}', 'TagObjects\Character\CharacterController@show')->Name('show_character');
-
 	//Character alias controller routes
-	Route::group(['middleware' => ['auth', 'permission:Create Personal Character Alias|Create Global Character Alias']], function(){
-		Route::post('/character_alias/{character}', 'TagObjects\Character\CharacterAliasController@store')->Name('store_character_alias');
-	});
-	
-	Route::group(['middleware' => ['auth', 'permission:Delete Personal Character Alias|Delete Global Character Alias']], function(){
-		Route::delete('/character_alias/{characterAlias}', 'TagObjects\Character\CharacterAliasController@destroy')->Name('delete_character_alias');
-	});	
-	
-	Route::get('/character_alias', 'TagObjects\Character\CharacterAliasController@index')->Name('index_character_alias');
+		Route::prefix('character_alias')->group(function () {
+			Route::post('/{character}', 'CharacterAliasController@store')->Name('store_character_alias');
+			Route::delete('/{characterAlias}', 'CharacterAliasController@destroy')->Name('delete_character_alias');
+			Route::get('/', 'CharacterAliasController@index')->Name('index_character_alias');
+		});
 	//End character alias controller routes
-//End Character controller routes
+});
 
 //Search controller routes
 	Route::post('/search', 'SearchController@search')->Name('process_search');

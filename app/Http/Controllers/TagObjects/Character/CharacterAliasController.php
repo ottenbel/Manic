@@ -10,6 +10,13 @@ use App\Http\Requests\TagObjects\Character\Alias\StoreCharacterAliasRequest;
 
 class CharacterAliasController extends TagObjectAliasController
 {
+	public function __construct()
+    {
+		$this->middleware('auth')->except('index');
+		$this->middleware('permission:Create Personal Character Alias|Create Global Character Alias')->only(['create', 'store']);
+		$this->middleware('permission:Delete Personal Character Alias|Delete Global Character Alias')->only('destroy');
+	}
+	
     public function index(Request $request)
     {
 		$aliases = new CharacterAlias();

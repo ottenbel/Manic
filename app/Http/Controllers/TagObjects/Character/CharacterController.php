@@ -21,6 +21,14 @@ use App\Http\Requests\TagObjects\Character\UpdateCharacterRequest;
 
 class CharacterController extends TagObjectController
 {
+	public function __construct()
+    {
+		$this->middleware('auth')->except(['index', 'show']);
+		$this->middleware('permission:Create Character')->only(['create', 'store']);
+		$this->middleware('permission:Edit Character')->only(['edit', 'update']);
+		$this->middleware('permission:Delete Character')->only('destroy');
+	}
+	
     public function index(Request $request)
     {
 		$characters = new Character();
