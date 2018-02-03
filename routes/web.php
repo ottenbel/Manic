@@ -47,36 +47,27 @@
 	});
 //End Chapter controller routes
 
-//Tag controller routes
-	Route::group(['middleware' => ['auth', 'permission:Create Tag']], function(){
-		Route::get('/tag/create', 'TagObjects\Tag\TagController@create')->Name('create_tag');
-		Route::post('/tag', 'TagObjects\Tag\TagController@store')->Name('store_tag');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Edit Tag']], function(){
-		Route::get('/tag/{tag}/edit', 'TagObjects\Tag\TagController@edit')->Name('edit_tag');
-		Route::patch('/tag/{tag}', 'TagObjects\Tag\TagController@update')->Name('update_tag');
-	});
-		
-	Route::group(['middleware' => ['auth', 'permission:Delete Tag']], function(){	
-		Route::delete('/tag/{tag}', 'TagObjects\Tag\TagController@destroy')->Name('delete_tag');
-	});
-		
-	Route::get('/tag', 'TagObjects\Tag\TagController@index')->Name('index_tag');
-	Route::get('/tag/{tag}', 'TagObjects\Tag\TagController@show')->Name('show_tag');
-
+Route::namespace('TagObjects\Tag')->group(function () {
+	//Tag controller routes
+		Route::prefix('tag')->group(function () {
+			Route::get('/create', 'TagController@create')->Name('create_tag');
+			Route::post('/', 'TagController@store')->Name('store_tag');
+			Route::get('/{tag}/edit', 'TagController@edit')->Name('edit_tag');
+			Route::patch('/{tag}', 'TagController@update')->Name('update_tag');
+			Route::delete('/{tag}', 'TagController@destroy')->Name('delete_tag');
+			Route::get('/', 'TagController@index')->Name('index_tag');
+			Route::get('/{tag}', 'TagController@show')->Name('show_tag');
+		});
+	//End tag controller routes
+	
 	//Tag Alias controller routes
-		Route::group(['middleware' => ['auth', 'permission:Create Personal Tag Alias|Create Global Tag Alias']], function(){
-			Route::post('/tag_alias/{tag}', 'TagObjects\Tag\TagAliasController@store')->Name('store_tag_alias');
+		Route::prefix('tag_alias')->group(function () {
+			Route::get('/', 'TagAliasController@index')->Name('index_tag_alias');
+			Route::post('/{tag}', 'TagAliasController@store')->Name('store_tag_alias');
+			Route::delete('/{tagAlias}', 'TagAliasController@destroy')->Name('delete_tag_alias');
 		});
-
-		Route::group(['middleware' => ['auth', 'permission:Delete Personal Tag Alias|Delete Global Tag Alias']], function(){
-			Route::delete('/tag_alias/{tagAlias}', 'TagObjects\Tag\TagAliasController@destroy')->Name('delete_tag_alias');
-		});
-			
-		Route::get('/tag_alias', 'TagObjects\Tag\TagAliasController@index')->Name('index_tag_alias');
 	//End tag alias controller routes
-//End tag controller routes
+});	
 
 //Artist controller routes
 	Route::group(['middleware' => ['auth', 'permission:Create Artist']], function(){

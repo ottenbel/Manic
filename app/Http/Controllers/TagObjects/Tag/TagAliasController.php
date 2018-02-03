@@ -10,6 +10,13 @@ use App\Http\Requests\TagObjects\Tag\Alias\StoreTagAliasRequest;
 
 class TagAliasController extends TagObjectAliasController
 {
+	public function __construct()
+    {
+		$this->middleware('auth')->except('index');
+		$this->middleware('permission:Create Personal Tag Alias|Create Global Tag Alias')->only(['create', 'store']);
+		$this->middleware('permission:Delete Personal Tag Alias|Delete Global Tag Alias')->only('destroy');
+	}
+	
     public function index(Request $request)
     {
 		$aliases = new TagAlias();

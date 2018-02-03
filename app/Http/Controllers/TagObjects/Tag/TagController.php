@@ -19,6 +19,14 @@ use App\Http\Requests\TagObjects\Tag\UpdateTagRequest;
 
 class TagController extends TagObjectController
 {
+	public function __construct()
+    {
+		$this->middleware('auth')->except(['index', 'show']);
+		$this->middleware('permission:Create Tag')->only(['create', 'store']);
+		$this->middleware('permission:Edit Tag')->only(['edit', 'update']);
+		$this->middleware('permission:Delete Tag')->only('destroy');
+	}
+	
     public function index(Request $request)
     {
 		$tags = new Tag();
