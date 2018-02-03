@@ -19,6 +19,14 @@ use App\Http\Requests\TagObjects\Scanalator\UpdateScanalatorRequest;
 
 class ScanalatorController extends TagObjectController
 {
+	public function __construct()
+    {
+		$this->middleware('auth')->except(['index', 'show']);
+		$this->middleware('permission:Create Scanalator')->only(['create', 'store']);
+		$this->middleware('permission:Edit Scanalator')->only(['edit', 'update']);
+		$this->middleware('permission:Delete Scanalator')->only('destroy');
+	}
+	
     public function index(Request $request)
     {
 		$scanalators = new Scanalator();

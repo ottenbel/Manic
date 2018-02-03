@@ -113,36 +113,27 @@ Route::namespace('TagObjects\Series')->group(function () {
 	//End series alias controller routes
 });
 
-//Scanalator controller routes
-	Route::group(['middleware' => ['auth', 'permission:Create Scanalator']], function(){
-		Route::get('/scanalator/create', 'TagObjects\Scanalator\ScanalatorController@create')->Name('create_scanalator');
-		Route::post('/scanalator', 'TagObjects\Scanalator\ScanalatorController@store')->Name('store_scanalator');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Edit Scanalator']], function(){
-		Route::get('/scanalator/{scanalator}/edit', 'TagObjects\Scanalator\ScanalatorController@edit')->Name('edit_scanalator');
-		Route::patch('/scanalator/{scanalator}', 'TagObjects\Scanalator\ScanalatorController@update')->Name('update_scanalator');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Delete Scanalator']], function(){
-		Route::delete('/scanalator/{scanalator}', 'TagObjects\Scanalator\ScanalatorController@destroy')->Name('delete_scanalator');
-	});
-		
-	Route::get('/scanalator', 'TagObjects\Scanalator\ScanalatorController@index')->Name('index_scanalator');
-	Route::get('/scanalator/{scanalator}', 'TagObjects\Scanalator\ScanalatorController@show')->Name('show_scanalator');
-
-	//Scanalator alias controller routes
-	Route::group(['middleware' => ['auth', 'permission:Create Personal Scanalator Alias|Create Global Scanalator Alias']], function(){
-		Route::post('/scanalator_alias/{scanalator}', 'TagObjects\Scanalator\ScanalatorAliasController@store')->Name('store_scanalator_alias');
-	});
+Route::namespace('TagObjects\Scanalator')->group(function () {
+	//Scanalator controller routes
+		Route::prefix('scanalator')->group(function () {
+			Route::get('/create', 'ScanalatorController@create')->Name('create_scanalator');
+			Route::post('/', 'ScanalatorController@store')->Name('store_scanalator');
+			Route::get('/{scanalator}/edit', 'ScanalatorController@edit')->Name('edit_scanalator');
+			Route::patch('/{scanalator}', 'ScanalatorController@update')->Name('update_scanalator');
+			Route::delete('/{scanalator}', 'ScanalatorController@destroy')->Name('delete_scanalator');
+			Route::get('/', 'ScanalatorController@index')->Name('index_scanalator');
+			Route::get('/{scanalator}', 'ScanalatorController@show')->Name('show_scanalator');
+		});
+	//End scanalator controller routes
 	
-	Route::group(['middleware' => ['auth', 'permission:Delete Personal Scanalator Alias|Delete Global Scanalator Alias']], function(){
-		Route::delete('/scanalator_alias/{scanalatorAlias}', 'TagObjects\Scanalator\ScanalatorAliasController@destroy')->Name('delete_scanalator_alias');
-	});
-
-	Route::get('/scanalator_alias', 'TagObjects\Scanalator\ScanalatorAliasController@index')->Name('index_scanalator_alias');
+	//Scanalator alias controller routes
+		Route::prefix('scanalator_alias')->group(function () {
+			Route::post('/{scanalator}', 'ScanalatorAliasController@store')->Name('store_scanalator_alias');
+			Route::delete('/{scanalatorAlias}', 'ScanalatorAliasController@destroy')->Name('delete_scanalator_alias');
+			Route::get('/', 'ScanalatorAliasController@index')->Name('index_scanalator_alias');
+		});
 	//End scanalator alias controller routes
-//End scanalator controller routes
+});
 
 //Character controller routes
 	Route::group(['middleware' => ['auth', 'permission:Create Character']], function(){

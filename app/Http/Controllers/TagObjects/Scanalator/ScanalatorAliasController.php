@@ -10,6 +10,13 @@ use App\Http\Requests\TagObjects\Scanalator\Alias\StoreScanalatorAliasRequest;
 
 class ScanalatorAliasController extends TagObjectAliasController
 {
+	public function __construct()
+    {
+		$this->middleware('auth')->except('index');
+		$this->middleware('permission:Create Personal Scanalator Alias|Create Global Scanalator Alias')->only(['create', 'store']);
+		$this->middleware('permission:Delete Personal Scanalator Alias|Delete Global Scanalator Alias')->only('destroy');
+	}
+	
     public function index(Request $request)
     {
 		$aliases = new ScanalatorAlias();
