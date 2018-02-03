@@ -69,36 +69,27 @@ Route::namespace('TagObjects\Tag')->group(function () {
 	//End tag alias controller routes
 });	
 
-//Artist controller routes
-	Route::group(['middleware' => ['auth', 'permission:Create Artist']], function(){
-		Route::get('/artist/create', 'TagObjects\Artist\ArtistController@create')->Name('create_artist');
-		Route::post('/artist', 'TagObjects\Artist\ArtistController@store')->Name('store_artist');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Edit Artist']], function(){
-		Route::get('/artist/{artist}/edit', 'TagObjects\Artist\ArtistController@edit')->Name('edit_artist');
-		Route::patch('/artist/{artist}', 'TagObjects\Artist\ArtistController@update')->Name('update_artist');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Delete Artist']], function(){
-		Route::delete('/artist/{artist}', 'TagObjects\Artist\ArtistController@destroy')->Name('delete_artist');
-	});
-
-	Route::get('/artist', 'TagObjects\Artist\ArtistController@index')->Name('index_artist');
-	Route::get('/artist/{artist}', 'TagObjects\Artist\ArtistController@show')->Name('show_artist');
-
-	//Artist alias controller routes
-		Route::group(['middleware' => ['auth', 'permission:Create Personal Artist Alias|Create Global Artist Alias']], function(){
-			Route::post('/artist_alias/{artist}', 'TagObjects\Artist\ArtistAliasController@store')->Name('store_artist_alias');
+Route::namespace('TagObjects\Artist')->group(function () {
+	//Artist controller routes
+		Route::prefix('artist')->group(function () {
+			Route::get('/create', 'ArtistController@create')->Name('create_artist');
+			Route::post('/', 'ArtistController@store')->Name('store_artist');
+			Route::get('/{artist}/edit', 'ArtistController@edit')->Name('edit_artist');
+			Route::patch('/{artist}', 'ArtistController@update')->Name('update_artist');
+			Route::delete('/{artist}', 'ArtistController@destroy')->Name('delete_artist');
+			Route::get('/', 'ArtistController@index')->Name('index_artist');
+			Route::get('/{artist}', 'ArtistController@show')->Name('show_artist');
 		});
-
-		Route::group(['middleware' => ['auth', 'permission:Delete Personal Artist Alias|Delete Global Artist Alias']], function(){
-			Route::delete('/artist_alias/{artistAlias}', 'TagObjects\Artist\ArtistAliasController@destroy')->Name('delete_artist_alias');
+	//End artist controller routes
+	
+	//Artist alias controller routes			
+		Route::prefix('artist_alias')->group(function () {
+			Route::post('/{artist}', 'ArtistAliasController@store')->Name('store_artist_alias');
+			Route::delete('/{artistAlias}', 'ArtistAliasController@destroy')->Name('delete_artist_alias');
+			Route::get('/', 'ArtistAliasController@index')->Name('index_artist_alias');
 		});
-			
-		Route::get('/artist_alias', 'TagObjects\Artist\ArtistAliasController@index')->Name('index_artist_alias');
 	//End artist alias controller routes
-//End artist controller routes
+});
 
 //Series controller routes
 	Route::group(['middleware' => ['auth', 'permission:Create Series']], function(){

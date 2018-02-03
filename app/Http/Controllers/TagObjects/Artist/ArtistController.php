@@ -20,6 +20,14 @@ use App\Http\Requests\TagObjects\Artist\UpdateArtistRequest;
 
 class ArtistController extends TagObjectController
 {
+	public function __construct()
+    {
+		$this->middleware('auth')->except(['index', 'show']);
+		$this->middleware('permission:Create Artist')->only(['create', 'store']);
+		$this->middleware('permission:Edit Artist')->only(['edit', 'update']);
+		$this->middleware('permission:Delete Artist')->only('destroy');
+	}
+	
     public function index(Request $request)
     {		
 		$artists = new artist();

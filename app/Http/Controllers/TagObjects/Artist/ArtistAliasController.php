@@ -10,6 +10,13 @@ use App\Http\Requests\TagObjects\Artist\Alias\StoreArtistAliasRequest;
 
 class ArtistAliasController extends TagObjectAliasController
 {
+	public function __construct()
+    {
+		$this->middleware('auth')->except('index');
+		$this->middleware('permission:Create Personal Artist Alias|Create Global Artist Alias')->only(['create', 'store']);
+		$this->middleware('permission:Delete Personal Artist Alias|Delete Global Artist Alias')->only('destroy');
+	}
+	
     public function index(Request $request)
     {	
 		$aliases = new ArtistAlias();
