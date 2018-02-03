@@ -15,6 +15,11 @@ use App\Models\Configuration\ConfigurationRatingRestriction;
 
 class RatingRestrictionController extends WebController
 {
+	public function __construct()
+    {
+		$this->middleware('auth');
+	}
+	
     /**
      * Show the form for editing the specified resource.
      *

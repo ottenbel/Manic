@@ -15,6 +15,11 @@ use App\Models\Configuration\ConfigurationPagination;
 
 class PaginationController extends WebController
 {
+	public function __construct()
+    {
+		$this->middleware('auth');
+	}
+	
     /**
      * Show the form for editing the specified resource.
      *

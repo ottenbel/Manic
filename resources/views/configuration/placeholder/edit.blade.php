@@ -48,6 +48,8 @@
 			@include('partials.configuration.placeholder.input', array('section' => 'Collection', 'items' => $collections))
 			@include('partials.configuration.placeholder.input', array('section' => 'Volume', 'items' => $volumes))
 			@include('partials.configuration.placeholder.input', array('section' => 'Chapter', 'items' => $chapters))
+			@include('partials.configuration.placeholder.input', array('section' => 'Permission', 'items' => $permissions))
+			@include('partials.configuration.placeholder.input', array('section' => 'Role', 'items' => $roles))
 			
 			<br/>
 			<div class="text-right">

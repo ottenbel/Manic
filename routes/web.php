@@ -164,30 +164,35 @@ Route::namespace('TagObjects\Character')->group(function () {
 Auth::routes();
 
 //User dashboards
-Route::group(['middleware' => 'auth'], function(){
-	Route::get('/user', 'User\User\UserDashboardController@main')->Name('user_dashboard_main');
-	Route::get('/user/configuration', 'User\User\UserDashboardController@configuration')->Name('user_dashboard_configuration_main');
+Route::namespace('User\User')->prefix('user')->group(function () {
+	Route::get('/', 'UserDashboardController@main')->Name('user_dashboard_main');
+	Route::get('/configuration', 'UserDashboardController@configuration')->Name('user_dashboard_configuration_main');
 });
 
-Route::group(['middleware' => ['auth', 'permission:Edit Personal Pagination Settings']], function(){
+Route::namespace('Configuration')->prefix('user/configuration')->group(function () {
 	//User pagination settings
-	Route::get('/user/configuration/pagination', 'Configuration\PaginationController@edit')->Name('user_dashboard_configuration_pagination');
-	Route::patch('/user/configuration/pagination/', 'Configuration\PaginationController@update')->Name('user_update_configuration_pagination');
-	Route::delete('/user/configuration/pagination/', 'Configuration\PaginationController@reset')->Name('user_reset_configuration_pagination');
-});
-
-Route::group(['middleware' => ['auth', 'permission:Edit Personal Rating Restriction Settings']], function(){
+		Route::group(['middleware' => 'permission:Edit Personal Pagination Settings'], function(){
+			Route::get('/pagination', 'PaginationController@edit')->Name('user_dashboard_configuration_pagination');
+			Route::patch('/pagination', 'PaginationController@update')->Name('user_update_configuration_pagination');
+			Route::delete('/pagination', 'PaginationController@reset')->Name('user_reset_configuration_pagination');
+		});
+	//End user pagination settings
+	
 	//User rating restriction settings
-	Route::get('/user/configuration/rating_restriction', 'Configuration\RatingRestrictionController@edit')->Name('user_dashboard_configuration_rating_restriction');
-	Route::patch('/user/configuration/rating_restriction/', 'Configuration\RatingRestrictionController@update')->Name('user_update_configuration_rating_restriction');
-	Route::delete('/user/configuration/rating_restriction/', 'Configuration\RatingRestrictionController@reset')->Name('user_reset_configuration_rating_restriction');
-});
-
-Route::group(['middleware' => ['auth', 'permission:Edit Personal Placeholder Settings']], function(){
+		Route::group(['middleware' => 'permission:Edit Personal Rating Restriction Settings'], function(){
+			Route::get('/rating_restriction', 'RatingRestrictionController@edit')->Name('user_dashboard_configuration_rating_restriction');
+			Route::patch('/rating_restriction', 'RatingRestrictionController@update')->Name('user_update_configuration_rating_restriction');
+			Route::delete('/rating_restriction', 'RatingRestrictionController@reset')->Name('user_reset_configuration_rating_restriction');
+		});
+	//End user rating restriction settings
+	
 	//User placeholder settings
-	Route::get('/user/configuration/placeholders', 'Configuration\PlaceholderController@edit')->Name('user_dashboard_configuration_placeholders');
-	Route::patch('/user/configuration/placeholders/', 'Configuration\PlaceholderController@update')->Name('user_update_configuration_placeholders');
-	Route::delete('/user/configuration/placeholders/', 'Configuration\PlaceholderController@reset')->Name('user_reset_configuration_placeholders');
+		Route::group(['middleware' => 'permission:Edit Personal Placeholder Settings'], function(){
+			Route::get('/placeholders', 'PlaceholderController@edit')->Name('user_dashboard_configuration_placeholders');
+			Route::patch('/placeholders/', 'PlaceholderController@update')->Name('user_update_configuration_placeholders');
+			Route::delete('/placeholders/', 'PlaceholderController@reset')->Name('user_reset_configuration_placeholders');
+		});
+	//End user placeholder settings
 });
 
 //Admin dashboard

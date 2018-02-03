@@ -15,6 +15,11 @@ use App\Models\Configuration\ConfigurationPlaceholder;
 
 class PlaceholderController extends WebController
 {
+	public function __construct()
+    {
+		$this->middleware('auth');
+	}
+	
     /**
      * Show the form for editing the specified resource.
      *
@@ -44,10 +49,12 @@ class PlaceholderController extends WebController
 		$collections = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'collection');});
 		$volumes = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'volume');});
 		$chapters = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'chapter');});
+		$permissions = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'permission');});
+		$roles = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'role');});
 		
 		$messages = self::GetFlashedMessages($request);
 		
-		return View('configuration.placeholder.edit', array('artists' => $artists, 'characters' => $characters, 'scanalators' => $scanalators, 'series' => $series, 'tags' => $tags, 'collections' => $collections, 'volumes' => $volumes, 'chapters' => $chapters, 'messages' => $messages));
+		return View('configuration.placeholder.edit', array('artists' => $artists, 'characters' => $characters, 'scanalators' => $scanalators, 'series' => $series, 'tags' => $tags, 'collections' => $collections, 'volumes' => $volumes, 'chapters' => $chapters, 'permissions' => $permissions, 'roles' => $roles, 'messages' => $messages));
     }
 
     /**
