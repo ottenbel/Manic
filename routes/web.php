@@ -196,28 +196,34 @@ Route::namespace('Configuration')->prefix('user/configuration')->group(function 
 });
 
 //Admin dashboard
-Route::group(['middleware' => ['auth', 'permission:Edit Global Pagination Settings|Edit Global Placeholder Settings|Edit Global Rating Restriction Settings']], function(){
-	Route::get('/admin', 'User\Admin\AdminDashboardController@main')->Name('admin_dashboard_main');
-	Route::get('/admin/configuration', 'User\Admin\AdminDashboardController@configuration')->Name('admin_dashboard_configuration_main');
+
+Route::namespace('User\Admin')->prefix('admin')->group(function () {
+	Route::get('/', 'AdminDashboardController@main')->Name('admin_dashboard_main');
+	Route::get('/configuration', 'AdminDashboardController@configuration')->Name('admin_dashboard_configuration_main');
 });
 
-Route::group(['middleware' => ['auth', 'permission:Edit Global Pagination Settings']], function(){
+Route::namespace('Configuration')->prefix('admin/configuration')->group(function () {
 	//Site pagination settings
-	Route::get('/admin/configuration/pagination', 'Configuration\PaginationController@edit')->Name('admin_dashboard_configuration_pagination');
-	Route::patch('/admin/configuration/pagination/', 'Configuration\PaginationController@update')->Name('admin_update_configuration_pagination');
-});
+		Route::group(['middleware' => 'permission:Edit Global Pagination Settings'], function(){
+			Route::get('/pagination', 'PaginationController@edit')->Name('admin_dashboard_configuration_pagination');
+			Route::patch('/pagination', 'PaginationController@update')->Name('admin_update_configuration_pagination');
+		});
+	//End site pagination settings
 	
-Route::group(['middleware' => ['auth', 'permission:Edit Global Rating Restriction Settings']], function(){
 	//Site placeholder settings
-	Route::get('/admin/configuration/placeholders', 'Configuration\PlaceholderController@edit')->Name('admin_dashboard_configuration_placeholders');
-	Route::patch('/admin/configuration/placeholders/', 'Configuration\PlaceholderController@update')->Name('admin_update_configuration_placeholders');
-});
+		Route::group(['middleware' => 'permission:Edit Global Rating Restriction Settings'], function(){
+			Route::get('/placeholders', 'PlaceholderController@edit')->Name('admin_dashboard_configuration_placeholders');
+			Route::patch('/placeholders', 'PlaceholderController@update')->Name('admin_update_configuration_placeholders');
+		});
+	//End site placeholder settings
 
-Route::group(['middleware' => ['auth', 'permission:Edit Global Placeholder Settings']], function(){	
 	//Site rating restriction settings
-	Route::get('/admin/configuration/rating_restriction', 'Configuration\RatingRestrictionController@edit')->Name('admin_dashboard_configuration_rating_restriction');
-	Route::patch('/admin/configuration/rating_restriction/', 'Configuration\RatingRestrictionController@update')->Name('admin_update_configuration_rating_restriction');
-});	
+		Route::group(['middleware' => 'permission:Edit Global Placeholder Settings'], function(){	
+			Route::get('/rating_restriction', 'RatingRestrictionController@edit')->Name('admin_dashboard_configuration_rating_restriction');
+			Route::patch('/rating_restriction', 'RatingRestrictionController@update')->Name('admin_update_configuration_rating_restriction');
+		});	
+	//End site rating restriction settings
+});
 
 //Permissions
 	Route::group(['middleware' => ['auth', 'permission:Create Permission|Edit Permission|Delete Permission']], function(){	
