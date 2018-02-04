@@ -225,60 +225,68 @@ Route::namespace('Configuration')->prefix('admin/configuration')->group(function
 	//End site rating restriction settings
 });
 
-//Permissions
-	Route::group(['middleware' => ['auth', 'permission:Create Permission|Edit Permission|Delete Permission']], function(){	
-		Route::get('/admin/permission', 'RolesAndPermissions\PermissionsController@index')->Name('admin_index_permission');
-	});	
-
-	Route::group(['middleware' => 'auth'], function(){
-		Route::get('/user/permission', 'RolesAndPermissions\PermissionsController@index')->Name('user_index_permission');
-	});
-	
-	Route::group(['middleware' => ['auth', 'permission:Create Permission']], function(){
-		Route::get('/admin/permission/create', 'RolesAndPermissions\PermissionsController@create')->Name('admin_create_permission');
-		Route::post('/admin/permission', 'RolesAndPermissions\PermissionsController@store')->Name('admin_store_permission');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Edit Permission']], function(){
-		Route::get('/admin/permission/{permission}/edit', 'RolesAndPermissions\PermissionsController@edit')->Name('admin_edit_permission');
-		Route::patch('/admin/permission/{permission}', 'RolesAndPermissions\PermissionsController@update')->Name('admin_update_permission');
-	});
-
-	Route::group(['middleware' => ['auth', 'permission:Delete Permission']], function(){
-		Route::delete('/admin/permission/{permission}', 'RolesAndPermissions\PermissionsController@destroy')->Name('admin_delete_permission');
-	});
-//End Permissions
-
-//Roles
-	Route::group(['middleware' => ['auth', 'permission:Create Role']], function(){
-		Route::get('/admin/role/create', 'RolesAndPermissions\RolesController@create')->Name('admin_create_role');
-		Route::post('/admin/role', 'RolesAndPermissions\RolesController@store')->Name('admin_store_role');
-	});
-	
-	Route::group(['middleware' => ['auth', 'permission:Edit Role']], function(){
-		Route::get('/admin/role/{role}/edit', 'RolesAndPermissions\RolesController@edit')->Name('admin_edit_role');
-		Route::patch('/admin/role/{role}', 'RolesAndPermissions\RolesController@update')->Name('admin_update_role');
-	});
+Route::namespace('RolesAndPermissions')->group(function () {
+	//Permissions
+		Route::prefix('user/permission')->group(function () {
+			Route::get('/', 'PermissionsController@index')->Name('user_index_permission');
+		});
 		
-	Route::group(['middleware' => ['auth', 'permission:Delete Role']], function(){
-		Route::delete('/admin/role/{role}', 'RolesAndPermissions\RolesController@destroy')->Name('admin_delete_role');
-	});
-	
-	Route::group(['middleware' => ['auth', 'permission:Create Role|Edit Role|Delete Role']], function(){	
-		Route::get('/admin/role', 'RolesAndPermissions\RolesController@index')->Name('admin_index_role');
-		Route::get('/admin/role/{role}', 'RolesAndPermissions\RolesController@show')->Name('admin_show_role');
-	});
-	
-	Route::group(['middleware' => 'auth', ], function(){
-		Route::get('/user/role', 'RolesAndPermissions\RolesController@index')->Name('user_index_role');
-		Route::get('/user/role/{role}', 'RolesAndPermissions\RolesController@show')->Name('user_show_role');
-	});
-	
-	Route::get('/admin/user', 'User\Admin\AdminUserController@index')->Name('admin_index_user');
-	Route::get('/admin/user/{user}', 'User\Admin\AdminUserController@show')->Name('admin_show_user');
-	
-	Route::get('/admin/user/{user}/rolesandpermissions/edit', 'User\Admin\UserRolesAndPermissionsController@edit')->Name('admin_edit_user_roles_and_permissions');
-	Route::patch('/admin/user/{user}/rolesandpermissions', 'User\Admin\UserRolesAndPermissionsController@update')->Name('admin_update_user_roles_and_permissions');
-	
-	
-//End Roles
+		Route::prefix('admin/permission')->group(function () {
+			Route::group(['middleware' => 'permission:Create Permission|Edit Permission|Delete Permission'], function(){	
+				Route::get('/', 'PermissionsController@index')->Name('admin_index_permission');
+			});	
+			
+			Route::group(['middleware' => 'permission:Create Permission'], function(){
+				Route::get('/create', 'PermissionsController@create')->Name('admin_create_permission');
+				Route::post('/', 'PermissionsController@store')->Name('admin_store_permission');
+			});
+
+			Route::group(['middleware' => 'permission:Edit Permission'], function(){
+				Route::get('/{permission}/edit', 'PermissionsController@edit')->Name('admin_edit_permission');
+				Route::patch('/{permission}', 'PermissionsController@update')->Name('admin_update_permission');
+			});
+
+			Route::group(['middleware' => 'permission:Delete Permission'], function(){
+				Route::delete('/{permission}', 'PermissionsController@destroy')->Name('admin_delete_permission');
+			});
+		});
+	//End Permissions
+
+	//Roles
+		Route::prefix('user/role')->group(function () {
+			Route::get('/', 'RolesController@index')->Name('user_index_role');
+			Route::get('/{role}', 'RolesController@show')->Name('user_show_role');
+		});
+		
+		Route::prefix('admin/role')->group(function () {
+			Route::group(['middleware' => 'permission:Create Role'], function(){
+				Route::get('/create', 'RolesController@create')->Name('admin_create_role');
+				Route::post('/', 'RolesController@store')->Name('admin_store_role');
+			});
+			
+			Route::group(['middleware' => 'permission:Edit Role'], function(){
+				Route::get('/{role}/edit', 'RolesController@edit')->Name('admin_edit_role');
+				Route::patch('/{role}', 'RolesController@update')->Name('admin_update_role');
+			});
+				
+			Route::group(['middleware' => 'permission:Delete Role'], function(){
+				Route::delete('/{role}', 'RolesController@destroy')->Name('admin_delete_role');
+			});
+			
+			Route::group(['middleware' => 'permission:Create Role|Edit Role|Delete Role'], function(){	
+				Route::get('/', 'RolesController@index')->Name('admin_index_role');
+				Route::get('/{role}', 'RolesController@show')->Name('admin_show_role');
+			});
+		});
+	//End Roles
+});
+
+Route::namespace('User\Admin')->prefix('admin/user')->group(function () {	
+	//User administration
+		Route::get('/', 'AdminUserController@index')->Name('admin_index_user');
+		Route::get('/{user}', 'AdminUserController@show')->Name('admin_show_user');
+		
+		Route::get('/{user}/rolesandpermissions/edit', 'UserRolesAndPermissionsController@edit')->Name('admin_edit_user_roles_and_permissions');
+		Route::patch('/{user}/rolesandpermissions', 'UserRolesAndPermissionsController@update')->Name('admin_update_user_roles_and_permissions');	
+	//End user administration
+});

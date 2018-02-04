@@ -21,7 +21,6 @@ class AdminUserController extends WebController
 	public function __construct()
 	{
 		$this->middleware('auth');
-		
 		$this->middleware('permission:View User Index')->only('index');
 		$this->middleware('permission:View User')->only('show');
 	}
