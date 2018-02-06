@@ -290,3 +290,8 @@ Route::namespace('User\Admin')->prefix('admin/user')->group(function () {
 		Route::patch('/{user}/rolesandpermissions', 'UserRolesAndPermissionsController@update')->Name('admin_update_user_roles_and_permissions');	
 	//End user administration
 });
+
+Route::namespace('Auth')->prefix('user/password')->group(function () {
+	Route::get('/', 'UpdatePasswordController@edit')->Name('edit_password');
+	Route::patch('/', 'UpdatePasswordController@update')->Name('update_password');
+});

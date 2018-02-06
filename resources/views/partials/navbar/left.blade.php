@@ -26,6 +26,8 @@
 					<li><a href="{{route('user_dashboard_configuration_rating_restriction')}}">Rating Restrictions</a></li>
 				@endcan
 			@endif
+			<h6 class="dropdown-header">Account Settings</h6>
+				<li><a href="{{ route('edit_password') }}"><i class="fa fa-unlock" aria-hidden="true"></i> Change Password</a><li>
 		</ul>
 	</li>
 @elseif(Auth::check() && Route::is('admin_*'))
