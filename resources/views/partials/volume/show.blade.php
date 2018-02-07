@@ -1,7 +1,15 @@
 @if($hideVolumes == true)
-	<button id="{{$volume->id}}_button" class="accordion" type="button" style="display:none">
+	@if($openAccordion == true)
+		<button id="{{$volume->id}}_button" class="openAccordion" type="button" style="display:none">
+	@else
+		<button id="{{$volume->id}}_button" class="closedAccordion" type="button" style="display:none">
+	@endif
 @else
-	<button id="{{$volume->id}}_button" class="accordion" type="button">
+	@if($openAccordion == true)
+		<button id="{{$volume->id}}_button" class="openAccordion" type="button">
+	@else
+		<button id="{{$volume->id}}_button" class="closedAccordion" type="button">
+	@endif
 @endif
 	@if($volume->name != null && $volume->name != "")
 		Volume {{$volume->volume_number}} - {{{$volume->name}}}

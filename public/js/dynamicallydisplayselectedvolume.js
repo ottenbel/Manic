@@ -20,7 +20,7 @@ $(window).on('load', function() {
 			$(currentPanelID).attr('style','');
 			
 			//Change the accordion state to disabled
-			$(currentButtonID).attr("class", "accordion");
+			$(currentButtonID).attr("class", "closedAccordion");
 			
 			$(currentButtonID).hide();
 		}

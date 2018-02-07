@@ -11,12 +11,12 @@
 @if(Route::is('create_chapter'))
 	@include('partials.collection.show', 
 		[
-		'volumes' => $collection->volumes(), 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => true
+		'volumes' => $collection->volumes(), 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => true, 'isChapter' => true
 		])
 @elseif(Route::is('edit_chapter'))
 	@include('partials.collection.show', 
 	[
-	'volumes' => $chapter->collection->volumes(), 'editVolume' => false, 'editChapter' => true, 'scanalatorLinkRoute' => 'edit_scanalator', 'hideVolumes' => true
+	'volumes' => $chapter->collection->volumes(), 'editVolume' => false, 'editChapter' => true, 'scanalatorLinkRoute' => 'edit_scanalator', 'hideVolumes' => true, 'isChapter' => true
 	])
 @endif
 <br/>

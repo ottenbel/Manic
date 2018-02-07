@@ -3,7 +3,7 @@
 			|| ($search_ratings_array != null) || ($search_statues_array != null) || ($search_canonicity_array != null) 
 			|| ($invalid_tokens_array != null))
 			<!--Begin Pannel-->
-			<button id="search_panel" class="accordion" type="button">
+			<button id="search_panel" class="openAccordion" type="button">
 				Search Breakdown
 			</button>
 			<div id = "search_panel" class="volume_panel">

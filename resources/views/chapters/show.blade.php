@@ -38,7 +38,7 @@
 		</div>
 	</div>
 	@if((count($chapter->primary_scanalators)) || (count($chapter->secondary_scanalators)) || ($chapter->source != null) || (Auth::check() && Auth::user()->can('export', $chapter)))
-		<button class="accordion">Additional Chapter Information:</button>
+		<button class="closedAccordion">Additional Chapter Information:</button>
 		<div class="volume_panel" id="additional_chapter_information">
 			@if((count($chapter->primary_scanalators)) || (count($chapter->secondary_scanalators)))
 				<div class="row">

@@ -267,7 +267,7 @@
 	
 	@include('partials.collection.show', 
 	[
-	'volumes' => $collection->volumes(), 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'index_collection', 'hideVolumes' => false
+	'volumes' => $collection->volumes(), 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'index_collection', 'hideVolumes' => false, 'isChapter' => false
 	])
 	
 	@if(($collection->parent_collection != null) || (count($collection->child_collections)))
@@ -275,7 +275,7 @@
 		<p>
 			<h3>Alternative Versions of This Collection</h3>
 			@if($collection->parent_collection != null)
-				<button class="accordion">Parent Collection:</button>
+				<button class="closedAccordion">Parent Collection:</button>
 				<div class="volume_panel" id="parent_collection">
 					<span class="col-md-1">
 						@if($collection->parent_collection->cover_image != null)
@@ -293,9 +293,9 @@
 	
 			@if(count($sibling_collections))
 				@if(count($sibling_collections) == 1)
-					<button class="accordion">Sibling Collection</button>
+					<button class="closedAccordion">Sibling Collection</button>
 				@else
-					<button class="accordion">Sibling Collections</button>
+					<button class="closedAccordion">Sibling Collections</button>
 				@endif
 				<div class="volume_panel" id="sibling_collections">
 					@foreach($sibling_collections as $sibling_collection)
@@ -318,9 +318,9 @@
 			
 			@if(count($collection->child_collections))
 				@if(count($collection->child_collections) == 1)
-					<button class="accordion">Child Collection:</button>
+					<button class="closedAccordion">Child Collection:</button>
 				@else
-					<button class="accordion">Child Collections:</button>
+					<button class="closedAccordion">Child Collections:</button>
 				@endif
 
 				<div class="volume_panel" id="child_collections">					

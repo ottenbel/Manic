@@ -1,4 +1,4 @@
-<button id="rolesAndPermissions_button" class="accordion" type="button">
+<button id="rolesAndPermissions_button" class="openAccordion" type="button">
 	Roles and Permissions
 </button>
 

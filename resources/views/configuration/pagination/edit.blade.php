@@ -40,7 +40,7 @@
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 			
-			<button id="pagination_value_button" class="accordion" type="button">
+			<button id="pagination_value_button" class="closedAccordion" type="button">
 				Pagination Configuration
 			</button>
 			<div id="pagination_value_panel" class="volume_panel">
@@ -59,7 +59,7 @@
 					</div>
 				@endforeach
 			</div>
-			<button id="pagination_value_helper_button" class="accordion" type="button">
+			<button id="pagination_value_helper_button" class="closedAccordion" type="button">
 				Pagination Helper Configuration
 			</button>
 			<div id="pagination_value_helper_panel" class="volume_panel">

@@ -1,5 +1,5 @@
 <h2>{{$section}} </h2>
-<button id="placeholder_value_button" class="accordion" type="button">
+<button id="placeholder_value_button" class="closedAccordion" type="button">
 	Placeholder Configuration
 </button>
 <div id="placeholder_value_panel" class="volume_panel">
@@ -18,7 +18,7 @@
 		</div>
 	@endforeach
 </div>
-<button id="pagination_value_helper_button" class="accordion" type="button">
+<button id="pagination_value_helper_button" class="closedAccordion" type="button">
 	Placeholder Helper Configuration
 </button>
 <div id="pagination_value_helper_panel" class="volume_panel">

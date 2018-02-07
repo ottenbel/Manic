@@ -40,7 +40,7 @@
 			{{ csrf_field() }}
 			{{method_field('PATCH')}}
 			
-			<button id="rating_restriction_value_button" class="accordion" type="button">
+			<button id="rating_restriction_value_button" class="closedAccordion" type="button">
 				Rating Restriction Configuration
 			</button>
 			<div id="rating_restriction_value_panel" class="volume_panel">

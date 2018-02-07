@@ -36,7 +36,7 @@ Edit Volume - {{{$volume->name}}}
 			
 			@include('partials.volume.show', 
 			[
-			'volume' => $volume, 'editVolume' => false, 'editChapter' => true, 'scanalatorLinkRoute' => 'edit_scanalator', 'chapterOnly' => true, 'hideVolumes' => false
+			'volume' => $volume, 'editVolume' => false, 'editChapter' => true, 'scanalatorLinkRoute' => 'edit_scanalator', 'chapterOnly' => true, 'hideVolumes' => false, 'openAccordion' => true, 'isChapter' => false
 			])
 			
 			<br/>
