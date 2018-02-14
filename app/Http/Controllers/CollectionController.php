@@ -56,17 +56,7 @@ class CollectionController extends WebController
 		$messages = self::GetFlashedMessages($request);
 		$search_string = $request->query('search');
 		
-		$collections = null;
-		$searchArtists = null;
-		$searchCharacters = null;
-		$searchScanalators = null; 
-		$searchSeries = null; 
-		$searchTags = null; 
-		$searchLanguages = null;
-		$searchRatings = null;
-		$searchStatuses = null;
-		$searchCanonicity = null;
-		$invalid_tokens = null;
+		$collections = $searchArtists = $searchCharacters = $searchScanalators = $searchSeries = $searchTags = $searchLanguages = $searchRatings = $searchStatuses = $searchCanonicity = $invalid_tokens = null; 
 		
 		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
 		$ratingRestrictions = null;

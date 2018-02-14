@@ -28,16 +28,7 @@ class SearchParseHelper
 	 */
 	public static function Search($search_string, &$collections, &$searchArtists, &$searchCharacters, &$searchScanalators, &$searchSeries, &$searchTags, &$searchLanguages, &$searchRatings, &$searchStatuses, &$searchCanonicity, &$invalid_tokens)
 	{
-		$searchArtists = array();
-		$searchCharacters = array();
-		$searchScanalators = array(); 
-		$searchSeries = array(); 
-		$searchTags = array(); 
-		$searchLanguages = array();
-		$searchRatings = array();
-		$searchStatuses = array();
-		$searchCanonicity = array();
-		$invalid_tokens = array();
+		$searchArtists = $searchCharacters = $searchScanalators = $searchSeries = $searchTags = $searchLanguages = $searchRatings = $searchStatuses = $searchCanonicity = $invalid_tokens = array();
 		
 		//Break out search into tokens
 		$search_tokens = array_map('trim', explode(',', $search_string));
@@ -51,9 +42,7 @@ class SearchParseHelper
 			}
 			
 			$searchClassifier = "";
-			$not = false;
-			$primary = false;
-			$secondary = false;
+			$not = $primary = $secondary = false;
 			
 			//Check for - (not) flags
 			if ($search_token[0] == "-")
