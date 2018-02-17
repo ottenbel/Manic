@@ -102,12 +102,12 @@ class SearchLookupHelper
 		$matches = $matches->sortByDesc('total');
 		$tagObjectList = $matches->take(5)->pluck('name')->sort();
 		
-		$tagObjectList = array();
-		foreach ($tagObjects as $tagObject)
+		$tagObjectListOut = array();
+		foreach ($tagObjectList as $tagObject)
 		{
-			array_push($tagObjectList, ['value' => $tagObject, 'label' => $tagObject]);
+			array_push($tagObjectListOut, ['value' => $tagObject, 'label' => $tagObject]);
 		}
 		
-		return $tagObjectList;
+		return $tagObjectListOut;
 	}
 }
