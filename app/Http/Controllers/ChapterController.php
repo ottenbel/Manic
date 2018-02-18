@@ -2,29 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Redirect;
-use Auth;
-use Config;
-use DB;
-use Input;
-use LookupHelper;
-use MappingHelper;
-use ImageUploadHelper;
-use InterventionImage;
-use FileExportHelper;
-use File;
-use Storage;
 use App\Models\Chapter;
 use App\Models\Collection;
 use App\Models\Image;
-use App\Models\Page;
-use App\Models\TagObjects\Scanalator\Scanalator;
-use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 use App\Models\Volume;
 use App\Http\Requests\Chapter\StoreChapterRequest;
 use App\Http\Requests\Chapter\UpdateChapterRequest;
+use Auth;
+use Config;
+use DB;
+use File;
+use FileExportHelper;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Input;
+use ImageUploadHelper;
+use LookupHelper;
+use MappingHelper;
+use Storage;
 
 class ChapterController extends WebController
 {

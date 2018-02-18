@@ -3,7 +3,6 @@
 namespace App\Models\TagObjects\Character;
 
 use App\Models\TagObjects\CollectionAssociatedTagObjectModel;
-use Auth;
 
 class Character extends CollectionAssociatedTagObjectModel
 {

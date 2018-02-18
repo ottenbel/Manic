@@ -21,7 +21,7 @@ Create a New Volume
 			
 			@include('partials.volume.input', array('configurations' => $configurations))
 			
-			@include('partials.collection.show', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => false])
+			@include('partials.collection.show', ['volumes' => $collection->volumes(), 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => false, 'isChapter' => false])
 			<br/>
 			
 			{{ Form::submit('Create Volume', array('class' => 'btn btn-primary')) }}

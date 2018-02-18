@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Redirect;
 use Auth;
-use DB;
-use Config;
-use Input;
-use Storage;
-use InterventionImage;
-use ImageUploadHelper;
-use FileExportHelper;
+use App\Http\Requests\Volume\StoreVolumeRequest;
+use App\Http\Requests\Volume\UpdateVolumeRequest;
 use App\Models\Collection;
 use App\Models\Image;
 use App\Models\Volume;
-use App\Http\Requests\Volume\StoreVolumeRequest;
-use App\Http\Requests\Volume\UpdateVolumeRequest;
+use Config;
+use DB;
+use FileExportHelper;
+use ImageUploadHelper;
+use Input;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Storage;
 
 class VolumeController extends WebController
 {

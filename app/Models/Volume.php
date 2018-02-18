@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\BaseManicModel;
-use Auth;
 
 class Volume extends BaseManicModel
 {

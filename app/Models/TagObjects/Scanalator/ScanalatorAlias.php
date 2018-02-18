@@ -3,7 +3,6 @@
 namespace App\Models\TagObjects\Scanalator;
 
 use App\Models\BaseManicModel;
-use Auth;
 
 class ScanalatorAlias extends BaseManicModel
 {

@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use App\Models\Configuration\ConfigurationPagination;
-use App\Models\User;
 use Auth;
 
 class ConfigurationLookupHelper

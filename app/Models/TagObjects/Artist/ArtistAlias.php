@@ -3,7 +3,6 @@
 namespace App\Models\TagObjects\Artist;
 
 use App\Models\BaseManicModel;
-use Auth;
 
 class ArtistAlias extends BaseManicModel
 {

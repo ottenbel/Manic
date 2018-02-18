@@ -2,23 +2,17 @@
 
 namespace App\Helpers\Search;
 
-use App\Models\Collection;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
 use App\Models\TagObjects\Character\Character;
 use App\Models\TagObjects\Character\CharacterAlias;
+use App\Models\TagObjects\Scanalator\Scanalator;
+use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
 use App\Models\TagObjects\Tag\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
-use App\Models\TagObjects\Scanalator\Scanalator;
-use App\Models\TagObjects\Scanalator\ScanalatorAlias;
-use App\Models\Language;
-use App\Models\Rating;
-use App\Models\Status;
 use Auth;
-use Config;
-use LookupHelper;
 use DB;
 
 class SearchLookupHelper
