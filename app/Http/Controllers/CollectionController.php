@@ -109,7 +109,17 @@ class CollectionController extends WebController
 			$sibling_collections = $collection->parent_collection->child_collections()->where('id', '!=', $collection->id)->get();
 		}
 		
-        return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections, 'messages' => $messages));
+		$isFavourite = false;
+		if (Auth::check())
+		{
+			$favouriteCollection = Auth::user()->favorite_collections()->where('collection_id', '=', $collection->id)->first();
+			if ($favouriteCollection != null)
+			{
+				$isFavourite = true;
+			}
+		}
+		
+        return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections, 'isFavourite' => $isFavourite, 'messages' => $messages));
     }
 
     public function edit(Request $request, Collection $collection)
@@ -120,7 +130,17 @@ class CollectionController extends WebController
         $dropdowns = self::GetDropdowns();
 		$collection->load('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
 		
-		return View('collections.edit', array('configurations' => $configurations, 'collection' => $collection, 'ratings' => $dropdowns['ratings'], 'statuses' => $dropdowns['statuses'], 'languages' => $dropdowns['languages'], 'messages' => $messages));
+		$isFavourite = false;
+		if (Auth::check())
+		{
+			$favouriteCollection = Auth::user()->favorite_collections()->where('collection_id', '=', $collection->id)->first();
+			if ($favouriteCollection != null)
+			{
+				$isFavourite = true;
+			}
+		}
+		
+		return View('collections.edit', array('configurations' => $configurations, 'collection' => $collection, 'ratings' => $dropdowns['ratings'], 'statuses' => $dropdowns['statuses'], 'languages' => $dropdowns['languages'], 'isFavourite' =>$isFavourite, 'messages' => $messages));
     }
 
     public function update(UpdateCollectionRequest $request, Collection $collection)

@@ -295,3 +295,9 @@ Route::namespace('Auth')->prefix('user/password')->group(function () {
 	Route::get('/', 'UpdatePasswordController@edit')->Name('edit_password');
 	Route::patch('/', 'UpdatePasswordController@update')->Name('update_password');
 });
+
+Route::namespace('User\User\Favourites\Collection')->prefix('user/favourites/collection')->group(function () {
+	Route::post('/{collection}', 'CollectionFavouritesController@store')->Name('store_collection_favourite');
+	Route::delete('/{collection}', 'CollectionFavouritesController@destroy')->Name('delete_collection_favourite');
+	Route::get('/', 'CollectionFavouritesController@index')->Name('index_collection_favourite');
+});

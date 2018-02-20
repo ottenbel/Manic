@@ -27,6 +27,10 @@ class RolesAndPermissionsSeeder extends Seeder
 		self::SeedPermissionRow('Delete Personal Tag Alias');
 		self::SeedPermissionRow('Edit Personal Pagination Settings');
 		self::SeedPermissionRow('Edit Personal Rating Restriction Settings');
+		self::SeedPermissionRow('Edit Personal Rating Restriction Settings');
+		self::SeedPermissionRow('Edit Personal Rating Restriction Settings');
+		self::SeedPermissionRow('Add Favourite Collection');
+		self::SeedPermissionRow('Delete Favourite Collection');
 		self::SeedPermissionRow('Create Collection');
 		self::SeedPermissionRow('Edit Collection');
 		self::SeedPermissionRow('Delete Collection');
@@ -91,7 +95,8 @@ class RolesAndPermissionsSeeder extends Seeder
 			'Delete Personal Artist Alias', 'Create Personal Character Alias', 'Delete Personal Character Alias', 
 			'Create Personal Scanalator Alias', 'Delete Personal Scanalator Alias', 'Create Personal Series Alias', 
 			'Delete Personal Series Alias', 'Create Personal Tag Alias', 'Delete Personal Tag Alias', 
-			'Edit Personal Pagination Settings', 'Edit Personal Rating Restriction Settings'
+			'Edit Personal Pagination Settings', 'Edit Personal Rating Restriction Settings', 'Add Favourite Collection',
+			'Delete Favourite Collection'
 		]);
 		
 		self::SeedRoleAndPermissions('editor', 

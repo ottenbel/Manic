@@ -182,4 +182,12 @@ class Collection extends BaseManicModel
 	{
 		return $this->hasOne('App\Models\CollectionExport');
 	}
+	
+	/*
+	 * Get all collection favourites associated with the user
+	 */
+	public function favourited()
+	{
+		return $this->hasMany('App\Models\User\CollectionFavourite');
+	}
 }

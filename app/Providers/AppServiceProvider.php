@@ -37,6 +37,9 @@ use App\Observers\Configuration\Placeholder\PlaceholderObserver;
 use App\Models\Configuration\ConfigurationRatingRestriction;
 use App\Observers\Configuration\RatingRestriction\RatingRestrictionObserver;
 
+use App\Models\User\CollectionFavourite;
+use App\Observers\User\CollectionFavouritesObserver;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -63,6 +66,7 @@ class AppServiceProvider extends ServiceProvider
 		ConfigurationPagination::observe(PaginationObserver::class);
 		ConfigurationPlaceholder::observe(PlaceholderObserver::class);
 		ConfigurationRatingRestriction::observe(RatingRestrictionObserver::class);
+		CollectionFavourite::observe(CollectionFavouritesObserver::class);
     }
 
     /**

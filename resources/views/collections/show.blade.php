@@ -256,6 +256,23 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			@if(Auth::check() && Auth::user()->hasPermissionTo('Add Favourite Collection') && (!($isFavourite)))
+				<form method="POST" action="{{route('store_collection_favourite', ['collection' => $collection])}}">
+					{{ csrf_field() }}
+					
+					{{ Form::button('<i class="fa fa-star-o" aria-hidden="true"></i> Add To Favourites', array('type' => 'submit', 'class' => 'btn btn-sm btn-success')) }}
+				</form>
+			@endif
+			@if(Auth::check() && Auth::user()->hasPermissionTo('Delete Favourite Collection') && ($isFavourite))
+				<form method="POST" action="{{route('delete_collection_favourite', ['collection' => $collection])}}">
+					{{ csrf_field() }}
+					{{method_field('DELETE')}}
+					
+					{{ Form::button('<i class="fa fa-star-o" aria-hidden="true"></i> Remove From Favourites', array('type' => 'submit', 'class' => 'btn btn-sm btn-danger')) }}
+				</form>
+			@endif
+		</div>
 	</div>
 	@if(($collection->description != null) && ($collection->description != ""))
 		<br/>

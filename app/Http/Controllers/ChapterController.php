@@ -143,15 +143,10 @@ class ChapterController extends WebController
 		
 		if (is_int($page))
 		{
-			if ($page < 0)
-			{
-				$page = 0;
-			}
+			if ($page < 0) { $page = 0; }
 		}
 		else
-		{
-			$page = 0;
-		}
+			{ $page = 0; }
 		
 		$previousChapterID;
 		$nextChapterID;
@@ -188,7 +183,17 @@ class ChapterController extends WebController
 			$lastPageOfPreviousChapter = null;
 		}
 		
-		return view('chapters.show', array('collection' => $collection, 'chapter' => $chapter, 'page_number' => $page, 'pages_array' => $pagesArray, 'previous_chapter_id' => $previousChapterID, 'next_chapter_id' => $nextChapterID, 'last_page_of_previous_chapter' => $lastPageOfPreviousChapter, 'messages' => $messages));
+		$isFavourite = false;
+		if (Auth::check())
+		{
+			$favouriteCollection = Auth::user()->favorite_collections()->where('collection_id', '=', $collection->id)->first();
+			if ($favouriteCollection != null)
+			{
+				$isFavourite = true;
+			}
+		}
+		
+		return view('chapters.show', array('collection' => $collection, 'chapter' => $chapter, 'page_number' => $page, 'pages_array' => $pagesArray, 'previous_chapter_id' => $previousChapterID, 'next_chapter_id' => $nextChapterID, 'last_page_of_previous_chapter' => $lastPageOfPreviousChapter, 'isFavourite' =>$isFavourite, 'messages' => $messages));
     }
 
     public function edit(Request $request, Chapter $chapter)
@@ -205,7 +210,17 @@ class ChapterController extends WebController
 			return "Volume $item";
 		});
 		
-        return View('chapters.edit', array('configurations' => $configurations, 'chapter' => $chapter, 'volumes' => $volumes, 'volumes_array' => $volumesArray, 'messages' => $messages));
+		$isFavourite = false;
+		if (Auth::check())
+		{
+			$favouriteCollection = Auth::user()->favorite_collections()->where('collection_id', '=', $collection->id)->first();
+			if ($favouriteCollection != null)
+			{
+				$isFavourite = true;
+			}
+		}
+		
+        return View('chapters.edit', array('configurations' => $configurations, 'chapter' => $chapter, 'volumes' => $volumes, 'volumes_array' => $volumesArray, 'isFavourite' =>$isFavourite, 'messages' => $messages));
     }
 
     

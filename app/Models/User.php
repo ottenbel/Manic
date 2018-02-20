@@ -271,4 +271,12 @@ class User extends Authenticatable
 	{
 		return $this->hasMany('App\Models\Configuration\ConfigurationRatingRestriction');
 	}
+	
+	/*
+	 * Get all collection favorites associated with the user
+	 */
+	public function favorite_collections()
+	{
+		return $this->hasMany('App\Models\User\CollectionFavourite');
+	}
 }
