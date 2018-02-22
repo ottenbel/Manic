@@ -7,6 +7,8 @@ use App\Http\Requests\User\User\Favourites\Collection\StoreCollectionFavouriteRe
 use App\Models\Collection;
 use App\Models\User\CollectionFavourite;
 use Auth;
+use Config;
+use ConfigurationLookupHelper;
 use DB;
 use Illuminate\Http\Request;
 
@@ -26,9 +28,18 @@ class CollectionFavouritesController extends WebController
     }
 
 	
-	public function index()
+	public function index(Request $request)
 	{
+		$messages = self::GetFlashedMessages($request);
+		$userFavourites = Auth::user()->favorite_collections()->pluck('collection_id')->toArray();
+		$lookupKey = Config::get('constants.keys.pagination.collectionsPerPageIndex');
+		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$ratingRestrictions = Auth::user()->rating_restriction_configuration->where('display', '=', false)->pluck('rating_id')->toArray();
 		
+		$favourites = new Collection();
+		$favourites = $favourites->whereIn('id', $userFavourites)->whereNotIn('rating_id', $ratingRestrictions)->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
+		
+		return View('user.user.favourites.index', array('collections' => $favourites, 'messages' => $messages));
 	}
 	
 	public function store(StoreCollectionFavouriteRequest $request, Collection $collection)

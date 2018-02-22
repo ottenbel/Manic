@@ -52,17 +52,14 @@ class CollectionController extends WebController
 		$ratingRestrictions = null;
 		if(Auth::check())
 		{
-			$ratingRestrictions = Auth::user()->rating_restriction_configuration->where('display', '=', false);
+			$ratingRestrictions = Auth::user()->rating_restriction_configuration->where('display', '=', false)->pluck('rating_id')->toArray();
 		}
 		else
 		{
-			$ratingRestrictions = ConfigurationRatingRestriction::where('user_id', '=', null)->where('display', '=', false)->get();
+			$ratingRestrictions = ConfigurationRatingRestriction::where('user_id', '=', null)->where('display', '=', false)->pluck('rating_id')->toArray();
 		}
 		
-		foreach ($ratingRestrictions as $ratingRestriction)
-		{
-			$collections = $collections->where('rating_id', '!=', $ratingRestriction->rating_id);
-		}
+		$collections = $collections->whereNotIn('rating_id', $ratingRestrictions);
 		
 		//No search is conducted
 		if ($search_string ==  "")
