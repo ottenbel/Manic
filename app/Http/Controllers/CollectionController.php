@@ -46,7 +46,7 @@ class CollectionController extends WebController
 		$messages = self::GetFlashedMessages($request);
 		$search_string = $request->query('search');
 		
-		$collections = $searchArtists = $searchCharacters = $searchScanalators = $searchSeries = $searchTags = $searchLanguages = $searchRatings = $searchStatuses = $searchCanonicity = $invalid_tokens = null; 
+		$collections = $searchArtists = $searchCharacters = $searchScanalators = $searchSeries = $searchTags = $searchLanguages = $searchRatings = $searchStatuses = $searchCanonicity = $searchFavourites = $invalid_tokens = null; 
 		
 		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
 		$ratingRestrictions = null;
@@ -73,11 +73,11 @@ class CollectionController extends WebController
 		}
 		else //Filter the collections return based on the search string
 		{
-			SearchParseHelper::Search($search_string, $collections, $searchArtists, $searchCharacters, $searchScanalators, $searchSeries, $searchTags, $searchLanguages, $searchRatings, $searchStatuses, $searchCanonicity, $invalid_tokens);
+			SearchParseHelper::Search($search_string, $collections, $searchArtists, $searchCharacters, $searchScanalators, $searchSeries, $searchTags, $searchLanguages, $searchRatings, $searchStatuses, $searchCanonicity, $searchFavourites, $invalid_tokens);
 			$collections->appends(Input::except('page'));
 		}
 		
-		return View('collections.index', array('collections' => $collections, 'search_artists_array' => $searchArtists, 'search_characters_array' => $searchCharacters, 'search_scanalators_array' => $searchScanalators, 'search_series_array' => $searchSeries, 'search_tags_array' => $searchTags, 'search_languages_array' => $searchLanguages, 'search_ratings_array' => $searchRatings, 'search_statues_array' => $searchStatuses, 'search_canonicity_array' => $searchCanonicity, 'invalid_tokens_array' => $invalid_tokens, 'messages' => $messages));
+		return View('collections.index', array('collections' => $collections, 'search_artists_array' => $searchArtists, 'search_characters_array' => $searchCharacters, 'search_scanalators_array' => $searchScanalators, 'search_series_array' => $searchSeries, 'search_tags_array' => $searchTags, 'search_languages_array' => $searchLanguages, 'search_ratings_array' => $searchRatings, 'search_statues_array' => $searchStatuses, 'search_canonicity_array' => $searchCanonicity, 'search_favourites_array' => $searchFavourites, 'invalid_tokens_array' => $invalid_tokens, 'messages' => $messages));
     }
 
     public function create(Request $request)
@@ -109,7 +109,7 @@ class CollectionController extends WebController
 		$isFavourite = false;
 		if (Auth::check())
 		{
-			$favouriteCollection = Auth::user()->favorite_collections()->where('collection_id', '=', $collection->id)->first();
+			$favouriteCollection = Auth::user()->favourite_collections()->where('collection_id', '=', $collection->id)->first();
 			if ($favouriteCollection != null)
 			{
 				$isFavourite = true;
@@ -130,7 +130,7 @@ class CollectionController extends WebController
 		$isFavourite = false;
 		if (Auth::check())
 		{
-			$favouriteCollection = Auth::user()->favorite_collections()->where('collection_id', '=', $collection->id)->first();
+			$favouriteCollection = Auth::user()->favourite_collections()->where('collection_id', '=', $collection->id)->first();
 			if ($favouriteCollection != null)
 			{
 				$isFavourite = true;

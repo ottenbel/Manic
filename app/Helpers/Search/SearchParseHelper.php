@@ -2,6 +2,7 @@
 
 namespace App\Helpers\Search;
 
+use Auth;
 use App\Models\Language;
 use App\Models\Rating;
 use App\Models\Status;
@@ -15,9 +16,9 @@ class SearchParseHelper
 	/*
 	 * Return the collection that matches the search string.
 	 */
-	public static function Search($searchString, &$collections, &$searchArtists, &$searchCharacters, &$searchScanalators, &$searchSeries, &$searchTags, &$searchLanguages, &$searchRatings, &$searchStatuses, &$searchCanonicity, &$invalidTokens)
+	public static function Search($searchString, &$collections, &$searchArtists, &$searchCharacters, &$searchScanalators, &$searchSeries, &$searchTags, &$searchLanguages, &$searchRatings, &$searchStatuses, &$searchCanonicity, &$searchFavourites, &$invalidTokens)
 	{
-		$searchArtists = $searchCharacters = $searchScanalators = $searchSeries = $searchTags = $searchLanguages = $searchRatings = $searchStatuses = $searchCanonicity = $invalidTokens = array();
+		$searchArtists = $searchCharacters = $searchScanalators = $searchSeries = $searchTags = $searchLanguages = $searchRatings = $searchStatuses = $searchCanonicity = $searchFavourites = $invalidTokens = array();
 		
 		//Break out search into tokens
 		$searchTokens = array_map('trim', explode(',', $searchString));
@@ -116,6 +117,7 @@ class SearchParseHelper
 				self::ParseSearchTokenRating($searchRatings, $invalidTokens, $searchToken, $not, false, $found);
 				self::ParseSearchTokenStatus($searchStatuses, $invalidTokens, $searchToken, $not, false, $found);
 				self::ParseSearchCanonicity($searchCanonicity, $searchToken, $not, $found);
+				self::ParseSearchFavourites($searchFavourites, $searchToken, $not, $found);
 				
 				if (!($found))
 				{
@@ -127,17 +129,8 @@ class SearchParseHelper
 		//Build the search query
 		$query = $collections;
 		
-		$i = 0;
-		foreach($searchCanonicity as $canonicity)
-		{
-			$compareBy = '';
-			if ($canonicity['not']) {$compareBy = '!=';}
-			else {$compareBy = '=';}
-			
-			if ($i == 0) { $query = $query->where('canonical', $compareBy, $canonicity['canon']); }
-			else { $query = $query->orWhere('canonical', $compareBy, $canonicity['canon']); }
-			$i++;
-		}
+		self::AppendFavouritesToQuery($query, $searchFavourites);
+		self::AppendCanonicityToQuery($query, $searchCanonicity);
 		
 		self::AppendSeperatePropertyToQuery($query, $searchStatuses, 'status_id', 'status');
 		self::AppendSeperatePropertyToQuery($query, $searchRatings, 'rating_id', 'rating');
@@ -231,10 +224,18 @@ class SearchParseHelper
 			array_push($searchCanonicity, array('canon' => true, 'not' => $not));
 			if (!($found)) { $found = true; }
 		}
-		else if ($searchToken == "non-canonical")
+	}
+	
+	private static function ParseSearchFavourites(&$searchFavourites, $searchToken, $not, &$found)
+	{
+		if (Auth::check())
 		{
-			array_push($searchCanonicity, array('canon' => false, 'not' => $not));
-			if (!($found)) { $found = true; }
+			$searchToken = strtolower($searchToken);
+			if ($searchToken == "favourites" || $searchToken == "favorites")   
+			{
+				array_push($searchFavourites, array('favourite' => true, 'not' => $not));
+				if (!($found)) { $found = true; }
+			}
 		}
 	}
 	
@@ -250,6 +251,42 @@ class SearchParseHelper
 			if ($i == 0) { $query = $query->where($id, $compareBy, $property[$arrayField]->id); }
 			else { $query = $query->orWhere($id, $compareBy, $property[$arrayField]->id); }
 			$i++;
+		}
+	}
+	
+	private static function AppendCanonicityToQuery(&$query, $searchCanonicity)
+	{
+		$i = 0;
+		foreach($searchCanonicity as $canonicity)
+		{
+			$compareBy = '';
+			if ($canonicity['not']) {$compareBy = '!=';}
+			else {$compareBy = '=';}
+			
+			if ($i == 0) { $query = $query->where('canonical', $compareBy, $canonicity['canon']); }
+			else { $query = $query->orWhere('canonical', $compareBy, $canonicity['canon']); }
+			$i++;
+		}
+	}
+	
+	private static function AppendFavouritesToQuery(&$query, $searchFavourites)
+	{
+		if (Auth::check())
+		{
+			$userFavourites = Auth::user()->favourite_collections()->pluck('collection_id')->toArray();
+			
+			$i = 0;
+			foreach($searchFavourites as $favourite)
+			{
+				if ($favourite['not'])
+				{
+					$query = $query->whereNotIn('id', $userFavourites);
+				}
+				else
+				{
+					$query = $query->whereIn('id', $userFavourites);
+				}
+			}
 		}
 	}
 	

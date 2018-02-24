@@ -31,7 +31,7 @@ class CollectionFavouritesController extends WebController
 	public function index(Request $request)
 	{
 		$messages = self::GetFlashedMessages($request);
-		$userFavourites = Auth::user()->favorite_collections()->pluck('collection_id')->toArray();
+		$userFavourites = Auth::user()->favourite_collections()->pluck('collection_id')->toArray();
 		$lookupKey = Config::get('constants.keys.pagination.collectionsPerPageIndex');
 		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
 		$ratingRestrictions = Auth::user()->rating_restriction_configuration->where('display', '=', false)->pluck('rating_id')->toArray();
@@ -68,7 +68,7 @@ class CollectionFavouritesController extends WebController
 	
 	public function destroy(Collection $collection)
 	{
-		$collectionFavourite = Auth::user()->favorite_collections()->where('collection_id', '=', $collection->id)->first();
+		$collectionFavourite = Auth::user()->favourite_collections()->where('collection_id', '=', $collection->id)->first();
 		
 		DB::beginTransaction();
 		try

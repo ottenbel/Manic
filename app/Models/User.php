@@ -275,7 +275,7 @@ class User extends Authenticatable
 	/*
 	 * Get all collection favorites associated with the user
 	 */
-	public function favorite_collections()
+	public function favourite_collections()
 	{
 		return $this->hasMany('App\Models\User\CollectionFavourite');
 	}
