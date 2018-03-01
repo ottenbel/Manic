@@ -15,11 +15,29 @@
 			<tr>
 				<td class="col-xs-2">
 				@if($collection->cover_image != null)
-					<a href="{{route('show_collection', ['collection' => $collection])}}"><img src="{{asset($collection->cover_image->thumbnail)}}" class="img-responsive img-rounded"></a>
+					@if(Route::is('index_collection_blacklist'))
+						<div><img src="{{asset($collection->cover_image->thumbnail)}}" class="img-responsive img-rounded"></div>
+					@else
+						<div><a href="{{route('show_collection', ['collection' => $collection])}}"><img src="{{asset($collection->cover_image->thumbnail)}}" class="img-responsive img-rounded"></a></div>
+					@endif
+				@endif
+				@if(Route::is('index_collection_blacklist'))
+					@if(Auth::check() && Auth::user()->hasPermissionTo('Delete Blacklisted Collection'))
+						<form method="POST" action="{{route('delete_collection_blacklist', ['collection' => $collection])}}">
+							{{ csrf_field() }}
+							{{method_field('DELETE')}}
+							
+							{{ Form::button('<i class="fa fa-trash" aria-hidden="true"></i> Remove From Blacklist', array('type' => 'submit', 'class' => 'btn btn-sm btn-danger')) }}
+						</form>
+					@endif
 				@endif
 				</td>
 				<td class="col-xs-10">
-					<div><a href="{{route('show_collection', ['collection' => $collection])}}"><h4>{{{$collection->name}}}</h4></a></div>
+					@if(Route::is('index_collection_blacklist'))
+						<div><h4>{{{$collection->name}}}</h4></div>
+					@else
+						<div><a href="{{route('show_collection', ['collection' => $collection])}}"><h4>{{{$collection->name}}}</h4></a></div>
+					@endif
 					
 					@if(($collection->primary_artists()->count()) || ($collection->secondary_artists()->count()))
 						<div class="row">
@@ -44,7 +62,7 @@
 												'componentToken' => 'artist'])
 										@endforeach
 									@endif
-							</div>
+								</div>
 							</div>
 						</div>
 					@endif

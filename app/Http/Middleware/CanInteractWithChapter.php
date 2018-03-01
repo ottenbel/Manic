@@ -20,8 +20,10 @@ class CanInteractWithChapter
     {
 		$chapter = $request->route('chapter');
 		$ratingRestriction = null;
+		$blacklist = null;
 		if (Auth::check())
 		{
+			$blacklist = Auth::user()->blacklisted_collections()->where('collection_id', '=', $chapter->collection->id)->first();
 			$ratingRestriction = Auth::user()->rating_restriction_configuration->where('rating_id', '=', $chapter->collection->rating_id)->first();
 		}
 		else
@@ -31,8 +33,8 @@ class CanInteractWithChapter
 		
 		if ($ratingRestriction != null)
 		{
-			if ($ratingRestriction->display)
-			{
+			if (($ratingRestriction->display) && ($blacklist == null))
+			{	
 				return $next($request);
 			}
 			else

@@ -26,7 +26,6 @@ class CollectionFavouritesController extends WebController
 		$this->middleware('permission:Add Favourite Collection')->only('store');
 		$this->middleware('permission:Delete Favourite Collection')->only('destroy');
     }
-
 	
 	public function index(Request $request)
 	{
@@ -39,7 +38,7 @@ class CollectionFavouritesController extends WebController
 		$favourites = new Collection();
 		$favourites = $favourites->whereIn('id', $userFavourites)->whereNotIn('rating_id', $ratingRestrictions)->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
 		
-		return View('user.user.favourites.index', array('collections' => $favourites, 'messages' => $messages));
+		return View('user.user.favourites.collection.index', array('collections' => $favourites, 'messages' => $messages));
 	}
 	
 	public function store(StoreCollectionFavouriteRequest $request, Collection $collection)
@@ -86,7 +85,7 @@ class CollectionFavouritesController extends WebController
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully removed collection $collection->name to favourites."], null, null);
+		$messages = self::BuildFlashedMessagesVariable(["Successfully removed collection $collection->name from favourites."], null, null);
 		
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
 	}

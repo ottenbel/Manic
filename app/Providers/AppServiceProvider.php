@@ -40,6 +40,9 @@ use App\Observers\Configuration\RatingRestriction\RatingRestrictionObserver;
 use App\Models\User\CollectionFavourite;
 use App\Observers\User\CollectionFavouritesObserver;
 
+use App\Models\User\CollectionBlacklist;
+use App\Observers\User\CollectionBlacklistObserver;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -67,6 +70,7 @@ class AppServiceProvider extends ServiceProvider
 		ConfigurationPlaceholder::observe(PlaceholderObserver::class);
 		ConfigurationRatingRestriction::observe(RatingRestrictionObserver::class);
 		CollectionFavourite::observe(CollectionFavouritesObserver::class);
+		CollectionBlacklist::observe(CollectionBlacklistObserver::class);
     }
 
     /**

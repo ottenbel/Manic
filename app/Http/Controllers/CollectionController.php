@@ -52,6 +52,10 @@ class CollectionController extends WebController
 		$ratingRestrictions = null;
 		if(Auth::check())
 		{
+			//Remove all entries from the blacklist
+			$blacklist = Auth::user()->blacklisted_collections()->pluck('collection_id')->toArray();
+			$collections = $collections->whereNotIn('id', $blacklist);
+			
 			$ratingRestrictions = Auth::user()->rating_restriction_configuration->where('display', '=', false)->pluck('rating_id')->toArray();
 		}
 		else
@@ -116,7 +120,17 @@ class CollectionController extends WebController
 			}
 		}
 		
-        return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections, 'isFavourite' => $isFavourite, 'messages' => $messages));
+		$isBlacklisted = false;
+		if (Auth::check())
+		{
+			$blacklistedCollection = Auth::user()->blacklisted_collections()->where('collection_id', '=', $collection->id)->first();
+			if ($blacklistedCollection != null)
+			{
+				$isBlacklisted = true;
+			}
+		}
+		
+        return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections, 'isFavourite' => $isFavourite, 'isBlacklist' => $isBlacklisted, 'messages' => $messages));
     }
 
     public function edit(Request $request, Collection $collection)

@@ -279,4 +279,9 @@ class User extends Authenticatable
 	{
 		return $this->hasMany('App\Models\User\CollectionFavourite');
 	}
+	
+	public function blacklisted_collections()
+	{
+		return $this->hasMany('App\Models\User\CollectionBlacklist');
+	}
 }

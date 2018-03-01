@@ -31,6 +31,8 @@ class RolesAndPermissionsSeeder extends Seeder
 		self::SeedPermissionRow('Edit Personal Rating Restriction Settings');
 		self::SeedPermissionRow('Add Favourite Collection');
 		self::SeedPermissionRow('Delete Favourite Collection');
+		self::SeedPermissionRow('Add Blacklisted Collection');
+		self::SeedPermissionRow('Delete Blacklisted Collection');
 		self::SeedPermissionRow('Create Collection');
 		self::SeedPermissionRow('Edit Collection');
 		self::SeedPermissionRow('Delete Collection');
@@ -96,7 +98,7 @@ class RolesAndPermissionsSeeder extends Seeder
 			'Create Personal Scanalator Alias', 'Delete Personal Scanalator Alias', 'Create Personal Series Alias', 
 			'Delete Personal Series Alias', 'Create Personal Tag Alias', 'Delete Personal Tag Alias', 
 			'Edit Personal Pagination Settings', 'Edit Personal Rating Restriction Settings', 'Add Favourite Collection',
-			'Delete Favourite Collection'
+			'Delete Favourite Collection', 'Add Blacklisted Collection', 'Delete Blacklisted Collection'
 		]);
 		
 		self::SeedRoleAndPermissions('editor', 

@@ -20,8 +20,10 @@ class CanInteractWithCollection
     {
 		$collection = $request->route('collection');
 		$ratingRestriction = null;
+		$blacklist = null;
 		if (Auth::check())
 		{
+			$blacklist = Auth::user()->blacklisted_collections()->where('collection_id', '=', $collection->id)->first();
 			$ratingRestriction = Auth::user()->rating_restriction_configuration->where('rating_id', '=', $collection->rating_id)->first();
 		}
 		else
@@ -31,7 +33,7 @@ class CanInteractWithCollection
 		
 		if ($ratingRestriction != null)
 		{
-			if ($ratingRestriction->display)
+			if (($ratingRestriction->display) && ($blacklist == null))
 			{
 				return $next($request);
 			}

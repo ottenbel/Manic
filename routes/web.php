@@ -301,3 +301,9 @@ Route::namespace('User\User\Favourites\Collection')->prefix('user/favourites/col
 	Route::delete('/{collection}', 'CollectionFavouritesController@destroy')->Name('delete_collection_favourite');
 	Route::get('/', 'CollectionFavouritesController@index')->Name('index_collection_favourite');
 });
+
+Route::namespace('User\User\Blacklists\Collection')->prefix('user/blacklists/collection')->group(function () {
+	Route::post('/{collection}', 'CollectionBlacklistController@store')->Name('store_collection_blacklist');
+	Route::delete('/{collection}', 'CollectionBlacklistController@destroy')->Name('delete_collection_blacklist');
+	Route::get('/', 'CollectionBlacklistController@index')->Name('index_collection_blacklist');
+});

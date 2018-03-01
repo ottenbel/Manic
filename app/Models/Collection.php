@@ -190,4 +190,12 @@ class Collection extends BaseManicModel
 	{
 		return $this->hasMany('App\Models\User\CollectionFavourite');
 	}
+	
+	/*
+	 * Get all collection blacklist associated with the user
+	 */
+	public function blacklisted()
+	{
+		return $this->hasMany('App\Models\User\CollectionBlacklist');
+	}
 }
