@@ -186,7 +186,7 @@ class ChapterController extends WebController
 		$isFavourite = false;
 		if (Auth::check())
 		{
-			$favouriteCollection = Auth::user()->favorite_collections()->where('collection_id', '=', $collection->id)->first();
+			$favouriteCollection = Auth::user()->favourite_collections()->where('collection_id', '=', $collection->id)->first();
 			if ($favouriteCollection != null)
 			{
 				$isFavourite = true;
@@ -213,7 +213,7 @@ class ChapterController extends WebController
 		$isFavourite = false;
 		if (Auth::check())
 		{
-			$favouriteCollection = Auth::user()->favorite_collections()->where('collection_id', '=', $collection->id)->first();
+			$favouriteCollection = Auth::user()->favourite_collections()->where('collection_id', '=', $collection->id)->first();
 			if ($favouriteCollection != null)
 			{
 				$isFavourite = true;
