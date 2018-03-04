@@ -203,9 +203,9 @@ class ChapterController extends WebController
         $messages = self::GetFlashedMessages($request);
 		$configurations = self::GetConfiguration();
 		
-		$volumesArray = json_encode($chapter->volume->collection->volumes()->pluck('id'));
+		$volumesArray = json_encode($chapter->collection->volumes()->pluck('id'));
 		
-		$volumes = $chapter->volume->collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
+		$volumes = $chapter->collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
 		{
 			return "Volume $item";
 		});
@@ -213,7 +213,7 @@ class ChapterController extends WebController
 		$isFavourite = false;
 		if (Auth::check())
 		{
-			$favouriteCollection = Auth::user()->favourite_collections()->where('collection_id', '=', $collection->id)->first();
+			$favouriteCollection = Auth::user()->favourite_collections()->where('collection_id', '=', $chapter->collection->id)->first();
 			if ($favouriteCollection != null)
 			{
 				$isFavourite = true;
