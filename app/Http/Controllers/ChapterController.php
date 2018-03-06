@@ -48,6 +48,9 @@ class ChapterController extends WebController
 		
 		$volumesArray = json_encode($collection->volumes()->pluck('id'));
 		
+		$highestVolume = null;
+		$newChapter = 1;
+		
 		if ($collection->volumes()->count() == 0)
 		{
 			//If collection doesn't have any associated volumes prompt the user to create a volume before they create a chapter.
@@ -62,11 +65,17 @@ class ChapterController extends WebController
 				$messages['warning'] = array($missingVolumeWarning);
 			}
 			
-			return View('volumes.create', array('collection' => $collection, 'volumes_array' => $volumesArray, 'messages' => $messages));
+			return View('volumes.create', array('collection' => $collection, 'volumes_array' => $volumesArray, 'highestVolume' => $highestVolume, 'newChapter' => $newChapter, 'messages' => $messages));
 		}
 		else
 		{
-			return View('chapters.create', array('configurations' => $configurations, 'collection' => $collection, 'volumes' => $volumes, 'volumes_array' => $volumesArray, 'messages' => $messages));
+			$highestVolume = $collection->unsorted_volumes()->orderby('volume_number', 'desc')->first()->id;
+			if ($collection->chapters()->count() > 0)
+			{
+				$newChapter = $collection->chapters()->orderby('chapter_number', 'desc')->first()->chapter_number + 1;
+			}
+			
+			return View('chapters.create', array('configurations' => $configurations, 'collection' => $collection, 'volumes' => $volumes, 'volumes_array' => $volumesArray, 'highestVolume' => $highestVolume, 'newChapter' => $newChapter, 'messages' => $messages));
 		}
     }
 
@@ -220,7 +229,7 @@ class ChapterController extends WebController
 			}
 		}
 		
-        return View('chapters.edit', array('configurations' => $configurations, 'chapter' => $chapter, 'volumes' => $volumes, 'volumes_array' => $volumesArray, 'isFavourite' =>$isFavourite, 'messages' => $messages));
+        return View('chapters.edit', array('configurations' => $configurations, 'chapter' => $chapter, 'volumes' => $volumes, 'volumes_array' => $volumesArray, 'isFavourite' =>$isFavourite, 'highestVolume' => null, 'newChapter' => 1, 'messages' => $messages));
     }
 
     

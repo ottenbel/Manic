@@ -3,8 +3,10 @@
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['volume']->description}}"></i>
 	@if((!empty($chapter)) && ($chapter->volume != null) && (Input::old('volume') == null))
 		{{ Form::select('volume_id', $volumes, $chapter->volume->id) }}
-	@else
+	@elseif(Input::old('volume') != null)
 		{{ Form::select('volume_id', $volumes, Input::old('volume')) }}
+	@else
+		{{ Form::select('volume_id', $volumes, $highestVolume) }}
 	@endif
 </div>
 
@@ -25,8 +27,10 @@
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['number']->description}}"></i>
 	@if((!empty($chapter)) && ($chapter->chapter_number != null) && (Input::old('chapter_number') == null))
 		{{ Form::text('chapter_number', $chapter->chapter_number, array('class' => 'form-control', 'placeholder' => $configurations['number']->value)) }}
-	@else
+	@elseif(Input::old('chapter_number') != null)
 		{{ Form::text('chapter_number', Input::old('chapter_number'), array('class' => 'form-control', 'placeholder' => $configurations['number']->value)) }}
+	@else
+		{{ Form::text('chapter_number', $newChapter, array('class' => 'form-control', 'placeholder' => $configurations['number']->value)) }}
 	@endif
 	@if($errors->has('chapter_number'))
 		<div class ="alert alert-danger" id="name_errors">{{$errors->first('chapter_number')}}</div>
