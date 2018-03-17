@@ -56,7 +56,7 @@ class UpdateChapterRequest extends FormRequest
 			'scanalator_primary' => 'regex:/^[^:-]+$/',
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
-			'images.*' => 'mimes:jpeg,bmp,png,zip',
+			'images.*' => 'mimes:jpeg,bmp,png,gif,zip',
 			'chapter_pages.*' => 'required|integer|min:0',
 			'delete_pages.*' => 'boolean'];
 		}
@@ -76,7 +76,7 @@ class UpdateChapterRequest extends FormRequest
 			'scanalator_primary' => 'regex:/^[^:-]+$/',
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
-			'images.*' => 'mimes:jpeg,bmp,png,zip',
+			'images.*' => 'mimes:jpeg,bmp,png,gif,zip',
 			'chapter_pages.*' => 'required|integer|min:0',
 			'delete_pages.*' => 'boolean'];
 		}
@@ -96,7 +96,7 @@ class UpdateChapterRequest extends FormRequest
 			'scanalator_primary' => 'regex:/^[^:-]+$/',
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
-			'images.*' => 'mimes:jpeg,bmp,png,zip',
+			'images.*' => 'mimes:jpeg,bmp,png,gif,zip',
 			'chapter_pages.*' => 'required|integer|min:0',
 			'delete_pages.*' => 'boolean'];
 		}
@@ -115,7 +115,7 @@ class UpdateChapterRequest extends FormRequest
 			'scanalator_primary' => 'regex:/^[^:-]+$/',
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
-			'images.*' => 'mimes:jpeg,bmp,png,zip',
+			'images.*' => 'mimes:jpeg,bmp,png,gif,zip',
 			'chapter_pages.*' => 'required|integer|min:0',
 			'delete_pages.*' => 'boolean'];
 		}
