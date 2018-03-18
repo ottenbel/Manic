@@ -25,7 +25,7 @@ class ChapterController extends WebController
 {
 	public function __construct()
     {
-		$this->middleware('auth')->except('show');
+		$this->middleware('auth')->except(['show', 'overview']);
 		$this->middleware('permission:Create Chapter')->only(['create', 'store']);
 		$this->middleware('canInteractWithCollection')->only('create');
 		$this->middleware('canInteractWithChapter')->except(['create', 'store']);
@@ -157,9 +157,7 @@ class ChapterController extends WebController
 		else
 			{ $page = 0; }
 		
-		$previousChapterID;
-		$nextChapterID;
-		$lastPageOfPreviousChapter;
+		$previousChapterID = $nextChapterID = $lastPageOfPreviousChapter = null;
 		
 		$collection = $chapter->collection()->first();
 	
@@ -169,27 +167,15 @@ class ChapterController extends WebController
 		{
 			$previousChapterID = $chapter->previous_chapter()->first()->id;
 		}
-		else
-		{
-			$previousChapterID = null;
-		}
 		
 		if(count($chapter->next_chapter()->first()))
 		{
 			$nextChapterID = $chapter->next_chapter()->first()->id;
 		}
-		else
-		{
-			$nextChapterID = null;
-		}
 		
 		if($previousChapterID != null)
 		{
 			$lastPageOfPreviousChapter = count(Chapter::where('id', '=', $previousChapterID)->first()->pages) - 1;
-		}
-		else
-		{
-			$lastPageOfPreviousChapter = null;
 		}
 		
 		$isFavourite = false;
@@ -204,6 +190,35 @@ class ChapterController extends WebController
 		
 		return view('chapters.show', array('collection' => $collection, 'chapter' => $chapter, 'page_number' => $page, 'pages_array' => $pagesArray, 'previous_chapter_id' => $previousChapterID, 'next_chapter_id' => $nextChapterID, 'last_page_of_previous_chapter' => $lastPageOfPreviousChapter, 'isFavourite' =>$isFavourite, 'messages' => $messages));
     }
+	
+	public function overview(Request $request, Chapter $chapter)
+	{
+		$messages = self::GetFlashedMessages($request);
+		$previousChapterID = $nextChapterID = null;
+		$collection = $chapter->collection()->first();
+		
+		if (count($chapter->previous_chapter()->first()))
+		{
+			$previousChapterID = $chapter->previous_chapter()->first()->id;
+		}
+		
+		if(count($chapter->next_chapter()->first()))
+		{
+			$nextChapterID = $chapter->next_chapter()->first()->id;
+		}
+		
+		$isFavourite = false;
+		if (Auth::check())
+		{
+			$favouriteCollection = Auth::user()->favourite_collections()->where('collection_id', '=', $collection->id)->first();
+			if ($favouriteCollection != null)
+			{
+				$isFavourite = true;
+			}
+		}
+		
+		return view('chapters.overview', array('collection' => $collection, 'chapter' => $chapter, 'previous_chapter_id' => $previousChapterID, 'next_chapter_id' => $nextChapterID, 'isFavourite' =>$isFavourite, 'messages' => $messages));
+	}
 
     public function edit(Request $request, Chapter $chapter)
     {

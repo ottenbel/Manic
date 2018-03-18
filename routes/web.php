@@ -43,6 +43,7 @@
 		Route::patch('/{chapter}', 'ChapterController@update')->Name('update_chapter');
 		Route::delete('/{chapter}', 'ChapterController@destroy')->Name('delete_chapter');
 		Route::get('/{chapter}/export', 'ChapterController@export')->Name('export_chapter');
+		Route::get('/{chapter}/overview', 'ChapterController@overview')->Name('overview_chapter');
 		Route::get('/{chapter}/{page?}', 'ChapterController@show')->Name('show_chapter');
 	});
 //End Chapter controller routes
