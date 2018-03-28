@@ -14,6 +14,8 @@
 	@include('partials.navbar.components.right.collection')
 	@include('partials.navbar.components.right.chapter')
 	
+	@include('partials.navbar.components.right.language')
+	
 	@include('partials.navbar.components.right.tagObjects.artist')
 	@include('partials.navbar.components.right.tagObjects.character')
 	@include('partials.navbar.components.right.tagObjects.series')

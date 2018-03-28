@@ -13,6 +13,7 @@
  Series</a></li>
 		<li><a href="{{ route('index_tag') }}"><i class="fa fa-tags" aria-hidden="true"></i>
  Tag</a></li>
+		<li><a href="{{route('index_language')}}">Language</a></li>
 		<h6 class="dropdown-header">Aliases</h6>
 		<li><a href="{{ route('index_artist_alias') }}"><i class="fa fa-paint-brush" aria-hidden="true"></i>
  Artist Aliases</a></li>

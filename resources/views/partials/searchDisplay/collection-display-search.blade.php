@@ -195,7 +195,9 @@
 												'componentNot' => $language['not'],
 												'componentSpanClass' => 'language_tag',
 												'notComponentSpanClass' => 'not_language_tag',
-												'componentToken' => 'language'])
+												'componentToken' => 'language',
+												'componentRouteName' => 'show_language',
+												'componentObjectName' => 'language'])
 								@endforeach
 							</div>
 						</div>

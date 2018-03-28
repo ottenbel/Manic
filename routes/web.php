@@ -48,6 +48,18 @@
 	});
 //End Chapter controller routes
 
+//Language controller routes
+	Route::prefix('language')->group(function () {
+		Route::get('/', 'LanguageController@index')->Name('index_language');
+		Route::get('/create', 'LanguageController@create')->Name('create_language');
+		Route::post('/', 'LanguageController@store')->Name('store_language');
+		Route::get('/{language}/edit', 'LanguageController@edit')->Name('edit_language');
+		Route::patch('/{language}', 'LanguageController@update')->Name('update_language');
+		Route::delete('/{language}', 'LanguageController@destroy')->Name('delete_language');
+		Route::get('/{language}', 'LanguageController@show')->Name('show_language');
+	});
+//End Language controller routes
+
 Route::namespace('TagObjects\Tag')->group(function () {
 	//Tag controller routes
 		Route::prefix('tag')->group(function () {

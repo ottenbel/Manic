@@ -41,20 +41,21 @@ class PlaceholderController extends WebController
 			$placeholderValues = ConfigurationPlaceholder::where('user_id', '=', null)->orderBy('priority')->get();
 		}
 		
-		$artists = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'artist');});
-		$characters = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'character');});
-		$scanalators = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'scanalator');});
-		$series = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'series');});
-		$tags = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'tag');});
-		$collections = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'collection');});
-		$volumes = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'volume');});
-		$chapters = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'chapter');});
-		$permissions = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'permission');});
-		$roles = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'role');});
+		$artists = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'artist');});
+		$characters = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'character');});
+		$scanalators = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'scanalator');});
+		$series = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'series');});
+		$tags = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'tag');});
+		$collections = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'collection');});
+		$volumes = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'volume');});
+		$chapters = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'chapter');});
+		$permissions = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'permission');});
+		$roles = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'role');});
+		$languages = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'language');});
 		
 		$messages = self::GetFlashedMessages($request);
 		
-		return View('configuration.placeholder.edit', array('artists' => $artists, 'characters' => $characters, 'scanalators' => $scanalators, 'series' => $series, 'tags' => $tags, 'collections' => $collections, 'volumes' => $volumes, 'chapters' => $chapters, 'permissions' => $permissions, 'roles' => $roles, 'messages' => $messages));
+		return View('configuration.placeholder.edit', array('artists' => $artists, 'characters' => $characters, 'scanalators' => $scanalators, 'series' => $series, 'tags' => $tags, 'collections' => $collections, 'volumes' => $volumes, 'chapters' => $chapters, 'permissions' => $permissions, 'roles' => $roles, 'languages' => $languages, 'messages' => $messages));
     }
 
     /**

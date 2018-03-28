@@ -44,33 +44,23 @@
 		<br/>
 		{{ $tagObjects->links() }}
 	@else
-		@can('create', $classModelPath)
-			<br/>
-			<div class="text-center">
-				@if($list_type == "usage")
-					<p>No {{$tagObjectNames}} associated with a {{$associatedType}} have been found in the database. </p>
-					
-					<p>Add a new {{$tagObjectName}} <a href = "{{route($createRoute)}}">here</a> or try listing {{$tagObjectNames}} by alphabetical order to find any not associated with a {{$associatedType}}.</p>
-				@elseif ($list_type == "alphabetic")
-					<p>No {{$tagObjectNames}} have been found in the database. </p>
-					
-					<p>Add a new {{$tagObjectName}} <a href = "{{route($createRoute)}}">here</a>.</p>
-					
-				@endif
-			</div>
-		@endcan
 		
-		@cannot('create', $classModelPath)
-			<br/>
-			<div class="text-center">
+		<br/>
+		<div class="text-center">
 			@if($list_type == "usage")
 				<p>No {{$tagObjectNames}} associated with a {{$associatedType}} have been found in the database. </p>
-			
+				
 				<p>Try listing {{$tagObjectNames}} by alphabetical order to find any not associated with a {{$associatedType}}.</p>
+				
+				@can('create', $classModelPath)
+					<p>Add a new {{$tagObjectName}} <a href = "{{route($createRoute)}}">here</a>.</p>
+				@endcan
 			@elseif ($list_type == "alphabetic")
-				<p>No {{$tagObjectNames}} associated with a {{$associatedType}} have been found in the database.</p>
+				<p>No {{$tagObjectNames}} have been found in the database. </p>
+				@can('create', $classModelPath)
+					<p>Add a new {{$tagObjectName}} <a href = "{{route($createRoute)}}">here</a>.</p>
+				@endcan
 			@endif
-			</div>
-		@endcan
+		</div>
 	@endif
 </div>
