@@ -22,6 +22,11 @@ class ArtistController extends TagObjectController
 {
 	public function __construct()
     {
+		$this->paginationKey = "pagination_artists_per_page_index";
+		$this->aliasesPaginationKey = "pagination_artist_aliases_per_page_parent";
+		$this->placeholderStub = "artist";
+		$this->placeheldFields = array('name', 'short_description', 'description', 'source', 'child');
+		
 		$this->middleware('auth')->except(['index', 'show']);
 		$this->middleware('permission:Create Artist')->only(['create', 'store']);
 		$this->middleware('permission:Edit Artist')->only(['edit', 'update']);
@@ -31,14 +36,14 @@ class ArtistController extends TagObjectController
     public function index(Request $request)
     {		
 		$artists = new artist();
-		return self::GetTagObjectIndex($request, $artists, 'artistsPerPageIndex', 'artists', 'artist_collection', 'artist_id');
+		return $this->GetTagObjectIndex($request, $artists, 'artistsPerPageIndex', 'artists', 'artist_collection', 'artist_id');
     }
 
     public function create(Request $request)
     {
 		$this->authorize(Artist::class);	
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration('artist');
+		$configurations = $this->GetConfiguration();
 		return View('tagObjects.artists.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
@@ -50,14 +55,14 @@ class ArtistController extends TagObjectController
 
     public function show(Request $request, Artist $artist)
     {
-        return self::GetArtistToDisplay($request, $artist, 'show');
+        return $this->GetArtistToDisplay($request, $artist, 'show');
     }
 
     public function edit(Request $request, Artist $artist)
     {
 		$this->authorize($artist);
-		$configurations = self::GetConfiguration('artist');
-		return self::GetArtistToDisplay($request, $artist, 'edit', $configurations);
+		$configurations = $this->GetConfiguration();
+		return $this->GetArtistToDisplay($request, $artist, 'edit', $configurations);
     }
 	
     public function update(UpdateArtistRequest $request, Artist $artist)
@@ -106,13 +111,12 @@ class ArtistController extends TagObjectController
 		}
 	}
 	
-	private static function GetArtistToDisplay($request, $artist, $route, $configurations = null)
+	private function GetArtistToDisplay($request, $artist, $route, $configurations = null)
 	{
 		$messages = self::GetFlashedMessages($request);
 		$aliasOrdering = self::GetAliasShowOrdering($request);
 		
-		$lookupKey = Config::get('constants.keys.pagination.artistAliasesPerPageParent');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->aliasesPaginationKey)->value;
 		
 		$globalAliases = $artist->aliases()->where('user_id', '=', null)->orderBy('alias', $aliasOrdering['global'])->paginate($paginationCount, ['*'], 'global_alias_page');
 		$globalAliases->appends(Input::except('global_alias_page'));

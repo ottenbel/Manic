@@ -23,6 +23,11 @@ class CharacterController extends TagObjectController
 {
 	public function __construct()
     {
+		$this->paginationKey = "pagination_characters_per_page_index";
+		$this->aliasesPaginationKey = "pagination_character_aliases_per_page_parent";
+		$this->placeholderStub = "character";
+		$this->placeheldFields = array('name', 'short_description', 'description', 'source', 'parent', 'child');
+		
 		$this->middleware('auth')->except(['index', 'show']);
 		$this->middleware('permission:Create Character')->only(['create', 'store']);
 		$this->middleware('permission:Edit Character')->only(['edit', 'update']);
@@ -32,14 +37,14 @@ class CharacterController extends TagObjectController
     public function index(Request $request)
     {
 		$characters = new Character();
-		return self::GetTagObjectIndex($request, $characters, 'charactersPerPageIndex', 'characters', 'character_collection', 'character_id');
+		return $this->GetTagObjectIndex($request, $characters, 'charactersPerPageIndex', 'characters', 'character_collection', 'character_id');
     }
 
     public function create(Request $request, Series $series = null)
     {
 		$this->authorize(Character::class);	
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration('character');
+		$configurations = $this->GetConfiguration();
 		return View('tagObjects.characters.create', array('configurations' => $configurations, 'series' => $series, 'messages' => $messages));
     }
 
@@ -60,14 +65,14 @@ class CharacterController extends TagObjectController
 
     public function show(Request $request, Character $character)
     {
-        return self::GetCharacterToDisplay($request, $character, 'show');
+        return $this->GetCharacterToDisplay($request, $character, 'show');
     }
 
     public function edit(Request $request, Character $character)
     {
 		$this->authorize($character);
-		$configurations = self::GetConfiguration('character');
-        return self::GetCharacterToDisplay($request, $character, 'edit', $configurations);
+		$configurations = $this->GetConfiguration();
+        return $this->GetCharacterToDisplay($request, $character, 'edit', $configurations);
     }
 
     public function update(UpdateCharacterRequest $request, Character $character)
@@ -132,13 +137,12 @@ class CharacterController extends TagObjectController
 		}
 	}
 	
-	private static function GetCharacterToDisplay($request, $character, $route, $configurations = null)
+	private function GetCharacterToDisplay($request, $character, $route, $configurations = null)
 	{
 		$messages = self::GetFlashedMessages($request);
 		$aliasOrdering = self::GetAliasShowOrdering($request);
 		
-		$lookupKey = Config::get('constants.keys.pagination.characterAliasesPerPageParent');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->aliasesPaginationKey)->value;
 		
 		$globalAliases = $character->aliases()->where('user_id', '=', null)->orderBy('alias', $aliasOrdering['global'])->paginate($paginationCount, ['*'], 'global_alias_page');
 		$globalAliases->appends(Input::except('global_alias_page'));

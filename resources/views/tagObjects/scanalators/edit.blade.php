@@ -35,7 +35,7 @@ Edit Scanalator - {{{$scanalator->name}}}
 			'tagObject' => $scanalator, 
 			'child' => 'scanalator_child',
 			'namePlaceholder' => $configurations['name'], 
-			'shortDescriptionPlaceholder' => $configurations['shortDescription'],
+			'shortDescriptionPlaceholder' => $configurations['short_description'],
 			'descriptionPlaceholder' => $configurations['description'], 
 			'sourcePlaceholder' => $configurations['source'],
 			'childPlaceholder' => $configurations['child']

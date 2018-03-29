@@ -3,9 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 
 class WebController extends Controller
 {
+	protected $paginationKey;
+	protected $placeholderStub;
+	protected $placeheldFields;
+	
+	protected function GetConfiguration()
+	{
+		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', $this->placeholderStub.'%')->get();
+		$configurationsArray = [];
+		
+		foreach ($this->placeheldFields as $key)
+		{
+			$value = $configurations->where('key', '=', $this->placeholderStub.'_'.$key)->first();
+			$configurationsArray = array_merge($configurationsArray, [$key => $value]);
+		}
+		
+		return $configurationsArray;
+	}
+	
 	protected static function GetFlashedMessages(Request $request)
 	{
 		$messages = $request->session()->get('messages');

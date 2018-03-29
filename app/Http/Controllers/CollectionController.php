@@ -28,6 +28,10 @@ class CollectionController extends WebController
 {
 	public function __construct()
     {
+		$this->paginationKey = "pagination_collections_per_page_index";
+		$this->placeholderStub = "collection";
+		$this->placeheldFields = array('cover', 'name', 'description', 'parent', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_characters', 'secondary_characters', 'primary_tags', 'secondary_tags', 'canonical', 'language', 'rating', 'status');
+		
 		$this->middleware('auth')->except(['index', 'show']);
 		$this->middleware('canInteractWithCollection')->except(['index', 'create', 'store']);
 		$this->middleware('permission:Create Collection')->only(['create', 'store']);
@@ -69,8 +73,7 @@ class CollectionController extends WebController
 		if ($search_string ==  "")
 		{
 			//Get all relevant collections
-			$lookupKey = Config::get('constants.keys.pagination.collectionsPerPageIndex');
-			$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+			$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->paginationKey)->value;
 		
 			$collections = $collections->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
 			$collections->appends(Input::except('page'));
@@ -89,7 +92,7 @@ class CollectionController extends WebController
 		$this->authorize(Collection::class);
 		$messages = self::GetFlashedMessages($request);
 		$dropdowns = self::GetDropdowns();
-		$configurations = self::GetConfiguration();
+		$configurations = $this->GetConfiguration();
 		
 		return View('collections.create', array('configurations' => $configurations, 'ratings' => $dropdowns['ratings'], 'statuses' => $dropdowns['statuses'], 'languages' => $dropdowns['languages'], 'messages' => $messages));
     }
@@ -137,7 +140,7 @@ class CollectionController extends WebController
     {
 		$this->authorize($collection);
 		$messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
+		$configurations = $this->GetConfiguration();
         $dropdowns = self::GetDropdowns();
 		$collection->load('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
 		
@@ -328,20 +331,5 @@ class CollectionController extends WebController
 		$languages = Language::orderBy('name', 'asc')->get()->pluck('name', 'id');
 		
 		return ['ratings' => $ratings, 'statuses' => $statuses, 'languages' => $languages];
-	}
-	
-	private static function GetConfiguration()
-	{
-		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'collection%')->get();
-		$keys = ['cover', 'name', 'description', 'parent', 'primaryArtists', 'secondaryArtists', 'primarySeries', 'secondarySeries', 'primaryCharacters', 'secondaryCharacters', 'primaryTags', 'secondaryTags', 'canonical', 'language', 'rating', 'status'];
-		$configurationsArray = [];
-		
-		foreach ($keys as $key)
-		{
-			$value = $configurations->where('key', '=', Config::get('constants.keys.placeholders.collection.'.$key))->first();
-			$configurationsArray = array_merge($configurationsArray, [$key => $value]);
-		}
-		
-		return $configurationsArray;
 	}
 }

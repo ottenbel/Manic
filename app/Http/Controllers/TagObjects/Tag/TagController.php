@@ -21,6 +21,11 @@ class TagController extends TagObjectController
 {
 	public function __construct()
     {
+		$this->paginationKey = "pagination_tags_per_page_index";
+		$this->aliasesPaginationKey = "pagination_tag_aliases_per_page_parent";
+		$this->placeholderStub = "tag";
+		$this->placeheldFields = array('name', 'short_description', 'description', 'source', 'child');
+		
 		$this->middleware('auth')->except(['index', 'show']);
 		$this->middleware('permission:Create Tag')->only(['create', 'store']);
 		$this->middleware('permission:Edit Tag')->only(['edit', 'update']);
@@ -30,14 +35,16 @@ class TagController extends TagObjectController
     public function index(Request $request)
     {
 		$tags = new Tag();
-		return self::GetTagObjectIndex($request, $tags, 'tagsPerPageIndex', 'tags', 'collection_tag', 'tag_id');
+		return $this->GetTagObjectIndex($request, $tags, 'tagsPerPageIndex', 'tags', 'collection_tag', 'tag_id');
     }
 
     public function create(Request $request)
     {
 		$this->authorize(Tag::class);	
+		
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration('tag');
+		$configurations = $this->GetConfiguration();
+		
 		return View('tagObjects.tags.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
@@ -49,15 +56,16 @@ class TagController extends TagObjectController
 	
     public function show(Request $request, Tag $tag)
     {
-        return self::GetTagToDisplay($request, $tag, 'show');
+        return $this->GetTagToDisplay($request, $tag, 'show');
     }
 
     public function edit(Request $request, Tag $tag)
     {
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($tag);
-		$configurations = self::GetConfiguration('tag');
-		return self::GetTagToDisplay($request, $tag, 'edit', $configurations);
+		
+		$configurations = $this->GetConfiguration();
+		return $this->GetTagToDisplay($request, $tag, 'edit', $configurations);
     }
 
     public function update(UpdateTagRequest $request, Tag $tag)
@@ -106,13 +114,12 @@ class TagController extends TagObjectController
 		}
 	}
 	
-	private static function GetTagToDisplay($request, $tag, $route, $configurations = null)
+	private function GetTagToDisplay($request, $tag, $route, $configurations = null)
 	{
 		$messages = self::GetFlashedMessages($request);
 		$aliasOrdering = self::GetAliasShowOrdering($request);
 		
-		$lookupKey = Config::get('constants.keys.pagination.tagAliasesPerPageParent');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->aliasesPaginationKey)->value;
 		
 		$globalAliases = $tag->aliases()->where('user_id', '=', null)->orderBy('alias', $aliasOrdering['global'])->paginate($paginationCount, ['*'], 'global_alias_page');
 		$globalAliases->appends(Input::except('global_alias_page'));

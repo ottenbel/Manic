@@ -1,10 +1,10 @@
 <div class="form-group">
 	{{ Form::label('name', 'Name') }}
-	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configuration->description}}"></i>
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configuration['name']->description}}"></i>
 	@if((!empty($role)) && ($role->name != null) && (Input::old('name') == null))
-		{{ Form::text('name', $role->name, array('class' => 'form-control', 'placeholder' => $configuration->value)) }}
+		{{ Form::text('name', $role->name, array('class' => 'form-control', 'placeholder' => $configuration['name']->value)) }}
 	@else
-		{{ Form::text('name', Input::old('name'), array('class' => 'form-control', 'placeholder' => $configuration->value)) }}
+		{{ Form::text('name', Input::old('name'), array('class' => 'form-control', 'placeholder' => $configuration['name']->value)) }}
 	@endif
 	@if($errors->has('name'))
 		<div class ="alert alert-danger" id="name_errors">{{$errors->first('name')}}</div>

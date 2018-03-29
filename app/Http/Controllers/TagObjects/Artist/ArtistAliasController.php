@@ -12,6 +12,8 @@ class ArtistAliasController extends TagObjectAliasController
 {
 	public function __construct()
     {
+		$this->paginationKey = "pagination_artist_aliases_per_page_index";
+		
 		$this->middleware('auth')->except('index');
 		$this->middleware('permission:Create Personal Artist Alias|Create Global Artist Alias')->only(['create', 'store']);
 		$this->middleware('permission:Delete Personal Artist Alias|Delete Global Artist Alias')->only('destroy');
@@ -20,7 +22,7 @@ class ArtistAliasController extends TagObjectAliasController
     public function index(Request $request)
     {	
 		$aliases = new ArtistAlias();
-		return self::GetAliasIndex($request, $aliases, 'artistAliasesPerPageIndex', 'artists');
+		return self::GetAliasIndex($request, $aliases, $this->paginationKey, 'artists');
     }
 
     public function store(StoreArtistAliasRequest $request, Artist $artist)

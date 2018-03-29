@@ -21,6 +21,11 @@ class ScanalatorController extends TagObjectController
 {
 	public function __construct()
     {
+		$this->paginationKey = "pagination_scanalators_per_page_index";
+		$this->aliasesPaginationKey = "pagination_scanalator_aliases_per_page_parent";
+		$this->placeholderStub = "scanalator";
+		$this->placeheldFields = array('name', 'short_description', 'description', 'source', 'child');
+		
 		$this->middleware('auth')->except(['index', 'show']);
 		$this->middleware('permission:Create Scanalator')->only(['create', 'store']);
 		$this->middleware('permission:Edit Scanalator')->only(['edit', 'update']);
@@ -30,14 +35,14 @@ class ScanalatorController extends TagObjectController
     public function index(Request $request)
     {
 		$scanalators = new Scanalator();
-		return self::GetTagObjectIndex($request, $scanalators, 'scanalatorsPerPageIndex', 'scanalators', 'chapter_scanalator', 'scanalator_id');
+		return $this->GetTagObjectIndex($request, $scanalators, 'scanalatorsPerPageIndex', 'scanalators', 'chapter_scanalator', 'scanalator_id');
     }
 
     public function create(Request $request)
     {
 		$this->authorize(Scanalator::class);	
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration('scanalator');
+		$configurations = $this->GetConfiguration();
 		return View('tagObjects.scanalators.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
@@ -49,14 +54,14 @@ class ScanalatorController extends TagObjectController
 
     public function show(Request $request, Scanalator $scanalator)
     {
-        return self::GetScanalatorToDisplay($request, $scanalator, 'show');
+        return $this->GetScanalatorToDisplay($request, $scanalator, 'show');
     }
 
     public function edit(Request $request, Scanalator $scanalator)
     {
 		$this->authorize($scanalator);
-		$configurations = self::GetConfiguration('scanalator');
-        return self::GetScanalatorToDisplay($request, $scanalator, 'edit', $configurations);
+		$configurations = $this->GetConfiguration();
+        return $this->GetScanalatorToDisplay($request, $scanalator, 'edit', $configurations);
     }
 
     public function update(UpdateScanalatorRequest $request, Scanalator $scanalator)
@@ -105,13 +110,12 @@ class ScanalatorController extends TagObjectController
 		}
 	}
 	
-	private static function GetScanalatorToDisplay($request, $scanalator, $route, $configurations = null)
+	private function GetScanalatorToDisplay($request, $scanalator, $route, $configurations = null)
 	{
 		$messages = self::GetFlashedMessages($request);
 		$aliasOrdering = self::GetAliasShowOrdering($request);
 		
-		$lookupKey = Config::get('constants.keys.pagination.scanalatorAliasesPerPageParent');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->aliasesPaginationKey)->value;
 		
 		$global_aliases = $scanalator->aliases()->where('user_id', '=', null)->orderBy('alias', $aliasOrdering['global'])->paginate($paginationCount, ['*'], 'global_alias_page');
 		$global_aliases->appends(Input::except('global_alias_page'));

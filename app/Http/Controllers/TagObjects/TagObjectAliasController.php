@@ -104,8 +104,7 @@ class TagObjectAliasController extends WebController
 	
 	private static function GetAliases($aliases, $aliasListType, $aliasListOrder, $paginationKey)
 	{
-		$lookupKey = Config::get('constants.keys.pagination.'.$paginationKey);
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($paginationKey)->value;
 		
 		if (Auth::user())
 		{

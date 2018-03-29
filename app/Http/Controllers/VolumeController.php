@@ -21,6 +21,9 @@ class VolumeController extends WebController
 {
 	public function __construct()
     {
+		$this->placeholderStub = "volume";
+		$this->placeheldFields = array('cover', 'number', 'name');
+		
 		$this->middleware('auth');
 		$this->middleware('permission:Create Volume')->only(['create', 'store']);
 		$this->middleware('canInteractWithCollection')->only('create');
@@ -35,7 +38,7 @@ class VolumeController extends WebController
 		$this->authorize(Volume::class);
 		
 		$messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration($collection);
+		$configurations = $this->GetConfiguration($collection);
 		
         return View('volumes.create', array('configurations' => $configurations, 'collection' => $collection, 'messages' => $messages));
     }
@@ -96,7 +99,7 @@ class VolumeController extends WebController
 		$this->authorize($volume);
 		
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
+		$configurations = $this->GetConfiguration();
 		
         return View('volumes.edit', array('configurations' => $configurations, 'volume' => $volume, 'messages' => $messages));
     }
@@ -224,23 +227,14 @@ class VolumeController extends WebController
 		}
 	}
 	
-	private static function GetConfiguration($collection = null)
+	protected function GetConfiguration($collection = null)
 	{
-		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'volume%')->get();
+		$configurationsArray = parent::GetConfiguration();
 		
-		$cover = $configurations->where('key', '=', Config::get('constants.keys.placeholders.volume.cover'))->first();
-		$number = $configurations->where('key', '=', Config::get('constants.keys.placeholders.volume.number'))->first();
 		if (($collection != null) && ($collection->volumes->count() > 0))
 		{
-			$number->value = $collection->volumes->last()->volume_number + 1;
+			$configurationsArray['number']->value = $collection->volumes->last()->volume_number + 1;
 		}
-		else
-		{
-			$number->value = 1;
-		}
-		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.volume.name'))->first();
-		
-		$configurationsArray = array('cover' => $cover, 'number' => $number, 'name' => $name);
 		
 		return $configurationsArray;
 	}

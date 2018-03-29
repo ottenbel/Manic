@@ -25,6 +25,9 @@ class ChapterController extends WebController
 {
 	public function __construct()
     {
+		$this->placeholderStub = "chapter";
+		$this->placeheldFields = array('volume', 'number', 'name', 'primary_scanalators', 'secondary_scanalators', 'source', 'images');
+		
 		$this->middleware('auth')->except(['show', 'overview']);
 		$this->middleware('permission:Create Chapter')->only(['create', 'store']);
 		$this->middleware('canInteractWithCollection')->only('create');
@@ -39,7 +42,7 @@ class ChapterController extends WebController
 		$this->authorize(Chapter::class);
 		
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
+		$configurations = $this->GetConfiguration();
 		
 		$volumes = $collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
 		{
@@ -225,7 +228,7 @@ class ChapterController extends WebController
 		$this->authorize($chapter);
 		
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
+		$configurations = $this->GetConfiguration();
 		
 		$volumesArray = json_encode($chapter->collection->volumes()->pluck('id'));
 		
@@ -407,21 +410,5 @@ class ChapterController extends WebController
 			
 			return Redirect::back()->with(["messages" => $messages]);
 		}
-	}
-	
-	private static function GetConfiguration()
-	{
-		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'chapter%')->get();
-		
-		$keys = ['volume', 'number', 'name', 'scanalatorPrimary', 'scanalatorSecondary', 'source', 'images'];
-		$configurationsArray = [];
-		
-		foreach ($keys as $key)
-		{
-			$value = $configurations->where('key', '=', Config::get('constants.keys.placeholders.chapter.'.$key))->first();
-			$configurationsArray = array_merge($configurationsArray, [$key => $value]);
-		}
-		
-		return $configurationsArray;
 	}
 }

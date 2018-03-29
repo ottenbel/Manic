@@ -17,6 +17,10 @@ class PermissionsController extends WebController
 {
 	public function __construct()
     {
+		$this->paginationKey = "pagination_permissions_per_page_index";
+		$this->placeholderStub = "permission";
+		$this->placeheldFields = array('name');
+		
 		$this->middleware('auth');
 	}
 	
@@ -28,8 +32,8 @@ class PermissionsController extends WebController
     public function index(Request $request)
 	{
 		$messages = self::GetFlashedMessages($request);
-		$lookupKey = Config::get('constants.keys.pagination.permissionsPerPageIndex');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->paginationKey)->value;
 		
 		$permissions = new Permission();
 		$permissions = $permissions->orderby('id', 'asc')->paginate($paginationCount);
@@ -40,8 +44,10 @@ class PermissionsController extends WebController
 	public function create(Request $request)
     {
 		$this->authorize(Permission::class);
+		
 		$messages = self::GetFlashedMessages($request);
-		$configuration = Auth::user()->placeholder_configuration()->where('key', 'like', 'permission%')->first();
+		$configuration = $this->GetConfiguration();
+		
 		return View('rolesAndPermissions.permissions.create', array('configuration' => $configuration, 'messages' => $messages));
 	}
 	
@@ -69,8 +75,10 @@ class PermissionsController extends WebController
 	public function edit(Request $request, Permission $permission)
     {
 		$this->authorize($permission);
+		
 		$messages = self::GetFlashedMessages($request);
-		$configuration = Auth::user()->placeholder_configuration()->where('key', 'like', 'permission%')->first();
+		$configuration = $this->GetConfiguration();
+		
 		return View('rolesAndPermissions.permissions.edit', array('permission' => $permission, 'configuration' => $configuration, 'messages' => $messages));
 	}
 	

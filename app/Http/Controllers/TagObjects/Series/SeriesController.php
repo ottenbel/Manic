@@ -19,8 +19,16 @@ use App\Http\Requests\TagObjects\Series\UpdateSeriesRequest;
 
 class SeriesController extends TagObjectController
 {
+	protected $childCharactersPaginationKey;
+	
 	public function __construct()
     {
+		$this->paginationKey = "pagination_series_per_page_index";
+		$this->aliasesPaginationKey = "pagination_series_aliases_per_page_parent";
+		$this->childCharactersPaginationKey = "pagination_characters_per_page_series";
+		$this->placeholderStub = "series";
+		$this->placeheldFields = array('name', 'short_description', 'description', 'source', 'child');
+		
 		$this->middleware('auth')->except(['index', 'show']);
 		$this->middleware('permission:Create Series')->only(['create', 'store']);
 		$this->middleware('permission:Edit Series')->only(['edit', 'update']);
@@ -30,14 +38,14 @@ class SeriesController extends TagObjectController
     public function index(Request $request)
     {
 		$series = new Series();
-		return self::GetTagObjectIndex($request, $series, 'seriesPerPageIndex', 'series', 'collection_series', 'series_id');
+		return $this->GetTagObjectIndex($request, $series, 'seriesPerPageIndex', 'series', 'collection_series', 'series_id');
     }
 
     public function create(Request $request)
     {
 		$this->authorize(Series::class);	
         $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration('series');
+		$configurations = $this->GetConfiguration();
 		return View('tagObjects.series.create', array('configurations' => $configurations, 'messages' => $messages));
     }
 
@@ -59,8 +67,7 @@ class SeriesController extends TagObjectController
 		$aliasOrdering = self::GetAliasShowOrdering($request);
 		$characterOrdering = self::GetCharacterShowOrdering($request);
 		
-		$lookupKey = Config::get('constants.keys.pagination.charactersPerPageSeries');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->childCharactersPaginationKey)->value;
 		
 		if ($characterOrdering['type'] == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
 		{
@@ -77,8 +84,7 @@ class SeriesController extends TagObjectController
 			$characters = $characters_used;
 		}
 		
-		$lookupKey = Config::get('constants.keys.pagination.seriesAliasesPerPageParent');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->aliasesPaginationKey)->value;
 		
 		$global_aliases = $series->aliases()->where('user_id', '=', null)->orderBy('alias', $aliasOrdering['global'])->paginate($paginationCount, ['*'], 'global_alias_page');
 		$global_aliases->appends(Input::except('global_alias_page'));
@@ -104,13 +110,12 @@ class SeriesController extends TagObjectController
     {
 		//Define authorization in the controller as the show route can be viewed by guests. Authorizing the full resource conroller causes problems with that [requires the user to login])
 		$this->authorize($series);
-		$configurations = self::GetConfiguration('series');
+		$configurations = $this->GetConfiguration();
 				
         $messages = self::GetFlashedMessages($request);
 		$aliasOrdering = self::GetAliasShowOrdering($request);
 		
-		$lookupKey = Config::get('constants.keys.pagination.seriesAliasesPerPageParent');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->aliasesPaginationKey)->value;
 		
 		$global_aliases = $series->aliases()->where('user_id', '=', null)->orderBy('alias', $aliasOrdering['global'])->paginate($paginationCount, ['*'], 'global_alias_page');
 		$global_aliases->appends(Input::except('global_alias_page'));

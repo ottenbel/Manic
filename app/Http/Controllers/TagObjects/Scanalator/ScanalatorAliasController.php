@@ -12,6 +12,8 @@ class ScanalatorAliasController extends TagObjectAliasController
 {
 	public function __construct()
     {
+		$this->paginationKey = "pagination_scanalator_aliases_per_page_index";
+		
 		$this->middleware('auth')->except('index');
 		$this->middleware('permission:Create Personal Scanalator Alias|Create Global Scanalator Alias')->only(['create', 'store']);
 		$this->middleware('permission:Delete Personal Scanalator Alias|Delete Global Scanalator Alias')->only('destroy');
@@ -20,7 +22,7 @@ class ScanalatorAliasController extends TagObjectAliasController
     public function index(Request $request)
     {
 		$aliases = new ScanalatorAlias();
-		return self::GetAliasIndex($request, $aliases, 'scanalatorAliasesPerPageIndex', 'scanalators');
+		return self::GetAliasIndex($request, $aliases, $this->paginationKey, 'scanalators');
     }
 
     public function store(StoreScanalatorAliasRequest $request, Scanalator $scanalator)

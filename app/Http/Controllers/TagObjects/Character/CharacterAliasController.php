@@ -12,6 +12,8 @@ class CharacterAliasController extends TagObjectAliasController
 {
 	public function __construct()
     {
+		$this->paginationKey = "pagination_character_aliases_per_page_index";
+		
 		$this->middleware('auth')->except('index');
 		$this->middleware('permission:Create Personal Character Alias|Create Global Character Alias')->only(['create', 'store']);
 		$this->middleware('permission:Delete Personal Character Alias|Delete Global Character Alias')->only('destroy');
@@ -20,7 +22,7 @@ class CharacterAliasController extends TagObjectAliasController
     public function index(Request $request)
     {
 		$aliases = new CharacterAlias();
-		return self::GetAliasIndex($request, $aliases, 'characterAliasesPerPageIndex', 'characters');
+		return self::GetAliasIndex($request, $aliases, $this->paginationKey, 'characters');
     }
 	
     public function store(StoreCharacterAliasRequest $request, Character $character)

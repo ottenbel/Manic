@@ -36,7 +36,7 @@ Edit Tag - {{{$tag->name}}}
 				'tagObject' => $tag, 
 				'child' => 'tag_child',
 				'namePlaceholder' => $configurations['name'], 
-				'shortDescriptionPlaceholder' => $configurations['shortDescription'],
+				'shortDescriptionPlaceholder' => $configurations['short_description'],
 				'descriptionPlaceholder' => $configurations['description'], 
 				'sourcePlaceholder' => $configurations['source'],
 				'childPlaceholder' => $configurations['child']

@@ -19,6 +19,10 @@ class RolesController extends WebController
 {
 	public function __construct()
     {
+		$this->paginationKey = "pagination_roles_per_page_index";
+		$this->placeholderStub = "role";
+		$this->placeheldFields = array('name');
+		
 		$this->middleware('auth');
 	}
 	
@@ -30,8 +34,7 @@ class RolesController extends WebController
     public function index(Request $request)
 	{
 		$messages = self::GetFlashedMessages($request);
-		$lookupKey = Config::get('constants.keys.pagination.rolesPerPageIndex');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->paginationKey)->value;
 		
 		$roles = new Role();
 		$roles = $roles->orderby('id', 'asc')->paginate($paginationCount);
@@ -43,10 +46,12 @@ class RolesController extends WebController
 	public function create(Request $request)
     {
 		$this->authorize(Role::class);
+		
 		$messages = self::GetFlashedMessages($request);
-		$configuration = Auth::user()->placeholder_configuration()->where('key', 'like', 'role%')->first();
+		$configuration = $this->GetConfiguration();
 		$permissions = new Permission();
 		$permissions = $permissions->orderby('id', 'asc')->get(); //Update the permissions array to include some boolean that shows whether or not the user has it
+		
 		return View('rolesAndPermissions.roles.create', array('permissions' => $permissions, 'configuration' => $configuration, 'messages' => $messages));
 	}
 	
@@ -103,8 +108,9 @@ class RolesController extends WebController
 	public function edit(Request $request, Role $role)
     {
 		$this->authorize($role);
+		
 		$messages = self::GetFlashedMessages($request);
-		$configuration = Auth::user()->placeholder_configuration()->where('key', 'like', 'role%')->first();
+		$configuration = $this->GetConfiguration();
 		
 		$permissions = new Permission();
 		$permissions = $permissions->orderby('id', 'asc')->get(); //Update the permissions array to include some boolean that shows

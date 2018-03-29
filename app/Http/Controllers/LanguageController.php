@@ -15,10 +15,6 @@ use Input;
 
 class LanguageController extends WebController
 {
-	private $paginationKey;
-	private $placeholderStub;
-	private $placeheldFields;
-	
 	public function __construct()
     {
 		$this->paginationKey = "pagination_languages_per_page_index";
@@ -127,19 +123,5 @@ class LanguageController extends WebController
 		
 		$messages = self::BuildFlashedMessagesVariable(["Successfully $action language $language->name."], null, null);
 		return redirect()->route('show_language', ['language' => $language])->with("messages", $messages);
-	}
-	
-	private function GetConfiguration()
-	{
-		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', $this->placeholderStub.'%')->get();
-		$configurationsArray = [];
-		
-		foreach ($this->placeheldFields as $key)
-		{
-			$value = $configurations->where('key', '=', $this->placeholderStub.'_'.$key)->first();
-			$configurationsArray = array_merge($configurationsArray, [$key => $value]);
-		}
-		
-		return $configurationsArray;
 	}
 }

@@ -12,6 +12,8 @@ class SeriesAliasController extends TagObjectAliasController
 {
 	public function __construct()
     {
+		$this->paginationKey = "pagination_series_aliases_per_page_index";
+		
 		$this->middleware('auth')->except('index');
 		$this->middleware('permission:Create Personal Series Alias|Create Global Series Alias')->only(['create', 'store']);
 		$this->middleware('permission:Delete Personal Series Alias|Delete Global Series Alias')->only('destroy');
@@ -20,7 +22,7 @@ class SeriesAliasController extends TagObjectAliasController
     public function index(Request $request)
     {
 		$aliases = new SeriesAlias();
-		return self::GetAliasIndex($request, $aliases, 'seriesAliasesPerPageIndex', 'series');
+		return self::GetAliasIndex($request, $aliases, $this->paginationKey, 'series');
     }
 
     public function store(StoreSeriesAliasRequest $request, Series $series)
