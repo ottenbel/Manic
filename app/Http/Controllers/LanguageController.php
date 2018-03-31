@@ -17,6 +17,8 @@ class LanguageController extends WebController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
 		$this->paginationKey = "pagination_languages_per_page_index";
 		$this->placeholderStub = "language";
 		$this->placeheldFields = array('name','description', 'url');
@@ -36,22 +38,22 @@ class LanguageController extends WebController
 			$order = Config::get('constants.sortingStringComparison.listOrder.ascending');
 		}
 		
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$paginationLanguagesPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->paginationKey)->value;
 		
 		$languages = new Language();
 		$languages = $languages->orderBy('name', $order)->paginate($paginationLanguagesPerPageIndexCount);
 		$languages->appends(Input::except('page'));
 		
-		return View('languages.index', array('languages' => $languages, 'list_order' => $order, 'messages' => $messages));
+		return View('languages.index', array('languages' => $languages, 'list_order' => $order, 'messages' => $this->messages));
     }
 	
     public function create(Request $request)
     {
         $this->authorize(Language::class);
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$configurations = $this->GetConfiguration();
-		return View('languages.create', array('configurations' => $configurations, 'messages' => $messages));
+		return View('languages.create', array('configurations' => $configurations, 'messages' => $this->messages));
     }
 	
     public function store(StoreLanguageRequest $request)
@@ -62,19 +64,19 @@ class LanguageController extends WebController
 	
     public function show(Request $request, Language $language)
     {
-        $messages = self::GetFlashedMessages($request);
+        $this->GetFlashedMessages($request);
 		$usageCount = $language->collections()->count();
 		
-		return View('languages.show', array('language' => $language, 'usageCount' => $usageCount, 'messages' => $messages));
+		return View('languages.show', array('language' => $language, 'usageCount' => $usageCount, 'messages' => $this->messages));
     }
 
     public function edit(Request $request, Language $language)
     {
         $this->authorize($language);
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$configurations = $this->GetConfiguration();
 		
-		return View('languages.edit', array('configurations' => $configurations, 'language' => $language, 'messages' => $messages));
+		return View('languages.edit', array('configurations' => $configurations, 'language' => $language, 'messages' => $this->messages));
     }
 
     public function update(UpdateLanguageRequest $request, Language $language)
@@ -96,13 +98,13 @@ class LanguageController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully delete language $languageName."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully delete language $languageName.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully purged language $languageName from the database."], null, null);
-		return redirect()->route('index_language')->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully purged language $languageName from the database.");
+		return redirect()->route('index_language')->with("messages", $this->messages);
     }
 	
 	private function InsertOrUpdate($request, $language, $action, $errorAction)
@@ -116,12 +118,12 @@ class LanguageController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction language $language->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully $errorAction language $language->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully $action language $language->name."], null, null);
-		return redirect()->route('show_language', ['language' => $language])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully $action language $language->name.");
+		return redirect()->route('show_language', ['language' => $language])->with("messages", $this->messages);
 	}
 }

@@ -28,6 +28,8 @@ class CollectionController extends WebController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
 		$this->paginationKey = "pagination_collections_per_page_index";
 		$this->placeholderStub = "collection";
 		$this->placeheldFields = array('cover', 'name', 'description', 'parent', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_characters', 'secondary_characters', 'primary_tags', 'secondary_tags', 'canonical', 'language', 'rating', 'status');
@@ -47,7 +49,7 @@ class CollectionController extends WebController
      */
     public function index(Request $request)
     {
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$search_string = $request->query('search');
 		
 		$collections = $searchArtists = $searchCharacters = $searchScanalators = $searchSeries = $searchTags = $searchLanguages = $searchRatings = $searchStatuses = $searchCanonicity = $searchFavourites = $invalid_tokens = null; 
@@ -84,28 +86,28 @@ class CollectionController extends WebController
 			$collections->appends(Input::except('page'));
 		}
 		
-		return View('collections.index', array('collections' => $collections, 'search_artists_array' => $searchArtists, 'search_characters_array' => $searchCharacters, 'search_scanalators_array' => $searchScanalators, 'search_series_array' => $searchSeries, 'search_tags_array' => $searchTags, 'search_languages_array' => $searchLanguages, 'search_ratings_array' => $searchRatings, 'search_statues_array' => $searchStatuses, 'search_canonicity_array' => $searchCanonicity, 'search_favourites_array' => $searchFavourites, 'invalid_tokens_array' => $invalid_tokens, 'messages' => $messages));
+		return View('collections.index', array('collections' => $collections, 'search_artists_array' => $searchArtists, 'search_characters_array' => $searchCharacters, 'search_scanalators_array' => $searchScanalators, 'search_series_array' => $searchSeries, 'search_tags_array' => $searchTags, 'search_languages_array' => $searchLanguages, 'search_ratings_array' => $searchRatings, 'search_statues_array' => $searchStatuses, 'search_canonicity_array' => $searchCanonicity, 'search_favourites_array' => $searchFavourites, 'invalid_tokens_array' => $invalid_tokens, 'messages' => $this->messages));
     }
 
     public function create(Request $request)
     {
 		$this->authorize(Collection::class);
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$dropdowns = self::GetDropdowns();
 		$configurations = $this->GetConfiguration();
 		
-		return View('collections.create', array('configurations' => $configurations, 'ratings' => $dropdowns['ratings'], 'statuses' => $dropdowns['statuses'], 'languages' => $dropdowns['languages'], 'messages' => $messages));
+		return View('collections.create', array('configurations' => $configurations, 'ratings' => $dropdowns['ratings'], 'statuses' => $dropdowns['statuses'], 'languages' => $dropdowns['languages'], 'messages' => $this->messages));
     }
 
     public function store(StoreCollectionRequest $request)
     {
 		$collection = new Collection();
-		return self::InsertOrUpdate($request, $collection, 'created', 'create');
+		return $this->InsertOrUpdate($request, $collection, 'created', 'create');
     }
 	
     public function show(Request $request, Collection $collection)
     {	
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$sibling_collections = null;
 		
 		if($collection->parent_collection != null)
@@ -133,13 +135,13 @@ class CollectionController extends WebController
 			}
 		}
 		
-        return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections, 'isFavourite' => $isFavourite, 'isBlacklist' => $isBlacklisted, 'messages' => $messages));
+        return view('collections.show', array('collection' => $collection, 'sibling_collections' => $sibling_collections, 'isFavourite' => $isFavourite, 'isBlacklist' => $isBlacklisted, 'messages' => $this->messages));
     }
 
     public function edit(Request $request, Collection $collection)
     {
 		$this->authorize($collection);
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$configurations = $this->GetConfiguration();
         $dropdowns = self::GetDropdowns();
 		$collection->load('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
@@ -154,13 +156,13 @@ class CollectionController extends WebController
 			}
 		}
 		
-		return View('collections.edit', array('configurations' => $configurations, 'collection' => $collection, 'ratings' => $dropdowns['ratings'], 'statuses' => $dropdowns['statuses'], 'languages' => $dropdowns['languages'], 'isFavourite' =>$isFavourite, 'messages' => $messages));
+		return View('collections.edit', array('configurations' => $configurations, 'collection' => $collection, 'ratings' => $dropdowns['ratings'], 'statuses' => $dropdowns['statuses'], 'languages' => $dropdowns['languages'], 'isFavourite' =>$isFavourite, 'messages' => $this->messages));
     }
 
     public function update(UpdateCollectionRequest $request, Collection $collection)
     {
 		$collection->updated_by = Auth::user()->id;
-		return self::InsertOrUpdate($request, $collection, 'updated', 'update');
+		return $this->InsertOrUpdate($request, $collection, 'updated', 'update');
 	}
 
     public function destroy(Collection $collection)
@@ -179,13 +181,13 @@ class CollectionController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully delete collection $collectionName."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully delete collection $collectionName.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully purged collection $collectionName from the database."], null, null);
-		return redirect()->route('index_collection')->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully purged collection $collectionName from the database.");
+		return redirect()->route('index_collection')->with("messages", $this->messages);
     }
 	
 	/**
@@ -210,13 +212,13 @@ class CollectionController extends WebController
 		}
 		else
 		{
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to export zipped collection file."]);
+			$this->AddWarningMessage("Unable to export zipped collection file.");
 			//Return an error message saying that it couldn't create a collection export
-			return Redirect::back()->with(["messages" => $messages]);
+			return Redirect::back()->with(["messages" => $this->messages]);
 		}
 	}
 	
-	private static function InsertOrUpdate($request, $collection, $action, $errorAction)
+	private function InsertOrUpdate($request, $collection, $action, $errorAction)
 	{
 		DB::beginTransaction();
 		try
@@ -290,37 +292,36 @@ class CollectionController extends WebController
 				Storage::delete($cover->thumbnail);
 			}
 			
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction collection $collection->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully $errorAction collection $collection->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
 		//Redirect to the collection that was created
 		if (count($missingCharacters))
-		{
-			$flashedWarnings = array();
-			
+		{	
 			if (count($missingPrimaryCharacters))
 			{
+				
 				$missingPrimaryCharacters_string = "Missing primary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missingPrimaryCharacters) . ".";
 				
-				array_push($flashedWarnings, $missingPrimaryCharacters_string);
+				$this->AddWarningMessage($missingPrimaryCharacters_string);
 			}
 			
 			if (count($missingSecondaryCharacters))
 			{
 				$missingSecondaryCharacters_string = "Missing secondary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missingSecondaryCharacters) . ".";
 				
-				array_push($flashedWarnings, $missingSecondaryCharacters_string);
+				$this->AddWarningMessage($missingSecondaryCharacters_string);
 			}
 			
-			$messages = self::BuildFlashedMessagesVariable(null, ["Partially $action collection $collection->name."], $flashedWarnings);
-			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+			$this->AddDataMessage("Partially $action collection $collection->name.");
+			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 		}
 		else
 		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully $action collection $collection->name."], null, null);
-			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+			$this->AddSuccessMessage("Successfully $action collection $collection->name.");
+			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 		}
 	}
 	

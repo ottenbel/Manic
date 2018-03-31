@@ -17,6 +17,8 @@ class PermissionsController extends WebController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
 		$this->paginationKey = "pagination_permissions_per_page_index";
 		$this->placeholderStub = "permission";
 		$this->placeheldFields = array('name');
@@ -31,24 +33,24 @@ class PermissionsController extends WebController
      */
     public function index(Request $request)
 	{
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->paginationKey)->value;
 		
 		$permissions = new Permission();
 		$permissions = $permissions->orderby('id', 'asc')->paginate($paginationCount);
 		
-		return View('rolesAndPermissions.permissions.index', array('permissions' => $permissions, 'messages' => $messages));
+		return View('rolesAndPermissions.permissions.index', array('permissions' => $permissions, 'messages' => $this->messages));
 	}
 	
 	public function create(Request $request)
     {
 		$this->authorize(Permission::class);
 		
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$configuration = $this->GetConfiguration();
 		
-		return View('rolesAndPermissions.permissions.create', array('configuration' => $configuration, 'messages' => $messages));
+		return View('rolesAndPermissions.permissions.create', array('configuration' => $configuration, 'messages' => $this->messages));
 	}
 	
 	public function store(StorePermissionRequest $request)
@@ -62,24 +64,23 @@ class PermissionsController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully create permission $permissionName."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully create permission $permissionName.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully created new permission $permissionName."], null, null);
-		
-		return redirect()->route('admin_index_permission')->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully created new permission $permissionName.");
+		return redirect()->route('admin_index_permission')->with("messages", $this->messages);
 	}
 	
 	public function edit(Request $request, Permission $permission)
     {
 		$this->authorize($permission);
 		
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$configuration = $this->GetConfiguration();
 		
-		return View('rolesAndPermissions.permissions.edit', array('permission' => $permission, 'configuration' => $configuration, 'messages' => $messages));
+		return View('rolesAndPermissions.permissions.edit', array('permission' => $permission, 'configuration' => $configuration, 'messages' => $this->messages));
 	}
 	
 	public function update(UpdatePermissionRequest $request, Permission $permission)
@@ -95,14 +96,13 @@ class PermissionsController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully update permission."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully update permission.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully updated permission."], null, null);
-		
-		return redirect()->route('admin_index_permission')->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully updated permission.");
+		return redirect()->route('admin_index_permission')->with("messages", $this->messages);
 	}
 	
 	public function destroy(Permission $permission)
@@ -116,13 +116,12 @@ class PermissionsController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully delete permission $permission->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully delete permission $permission->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully deleted permission $permission->name."], null, null);
-		
-		return redirect()->route('admin_index_permission')->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully deleted permission $permission->name.");
+		return redirect()->route('admin_index_permission')->with("messages", $this->messages);
 	}
 }

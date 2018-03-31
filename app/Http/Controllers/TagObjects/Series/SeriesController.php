@@ -23,6 +23,8 @@ class SeriesController extends TagObjectController
 	
 	public function __construct()
     {
+		parent::__construct();
+		
 		$this->paginationKey = "pagination_series_per_page_index";
 		$this->aliasesPaginationKey = "pagination_series_aliases_per_page_parent";
 		$this->childCharactersPaginationKey = "pagination_characters_per_page_series";
@@ -44,15 +46,15 @@ class SeriesController extends TagObjectController
     public function create(Request $request)
     {
 		$this->authorize(Series::class);	
-        $messages = self::GetFlashedMessages($request);
+        $this->GetFlashedMessages($request);
 		$configurations = $this->GetConfiguration();
-		return View('tagObjects.series.create', array('configurations' => $configurations, 'messages' => $messages));
+		return View('tagObjects.series.create', array('configurations' => $configurations, 'messages' => $this->messages));
     }
 
     public function store(StoreSeriesRequest $request)
     {
 		$series = new Series();
-		return self::InsertOrUpdate($request, $series, 'created', 'create');
+		return $this->InsertOrUpdate($request, $series, 'created', 'create');
     }
 
     /**
@@ -63,9 +65,9 @@ class SeriesController extends TagObjectController
      */
     public function show(Request $request, Series $series)
     {
-        $messages = self::GetFlashedMessages($request);
-		$aliasOrdering = self::GetAliasShowOrdering($request);
-		$characterOrdering = self::GetCharacterShowOrdering($request);
+        $this->GetFlashedMessages($request);
+		$aliasOrdering = $this->GetAliasShowOrdering($request);
+		$characterOrdering = $this->GetCharacterShowOrdering($request);
 		
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->childCharactersPaginationKey)->value;
 		
@@ -97,7 +99,7 @@ class SeriesController extends TagObjectController
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.series.show', array('series' => $series, 'characters' => $characters->appends(Input::except('character_page')), 'character_list_type' => $characterOrdering['type'], 'character_list_order' => $characterOrdering['order'], 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
+		return View('tagObjects.series.show', array('series' => $series, 'characters' => $characters->appends(Input::except('character_page')), 'character_list_type' => $characterOrdering['type'], 'character_list_order' => $characterOrdering['order'], 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $this->messages));
     }
 	
     /**
@@ -112,8 +114,8 @@ class SeriesController extends TagObjectController
 		$this->authorize($series);
 		$configurations = $this->GetConfiguration();
 				
-        $messages = self::GetFlashedMessages($request);
-		$aliasOrdering = self::GetAliasShowOrdering($request);
+        $this->GetFlashedMessages($request);
+		$aliasOrdering = $this->GetAliasShowOrdering($request);
 		
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->aliasesPaginationKey)->value;
 		
@@ -144,21 +146,21 @@ class SeriesController extends TagObjectController
 			}
 		}
 		
-		return View('tagObjects.series.edit', array('configurations' => $configurations, 'series' => $series, 'freeChildren' => $freeChildren, 'lockedChildren' =>$lockedChildren, 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
+		return View('tagObjects.series.edit', array('configurations' => $configurations, 'series' => $series, 'freeChildren' => $freeChildren, 'lockedChildren' =>$lockedChildren, 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $this->messages));
     }
 
     public function update(UpdateSeriesRequest $request, Series $series)
     {
-		return self::InsertOrUpdate($request, $series, 'updated', 'update');
+		return $this->InsertOrUpdate($request, $series, 'updated', 'update');
     }
 
     public function destroy(Series $series)
     {
 		$this->authorize($series);
-        return self::DestroyTagObject($series, 'series');
+        return $this->DestroyTagObject($series, 'series');
     }
 	
-	private static function InsertOrUpdate($request, $series, $action, $errorAction)
+	private function InsertOrUpdate($request, $series, $action, $errorAction)
 	{
 		DB::beginTransaction();
 		try
@@ -186,8 +188,9 @@ class SeriesController extends TagObjectController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction series $series->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			
+			$this->AddWarningMessage("Unable to successfully $errorAction series $series->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
@@ -195,14 +198,15 @@ class SeriesController extends TagObjectController
 		{	
 			$childCausingLoopsMessage = "The following series (" . implode(", ", $causedLoops) . ") were not attached as children to " . $series->name . " as their addition would cause loops in tag implication.";
 			
-			$messages = self::BuildFlashedMessagesVariable(null, ["Partially $action series $series->name."], [$childCausingLoopsMessage]);
-			return redirect()->route('show_series', ['series' => $series])->with("messages", $messages);
+			$this->AddWarningMessage($childCausingLoopsMessage);
+			$this->AddDataMessage("Partially $action series $series->name.");
+			return redirect()->route('show_series', ['series' => $series])->with("messages", $this->messages);
 		}
 		else
 		{	
-			$messages = self::BuildFlashedMessagesVariable(["Successfully $action series $series->name."], null, null);
+			$this->AddSuccessMessage("Successfully $action series $series->name.");
 			//Redirect to the series that was created
-			return redirect()->route('show_series', ['series' => $series])->with("messages", $messages);
+			return redirect()->route('show_series', ['series' => $series])->with("messages", $this->messages);
 		}
 	}
 	

@@ -17,6 +17,8 @@ class PaginationController extends WebController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
 		$this->middleware('auth');
 	}
 	
@@ -41,9 +43,9 @@ class PaginationController extends WebController
 			$paginationValues = ConfigurationPagination::where('user_id', '=', null)->orderBy('priority')->get();
 		}
 		
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		
-		return View('configuration.pagination.edit', array('paginationValues' => $paginationValues, 'messages' => $messages));
+		return View('configuration.pagination.edit', array('paginationValues' => $paginationValues, 'messages' => $this->messages));
     }
 
     /**
@@ -94,14 +96,14 @@ class PaginationController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully update pagination configuration changes to the database."]);
+			$this->AddWarningMessage("Unable to successfully update pagination configuration changes to the database.");
 			if (Route::is('user_update_configuration_pagination'))
 			{
-				return redirect()->route('user_dashboard_configuration_pagination')->with(["messages" => $messages])->withInput();
+				return redirect()->route('user_dashboard_configuration_pagination')->with(["messages" => $this->messages])->withInput();
 			}
 			else if (Route::is('admin_update_configuration_pagination'))
 			{
-				return redirect()->route('admin_dashboard_configuration_pagination')->with(["messages" => $messages])->withInput();
+				return redirect()->route('admin_dashboard_configuration_pagination')->with(["messages" => $this->messages])->withInput();
 			}
 		}
 		
@@ -109,13 +111,13 @@ class PaginationController extends WebController
 		
 		if (Route::is('user_update_configuration_pagination'))
 		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully updated pagination configuration settings for user."], null, null);
-			return redirect()->route('user_dashboard_configuration_pagination')->with("messages", $messages);
+			$this->AddSuccessMessage("Successfully updated pagination configuration settings for user.");
+			return redirect()->route('user_dashboard_configuration_pagination')->with("messages", $this->messages);
 		}
 		else if (Route::is('admin_update_configuration_pagination'))
 		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully updated pagination configuration settings for site."], null, null);
-			return redirect()->route('admin_dashboard_configuration_pagination')->with("messages", $messages);
+			$this->AddSuccessMessage("Successfully updated pagination configuration settings for site.");
+			return redirect()->route('admin_dashboard_configuration_pagination')->with("messages", $this->messages);
 		}
     }
 
@@ -152,13 +154,14 @@ class PaginationController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully reset pagination configuration settings based on site configuration."]);
-			return redirect()->route('user_dashboard_configuration_pagination')->with(["messages" => $messages]);
+			
+			$this->AddWarningMessage("Unable to successfully reset pagination configuration settings based on site configuration.");
+			return redirect()->route('user_dashboard_configuration_pagination')->with(["messages" => $this->messages]);
 		}
 		
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully reset pagination configuration settings for user to site defaults."], null, null);
-		return redirect()->route('user_dashboard_configuration_pagination')->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully reset pagination configuration settings for user to site defaults.");
+		return redirect()->route('user_dashboard_configuration_pagination')->with("messages", $this->messages);
     }
 }

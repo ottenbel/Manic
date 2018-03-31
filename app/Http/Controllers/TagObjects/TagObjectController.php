@@ -16,16 +16,21 @@ class TagObjectController extends WebController
 {
 	protected $aliasesPaginationKey;
 	
+	public function __construct()
+    {
+		parent::__construct();
+	}
+	
 	protected function GetTagObjectIndex(Request $request, $tagObjects, $paginationKey, $tagType, $pivotTableName, $tagIDField)
 	{
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$orderAndSorting = self::GetIndexOrdering($request);
 		$tagObjects = $this->GetTagObjects($tagObjects, $paginationKey, $tagType, $pivotTableName, $tagIDField, $orderAndSorting);
 		
-		return View('tagObjects.'.$tagType.'.index', array($tagType => $tagObjects->appends(Input::except('page')), 'list_type' => $orderAndSorting['type'], 'list_order' => $orderAndSorting['order'], 'messages' => $messages));
+		return View('tagObjects.'.$tagType.'.index', array($tagType => $tagObjects->appends(Input::except('page')), 'list_type' => $orderAndSorting['type'], 'list_order' => $orderAndSorting['order'], 'messages' => $this->messages));
 	}
 	
-	protected static function DestroyTagObject($object, $objectType)
+	protected function DestroyTagObject($object, $objectType)
 	{
 		DB::beginTransaction();
 		try
@@ -53,13 +58,13 @@ class TagObjectController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully purge $objectType $objectName from the database."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully purge $objectType $objectName from the database.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully purged $objectType $objectName from the database."], null, null);
-		return redirect()->route('index_collection')->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully purged $objectType $objectName from the database.");
+		return redirect()->route('index_collection')->with("messages", $this->messages);
 	}
 	
 	private static function GetIndexOrdering(Request $request)
@@ -89,7 +94,7 @@ class TagObjectController extends WebController
 		return ['type' => $listType, 'order' => $listOrder];
 	}
 	
-	protected static function GetAliasShowOrdering(Request $request)
+	protected function GetAliasShowOrdering(Request $request)
 	{
 		$globalListOrder = trim(strtolower($request->input('global_order')));
 		$personalListOrder = trim(strtolower($request->input('personal_order')));

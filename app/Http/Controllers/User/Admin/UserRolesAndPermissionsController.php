@@ -18,12 +18,14 @@ class UserRolesAndPermissionsController extends WebController
 {
 	public function __construct()
 	{
+		parent::__construct();
+		
 		$this->middleware(['auth', 'permission:Edit User Roles and Permissions']);
 	}
 	
 	public function edit(Request $request, User $user)
     {
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		
 		$roles = new Role();
 		$roles = $roles->orderby('id', 'asc')->get(); 
@@ -41,15 +43,11 @@ class UserRolesAndPermissionsController extends WebController
 			$permission['hasValue'] = $user->permissions->contains('id', $permission->id);
 		}
 		
-		return View('user.admin.user.rolesAndPermissions.edit', array('user' => $user, 'roles' => $roles, 'permissions' => $permissions, 'messages' => $messages));
+		return View('user.admin.user.rolesAndPermissions.edit', array('user' => $user, 'roles' => $roles, 'permissions' => $permissions, 'messages' => $this->messages));
 	}
 	
 	public function update(UpdateRolesAndPermissionsRequest $request, User $user)
-    {
-		$successMessages = array();
-		$infoMessages = array();
-		$warningMessages = array();
-		
+    {		
 		DB::beginTransaction();
 		try
 		{
@@ -94,15 +92,12 @@ class UserRolesAndPermissionsController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			array_push($warningMessages, "Unable to successfully update roles and permissions for user $user->name.");
-			$messages = self::BuildFlashedMessagesVariable($successMessages, $infoMessages, $warningMessages);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully update roles and permissions for user $user->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		array_push($successMessages, "Successfully updated user roles and permissions.");
-		$messages = self::BuildFlashedMessagesVariable($successMessages, $infoMessages, $warningMessages);
-		
-		return redirect()->route('admin_show_user', ['user' => $user])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully updated user roles and permissions.");
+		return redirect()->route('admin_show_user', ['user' => $user])->with("messages", $this->messages);
 	}
 }

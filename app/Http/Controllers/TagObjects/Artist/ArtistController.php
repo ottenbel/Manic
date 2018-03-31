@@ -22,6 +22,8 @@ class ArtistController extends TagObjectController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
 		$this->paginationKey = "pagination_artists_per_page_index";
 		$this->aliasesPaginationKey = "pagination_artist_aliases_per_page_parent";
 		$this->placeholderStub = "artist";
@@ -42,15 +44,15 @@ class ArtistController extends TagObjectController
     public function create(Request $request)
     {
 		$this->authorize(Artist::class);	
-        $messages = self::GetFlashedMessages($request);
+        $this->GetFlashedMessages($request);
 		$configurations = $this->GetConfiguration();
-		return View('tagObjects.artists.create', array('configurations' => $configurations, 'messages' => $messages));
+		return View('tagObjects.artists.create', array('configurations' => $configurations, 'messages' => $this->messages));
     }
 
     public function store(StoreArtistRequest $request)
     {
 		$artist = new Artist();
-		return self::InsertOrUpdate($request, $artist, 'created', 'create');
+		return $this->InsertOrUpdate($request, $artist, 'created', 'create');
     }
 
     public function show(Request $request, Artist $artist)
@@ -67,16 +69,16 @@ class ArtistController extends TagObjectController
 	
     public function update(UpdateArtistRequest $request, Artist $artist)
     {		
-		return self::InsertOrUpdate($request, $artist, 'updated', 'update');
+		return $this->InsertOrUpdate($request, $artist, 'updated', 'update');
     }
 
     public function destroy(Artist $artist)
     {
 		$this->authorize($artist);
-		return self::DestroyTagObject($artist, 'artist');
+		return $this->DestroyTagObject($artist, 'artist');
     }
 	
-	private static function InsertOrUpdate($request, $artist, $action, $errorAction)
+	private function InsertOrUpdate($request, $artist, $action, $errorAction)
 	{
 		DB::beginTransaction();
 		try
@@ -92,8 +94,8 @@ class ArtistController extends TagObjectController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction artist $artist->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully $errorAction artist $artist->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
@@ -101,20 +103,21 @@ class ArtistController extends TagObjectController
 		{	
 			$childCausingLoopsMessage = "The following artists (" . implode(", ", $causedLoops) . ") were not attached as children to " . $artist->name . " as their addition would cause loops in tag implication.";
 			
-			$messages = self::BuildFlashedMessagesVariable(null, ["Partially $action artist $artist->name."], [$childCausingLoopsMessage]);
-			return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $messages);
+			$this->AddDataMessage("Partially $action artist $artist->name.");
+			$this->AddWarningMessage($childCausingLoopsMessage);
+			return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $this->messages);
 		}
 		else
 		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully $action artist $artist->name."], null, null);
-			return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $messages);
+			$this->AddSuccessMessage("Successfully $action artist $artist->name.");
+			return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $this->messages);
 		}
 	}
 	
 	private function GetArtistToDisplay($request, $artist, $route, $configurations = null)
 	{
-		$messages = self::GetFlashedMessages($request);
-		$aliasOrdering = self::GetAliasShowOrdering($request);
+		$this->GetFlashedMessages($request);
+		$aliasOrdering = $this->GetAliasShowOrdering($request);
 		
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->aliasesPaginationKey)->value;
 		
@@ -129,6 +132,6 @@ class ArtistController extends TagObjectController
 			$personalAliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.artists.'.$route, array('configurations' => $configurations, 'artist' => $artist, 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $globalAliases, 'personal_aliases' => $personalAliases, 'messages' => $messages));
+		return View('tagObjects.artists.'.$route, array('configurations' => $configurations, 'artist' => $artist, 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $globalAliases, 'personal_aliases' => $personalAliases, 'messages' => $this->messages));
 	}
 }

@@ -21,6 +21,11 @@ class CollectionFavouritesController extends WebController
      */
     public function __construct()
     {
+		parent::__construct();
+		
+		$this->paginationKey = "pagination_collections_per_page_index";
+		$this->placeholderStub = "collection";
+		
         $this->middleware('auth');
 		$this->middleware('canInteractWithCollection')->except('index');
 		$this->middleware('permission:Add Favourite Collection')->only('store');
@@ -29,16 +34,15 @@ class CollectionFavouritesController extends WebController
 	
 	public function index(Request $request)
 	{
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$userFavourites = Auth::user()->favourite_collections()->pluck('collection_id')->toArray();
-		$lookupKey = Config::get('constants.keys.pagination.collectionsPerPageIndex');
-		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->paginationKey)->value;
 		$ratingRestrictions = Auth::user()->rating_restriction_configuration->where('display', '=', false)->pluck('rating_id')->toArray();
 		
 		$favourites = new Collection();
 		$favourites = $favourites->whereIn('id', $userFavourites)->whereNotIn('rating_id', $ratingRestrictions)->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
 		
-		return View('user.user.favourites.collection.index', array('collections' => $favourites, 'messages' => $messages));
+		return View('user.user.favourites.collection.index', array('collections' => $favourites, 'messages' => $this->messages));
 	}
 	
 	public function store(StoreCollectionFavouriteRequest $request, Collection $collection)
@@ -55,14 +59,13 @@ class CollectionFavouritesController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully add collection to favourites."]);
-			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+			$this->AddWarningMessage("Unable to successfully add collection to favourites.");
+			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully added collection $collection->name to favourites."], null, null);
-		
-		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully added collection $collection->name to favourites.");
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 	}
 	
 	public function destroy(Collection $collection)
@@ -80,13 +83,12 @@ class CollectionFavouritesController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully remove $collection->name from favourites."]);
-			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+			$this->AddWarningMessage("Unable to successfully remove $collection->name from favourites.");
+			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully removed collection $collection->name from favourites."], null, null);
-		
-		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully removed collection $collection->name from favourites.");
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 	}
 }

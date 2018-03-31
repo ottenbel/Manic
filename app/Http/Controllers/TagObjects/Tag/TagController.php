@@ -21,6 +21,8 @@ class TagController extends TagObjectController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
 		$this->paginationKey = "pagination_tags_per_page_index";
 		$this->aliasesPaginationKey = "pagination_tag_aliases_per_page_parent";
 		$this->placeholderStub = "tag";
@@ -42,16 +44,16 @@ class TagController extends TagObjectController
     {
 		$this->authorize(Tag::class);	
 		
-        $messages = self::GetFlashedMessages($request);
+        $this->GetFlashedMessages($request);
 		$configurations = $this->GetConfiguration();
 		
-		return View('tagObjects.tags.create', array('configurations' => $configurations, 'messages' => $messages));
+		return View('tagObjects.tags.create', array('configurations' => $configurations, 'messages' => $this->messages));
     }
 
     public function store(StoreTagRequest $request)
     {
 		$tag = new Tag();
-		return self::InsertOrUpdate($request, $tag, 'created', 'create');
+		return $this->InsertOrUpdate($request, $tag, 'created', 'create');
     }
 	
     public function show(Request $request, Tag $tag)
@@ -70,16 +72,16 @@ class TagController extends TagObjectController
 
     public function update(UpdateTagRequest $request, Tag $tag)
     {
-		return self::InsertOrUpdate($request, $tag, 'updated', 'update');
+		return $this->InsertOrUpdate($request, $tag, 'updated', 'update');
     }
 
     public function destroy(Tag $tag)
     {
 		$this->authorize($tag);
-		return self::DestroyTagObject($tag, 'tag');
+		return $this->DestroyTagObject($tag, 'tag');
     }
 	
-	private static function InsertOrUpdate($request, $tag, $action, $errorAction)
+	private function InsertOrUpdate($request, $tag, $action, $errorAction)
 	{
 		DB::beginTransaction();
 		try
@@ -95,8 +97,8 @@ class TagController extends TagObjectController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction tag $tag->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully $errorAction tag $tag->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
@@ -104,20 +106,21 @@ class TagController extends TagObjectController
 		{	
 			$childCausingLoopsMessage = "The following tags (" . implode(", ", $causedLoops) . ") were not attached as children to " . $tag->name . " as their addition would cause loops in tag implication.";
 			
-			$messages = self::BuildFlashedMessagesVariable(null, ["Partially $action tag $tag->name."], [$childCausingLoopsMessage]);
-			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $messages);
+			$this->AddWarningMessage($childCausingLoopsMessage);
+			$this->AddDataMessage("Partially $action tag $tag->name.");
+			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $this->messages);
 		}
 		else
 		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully $action tag $tag->name."], null, null);
-			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $messages);
+			$this->AddSuccessMessage("Successfully $action tag $tag->name.");
+			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $this->messages);
 		}
 	}
 	
 	private function GetTagToDisplay($request, $tag, $route, $configurations = null)
 	{
-		$messages = self::GetFlashedMessages($request);
-		$aliasOrdering = self::GetAliasShowOrdering($request);
+		$this->GetFlashedMessages($request);
+		$aliasOrdering = $this->GetAliasShowOrdering($request);
 		
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->aliasesPaginationKey)->value;
 		
@@ -132,6 +135,6 @@ class TagController extends TagObjectController
 			$personalAliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.tags.'.$route, array('configurations' => $configurations, 'tag' => $tag, 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $globalAliases, 'personal_aliases' => $personalAliases, 'messages' => $messages));
+		return View('tagObjects.tags.'.$route, array('configurations' => $configurations, 'tag' => $tag, 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $globalAliases, 'personal_aliases' => $personalAliases, 'messages' => $this->messages));
 	}
 }

@@ -19,6 +19,8 @@ class RolesController extends WebController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
 		$this->paginationKey = "pagination_roles_per_page_index";
 		$this->placeholderStub = "role";
 		$this->placeheldFields = array('name');
@@ -33,13 +35,13 @@ class RolesController extends WebController
      */
     public function index(Request $request)
 	{
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->paginationKey)->value;
 		
 		$roles = new Role();
 		$roles = $roles->orderby('id', 'asc')->paginate($paginationCount);
 		
-		return View('rolesAndPermissions.roles.index', array('roles' => $roles, 'messages' => $messages));
+		return View('rolesAndPermissions.roles.index', array('roles' => $roles, 'messages' => $this->messages));
 	}
 	
 	
@@ -47,12 +49,12 @@ class RolesController extends WebController
     {
 		$this->authorize(Role::class);
 		
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$configuration = $this->GetConfiguration();
 		$permissions = new Permission();
 		$permissions = $permissions->orderby('id', 'asc')->get(); //Update the permissions array to include some boolean that shows whether or not the user has it
 		
-		return View('rolesAndPermissions.roles.create', array('permissions' => $permissions, 'configuration' => $configuration, 'messages' => $messages));
+		return View('rolesAndPermissions.roles.create', array('permissions' => $permissions, 'configuration' => $configuration, 'messages' => $this->messages));
 	}
 	
 	public function store(StoreRoleRequest $request)
@@ -68,8 +70,8 @@ class RolesController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully create role $roleName."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully create role $roleName.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
@@ -90,26 +92,25 @@ class RolesController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully create role $roleName."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully create role $roleName.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
-		$messages = self::BuildFlashedMessagesVariable(["Successfully created new role $roleName."], null, null);
-		
-		return redirect()->route('admin_show_role', ['role' => $role])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully created new role $roleName.");
+		return redirect()->route('admin_show_role', ['role' => $role])->with("messages", $this->messages);
 	}
 	
 	public function show(Request $request, Role $role)
 	{
-		$messages = self::GetFlashedMessages($request);
-		return View('rolesAndPermissions.roles.show', array('role' => $role, 'messages' => $messages));
+		$this->GetFlashedMessages($request);
+		return View('rolesAndPermissions.roles.show', array('role' => $role, 'messages' => $this->messages));
 	}
 	
 	public function edit(Request $request, Role $role)
     {
 		$this->authorize($role);
 		
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$configuration = $this->GetConfiguration();
 		
 		$permissions = new Permission();
@@ -120,7 +121,7 @@ class RolesController extends WebController
 			$permission['hasValue'] = $role->permissions->contains('id', $permission->id);
 		}
 		
-		return View('rolesAndPermissions.roles.edit', array('role' => $role, 'permissions' => $permissions, 'configuration' => $configuration, 'messages' => $messages));
+		return View('rolesAndPermissions.roles.edit', array('role' => $role, 'permissions' => $permissions, 'configuration' => $configuration, 'messages' => $this->messages));
 	}
 	
 	public function update(UpdateRoleRequest $request, Role $role)
@@ -154,13 +155,13 @@ class RolesController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully update role."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully update role.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
-		$messages = self::BuildFlashedMessagesVariable(["Successfully updated role."], null, null);
 		
-		return redirect()->route('admin_show_role', ['role' => $role])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully updated role.");
+		return redirect()->route('admin_show_role', ['role' => $role])->with("messages", $this->messages);
 	}
 	
 	public function destroy(Role $role)
@@ -174,13 +175,12 @@ class RolesController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully delete role $role->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully delete role $role->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully deleted role $role->name."], null, null);
-		
-		return redirect()->route('admin_index_role')->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully deleted role $role->name.");
+		return redirect()->route('admin_index_role')->with("messages", $this->messages);
 	}
 }

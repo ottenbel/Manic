@@ -13,16 +13,21 @@ use ConfigurationLookupHelper;
 
 class TagObjectAliasController extends WebController
 {
-	protected static function GetAliasIndex(Request $request, $aliases, $paginationKey, $paginationType)
+	public function __construct()
+    {
+		parent::__construct();
+	}
+	
+	protected function GetAliasIndex(Request $request, $aliases, $paginationKey, $paginationType)
 	{
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$orderAndSorting = self::GetIndexOrdering($request);
 		$aliases = self::GetAliases($aliases, $orderAndSorting['type'], $orderAndSorting['order'], $paginationKey);
 		
-		return View('tagObjects.' . $paginationType . '.alias.index', array('aliases' => $aliases->appends(Input::except('page')), 'list_type' => $orderAndSorting['type'], 'list_order' => $orderAndSorting['order'], 'messages' => $messages));
+		return View('tagObjects.' . $paginationType . '.alias.index', array('aliases' => $aliases->appends(Input::except('page')), 'list_type' => $orderAndSorting['type'], 'list_order' => $orderAndSorting['order'], 'messages' => $this->messages));
 	}
 	
-	protected static function StoreAlias($request, $alias, $parentObject, $aliasIDField, $objectType, $showRoute)
+	protected function StoreAlias($request, $alias, $parentObject, $aliasIDField, $objectType, $showRoute)
 	{
 		DB::beginTransaction();
 		try
@@ -48,17 +53,17 @@ class TagObjectAliasController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully add alias to $objectType."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully add alias to $objectType.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully created alias $alias->alias on $objectType  $parentObject->name."], null, null);
+		$this->AddSuccessMessage("Successfully created alias $alias->alias on $objectType  $parentObject->name.");
 		//Redirect to the object that the alias was created for
-		return redirect()->route($showRoute, [$objectType => $parentObject])->with("messages", $messages);
+		return redirect()->route($showRoute, [$objectType => $parentObject])->with("messages", $this->messages);
 	}
 	
-	protected static function DeleteAlias($alias, $parentIDField, $objectType, $showRoute)
+	protected function DeleteAlias($alias, $parentIDField, $objectType, $showRoute)
 	{
 		DB::beginTransaction();
 		try
@@ -71,14 +76,14 @@ class TagObjectAliasController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully purge alias from $objectType."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully purge alias from $objectType.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
 		//redirect to the object that the alias existed for
-		$messages = self::BuildFlashedMessagesVariable(["Successfully purged alias from $objectType."], null, null);
-		return redirect()->route($showRoute, [$objectType => $object])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully purged alias from $objectType.");
+		return redirect()->route($showRoute, [$objectType => $object])->with("messages", $this->messages);
 	}
 	
 	private static function GetIndexOrdering(Request $request)

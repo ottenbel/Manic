@@ -21,6 +21,8 @@ class ScanalatorController extends TagObjectController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
 		$this->paginationKey = "pagination_scanalators_per_page_index";
 		$this->aliasesPaginationKey = "pagination_scanalator_aliases_per_page_parent";
 		$this->placeholderStub = "scanalator";
@@ -41,15 +43,15 @@ class ScanalatorController extends TagObjectController
     public function create(Request $request)
     {
 		$this->authorize(Scanalator::class);	
-        $messages = self::GetFlashedMessages($request);
+        $this->GetFlashedMessages($request);
 		$configurations = $this->GetConfiguration();
-		return View('tagObjects.scanalators.create', array('configurations' => $configurations, 'messages' => $messages));
+		return View('tagObjects.scanalators.create', array('configurations' => $configurations, 'messages' => $this->messages));
     }
 
     public function store(StoreScanalatorRequest $request)
     {
 		$scanalator = new Scanalator();
-		return self::InsertOrUpdate($request, $scanalator, 'created', 'create');
+		return $this->InsertOrUpdate($request, $scanalator, 'created', 'create');
     }
 
     public function show(Request $request, Scanalator $scanalator)
@@ -66,16 +68,16 @@ class ScanalatorController extends TagObjectController
 
     public function update(UpdateScanalatorRequest $request, Scanalator $scanalator)
     {
-		return self::InsertOrUpdate($request, $scanalator, 'updated', 'update');
+		return $this->InsertOrUpdate($request, $scanalator, 'updated', 'update');
     }
 
     public function destroy(Scanalator $scanalator)
     {
 		$this->authorize($scanalator);
-        return self::DestroyTagObject($scanalator, 'scanalator');
+        return $this->DestroyTagObject($scanalator, 'scanalator');
     }
 	
-	private static function InsertOrUpdate($request, $scanalator, $action, $errorAction)
+	private function InsertOrUpdate($request, $scanalator, $action, $errorAction)
 	{
 		DB::beginTransaction();
 		try
@@ -91,8 +93,8 @@ class ScanalatorController extends TagObjectController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction scanalator $scanalator->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully $errorAction scanalator $scanalator->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
@@ -100,20 +102,22 @@ class ScanalatorController extends TagObjectController
 		{	
 			$childCausingLoopsMessage = "The following scanalators (" . implode(", ", $causedLoops) . ") were not attached as children to " . $scanalator->name . " as their addition would cause loops in tag implication.";
 			
-			$messages = self::BuildFlashedMessagesVariable(null, ["Partially $action scanalator $scanalator->name."], [$childCausingLoopsMessage]);
-			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $messages);
+			$this->AddWarningMessage($childCausingLoopsMessage);
+			$this->AddDataMessage("Partially $action scanalator $scanalator->name.");
+			
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $this->messages);
 		}
 		else
 		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully $action scanalator $scanalator->name."], null, null);
-			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $messages);
+			$this->AddSuccessMessage("Successfully $action scanalator $scanalator->name.");
+			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $this->messages);
 		}
 	}
 	
 	private function GetScanalatorToDisplay($request, $scanalator, $route, $configurations = null)
 	{
-		$messages = self::GetFlashedMessages($request);
-		$aliasOrdering = self::GetAliasShowOrdering($request);
+		$this->GetFlashedMessages($request);
+		$aliasOrdering = $this->GetAliasShowOrdering($request);
 		
 		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->aliasesPaginationKey)->value;
 		
@@ -128,6 +132,6 @@ class ScanalatorController extends TagObjectController
 			$personal_aliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.scanalators.'.$route, array('configurations' => $configurations, 'scanalator' => $scanalator, 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $messages));
+		return View('tagObjects.scanalators.'.$route, array('configurations' => $configurations, 'scanalator' => $scanalator, 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $global_aliases, 'personal_aliases' => $personal_aliases, 'messages' => $this->messages));
 	}
 }

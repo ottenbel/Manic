@@ -10,6 +10,12 @@ class WebController extends Controller
 	protected $paginationKey;
 	protected $placeholderStub;
 	protected $placeheldFields;
+	protected $messages;
+	
+	public function __construct()
+	{
+		$this->messages = ['success' => [], 'data' => [], 'warning' => []];
+	}
 	
 	protected function GetConfiguration()
 	{
@@ -25,18 +31,26 @@ class WebController extends Controller
 		return $configurationsArray;
 	}
 	
-	protected static function GetFlashedMessages(Request $request)
+	protected function GetFlashedMessages(Request $request)
 	{
-		$messages = $request->session()->get('messages');
-		$success = $messages['success'];
-		$data = $messages['data'];
-		$warning = $messages['warning'];
-		
-		return array('success' => $success, 'data' => $data, 'warning' => $warning);
+		$messagesFromRequest = $request->session()->get('messages');
+		$this->messages['success'] = $messagesFromRequest['success'];
+		$this->messages['data'] = $messagesFromRequest['data'];
+		$this->messages['warning'] = $messagesFromRequest['warning'];
 	}
 	
-	protected static function BuildFlashedMessagesVariable($success, $data, $warning)
+	protected function AddSuccessMessage($message)
 	{
-		return array('success' => $success, 'data' => $data, 'warning' => $warning);
+		array_push($this->messages['success'], $message);
+	}
+	
+	protected function AddDataMessage($message)
+	{
+		array_push($this->messages['data'], $message);
+	}
+	
+	protected function AddWarningMessage($message)
+	{
+		array_push($this->messages['warning'], $message);
 	}
 }

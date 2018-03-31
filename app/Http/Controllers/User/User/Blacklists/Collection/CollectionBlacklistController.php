@@ -21,6 +21,11 @@ class CollectionBlacklistController extends WebController
      */
     public function __construct()
     {
+		parent::__construct();
+		
+		$this->paginationKey = "pagination_collections_per_page_index";
+		$this->placeholderStub = "collection";
+		
         $this->middleware('auth');
 		//$this->middleware('canInteractWithCollection')->except('index'); //Add custom middleware to handle this
 		$this->middleware('permission:Add Blacklisted Collection')->only('store');
@@ -29,15 +34,14 @@ class CollectionBlacklistController extends WebController
 	
 	public function index(Request $request)
 	{
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$userBlacklist = Auth::user()->blacklisted_collections()->pluck('collection_id')->toArray();
-		$lookupKey = Config::get('constants.keys.pagination.collectionsPerPageIndex');
-		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->paginationKey)->value;
 		
 		$blacklisted = new Collection();
 		$blacklisted = $blacklisted->whereIn('id', $userBlacklist)->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
 		
-		return View('user.user.blacklist.collection.index', array('collections' => $blacklisted, 'messages' => $messages));
+		return View('user.user.blacklist.collection.index', array('collections' => $blacklisted, 'messages' => $this->messages));
 	}
 	
 	public function store(StoreCollectionBlacklistRequest $request, Collection $collection)
@@ -54,14 +58,13 @@ class CollectionBlacklistController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully add collection to blacklist."]);
-			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+			$this->AddWarningMessage("Unable to successfully add collection to blacklist.");
+			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully added collection $collection->name to blacklist."], null, null);
-		
-		return redirect()->route('index_collection')->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully added collection $collection->name to blacklist.");
+		return redirect()->route('index_collection')->with("messages", $this->messages);
 	}
 	
 	public function destroy(Collection $collection)
@@ -79,13 +82,12 @@ class CollectionBlacklistController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully remove $collection->name from blacklist."]);
-			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+			$this->AddWarningMessage("Unable to successfully remove $collection->name from blacklist.");
+			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully removed collection $collection->name from blacklist."], null, null);
-		
-		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully removed collection $collection->name from blacklist.");		
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 	}
 }
