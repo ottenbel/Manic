@@ -141,6 +141,15 @@ function jump()
 	}
 }
 
+function preload(sources)
+{
+	jQuery.each(sources, function(i,source) 
+	{
+		var path = "//" + window.location.hostname + ":" + window.location.port + "/" + source 
+		jQuery.get(path); 
+	});
+}
+
 document.onkeydown = function(key_press)
 {
 	//Catch user pressing the B key
