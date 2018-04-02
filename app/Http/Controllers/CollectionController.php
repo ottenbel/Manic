@@ -82,7 +82,7 @@ class CollectionController extends WebController
 		}
 		else //Filter the collections return based on the search string
 		{
-			SearchParseHelper::Search($search_string, $collections, $searchArtists, $searchCharacters, $searchScanalators, $searchSeries, $searchTags, $searchLanguages, $searchRatings, $searchStatuses, $searchCanonicity, $searchFavourites, $invalid_tokens);
+			SearchParseHelper::Search($search_string, $collections, $searchArtists, $searchCharacters, $searchScanalators, $searchSeries, $searchTags, $searchLanguages, $searchRatings, $searchStatuses, $searchCanonicity, $searchFavourites, $invalid_tokens, $this->paginationKey);
 			$collections->appends(Input::except('page'));
 		}
 		

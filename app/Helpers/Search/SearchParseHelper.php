@@ -16,7 +16,7 @@ class SearchParseHelper
 	/*
 	 * Return the collection that matches the search string.
 	 */
-	public static function Search($searchString, &$collections, &$searchArtists, &$searchCharacters, &$searchScanalators, &$searchSeries, &$searchTags, &$searchLanguages, &$searchRatings, &$searchStatuses, &$searchCanonicity, &$searchFavourites, &$invalidTokens)
+	public static function Search($searchString, &$collections, &$searchArtists, &$searchCharacters, &$searchScanalators, &$searchSeries, &$searchTags, &$searchLanguages, &$searchRatings, &$searchStatuses, &$searchCanonicity, &$searchFavourites, &$invalidTokens, $paginationKey)
 	{
 		$searchArtists = $searchCharacters = $searchScanalators = $searchSeries = $searchTags = $searchLanguages = $searchRatings = $searchStatuses = $searchCanonicity = $searchFavourites = $invalidTokens = array();
 		
@@ -142,8 +142,7 @@ class SearchParseHelper
 		self::AppendTagObjectToQuery($query, $searchTags, 'tag', 'tags', 'tags', 'collection_tag');
 		self::AppendTagObjectToQuery($query, $searchScanalators, 'scanalator', 'chapters.scanalators', 'scanalators', 'chapter_scanalator');
 		
-		$lookupKey = Config::get('constants.keys.pagination.collectionsPerPageIndex');
-		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($paginationKey)->value;
 		
 		$collections = $query->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
 	}
