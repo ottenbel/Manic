@@ -39,23 +39,7 @@ class CollectionFavouritesController extends WebController
 		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->paginationKey)->value;
 		$ratingRestrictions = Auth::user()->rating_restriction_configuration->where('display', '=', false)->pluck('rating_id')->toArray();
 		
-		$favourites = Collection::with(['primary_artists' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'secondary_artists' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'primary_series' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'secondary_series' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'primary_characters' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'secondary_characters' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'primary_tags' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'secondary_tags' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'rating', 'status', 'language']);
+		$favourites = new Collection();
 		$favourites = $favourites->whereIn('id', $userFavourites)->whereNotIn('rating_id', $ratingRestrictions)->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
 		
 		return View('user.user.favourites.collection.index', array('collections' => $favourites, 'messages' => $this->messages));

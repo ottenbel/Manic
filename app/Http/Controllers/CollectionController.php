@@ -54,23 +54,7 @@ class CollectionController extends WebController
 		
 		$collections = $searchArtists = $searchCharacters = $searchScanalators = $searchSeries = $searchTags = $searchLanguages = $searchRatings = $searchStatuses = $searchCanonicity = $searchFavourites = $invalid_tokens = null; 
 		
-		$collections = Collection::with(['primary_artists' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'secondary_artists' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'primary_series' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'secondary_series' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'primary_characters' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'secondary_characters' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'primary_tags' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'secondary_tags' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'rating', 'status', 'language']);
+		$collections = new Collection();
 		
 		$ratingRestrictions = null;
 		if(Auth::check())

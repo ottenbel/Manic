@@ -38,23 +38,8 @@ class CollectionBlacklistController extends WebController
 		$userBlacklist = Auth::user()->blacklisted_collections()->pluck('collection_id')->toArray();
 		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->paginationKey)->value;
 		
-		$blacklisted = Collection::with(['primary_artists' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'secondary_artists' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'primary_series' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'secondary_series' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'primary_characters' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'secondary_characters' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'primary_tags' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'secondary_tags' => function ($query)
-			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
-		'rating', 'status', 'language']);
+		$blacklisted = new Collection();
+		
 		$blacklisted = $blacklisted->whereIn('id', $userBlacklist)->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
 		
 		return View('user.user.blacklist.collection.index', array('collections' => $blacklisted, 'messages' => $this->messages));
