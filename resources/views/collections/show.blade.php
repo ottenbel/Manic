@@ -59,14 +59,14 @@
 				@endif
 			</div>
 			
-			@if(($collection->primary_artists()->count()) || ($collection->secondary_artists()->count()))
+			@if(($collection->primary_artists->count()) || ($collection->secondary_artists->count()))
 				<div class="row">
 					<div class="tag_holder">
 						<div class="col-md-2">
 							<strong>Artists:</strong>
 						</div>
 						<div class="col-md-10">
-							@foreach($collection->primary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
+							@foreach($collection->primary_artists as $artist)
 								@include('partials.tagObjects.display.display-tag-search-object',
 									['tagObject' => $artist,
 										'tagObjectClass' => 'primary_artists',
@@ -74,7 +74,7 @@
 										'componentToken' => 'artist'])
 							@endforeach
 							
-							@foreach($collection->secondary_artists()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $artist)
+							@foreach($collection->secondary_artists as $artist)
 								@include('partials.tagObjects.display.display-tag-search-object',
 									['tagObject' => $artist,
 										'tagObjectClass' => 'secondary_artists',
@@ -86,14 +86,14 @@
 				</div>
 			@endif
 			
-			@if(($collection->primary_series()->count()) || ($collection->secondary_series()->count()))
+			@if(($collection->primary_series->count()) || ($collection->secondary_series->count()))
 				<div class="row">
 					<div class="tag_holder">
 						<div class="col-md-2">
 							<strong>Series:</strong>
 						</div>
 						<div class="col-md-10">
-							@foreach($collection->primary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
+							@foreach($collection->primary_series as $series)
 								@include('partials.tagObjects.display.display-tag-search-object',
 									['tagObject' => $series,
 										'tagObjectClass' => 'primary_series',
@@ -101,7 +101,7 @@
 										'componentToken' => 'series'])
 							@endforeach
 							
-							@foreach($collection->secondary_series()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $series)
+							@foreach($collection->secondary_series as $series)
 								@include('partials.tagObjects.display.display-tag-search-object',
 									['tagObject' => $series,
 										'tagObjectClass' => 'secondary_series',
@@ -113,14 +113,14 @@
 				</div>
 			@endif
 			
-			@if(($collection->primary_characters()->count()) || ($collection->secondary_characters()->count()))
+			@if(($collection->primary_characters->count()) || ($collection->secondary_characters->count()))
 				<div class="row">
 					<div class="tag_holder">
 						<div class="col-md-2">
 							<strong>Characters:</strong>
 						</div>
 						<div class="col-md-10">
-							@foreach($collection->primary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $character)
+							@foreach($collection->primary_characters as $character)
 								@include('partials.tagObjects.display.display-tag-search-object',
 									['tagObject' => $character,
 										'tagObjectClass' => 'primary_characters',
@@ -128,7 +128,7 @@
 										'componentToken' => 'character'])
 							@endforeach
 							
-							@foreach($collection->secondary_characters()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $character)
+							@foreach($collection->secondary_characters as $character)
 								@include('partials.tagObjects.display.display-tag-search-object',
 									['tagObject' => $character,
 										'tagObjectClass' => 'secondary_characters',
@@ -140,14 +140,14 @@
 				</div>
 			@endif
 			
-			@if(($collection->primary_tags()->count()) || ($collection->secondary_tags()->count()))
+			@if(($collection->primary_tags->count()) || ($collection->secondary_tags->count()))
 				<div class="row">
 					<div class="tag_holder">
 						<div class="col-md-2">
 							<strong>Tags:</strong>
 						</div>
 						<div class="col-md-10">
-							@foreach($collection->primary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $tag)
+							@foreach($collection->primary_tags as $tag)
 								@include('partials.tagObjects.display.display-tag-search-object',
 									['tagObject' => $tag,
 										'tagObjectClass' => 'primary_tags',
@@ -155,7 +155,7 @@
 										'componentToken' => 'tag'])
 							@endforeach
 							
-							@foreach($collection->secondary_tags()->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->get() as $tag)
+							@foreach($collection->secondary_tags as $tag)
 								@include('partials.tagObjects.display.display-tag-search-object',
 									['tagObject' => $tag,
 										'tagObjectClass' => 'secondary_tags',
@@ -292,7 +292,7 @@
 	
 	@include('partials.collection.show', 
 	[
-	'volumes' => $collection->volumes(), 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'index_collection', 'hideVolumes' => false, 'isChapter' => false
+	'volumes' => $collection->volumes, 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'index_collection', 'hideVolumes' => false, 'isChapter' => false
 	])
 	
 	@if(($collection->parent_collection != null) || (count($collection->child_collections)))

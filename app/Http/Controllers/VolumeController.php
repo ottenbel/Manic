@@ -42,6 +42,17 @@ class VolumeController extends WebController
 		$this->GetFlashedMessages($request);
 		$configurations = $this->GetConfiguration($collection);
 		
+		$collection->load([
+		'volumes' => function ($query)
+			{ $query->orderBy('volume_number', 'asc'); },
+		'volumes.chapters' => function ($query)
+			{ $query->orderBy('chapter_number', 'asc'); },
+		'volumes.chapters.primary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); },
+		'volumes.chapters.secondary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); }
+		]);
+		
         return View('volumes.create', array('configurations' => $configurations, 'collection' => $collection, 'messages' => $this->messages));
     }
 
@@ -102,6 +113,15 @@ class VolumeController extends WebController
 		
         $this->GetFlashedMessages($request);
 		$configurations = $this->GetConfiguration();
+		
+		$volume->load([
+		'chapters' => function ($query)
+			{ $query->orderBy('chapter_number', 'asc'); },
+		'chapters.primary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); },
+		'chapters.secondary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); }
+		]);
 		
         return View('volumes.edit', array('configurations' => $configurations, 'volume' => $volume, 'messages' => $this->messages));
     }

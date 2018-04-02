@@ -46,17 +46,28 @@ class ChapterController extends WebController
         $this->GetFlashedMessages($request);
 		$configurations = $this->GetConfiguration();
 		
-		$volumes = $collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
+		$collection->load([
+		'volumes' => function ($query)
+			{ $query->orderBy('volume_number', 'asc'); },
+		'volumes.chapters' => function ($query)
+			{ $query->orderBy('chapter_number', 'asc'); },
+		'volumes.chapters.primary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); },
+		'volumes.chapters.secondary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); }, 
+		]);
+		
+		$volumes = $collection->volumes->pluck('volume_number', 'id')->map(function($item, $key)
 		{
 			return "Volume $item";	
 		});
 		
-		$volumesArray = json_encode($collection->volumes()->pluck('id'));
+		$volumesArray = json_encode($collection->volumes->pluck('id'));
 		
 		$highestVolume = null;
 		$newChapter = 1;
 		
-		if ($collection->volumes()->count() == 0)
+		if ($collection->volumes->count() == 0)
 		{
 			//If collection doesn't have any associated volumes prompt the user to create a volume before they create a chapter.
 			$this->AddWarningMessage("Creating a chapter on a collection requires a volume for the chapter to belong to.  Create a volume to associate the chapter to before trying to create a chapter.");
@@ -222,9 +233,21 @@ class ChapterController extends WebController
         $this->GetFlashedMessages($request);
 		$configurations = $this->GetConfiguration();
 		
-		$volumesArray = json_encode($chapter->collection->volumes()->pluck('id'));
+		$collection = $chapter->collection;
+		$collection->load([
+		'volumes' => function ($query)
+			{ $query->orderBy('volume_number', 'asc'); },
+		'volumes.chapters' => function ($query)
+			{ $query->orderBy('chapter_number', 'asc'); },
+		'volumes.chapters.primary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); },
+		'volumes.chapters.secondary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); }
+		]);
 		
-		$volumes = $chapter->collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
+		$volumesArray = json_encode($collection->volumes->pluck('id'));
+		
+		$volumes = $collection->volumes->pluck('volume_number', 'id')->map(function($item, $key)
 		{
 			return "Volume $item";
 		});

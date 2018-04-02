@@ -54,7 +54,24 @@ class CollectionController extends WebController
 		
 		$collections = $searchArtists = $searchCharacters = $searchScanalators = $searchSeries = $searchTags = $searchLanguages = $searchRatings = $searchStatuses = $searchCanonicity = $searchFavourites = $invalid_tokens = null; 
 		
-		$collections = Collection::with('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
+		$collections = Collection::with(['primary_artists' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
+		'secondary_artists' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
+		'primary_series' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
+		'secondary_series' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
+		'primary_characters' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
+		'secondary_characters' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
+		'primary_tags' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
+		'secondary_tags' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc')->take(10); }, 
+		'rating', 'status', 'language']);
+		
 		$ratingRestrictions = null;
 		if(Auth::check())
 		{
@@ -110,6 +127,33 @@ class CollectionController extends WebController
 		$this->GetFlashedMessages($request);
 		$sibling_collections = null;
 		
+		$collection->load([
+		'primary_artists' => function ($query) 
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc'); }, 
+		'secondary_artists' => function ($query) 
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc'); },
+		'primary_series' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc'); },
+		'secondary_series' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc'); },
+		'primary_characters' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc'); },
+		'secondary_characters' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc'); },
+		'primary_tags' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc'); },
+		'secondary_tags' => function ($query)
+			{ $query->withCount('collections')->orderBy('collections_count', 'desc')->orderBy('name', 'asc'); },
+		'volumes' => function ($query)
+			{ $query->orderBy('volume_number', 'asc'); }, 
+		'volumes.chapters' => function ($query)
+			{ $query->orderBy('chapter_number', 'asc'); },
+		'volumes.chapters.primary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); },
+		'volumes.chapters.secondary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); }, 
+		'rating', 'status', 'language',  'parent_collection', 'child_collections']);
+		
 		if($collection->parent_collection != null)
 		{
 			$sibling_collections = $collection->parent_collection->child_collections()->where('id', '!=', $collection->id)->get();
@@ -144,7 +188,16 @@ class CollectionController extends WebController
 		$this->GetFlashedMessages($request);
 		$configurations = $this->GetConfiguration();
         $dropdowns = self::GetDropdowns();
-		$collection->load('language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_tags', 'secondary_tags', 'rating', 'status');
+		$collection->load([
+		'volumes' => function ($query)
+			{ $query->orderBy('volume_number', 'asc'); }, 
+		'volumes.chapters' => function ($query)
+			{ $query->orderBy('chapter_number', 'asc'); },
+		'volumes.chapters.primary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); },
+		'volumes.chapters.secondary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); }, 
+		'language', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_characters', 'secondary_characters',  'primary_tags', 'secondary_tags', 'rating', 'status', 'parent_collection', 'child_collections']);
 		
 		$isFavourite = false;
 		if (Auth::check())
