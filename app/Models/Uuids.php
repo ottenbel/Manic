@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Webpatser\Uuid\Uuid;
+use Illuminate\Support\Str;
 
 trait Uuids
 {
@@ -14,7 +14,7 @@ trait Uuids
         static::creating(function ($model) {
 			if (empty($model->{$model->getKeyName()}))
 			{
-				$model->{$model->getKeyName()} = Uuid::generate()->string;
+				$model->{$model->getKeyName()} = (string) Str::orderedUuid();
 			}
         });
     }

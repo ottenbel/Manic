@@ -6,7 +6,7 @@ use App\Models\Image;
 use File;
 use InterventionImage;
 use Storage;
-use Webpatser\Uuid\Uuid;
+use Illuminate\Support\Str;
 use Zipper;
 
 class ImageUploadHelper
@@ -104,7 +104,7 @@ class ImageUploadHelper
 		{
 			$basePath = base_path();
 			$file_extension = File::extension($file);
-			$randomString = str_replace('-', '', (Uuid::generate(4) . Uuid::generate(4)));
+			$randomString = str_replace('-', '', ((string) Str::uuid() . (string) Str::uuid()));
 			$newFileName = $randomString . "." . $file_extension;
 			$newFilePath = $basePath . '/public/storage/images/full/' . $newFileName;
 			File::Move($file, $newFilePath);
@@ -134,7 +134,7 @@ class ImageUploadHelper
 	{
 		$basePath = base_path();
 		//Generate a guid
-		$folder = Uuid::generate(4);
+		$folder = (string) Str::uuid();
 		//Build a file to extract pages to
 		$extractionPath = $basePath . '/public/storage/images/tmp/' . $folder;
 		//Unzip to temp directory

@@ -8,7 +8,7 @@ use App\Models\VolumeExport;
 use App\Models\CollectionExport;
 use DateTime;
 use Storage;
-use Webpatser\Uuid\Uuid;
+use Illuminate\Support\Str;
 
 class FileExportHelper
 {
@@ -29,7 +29,7 @@ class FileExportHelper
 			if ($chapter->pages->count() > 0)
 			{
 				//Generate a random file name for the chapter zip
-				$fileName = str_replace('-', '', (Uuid::generate(4) . Uuid::generate(4))) . ".zip";
+				$fileName = str_replace('-', '', ((string) Str::uuid() . (string) Str::uuid())) . ".zip";
 				$filePath = 'storage/images/export/chapters/' . $fileName;
 				
 				$chapterExport = new ChapterExport;
@@ -83,7 +83,7 @@ class FileExportHelper
 			if ($volume->chapters->count() > 1)
 			{
 				//Generate a random file name for the volume zip
-				$fileName = str_replace('-', '', (Uuid::generate(4) . Uuid::generate(4))) . ".zip";
+				$fileName = str_replace('-', '', ((string) Str::uuid() . (string) Str::uuid())) . ".zip";
 				$filePath = 'storage/images/export/volumes/' . $fileName;
 				
 				$volumeExport = new VolumeExport;
@@ -146,7 +146,7 @@ class FileExportHelper
 			if ($collection->volumes->count() > 1)
 			{
 				//Generate a random file name for the volume zip
-				$fileName = str_replace('-', '', (Uuid::generate(4) . Uuid::generate(4))) . ".zip";
+				$fileName = str_replace('-', '', ((string) Str::uuid() . (string) Str::uuid())) . ".zip";
 				$filePath = 'storage/images/export/collections/' . $fileName;
 				
 				$collectionExport = new CollectionExport;

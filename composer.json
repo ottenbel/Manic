@@ -12,7 +12,6 @@
 
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
-        "webpatser/laravel-uuid": "^3.0",
         "laravelcollective/html": "5.6.*",
         "intervention/image": "^2.3",
         "iatstuti/laravel-cascade-soft-deletes": "1.3.*",
