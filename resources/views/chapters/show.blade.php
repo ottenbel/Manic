@@ -185,9 +185,11 @@
 	</div>
 @endif
 
+<script>
+	preload(pages);
+</script>
+
 @endsection
-
-
 
 @section('footer')
 

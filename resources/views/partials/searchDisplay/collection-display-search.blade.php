@@ -1,7 +1,7 @@
 @if(($search_artists_array != null) || ($search_characters_array != null) || ($search_scanalators_array != null) 
 			|| ($search_series_array != null) || ($search_tags_array != null) || ($search_languages_array != null) 
-			|| ($search_ratings_array != null) || ($search_statues_array != null) || ($search_canonicity_array != null) 
-			|| ($invalid_tokens_array != null))
+			|| ($search_ratings_array != null) || ($search_statues_array != null) || ($search_canonicity_array != null)
+			|| ($search_favourites_array != null) || ($invalid_tokens_array != null))
 			<!--Begin Pannel-->
 			<button id="search_panel" class="openAccordion" type="button">
 				Search Breakdown
@@ -195,7 +195,9 @@
 												'componentNot' => $language['not'],
 												'componentSpanClass' => 'language_tag',
 												'notComponentSpanClass' => 'not_language_tag',
-												'componentToken' => 'language'])
+												'componentToken' => 'language',
+												'componentRouteName' => 'show_language',
+												'componentObjectName' => 'language'])
 								@endforeach
 							</div>
 						</div>
@@ -250,19 +252,30 @@
 							</div>
 							<div class="col-md-10">
 								@foreach($search_canonicity_array as $canonicity)
-									@if($canonicity['canon'])
-										@include('partials.searchDisplay.collection-display-search-canonical-component', 
-											['componentNot' => $canonicity['not'],
-												'componentSpanClass' => 'canonical_tag',
-												'notComponentSpanClass' => 'not_canonical_tag',
-												'componentToken' => 'canonical'])
-									@else
-										@include('partials.searchDisplay.collection-display-search-canonical-component', 
-											['componentNot' => $canonicity['not'],
-												'componentSpanClass' => 'canonical_tag',
-												'notComponentSpanClass' => 'not_canonical_tag',
-												'componentToken' => 'non-canonical'])
-									@endif
+									@include('partials.searchDisplay.collection-display-search-canonical-component', 
+										['componentNot' => $canonicity['not'],
+											'componentSpanClass' => 'canonical_tag',
+											'notComponentSpanClass' => 'not_canonical_tag',
+											'componentToken' => 'canonical'])
+								@endforeach
+							</div>
+						</div>
+					</div>
+				@endif
+				
+				@if(count($search_favourites_array) > 0)
+					<div class="row">
+						<div class="tag_holder">
+							<div class="col-md-2">
+								<strong>Favourites (IN):</strong>
+							</div>
+							<div class="col-md-10">
+								@foreach($search_favourites_array as $favourite)
+									@include('partials.searchDisplay.collection-display-search-favourites-component', 
+										['componentNot' => $favourite['not'],
+											'favouriteSpanClass' => 'favourite_tag',
+											'notFavouriteSpanClass' => 'not_favourite_tag',
+											'componentToken' => 'favourites'])
 								@endforeach
 							</div>
 						</div>

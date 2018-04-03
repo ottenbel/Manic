@@ -14,13 +14,14 @@ class UpdatePasswordController extends WebController
 {
 	public function __construct()
     {
+		parent::__construct();
         $this->middleware('auth');
     }
 	
 	public function edit(Request $request)
 	{
-		$messages = self::GetFlashedMessages($request);
-		return View('auth.passwords.edit', array('messages' => $messages));
+		$this->GetFlashedMessages($request);
+		return View('auth.passwords.edit', array('messages' => $this->messages));
 	}
 	
 	public function update(UpdatePasswordRequest $request)
@@ -40,20 +41,20 @@ class UpdatePasswordController extends WebController
 			else
 			{
 				//Thow an incorrect password error
-				$messages = self::BuildFlashedMessagesVariable(null, null, ["Password not updated - incorrect password provided."]);
-				return redirect()->route('edit_password')->with(["messages" => $messages]);
+				$this->AddWarningMessage("Password not updated - incorrect password provided.");
+				return redirect()->route('edit_password')->with(["messages" => $this->messages]);
 			}
 		}
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully update account password."]);
-			return redirect()->route('edit_password')->with(["messages" => $messages]);
+			$this->AddWarningMessage("Unable to successfully update account password.");
+			return redirect()->route('edit_password')->with(["messages" => $this->messages]);
 		}
 		DB::commit();
 		
 		//Write success message and return to user page
-		$messages = self::BuildFlashedMessagesVariable(["Successfully updated account password."], null, null);
-		return redirect()->route('edit_password')->with(["messages" => $messages]);
+		$this->AddSuccessMessage("Successfully updated account password.");
+		return redirect()->route('edit_password')->with(["messages" => $this->messages]);
 	}
 }

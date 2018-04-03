@@ -3,20 +3,22 @@
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['volume']->description}}"></i>
 	@if((!empty($chapter)) && ($chapter->volume != null) && (Input::old('volume') == null))
 		{{ Form::select('volume_id', $volumes, $chapter->volume->id) }}
-	@else
+	@elseif(Input::old('volume') != null)
 		{{ Form::select('volume_id', $volumes, Input::old('volume')) }}
+	@else
+		{{ Form::select('volume_id', $volumes, $highestVolume) }}
 	@endif
 </div>
 
 @if(Route::is('create_chapter'))
 	@include('partials.collection.show', 
 		[
-		'volumes' => $collection->volumes(), 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => true, 'isChapter' => true
+		'volumes' => $collection->volumes, 'editVolume' => false, 'editChapter' => false, 'scanalatorLinkRoute' => 'show_scanalator', 'hideVolumes' => true, 'isChapter' => true
 		])
 @elseif(Route::is('edit_chapter'))
 	@include('partials.collection.show', 
 	[
-	'volumes' => $chapter->collection->volumes(), 'editVolume' => false, 'editChapter' => true, 'scanalatorLinkRoute' => 'edit_scanalator', 'hideVolumes' => true, 'isChapter' => true
+	'volumes' => $chapter->collection->volumes, 'editVolume' => false, 'editChapter' => true, 'scanalatorLinkRoute' => 'edit_scanalator', 'hideVolumes' => true, 'isChapter' => true
 	])
 @endif
 <br/>
@@ -25,8 +27,10 @@
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['number']->description}}"></i>
 	@if((!empty($chapter)) && ($chapter->chapter_number != null) && (Input::old('chapter_number') == null))
 		{{ Form::text('chapter_number', $chapter->chapter_number, array('class' => 'form-control', 'placeholder' => $configurations['number']->value)) }}
-	@else
+	@elseif(Input::old('chapter_number') != null)
 		{{ Form::text('chapter_number', Input::old('chapter_number'), array('class' => 'form-control', 'placeholder' => $configurations['number']->value)) }}
+	@else
+		{{ Form::text('chapter_number', $newChapter, array('class' => 'form-control', 'placeholder' => $configurations['number']->value)) }}
 	@endif
 	@if($errors->has('chapter_number'))
 		<div class ="alert alert-danger" id="name_errors">{{$errors->first('chapter_number')}}</div>
@@ -45,22 +49,22 @@
 
 <div class="form-group">
 	{{ Form::label('scanalator_primary', 'Primary Scanalators') }}
-	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['scanalatorPrimary']->description}}"></i>
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primary_scanalators']->description}}"></i>
 	@if((!empty($chapter)) && ($chapter->primary_scanalators != null) && (Input::old('scanalator_primary') == null))
-		{{ Form::text('scanalator_primary', collect($chapter->primary_scanalators->pluck('name'))->implode(", "), array('class' => 'form-control', 'placeholder' => $configurations['scanalatorPrimary']->value)) }}
+		{{ Form::text('scanalator_primary', collect($chapter->primary_scanalators->pluck('name'))->implode(", "), array('class' => 'form-control', 'placeholder' => $configurations['primary_scanalators']->value)) }}
 	@else
-		{{ Form::text('scanalator_primary', Input::old('scanalator_primary'), array('class' => 'form-control', 'placeholder' => $configurations['scanalatorPrimary']->value)) }}
+		{{ Form::text('scanalator_primary', Input::old('scanalator_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primary_scanalators']->value)) }}
 	@endif
 	@if($errors->has('scanalator_primary'))
 		<div class ="alert alert-danger" id="name_errors">{{$errors->first('scanalator_primary')}}</div>
 	@endif
 	
 	{{ Form::label('scanalator_secondary', 'Secondary Scanalators') }}
-	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['scanalatorSecondary']->description}}"></i>
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondary_scanalators']->description}}"></i>
 	@if((!empty($chapter)) && ($chapter->secondary_scanalators != null) && (Input::old('scanalator_secondary') == null))
-		{{ Form::text('scanalator_secondary', collect($chapter->secondary_scanalators->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['scanalatorSecondary']->value)) }}
+		{{ Form::text('scanalator_secondary', collect($chapter->secondary_scanalators->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondary_scanalators']->value)) }}
 	@else
-		{{ Form::text('scanalator_secondary', Input::old('scanalator_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['scanalatorSecondary']->value)) }}
+		{{ Form::text('scanalator_secondary', Input::old('scanalator_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondary_scanalators']->value)) }}
 	@endif
 	@if($errors->has('scanalator_secondary'))
 		<div class ="alert alert-danger" id="name_errors">{{$errors->first('scanalator_secondary')}}</div>

@@ -3,7 +3,6 @@
 namespace App\Models\TagObjects\Tag;
 
 use App\Models\BaseManicModel;
-use Auth;
 
 class TagAlias extends BaseManicModel
 {

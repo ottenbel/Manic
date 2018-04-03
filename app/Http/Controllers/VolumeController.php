@@ -2,27 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Redirect;
 use Auth;
-use DB;
-use Config;
-use Input;
-use Storage;
-use InterventionImage;
-use ImageUploadHelper;
-use FileExportHelper;
+use App\Http\Requests\Volume\StoreVolumeRequest;
+use App\Http\Requests\Volume\UpdateVolumeRequest;
 use App\Models\Collection;
 use App\Models\Image;
 use App\Models\Volume;
-use App\Http\Requests\Volume\StoreVolumeRequest;
-use App\Http\Requests\Volume\UpdateVolumeRequest;
+use Config;
+use DB;
+use FileExportHelper;
+use ImageUploadHelper;
+use Input;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Storage;
 
 class VolumeController extends WebController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
+		$this->placeholderStub = "volume";
+		$this->placeheldFields = array('cover', 'number', 'name');
+		
 		$this->middleware('auth');
 		$this->middleware('permission:Create Volume')->only(['create', 'store']);
 		$this->middleware('canInteractWithCollection')->only('create');
@@ -36,10 +39,21 @@ class VolumeController extends WebController
     {
 		$this->authorize(Volume::class);
 		
-		$messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration($collection);
+		$this->GetFlashedMessages($request);
+		$configurations = $this->GetConfiguration($collection);
 		
-        return View('volumes.create', array('configurations' => $configurations, 'collection' => $collection, 'messages' => $messages));
+		$collection->load([
+		'volumes' => function ($query)
+			{ $query->orderBy('volume_number', 'asc'); },
+		'volumes.chapters' => function ($query)
+			{ $query->orderBy('chapter_number', 'asc'); },
+		'volumes.chapters.primary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); },
+		'volumes.chapters.secondary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); }
+		]);
+		
+        return View('volumes.create', array('configurations' => $configurations, 'collection' => $collection, 'messages' => $this->messages));
     }
 
     public function store(StoreVolumeRequest $request)
@@ -84,23 +98,32 @@ class VolumeController extends WebController
 				Storage::delete($cover->thumbnail);
 			}
 			
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully create volume $volume->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully create volume $volume->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully created new volume #$volume->volume_number on collection $collection->name."], null, null);
-		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully created new volume #$volume->volume_number on collection $collection->name.");
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 
     public function edit(Request $request, Volume $volume)
     {
 		$this->authorize($volume);
 		
-        $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
+        $this->GetFlashedMessages($request);
+		$configurations = $this->GetConfiguration();
 		
-        return View('volumes.edit', array('configurations' => $configurations, 'volume' => $volume, 'messages' => $messages));
+		$volume->load([
+		'chapters' => function ($query)
+			{ $query->orderBy('chapter_number', 'asc'); },
+		'chapters.primary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); },
+		'chapters.secondary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); }
+		]);
+		
+        return View('volumes.edit', array('configurations' => $configurations, 'volume' => $volume, 'messages' => $this->messages));
     }
 
     public function update(UpdateVolumeRequest $request, Volume $volume)
@@ -162,13 +185,13 @@ class VolumeController extends WebController
 				Storage::delete($cover->thumbnail);
 			}
 			
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully update volume $volume->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully update volume $volume->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully updated volume #$volume->volume_number on collection $collection->name."], null, null);
-		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully updated volume #$volume->volume_number on collection $collection->name.");
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 
     public function destroy(Volume $volume)
@@ -191,13 +214,13 @@ class VolumeController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully delete volume $volumeName."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully delete volume $volumeName.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully purged volume $volumeName from the collection."], null, null);
-		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully purged volume $volumeName from the collection.");
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 	
     public function export(Volume $volume)
@@ -219,30 +242,20 @@ class VolumeController extends WebController
 		}
 		else
 		{
-			$messages = self::BuildFlashedMessagesVariable(["Unable to export zipped volume file."], null, null);
-			
+			$this->AddWarningMessage("Unable to export zipped volume file.");
 			//Return an error message saying that it couldn't create a volume export
-			return Redirect::back()->with(["messages" => $messages]);
+			return Redirect::back()->with(["messages" => $this->messages]);
 		}
 	}
 	
-	private static function GetConfiguration($collection = null)
+	protected function GetConfiguration($collection = null)
 	{
-		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'volume%')->get();
+		$configurationsArray = parent::GetConfiguration();
 		
-		$cover = $configurations->where('key', '=', Config::get('constants.keys.placeholders.volume.cover'))->first();
-		$number = $configurations->where('key', '=', Config::get('constants.keys.placeholders.volume.number'))->first();
 		if (($collection != null) && ($collection->volumes->count() > 0))
 		{
-			$number->value = $collection->volumes->last()->volume_number + 1;
+			$configurationsArray['number']->value = $collection->volumes->last()->volume_number + 1;
 		}
-		else
-		{
-			$number->value = 1;
-		}
-		$name = $configurations->where('key', '=', Config::get('constants.keys.placeholders.volume.name'))->first();
-		
-		$configurationsArray = array('cover' => $cover, 'number' => $number, 'name' => $name);
 		
 		return $configurationsArray;
 	}

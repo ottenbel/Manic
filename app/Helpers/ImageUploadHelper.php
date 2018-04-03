@@ -3,11 +3,11 @@
 namespace App\Helpers;
 
 use App\Models\Image;
-use Webpatser\Uuid\Uuid;
-use InterventionImage;
-use Zipper;
-use Storage;
 use File;
+use InterventionImage;
+use Storage;
+use Webpatser\Uuid\Uuid;
+use Zipper;
 
 class ImageUploadHelper
 {

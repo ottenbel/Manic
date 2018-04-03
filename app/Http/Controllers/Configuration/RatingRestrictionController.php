@@ -17,6 +17,8 @@ class RatingRestrictionController extends WebController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
 		$this->middleware('auth');
 	}
 	
@@ -41,9 +43,9 @@ class RatingRestrictionController extends WebController
 			$ratingRestrictions = ConfigurationRatingRestriction::where('user_id', '=', null)->orderBy('priority')->get();
 		}
 		
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		
-		return View('configuration.rating-restriction.edit', array('ratingRestrictions' => $ratingRestrictions, 'messages' => $messages));
+		return View('configuration.rating-restriction.edit', array('ratingRestrictions' => $ratingRestrictions, 'messages' => $this->messages));
     }
 
     /**
@@ -87,27 +89,28 @@ class RatingRestrictionController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully update rating restriction settings based on site configuration."]);
+			
+			$this->AddWarningMessage("Unable to successfully update rating restriction settings based on site configuration.");
 			if (Route::is('user_update_configuration_rating_restriction'))
 			{
-				return redirect()->route('user_dashboard_configuration_rating_restriction')->with(["messages" => $messages])->withInput();
+				return redirect()->route('user_dashboard_configuration_rating_restriction')->with(["messages" => $this->messages])->withInput();
 			}
 			else if (Route::is('admin_update_configuration_rating_restriction'))
 			{
-				return redirect()->route('admin_dashboard_configuration_rating_restriction')->with(["messages" => $messages])->withInput();
+				return redirect()->route('admin_dashboard_configuration_rating_restriction')->with(["messages" => $this->messages])->withInput();
 			}
 		}
 		DB::commit();
 		
 		if (Route::is('user_update_configuration_rating_restriction'))
 		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully updated rating restriction configuration settings for user."], null, null);
-			return redirect()->route('user_dashboard_configuration_rating_restriction')->with("messages", $messages);
+			$this->AddSuccessMessage("Successfully updated rating restriction configuration settings for user.");
+			return redirect()->route('user_dashboard_configuration_rating_restriction')->with("messages", $this->messages);
 		}
 		else if (Route::is('admin_update_configuration_rating_restriction'))
 		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully updated rating restriction configuration settings for site."], null, null);
-			return redirect()->route('admin_dashboard_configuration_rating_restriction')->with("messages", $messages);
+			$this->AddSuccessMessage("Successfully updated rating restriction configuration settings for site.");
+			return redirect()->route('admin_dashboard_configuration_rating_restriction')->with("messages", $this->messages);
 		}
     }
 
@@ -142,12 +145,12 @@ class RatingRestrictionController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully reset rating restriction settings based on site configuration."]);
-			return redirect()->route('user_dashboard_configuration_rating_restriction')->with(["messages" => $messages]);
+			$this->AddWarningMessage("Unable to successfully reset rating restriction settings based on site configuration.");
+			return redirect()->route('user_dashboard_configuration_rating_restriction')->with(["messages" => $this->messages]);
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully reset rating restriction configuration settings for user to site defaults."], null, null);
-		return redirect()->route('user_dashboard_configuration_rating_restriction')->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully reset rating restriction configuration settings for user to site defaults.");
+		return redirect()->route('user_dashboard_configuration_rating_restriction')->with("messages", $this->messages);
     }
 }

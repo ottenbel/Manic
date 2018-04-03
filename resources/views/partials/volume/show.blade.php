@@ -63,7 +63,7 @@
 		</div>
 		
 		<table width="100%">
-			@foreach($volume->chapters()->orderBy('chapter_number', 'asc')->get() as $chapter)
+			@foreach($volume->chapters as $chapter)
 				<tr>
 					@if($chapter->name != null && $chapter->name != "")
 						<td>
@@ -84,9 +84,9 @@
 						</td>
 					@endif
 					<td>
-						@if(($chapter->primary_scanalators()) || ($chapter->secondary_scanalators()))
+						@if(($chapter->primary_scanalators->count()) || ($chapter->secondary_scanalators->count()))
 							<div class="scanalator_holder">			
-							@foreach($chapter->primary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
+							@foreach($chapter->primary_scanalators as $scanalator)
 									@if($scanalatorLinkRoute == 'index_collection')
 										@include('partials.tagObjects.display.display-tag-search-object',
 											['tagObject' => $scanalator,
@@ -103,7 +103,7 @@
 									@endif
 								@endforeach
 								
-								@foreach($chapter->secondary_scanalators()->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc')->get() as $scanalator)
+								@foreach($chapter->secondary_scanalators as $scanalator)
 									@if($scanalatorLinkRoute == 'index_collection')
 										@include('partials.tagObjects.display.display-tag-search-object',
 											['tagObject' => $scanalator,

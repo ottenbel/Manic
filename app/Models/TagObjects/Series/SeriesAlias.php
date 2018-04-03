@@ -3,7 +3,6 @@
 namespace App\Models\TagObjects\Series;
 
 use App\Models\BaseManicModel;
-use Auth;
 
 class SeriesAlias extends BaseManicModel
 {

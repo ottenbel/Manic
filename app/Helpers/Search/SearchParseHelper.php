@@ -2,146 +2,126 @@
 
 namespace App\Helpers\Search;
 
-use App\Models\Collection;
-use App\Models\TagObjects\Artist\Artist;
-use App\Models\TagObjects\Artist\ArtistAlias;
-use App\Models\TagObjects\Character\Character;
-use App\Models\TagObjects\Character\CharacterAlias;
-use App\Models\TagObjects\Series\Series;
-use App\Models\TagObjects\Series\SeriesAlias;
-use App\Models\TagObjects\Tag\Tag;
-use App\Models\TagObjects\Tag\TagAlias;
-use App\Models\TagObjects\Scanalator\Scanalator;
-use App\Models\TagObjects\Scanalator\ScanalatorAlias;
+use Auth;
 use App\Models\Language;
 use App\Models\Rating;
 use App\Models\Status;
-use Auth;
 use Config;
-use LookupHelper;
 use ConfigurationLookupHelper;
+
+use LookupHelper;
 
 class SearchParseHelper
 {
 	/*
 	 * Return the collection that matches the search string.
 	 */
-	public static function Search($search_string, &$collections, &$searchArtists, &$searchCharacters, &$searchScanalators, &$searchSeries, &$searchTags, &$searchLanguages, &$searchRatings, &$searchStatuses, &$searchCanonicity, &$invalid_tokens)
+	public static function Search($searchString, &$collections, &$searchArtists, &$searchCharacters, &$searchScanalators, &$searchSeries, &$searchTags, &$searchLanguages, &$searchRatings, &$searchStatuses, &$searchCanonicity, &$searchFavourites, &$invalidTokens, $paginationKey)
 	{
-		$searchArtists = array();
-		$searchCharacters = array();
-		$searchScanalators = array(); 
-		$searchSeries = array(); 
-		$searchTags = array(); 
-		$searchLanguages = array();
-		$searchRatings = array();
-		$searchStatuses = array();
-		$searchCanonicity = array();
-		$invalid_tokens = array();
+		$searchArtists = $searchCharacters = $searchScanalators = $searchSeries = $searchTags = $searchLanguages = $searchRatings = $searchStatuses = $searchCanonicity = $searchFavourites = $invalidTokens = array();
 		
 		//Break out search into tokens
-		$search_tokens = array_map('trim', explode(',', $search_string));
+		$searchTokens = array_map('trim', explode(',', $searchString));
 		
 		//Process and organize the tokens
-		foreach ($search_tokens as $search_token)
+		foreach ($searchTokens as $searchToken)
 		{
-			if ($search_token == "")
+			if ($searchToken == "")
 			{
 				continue;
 			}
 			
 			$searchClassifier = "";
-			$not = false;
-			$primary = false;
-			$secondary = false;
+			$not = $primary = $secondary = false;
 			
 			//Check for - (not) flags
-			if ($search_token[0] == "-")
+			if ($searchToken[0] == "-")
 			{
 				$not = true;
-				$search_token = trim(substr($search_token, 1));
+				$searchToken = trim(substr($searchToken, 1));
 			}
 			
 			//Check for primary: and secondary: flags
-			$flag_marker = strpos($search_token, ':');
-			if ($flag_marker !== false)
+			$flagMarker = strpos($searchToken, ':');
+			if ($flagMarker !== false)
 			{
 				//Get the contents before the ":" to check for primary or secondary
-				$flag = strtolower(substr($search_token, 0, $flag_marker));
+				$flag = strtolower(substr($searchToken, 0, $flagMarker));
 				//check if the contents are primary or secondary
 				if ($flag == "primary")
 				{
 					$primary = true;
-					$search_token = trim(substr($search_token, $flag_marker + 1));
+					$searchToken = trim(substr($searchToken, $flagMarker + 1));
 				}
 				else if ($flag == "secondary")
 				{
 					$secondary = true;
-					$search_token = trim(substr($search_token, $flag_marker + 1));
+					$searchToken = trim(substr($searchToken, $flagMarker + 1));
 				}
 			}
 			
 			//check for search clarifiers artist:, character:, scanalator:, series:, tag:, language:, rating:, status:, etc
-			$flag_marker = strpos($search_token, ':');
-			if ($flag_marker !== false)
+			$flagMarker = strpos($searchToken, ':');
+			if ($flagMarker !== false)
 			{
 				//Get the contents before the ":" to check for search clarifiers
-				$searchClassifier = strtolower(substr($search_token, 0, $flag_marker));
-				$search_token = trim(substr($search_token, $flag_marker + 1));
+				$searchClassifier = strtolower(substr($searchToken, 0, $flagMarker));
+				$searchToken = trim(substr($searchToken, $flagMarker + 1));
 			}
 			
 			//Pass the variable in by reference
 			$ref = true;
 			if ($searchClassifier == "artist")
 			{
-				self::ParseSearchTokenArtist($searchArtists, $invalid_tokens, $search_token, $primary, $secondary, $not, true, $ref);
+				self::ParseSearchTokenArtist($searchArtists, $invalidTokens, $searchToken, $primary, $secondary, $not, true, $ref);
 			}
 			else if ($searchClassifier == "character")
 			{
-				self::ParseSearchTokenCharacter($searchCharacters, $invalid_tokens, $search_token, $primary, $secondary, $not, true, $ref);
+				self::ParseSearchTokenCharacter($searchCharacters, $invalidTokens, $searchToken, $primary, $secondary, $not, true, $ref);
 			}
 			else if ($searchClassifier == "scanalator")
 			{
-				self::ParseSearchTokenScanalator($searchScanalators, $invalid_tokens, $search_token, $primary, $secondary, $not, true, $ref);
+				self::ParseSearchTokenScanalator($searchScanalators, $invalidTokens, $searchToken, $primary, $secondary, $not, true, $ref);
 			}
 			else if ($searchClassifier == "series")
 			{
-				self::ParseSearchTokenSeries($searchSeries, $invalid_tokens, $search_token, $primary, $secondary, $not, true, $ref);
+				self::ParseSearchTokenSeries($searchSeries, $invalidTokens, $searchToken, $primary, $secondary, $not, true, $ref);
 			}
 			else if ($searchClassifier == "tag")
 			{
-				self::ParseSearchTokenTag($searchTags, $invalid_tokens, $search_token, $primary, $secondary, $not, true, $ref);
+				self::ParseSearchTokenTag($searchTags, $invalidTokens, $searchToken, $primary, $secondary, $not, true, $ref);
 			}
 			else if ($searchClassifier == "language")
 			{
-				self::ParseSearchTokenLanguage($searchLanguages, $invalid_tokens, $search_token, $not, true, $ref);
+				self::ParseSearchTokenLanguage($searchLanguages, $invalidTokens, $searchToken, $not, true, $ref);
 			}
 			else if ($searchClassifier == "rating")
 			{
-				self::ParseSearchTokenRating($searchRatings, $invalid_tokens, $search_token, $not, true, $ref);
+				self::ParseSearchTokenRating($searchRatings, $invalidTokens, $searchToken, $not, true, $ref);
 			}
 			else if ($searchClassifier == "status")
 			{
-				self::ParseSearchTokenStatus($searchStatuses, $invalid_tokens, $search_token, $not, true, $ref);
+				self::ParseSearchTokenStatus($searchStatuses, $invalidTokens, $searchToken, $not, true, $ref);
 			}
 			else
 			{
 				$found = false;
 				
 				//Search classifier not used, search for each type 
-				self::ParseSearchTokenArtist($searchArtists, $invalid_tokens, $search_token, $primary, $secondary, $not, false, $found);
-				self::ParseSearchTokenCharacter($searchCharacters, $invalid_tokens, $search_token, $primary, $secondary, $not, false, $found);
-				self::ParseSearchTokenScanalator($searchScanalators, $invalid_tokens, $search_token, $primary, $secondary, $not, false, $found);
-				self::ParseSearchTokenSeries($searchSeries, $invalid_tokens, $search_token, $primary, $secondary, $not, false, $found);
-				self::ParseSearchTokenTag($searchTags, $invalid_tokens, $search_token, $primary, $secondary, $not, false, $found);
-				self::ParseSearchTokenLanguage($searchLanguages, $invalid_tokens, $search_token, $not, false, $found);
-				self::ParseSearchTokenRating($searchRatings, $invalid_tokens, $search_token, $not, false, $found);
-				self::ParseSearchTokenStatus($searchStatuses, $invalid_tokens, $search_token, $not, false, $found);
-				self::ParseSearchCanonicity($searchCanonicity, $search_token, $not, $found);
+				self::ParseSearchTokenArtist($searchArtists, $invalidTokens, $searchToken, $primary, $secondary, $not, false, $found);
+				self::ParseSearchTokenCharacter($searchCharacters, $invalidTokens, $searchToken, $primary, $secondary, $not, false, $found);
+				self::ParseSearchTokenScanalator($searchScanalators, $invalidTokens, $searchToken, $primary, $secondary, $not, false, $found);
+				self::ParseSearchTokenSeries($searchSeries, $invalidTokens, $searchToken, $primary, $secondary, $not, false, $found);
+				self::ParseSearchTokenTag($searchTags, $invalidTokens, $searchToken, $primary, $secondary, $not, false, $found);
+				self::ParseSearchTokenLanguage($searchLanguages, $invalidTokens, $searchToken, $not, false, $found);
+				self::ParseSearchTokenRating($searchRatings, $invalidTokens, $searchToken, $not, false, $found);
+				self::ParseSearchTokenStatus($searchStatuses, $invalidTokens, $searchToken, $not, false, $found);
+				self::ParseSearchCanonicity($searchCanonicity, $searchToken, $not, $found);
+				self::ParseSearchFavourites($searchFavourites, $searchToken, $not, $found);
 				
 				if (!($found))
 				{
-					array_push($invalid_tokens, $search_token);
+					array_push($invalidTokens, $searchToken);
 				}
 			}
 		}
@@ -149,525 +129,201 @@ class SearchParseHelper
 		//Build the search query
 		$query = $collections;
 		
-		$i = 0;
-		foreach($searchCanonicity as $canonicity)
-		{
-			if ($i == 0)
-			{
-				if ($canonicity['not'])
-				{
-					$query = $query->where('canonical', '!=', $canonicity['canon']);
-				}
-				else
-				{
-					$query = $query->where('canonical', '=', $canonicity['canon']);
-				}
-			}
-			else
-			{
-				if ($canonicity['not'])
-				{
-					$query = $query->orWhere('canonical', '!=', $canonicity['canon']);
-				}
-				else
-				{
-					$query = $query->orWhere('canonical', '=', $canonicity['canon']);
-				}
-			}
-			$i++;
-		}
+		self::AppendFavouritesToQuery($query, $searchFavourites);
+		self::AppendCanonicityToQuery($query, $searchCanonicity);
 		
-		$i = 0;
-		foreach($searchStatuses as $status)
-		{
-			if ($i == 0)
-			{
-				if ($status['not'])
-				{
-					$query = $query->where('status_id', '!=', $status['status']->id);
-				}
-				else
-				{
-					$query = $query->where('status_id', '=', $status['status']->id);
-				}
-			}
-			else
-			{
-				if ($status['not'])
-				{
-					$query = $query->orWhere('status_id', '!=', $status['status']->id);
-				}
-				else
-				{
-					$query = $query->orWhere('status_id', '=', $status['status']->id);
-				}
-			}
-			$i++;
-		}
+		self::AppendSeperatePropertyToQuery($query, $searchStatuses, 'status_id', 'status');
+		self::AppendSeperatePropertyToQuery($query, $searchRatings, 'rating_id', 'rating');
+		self::AppendSeperatePropertyToQuery($query, $searchLanguages, 'language_id', 'language');
 		
-		$i = 0;
-		foreach($searchRatings as $rating)
-		{
-			if ($i == 0)
-			{
-				if ($rating['not'])
-				{
-					$query = $query->where('rating_id', '!=', $rating['rating']->id);
-				}
-				else
-				{
-					$query = $query->where('rating_id', '=', $rating['rating']->id);
-				}
-			}
-			else
-			{
-				if ($rating['not'])
-				{
-					$query = $query->orWhere('rating_id', '!=', $rating['rating']->id);
-				}
-				else
-				{
-					$query = $query->orWhere('rating_id', '=', $rating['rating']->id);
-				}
-			}
-		}
+		self::AppendTagObjectToQuery($query, $searchArtists, 'artist', 'artists', 'artists', 'artist_collection');
+		self::AppendTagObjectToQuery($query, $searchCharacters, 'character', 'characters', 'characters', 'character_collection');
+		self::AppendTagObjectToQuery($query, $searchSeries, 'series', 'series', 'series', 'collection_series');
+		self::AppendTagObjectToQuery($query, $searchTags, 'tag', 'tags', 'tags', 'collection_tag');
+		self::AppendTagObjectToQuery($query, $searchScanalators, 'scanalator', 'chapters.scanalators', 'scanalators', 'chapter_scanalator');
 		
-		$i = 0;
-		foreach($searchLanguages as $language)
-		{
-			if ($i == 0)
-			{
-				if ($language['not'])
-				{
-					$query = $query->where('language_id', '!=', $language['language']->id);
-				}
-				else
-				{
-					$query = $query->where('language_id', '=', $language['language']->id);
-				}
-			}
-			else
-			{
-				if ($language['not'])
-				{
-					$query = $query->orWhere('language_id', '!=', $language['language']->id);
-				}
-				else
-				{
-					$query = $query->orWhere('language_id', '=', $language['language']->id);
-				}
-			}
-			$i++;
-		}
-		
-		//Check for collections that get all artists
-		foreach($searchArtists as $artist)
-		{
-			$artistObject = $artist['artist'];
-			$not = $artist['not'];
-			$primary = $artist['primary'];
-			$secondary = $artist['secondary'];
-			$allArtists = $artistObject->descendants()->pluck('id');
-			
-			$allArtists->push($artistObject->id);
-			
-			if ($not)
-			{
-				$query = $query->whereDoesntHave('artists', function($query) use($allArtists, $primary, $secondary){
-					if ($primary)
-					{
-						$query->whereIn('artists.id', $allArtists)->where('artist_collection.primary', '=', 1);
-					}
-					else if ($secondary)
-					{
-						$query->whereIn('artists.id', $allArtists)->where('artist_collection.primary', '=', 0);
-					}
-					else
-					{
-						$query->whereIn('artists.id', $allArtists);
-					}
-				});
-			}
-			else
-			{
-				$query = $query->whereHas('artists', function($query) use($allArtists, $primary, $secondary){
-					if ($primary)
-					{
-						$query->whereIn('artists.id', $allArtists)->where('artist_collection.primary', '=', 1);
-					}
-					else if ($secondary)
-					{
-						$query->whereIn('artists.id', $allArtists)->where('artist_collection.primary', '=', 0);
-					}
-					else
-					{
-						$query->whereIn('artists.id', $allArtists);
-					}
-				});
-			}
-		}
-		
-		//Check for collections that get all characters
-		foreach($searchCharacters as $character)
-		{
-			$characterObject = $character['character'];
-			$not = $character['not'];
-			$primary = $character['primary'];
-			$secondary = $character['secondary'];
-			$allCharacters = $characterObject->descendants()->pluck('id');
-			
-			$allCharacters->push($characterObject->id);
-			
-			if ($not)
-			{
-				$query = $query->whereDoesntHave('characters', function($query) use($allCharacters, $primary, $secondary){
-					if ($primary)
-					{
-						$query->whereIn('characters.id', $allCharacters)->where('character_collection.primary', '=', 1);
-					}
-					else if ($secondary)
-					{
-						$query->whereIn('characters.id', $allCharacters)->where('character_collection.primary', '=', 0);
-					}
-					else 
-					{
-						$query->whereIn('characters.id', $allCharacters);
-					}			
-				});
-			}
-			else
-			{
-				$query = $query->whereHas('characters', function($query) use($allCharacters, $primary, $secondary){
-					if ($primary)
-					{
-						$query->whereIn('characters.id', $allCharacters)->where('character_collection.primary', '=', 1);
-					}
-					else if ($secondary)
-					{
-						$query->whereIn('characters.id', $allCharacters)->where('character_collection.primary', '=', 0);
-					}
-					else 
-					{
-						$query->whereIn('characters.id', $allCharacters);
-					}
-				});
-			}
-		}
-		
-		//Check for collections that get all series
-		foreach($searchSeries as $series)
-		{
-			$seriesObject = $series['series'];
-			$not = $series['not'];
-			$primary = $series['primary'];
-			$secondary = $series['secondary'];
-			$allSeries = $seriesObject->descendants()->pluck('id');
-			
-			$allSeries->push($seriesObject->id);
-			
-			if ($not)
-			{
-				$query = $query->whereDoesntHave('series', function($query) use($allSeries, $primary, $secondary){
-					if ($primary)
-					{
-						$query->whereIn('series.id', $allSeries)->where('collection_series.primary', '=', 1);
-					}
-					else if ($secondary)
-					{
-						$query->whereIn('series.id', $allSeries)->where('collection_series.primary', '=', 0);
-					}
-					else 
-					{
-						$query->whereIn('series.id', $allSeries);
-					}
-				});
-			}
-			else
-			{
-				$query = $query->whereHas('series', function($query) use($allSeries, $primary, $secondary){
-					if ($primary)
-					{
-						$query->whereIn('series.id', $allSeries)->where('collection_series.primary', '=', 1);
-					}
-					else if ($secondary)
-					{
-						$query->whereIn('series.id', $allSeries)->where('collection_series.primary', '=', 0);
-					}
-					else 
-					{
-						$query->whereIn('series.id', $allSeries);
-					}
-				});
-			}
-		}
-		
-		//Check for collections that get all tags
-		foreach($searchTags as $tag)
-		{
-			$tagObject = $tag['tag'];
-			$not = $tag['not'];
-			$primary = $tag['primary'];
-			$secondary = $tag['secondary'];
-			$allTags = $tagObject->descendants()->pluck('id');
-			
-			$allTags->push($tagObject->id);
-			
-			if ($not)
-			{
-				$query = $query->whereDoesntHave('tags', function($query) use($allTags, $primary, $secondary){
-					if ($primary)
-					{
-						$query->whereIn('tags.id', $allTags)->where('collection_tag.primary', '=', 1);
-					}
-					else if ($secondary)
-					{
-						$query->whereIn('tags.id', $allTags)->where('collection_tag.primary', '=', 0);
-					}
-					else 
-					{
-						$query->whereIn('tags.id', $allTags);
-					}
-				});
-			}
-			else
-			{
-				$query = $query->whereHas('tags', function($query) use($allTags, $primary, $secondary){
-					if ($primary)
-					{
-						$query->whereIn('tags.id', $allTags)->where('collection_tag.primary', '=', 1);
-					}
-					else if ($secondary)
-					{
-						$query->whereIn('tags.id', $allTags)->where('collection_tag.primary', '=', 0);
-					}
-					else 
-					{
-						$query->whereIn('tags.id', $allTags);
-					}
-				});
-			}
-		}
-		
-		//Check for collections that get all scanalators
-		foreach($searchScanalators as $scanalator)
-		{
-			$scanalatorObject = $scanalator['scanalator'];
-			$not = $scanalator['not'];
-			$primary = $scanalator['primary'];
-			$secondary = $scanalator['secondary'];
-			$allScanalators = $scanalatorObject->descendants()->pluck('id');
-			
-			$allScanalators->push($scanalatorObject->id);
-			
-			if ($not)
-			{
-				$query = $query->whereDoesntHave('chapters.scanalators', function($query) use($allScanalators, $primary, $secondary){
-					if ($primary)
-					{
-						$query->whereIn('scanalators.id', $allScanalators)->where('chapter_scanalator.primary', '=', 1);
-					}
-					else if ($secondary)
-					{
-						$query->whereIn('scanalators.id', $allScanalators)->where('chapter_scanalator.primary', '=', 0);
-					}
-					else
-					{
-						$query->whereIn('scanalators.id', $allScanalators);
-					}
-				});
-			}
-			else
-			{
-				$query = $query->whereHas('chapters.scanalators', function($query) use($allScanalators, $primary, $secondary){
-					if ($primary)
-					{
-						$query->whereIn('scanalators.id', $allScanalators)->where('chapter_scanalator.primary', '=', 1);
-					}
-					else if ($secondary)
-					{
-						$query->whereIn('scanalators.id', $allScanalators)->where('chapter_scanalator.primary', '=', 0);
-					}
-					else 
-					{
-						$query->whereIn('scanalators.id', $allScanalators);
-					}
-				});
-			}
-		}
-		
-		$lookupKey = Config::get('constants.keys.pagination.collectionsPerPageIndex');
-		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCollectionsPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($paginationKey)->value;
 		
 		$collections = $query->orderBy('updated_at', 'desc')->paginate($paginationCollectionsPerPageIndexCount);
 	}
 	
-	private static function ParseSearchTokenArtist(&$searchArtists, &$invalid_tokens, $search_token, $primary, $secondary, $not, $addToInvalid, &$found)
+	private static function ParseSearchTokenArtist(&$searchArtists, &$invalidTokens, $searchToken, $primary, $secondary, $not, $addToInvalid, &$found)
 	{
-		$artist = LookupHelper::GetArtistByNameOrAlias($search_token);
-		if ($artist != null)
+		$artist = LookupHelper::GetArtistByNameOrAlias($searchToken);
+		self::ParseSearchTagObjectToken($searchArtists, $invalidTokens, $searchToken, $primary, $secondary, $not, $addToInvalid, $found, $artist, 'artist');
+	}
+	
+	private static function ParseSearchTokenCharacter(&$searchCharacters, &$invalidTokens, $searchToken, $primary, $secondary, $not, $addToInvalid, &$found)
+	{
+		$character = LookupHelper::GetCharacterByNameOrAlias($searchToken);
+		self::ParseSearchTagObjectToken($searchCharacters, $invalidTokens, $searchToken, $primary, $secondary, $not, $addToInvalid, $found, $character, 'character');
+	}
+	
+	private static function ParseSearchTokenScanalator(&$searchScanalators, &$invalidTokens, $searchToken, $primary, $secondary, $not, $addToInvalid, &$found)
+	{
+		$scanalator = LookupHelper::GetScanalatorByNameOrAlias($searchToken);
+		self::ParseSearchTagObjectToken($searchScanalators, $invalidTokens, $searchToken, $primary, $secondary, $not, $addToInvalid, $found, $scanalator, 'scanalator');
+	}
+	
+	private static function ParseSearchTokenSeries(&$searchSeries, &$invalidTokens, $searchToken, $primary, $secondary, $not, $addToInvalid, &$found)
+	{
+		$series = LookupHelper::GetSeriesByNameOrAlias($searchToken);
+		self::ParseSearchTagObjectToken($searchSeries, $invalidTokens, $searchToken, $primary, $secondary, $not, $addToInvalid, $found, $series, 'series');
+	}
+	
+	private static function ParseSearchTokenTag(&$searchTags, &$invalidTokens, $searchToken, $primary, $secondary, $not, $addToInvalid, &$found)
+	{
+		$tag = LookupHelper::GetTagByNameOrAlias($searchToken);
+		self::ParseSearchTagObjectToken($searchTags, $invalidTokens, $searchToken, $primary, $secondary, $not, $addToInvalid, $found, $tag, 'tag');
+	}
+	
+	private static function ParseSearchTokenLanguage(&$searchLanguages, &$invalidTokens, $searchToken, $not, $addToInvalid, &$found)
+	{
+		$language = Language::where('name', '=', $searchToken)->first();
+		self::ParseSearchPropertyToken($searchLanguages, $invalidTokens, $searchToken, $not, $addToInvalid, $found, $language, 'language');
+	}
+	
+	private static function ParseSearchTokenRating(&$searchRatings, &$invalidTokens, $searchToken, $not, $addToInvalid, &$found)
+	{
+		$rating = Rating::where('name', '=', $searchToken)->first();
+		self::ParseSearchPropertyToken($searchRatings, $invalidTokens, $searchToken, $not, $addToInvalid, $found, $rating, 'rating');
+	}
+	
+	private static function ParseSearchTokenStatus(&$searchStatuses, &$invalidTokens, $searchToken, $not, $addToInvalid, &$found)
+	{
+		$status = Status::where('name', '=', $searchToken)->first();
+		self::ParseSearchPropertyToken($searchStatuses, $invalidTokens, $searchToken, $not, $addToInvalid, $found, $status, 'status');
+	}
+	
+	private static function ParseSearchPropertyToken(&$properties, &$invalidTokens, $searchToken, $not, $addToInvalid, &$found, $property, $propertyName)
+	{
+		if ($property != null)
 		{
-			array_push($searchArtists, array('artist' => $artist, 'not' => $not, 'primary' => $primary, 'secondary' => $secondary));
-			if (!($found))
-			{
-				$found = true;
-			}
+			array_push($properties, array($propertyName => $property, 'not' => $not));
+			if (!($found)) { $found = true; }
 		}
-		else if ($addToInvalid)
+		else if ($addToInvalid) { array_push($invalidTokens, $searchToken); }
+	}
+	
+	private static function ParseSearchTagObjectToken(&$searchTags, &$invalidTokens, $searchToken, $primary, $secondary, $not, $addToInvalid, &$found, $property, $propertyName)
+	{
+		if ($property != null)
 		{
-			array_push($invalid_tokens, $search_token);
+			array_push($searchTags, array($propertyName => $property, 'not' => $not, 'primary' => $primary, 'secondary' => $secondary));
+			if (!($found)) { $found = true; }
+		}
+		else if ($addToInvalid) { array_push($invalidTokens, $searchToken); }
+	}
+	
+	private static function ParseSearchCanonicity(&$searchCanonicity, $searchToken, $not, &$found)
+	{
+		$searchToken = strtolower($searchToken);
+		if ($searchToken == "canonical")   
+		{
+			array_push($searchCanonicity, array('canon' => true, 'not' => $not));
+			if (!($found)) { $found = true; }
 		}
 	}
 	
-	private static function ParseSearchTokenCharacter(&$searchCharacters, &$invalid_tokens, $search_token, $primary, $secondary, $not, $addToInvalid, &$found)
+	private static function ParseSearchFavourites(&$searchFavourites, $searchToken, $not, &$found)
 	{
-		$character = LookupHelper::GetCharacterByNameOrAlias($search_token);
-		if ($character != null)
+		if (Auth::check())
 		{
-			array_push($searchCharacters, array('character' => $character, 'not' => $not, 'primary' => $primary, 'secondary' => $secondary));
-			if (!($found))
+			$searchToken = strtolower($searchToken);
+			if ($searchToken == "favourites" || $searchToken == "favorites")   
 			{
-				$found = true;
+				array_push($searchFavourites, array('favourite' => true, 'not' => $not));
+				if (!($found)) { $found = true; }
 			}
-		}
-		else if ($addToInvalid)
-		{
-			array_push($invalid_tokens, $search_token);
 		}
 	}
 	
-	private static function ParseSearchTokenScanalator(&$searchScanalators, &$invalid_tokens, $search_token, $primary, $secondary, $not, $addToInvalid, &$found)
+	private static function AppendSeperatePropertyToQuery(&$query, $properties, $id, $arrayField)
 	{
-		$scanalator = LookupHelper::GetScanalatorByNameOrAlias($search_token);
-		if ($scanalator != null)
+		$i = 0;
+		foreach($properties as $property)
 		{
-			array_push($searchScanalators, array('scanalator' => $scanalator, 'not' => $not, 'primary' => $primary, 'secondary' => $secondary));
-			if (!($found))
-			{
-				$found = true;
-			}
-		}
-		else if ($addToInvalid)
-		{
-			array_push($invalid_tokens, $search_token);
+			$compareBy = '';
+			if ($property['not']) { $compareBy = '!='; }
+			else { $compareBy = '='; }
+			
+			if ($i == 0) { $query = $query->where($id, $compareBy, $property[$arrayField]->id); }
+			else { $query = $query->orWhere($id, $compareBy, $property[$arrayField]->id); }
+			$i++;
 		}
 	}
 	
-	private static function ParseSearchTokenSeries(&$searchSeries, &$invalid_tokens, $search_token, $primary, $secondary, $not, $addToInvalid, &$found)
+	private static function AppendCanonicityToQuery(&$query, $searchCanonicity)
 	{
-		$series = LookupHelper::GetSeriesByNameOrAlias($search_token);
-		if ($series != null)
+		$i = 0;
+		foreach($searchCanonicity as $canonicity)
 		{
-			array_push($searchSeries, array('series' => $series, 'not' => $not, 'primary' => $primary, 'secondary' => $secondary));
-			if (!($found))
-			{
-				$found = true;
-			}
-		}
-		else if ($addToInvalid)
-		{
-			array_push($invalid_tokens, $search_token);
+			$compareBy = '';
+			if ($canonicity['not']) {$compareBy = '!=';}
+			else {$compareBy = '=';}
+			
+			if ($i == 0) { $query = $query->where('canonical', $compareBy, $canonicity['canon']); }
+			else { $query = $query->orWhere('canonical', $compareBy, $canonicity['canon']); }
+			$i++;
 		}
 	}
 	
-	private static function ParseSearchTokenTag(&$searchTags, &$invalid_tokens, $search_token, $primary, $secondary, $not, $addToInvalid, &$found)
+	private static function AppendFavouritesToQuery(&$query, $searchFavourites)
 	{
-		$tag = LookupHelper::GetTagByNameOrAlias($search_token);
-		if ($tag != null)
+		if (Auth::check())
 		{
-			array_push($searchTags, array('tag' => $tag, 'not' => $not, 'primary' => $primary, 'secondary' => $secondary));
-			if (!($found))
+			$userFavourites = Auth::user()->favourite_collections()->pluck('collection_id')->toArray();
+			
+			$i = 0;
+			foreach($searchFavourites as $favourite)
 			{
-				$found = true;
-			}
-		}
-		else if ($addToInvalid)
-		{
-			array_push($invalid_tokens, $search_token);
-		}
-	}
-	
-	private static function ParseSearchTokenLanguage(&$searchLanguages, &$invalid_tokens, $search_token, $not, $addToInvalid, &$found)
-	{
-		$language = Language::where('name', '=', $search_token)->first();
-		
-		if ($language != null)
-		{
-			array_push($searchLanguages, array('language' => $language, 'not' => $not));
-			if (!($found))
-			{
-				$found = true;
-			}
-		}
-		else if ($addToInvalid)
-		{
-			array_push($invalid_tokens, $search_token);
-		}
-	}
-	
-	private static function ParseSearchTokenRating(&$searchRatings, &$invalid_tokens, $search_token, $not, $addToInvalid, &$found)
-	{
-		$rating = Rating::where('name', '=', $search_token)->first();
-				
-		if ($rating != null)
-		{
-			array_push($searchRatings, array('rating' => $rating, 'not' => $not));
-			if (!($found))
-			{
-				$found = true;
-			}
-		}
-		else
-		{
-			if ($addToInvalid)
-			{
-				array_push($invalid_tokens, $search_token);
-				if (!($found))
+				if ($favourite['not'])
 				{
-					$found = true;
+					$query = $query->whereNotIn('id', $userFavourites);
+				}
+				else
+				{
+					$query = $query->whereIn('id', $userFavourites);
 				}
 			}
 		}
 	}
 	
-	private static function ParseSearchTokenStatus(&$searchStatuses, &$invalid_tokens, $search_token, $not, $addToInvalid, &$found)
+	private static function AppendTagObjectToQuery(&$query, $tagObjects, $tagName, $tableNameOuter, $tableNameInner, $pivotTableName)
 	{
-		$status = Status::where('name', '=', $search_token)->first();
-				
-		if ($status != null)
+		foreach($tagObjects as $tag)
 		{
-			array_push($searchStatuses, array('status' => $status, 'not' => $not));
-			if (!($found))
+			$tagObject = $tag[$tagName];
+			$not = $tag['not'];
+			$primary = $tag['primary'];
+			$secondary = $tag['secondary'];
+			$allObjects = $tagObject->descendants()->pluck('id');
+			
+			$allObjects->push($tagObject->id);
+			
+			if ($not)
 			{
-				$found = true;
+				$query = $query->whereDoesntHave($tableNameOuter, function($query) use($allObjects, $primary, $secondary, $tableNameInner, $pivotTableName){
+					self::AppendTagObjectToQueryInner($query, $allObjects, $primary, $secondary, $tableNameInner,  $pivotTableName);
+				});
 			}
-		}
-		else
-		{
-			if ($addToInvalid)
+			else
 			{
-				array_push($invalid_tokens, $search_token);
+				$query = $query->whereHas($tableNameOuter, function($query) use($allObjects, $primary, $secondary, $tableNameInner, $pivotTableName){
+					self::AppendTagObjectToQueryInner($query, $allObjects, $primary, $secondary, $tableNameInner, $pivotTableName);
+				});
 			}
 		}
 	}
 	
-	private static function ParseSearchCanonicity(&$searchCanonicity, $search_token, $not, &$found)
+	private static function AppendTagObjectToQueryInner(&$query, $allObjects, $primary, $secondary, $tableName, $pivotTableName)
 	{
-		if (strtolower($search_token) == "canonical")
-		{
-			array_push($searchCanonicity, array('canon' => true, 'not' => $not));
-			if (!($found))
-			{
-				$found = true;
-			}
-		}
-		else if (strtolower($search_token) == "non-canonical")
-		{
-			array_push($searchCanonicity, array('canon' => false, 'not' => $not));
-			if (!($found))
-			{
-				$found = true;
-			}
-		}
+		if ($primary)
+			{ $query->whereIn($tableName.'.id', $allObjects)->where($pivotTableName.'.primary', '=', 1); }
+		else if ($secondary)
+			{ $query->whereIn($tableName.'.id', $allObjects)->where($pivotTableName.'.primary', '=', 0); }
+		else
+			{ $query->whereIn($tableName.'.id', $allObjects); }
 	}
 }
 ?>

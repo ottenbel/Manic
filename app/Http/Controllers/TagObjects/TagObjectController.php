@@ -14,16 +14,23 @@ use App\Models\Configuration\ConfigurationPlaceholder;
 
 class TagObjectController extends WebController
 {
-	protected static function GetTagObjectIndex(Request $request, $tagObjects, $paginationKey, $tagType, $pivotTableName, $tagIDField)
-	{
-		$messages = self::GetFlashedMessages($request);
-		$orderAndSorting = self::GetIndexOrdering($request);
-		$tagObjects = self::GetTagObjects($tagObjects, $paginationKey, $tagType, $pivotTableName, $tagIDField, $orderAndSorting);
-		
-		return View('tagObjects.'.$tagType.'.index', array($tagType => $tagObjects->appends(Input::except('page')), 'list_type' => $orderAndSorting['type'], 'list_order' => $orderAndSorting['order'], 'messages' => $messages));
+	protected $aliasesPaginationKey;
+	
+	public function __construct()
+    {
+		parent::__construct();
 	}
 	
-	protected static function DestroyTagObject($object, $objectType)
+	protected function GetTagObjectIndex(Request $request, $tagObjects, $paginationKey, $tagType, $pivotTableName, $tagIDField)
+	{
+		$this->GetFlashedMessages($request);
+		$orderAndSorting = self::GetIndexOrdering($request);
+		$tagObjects = $this->GetTagObjects($tagObjects, $paginationKey, $tagType, $pivotTableName, $tagIDField, $orderAndSorting);
+		
+		return View('tagObjects.'.$tagType.'.index', array($tagType => $tagObjects->appends(Input::except('page')), 'list_type' => $orderAndSorting['type'], 'list_order' => $orderAndSorting['order'], 'messages' => $this->messages));
+	}
+	
+	protected function DestroyTagObject($object, $objectType)
 	{
 		DB::beginTransaction();
 		try
@@ -51,29 +58,13 @@ class TagObjectController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully purge $objectType $objectName from the database."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully purge $objectType $objectName from the database.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully purged $objectType $objectName from the database."], null, null);
-		return redirect()->route('index_collection')->with("messages", $messages);
-	}
-	
-	protected static function GetConfiguration($tagType)
-	{
-		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', $tagType.'%')->get();
-		$keys = ['name', 'shortDescription', 'description', 'source', 'parent', 'child'];
-		
-		$configurationsArray = array();
-		
-		foreach ($keys as $key)
-		{
-			$value = $configurations->where('key', '=', Config::get('constants.keys.placeholders.'.$tagType.'.'.$key))->first();
-			$configurationsArray = array_merge($configurationsArray, [$key => $value]);
-		}
-		
-		return $configurationsArray;
+		$this->AddSuccessMessage("Successfully purged $objectType $objectName from the database.");
+		return redirect()->route('index_collection')->with("messages", $this->messages);
 	}
 	
 	private static function GetIndexOrdering(Request $request)
@@ -103,7 +94,7 @@ class TagObjectController extends WebController
 		return ['type' => $listType, 'order' => $listOrder];
 	}
 	
-	protected static function GetAliasShowOrdering(Request $request)
+	protected function GetAliasShowOrdering(Request $request)
 	{
 		$globalListOrder = trim(strtolower($request->input('global_order')));
 		$personalListOrder = trim(strtolower($request->input('personal_order')));
@@ -124,10 +115,9 @@ class TagObjectController extends WebController
 		
 	}
 	
-	private static function GetTagObjects($tagObjects, $paginationKey, $tagType, $pivotTableName, $tagIDField, $orderAndSorting)
+	private function GetTagObjects($tagObjects, $paginationKey, $tagType, $pivotTableName, $tagIDField, $orderAndSorting)
 	{
-		$lookupKey = Config::get('constants.keys.pagination.'.$paginationKey);
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->paginationKey)->value;
 		
 		if ($orderAndSorting['type'] == Config::get('constants.sortingStringComparison.tagListType.alphabetic'))
 		{

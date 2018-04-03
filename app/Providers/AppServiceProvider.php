@@ -9,6 +9,10 @@ use App\Models\Volume;
 use App\Observers\VolumeObserver;
 use App\Models\Collection;
 use App\Observers\CollectionObserver;
+
+use App\Models\Language;
+use App\Observers\LanguageObserver;
+
 use App\Models\TagObjects\Artist\Artist;
 use App\Observers\TagObjects\Artist\ArtistObserver;
 use App\Models\TagObjects\Artist\ArtistAlias;
@@ -37,6 +41,12 @@ use App\Observers\Configuration\Placeholder\PlaceholderObserver;
 use App\Models\Configuration\ConfigurationRatingRestriction;
 use App\Observers\Configuration\RatingRestriction\RatingRestrictionObserver;
 
+use App\Models\User\CollectionFavourite;
+use App\Observers\User\CollectionFavouritesObserver;
+
+use App\Models\User\CollectionBlacklist;
+use App\Observers\User\CollectionBlacklistObserver;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -50,6 +60,7 @@ class AppServiceProvider extends ServiceProvider
 		Chapter::observe(ChapterObserver::class);
 		Volume::observe(VolumeObserver::class);
 		Collection::observe(CollectionObserver::class);
+		Language::observe(LanguageObserver::class);
 		Artist::observe(ArtistObserver::class);
 		ArtistAlias::observe(ArtistAliasObserver::class);
 		Character::observe(CharacterObserver::class);
@@ -63,6 +74,8 @@ class AppServiceProvider extends ServiceProvider
 		ConfigurationPagination::observe(PaginationObserver::class);
 		ConfigurationPlaceholder::observe(PlaceholderObserver::class);
 		ConfigurationRatingRestriction::observe(RatingRestrictionObserver::class);
+		CollectionFavourite::observe(CollectionFavouritesObserver::class);
+		CollectionBlacklist::observe(CollectionBlacklistObserver::class);
     }
 
     /**

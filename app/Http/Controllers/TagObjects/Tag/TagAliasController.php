@@ -12,6 +12,10 @@ class TagAliasController extends TagObjectAliasController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
+		$this->paginationKey = "pagination_tag_aliases_per_page_index";
+		
 		$this->middleware('auth')->except('index');
 		$this->middleware('permission:Create Personal Tag Alias|Create Global Tag Alias')->only(['create', 'store']);
 		$this->middleware('permission:Delete Personal Tag Alias|Delete Global Tag Alias')->only('destroy');
@@ -20,18 +24,18 @@ class TagAliasController extends TagObjectAliasController
     public function index(Request $request)
     {
 		$aliases = new TagAlias();
-		return self::GetAliasIndex($request, $aliases, 'tagAliasesPerPageIndex', 'tags');
+		return $this->GetAliasIndex($request, $aliases, $this->paginationKey, 'tags');
     }
 
     public function store(StoreTagAliasRequest $request, Tag $tag)
     {
         $alias = new TagAlias();
-		return self::StoreAlias($request, $alias, $tag, 'tag_id', 'tag', 'show_tag');
+		return $this->StoreAlias($request, $alias, $tag, 'tag_id', 'tag', 'show_tag');
     }
 
     public function destroy(TagAlias $tagAlias)
     {
 		$this->authorize($tagAlias);
-        return self::DeleteAlias($tagAlias, 'tag_id', 'tag', 'show_tag');
+        return $this->DeleteAlias($tagAlias, 'tag_id', 'tag', 'show_tag');
     }
 }

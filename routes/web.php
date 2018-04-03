@@ -43,9 +43,22 @@
 		Route::patch('/{chapter}', 'ChapterController@update')->Name('update_chapter');
 		Route::delete('/{chapter}', 'ChapterController@destroy')->Name('delete_chapter');
 		Route::get('/{chapter}/export', 'ChapterController@export')->Name('export_chapter');
+		Route::get('/{chapter}/overview', 'ChapterController@overview')->Name('overview_chapter');
 		Route::get('/{chapter}/{page?}', 'ChapterController@show')->Name('show_chapter');
 	});
 //End Chapter controller routes
+
+//Language controller routes
+	Route::prefix('language')->group(function () {
+		Route::get('/', 'LanguageController@index')->Name('index_language');
+		Route::get('/create', 'LanguageController@create')->Name('create_language');
+		Route::post('/', 'LanguageController@store')->Name('store_language');
+		Route::get('/{language}/edit', 'LanguageController@edit')->Name('edit_language');
+		Route::patch('/{language}', 'LanguageController@update')->Name('update_language');
+		Route::delete('/{language}', 'LanguageController@destroy')->Name('delete_language');
+		Route::get('/{language}', 'LanguageController@show')->Name('show_language');
+	});
+//End Language controller routes
 
 Route::namespace('TagObjects\Tag')->group(function () {
 	//Tag controller routes
@@ -294,4 +307,16 @@ Route::namespace('User\Admin')->prefix('admin/user')->group(function () {
 Route::namespace('Auth')->prefix('user/password')->group(function () {
 	Route::get('/', 'UpdatePasswordController@edit')->Name('edit_password');
 	Route::patch('/', 'UpdatePasswordController@update')->Name('update_password');
+});
+
+Route::namespace('User\User\Favourites\Collection')->prefix('user/favourites/collection')->group(function () {
+	Route::post('/{collection}', 'CollectionFavouritesController@store')->Name('store_collection_favourite');
+	Route::delete('/{collection}', 'CollectionFavouritesController@destroy')->Name('delete_collection_favourite');
+	Route::get('/', 'CollectionFavouritesController@index')->Name('index_collection_favourite');
+});
+
+Route::namespace('User\User\Blacklists\Collection')->prefix('user/blacklists/collection')->group(function () {
+	Route::post('/{collection}', 'CollectionBlacklistController@store')->Name('store_collection_blacklist');
+	Route::delete('/{collection}', 'CollectionBlacklistController@destroy')->Name('delete_collection_blacklist');
+	Route::get('/', 'CollectionBlacklistController@index')->Name('index_collection_blacklist');
 });

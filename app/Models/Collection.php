@@ -23,6 +23,11 @@ class Collection extends BaseManicModel
 		return $this->hasMany('App\Models\Volume')->orderBy('volume_number');
 	}
 	
+	public function unsorted_volumes()
+	{
+		return $this->hasMany('App\Models\Volume');
+	}
+	
 	/*
 	 * Get all chapters associated with the collection.
 	 */
@@ -181,5 +186,21 @@ class Collection extends BaseManicModel
 	public function export()
 	{
 		return $this->hasOne('App\Models\CollectionExport');
+	}
+	
+	/*
+	 * Get all collection favourites associated with the user
+	 */
+	public function favourited()
+	{
+		return $this->hasMany('App\Models\User\CollectionFavourite');
+	}
+	
+	/*
+	 * Get all collection blacklist associated with the user
+	 */
+	public function blacklisted()
+	{
+		return $this->hasMany('App\Models\User\CollectionBlacklist');
 	}
 }

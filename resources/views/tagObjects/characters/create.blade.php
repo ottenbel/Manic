@@ -35,7 +35,7 @@ Create a New Character
 			'child' => 'character_child',
 			'namePlaceholder' => $configurations['name'],
 			'descriptionPlaceholder' => $configurations['description'], 
-			'shortDescriptionPlaceholder' => $configurations['shortDescription'],
+			'shortDescriptionPlaceholder' => $configurations['short_description'],
 			'sourcePlaceholder' => $configurations['source'],
 			'childPlaceholder' => $configurations['child']
 		])

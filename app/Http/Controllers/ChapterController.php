@@ -2,35 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Redirect;
-use Auth;
-use Config;
-use DB;
-use Input;
-use LookupHelper;
-use MappingHelper;
-use ImageUploadHelper;
-use InterventionImage;
-use FileExportHelper;
-use File;
-use Storage;
 use App\Models\Chapter;
 use App\Models\Collection;
 use App\Models\Image;
-use App\Models\Page;
-use App\Models\TagObjects\Scanalator\Scanalator;
-use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 use App\Models\Volume;
 use App\Http\Requests\Chapter\StoreChapterRequest;
 use App\Http\Requests\Chapter\UpdateChapterRequest;
+use Auth;
+use Config;
+use DB;
+use File;
+use FileExportHelper;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Input;
+use ImageUploadHelper;
+use LookupHelper;
+use MappingHelper;
+use Storage;
 
 class ChapterController extends WebController
 {
 	public function __construct()
     {
-		$this->middleware('auth')->except('show');
+		parent::__construct();
+		
+		$this->placeholderStub = "chapter";
+		$this->placeheldFields = array('volume', 'number', 'name', 'primary_scanalators', 'secondary_scanalators', 'source', 'images');
+		
+		$this->middleware('auth')->except(['show', 'overview']);
 		$this->middleware('permission:Create Chapter')->only(['create', 'store']);
 		$this->middleware('canInteractWithCollection')->only('create');
 		$this->middleware('canInteractWithChapter')->except(['create', 'store']);
@@ -43,35 +43,46 @@ class ChapterController extends WebController
     {
 		$this->authorize(Chapter::class);
 		
-        $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
+        $this->GetFlashedMessages($request);
+		$configurations = $this->GetConfiguration();
 		
-		$volumes = $collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
+		$collection->load([
+		'volumes' => function ($query)
+			{ $query->orderBy('volume_number', 'asc'); },
+		'volumes.chapters' => function ($query)
+			{ $query->orderBy('chapter_number', 'asc'); },
+		'volumes.chapters.primary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); },
+		'volumes.chapters.secondary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); }, 
+		]);
+		
+		$volumes = $collection->volumes->pluck('volume_number', 'id')->map(function($item, $key)
 		{
 			return "Volume $item";	
 		});
 		
-		$volumesArray = json_encode($collection->volumes()->pluck('id'));
+		$volumesArray = json_encode($collection->volumes->pluck('id'));
 		
-		if ($collection->volumes()->count() == 0)
+		$highestVolume = null;
+		$newChapter = 1;
+		
+		if ($collection->volumes->count() == 0)
 		{
 			//If collection doesn't have any associated volumes prompt the user to create a volume before they create a chapter.
-			$missingVolumeWarning = "Creating a chapter on a collection requires a volume for the chapter to belong to.  Create a volume to associate the chapter to before trying to create a chapter.";
+			$this->AddWarningMessage("Creating a chapter on a collection requires a volume for the chapter to belong to.  Create a volume to associate the chapter to before trying to create a chapter.");
 			
-			if ($messages['warning'] != null)
-			{
-				array_push($messages['warning'], $missingVolumeWarning);
-			}
-			else
-			{
-				$messages['warning'] = array($missingVolumeWarning);
-			}
-			
-			return View('volumes.create', array('collection' => $collection, 'volumes_array' => $volumesArray, 'messages' => $messages));
+			return View('volumes.create', array('collection' => $collection, 'volumes_array' => $volumesArray, 'highestVolume' => $highestVolume, 'newChapter' => $newChapter, 'messages' => $this->messages));
 		}
 		else
 		{
-			return View('chapters.create', array('configurations' => $configurations, 'collection' => $collection, 'volumes' => $volumes, 'volumes_array' => $volumesArray, 'messages' => $messages));
+			$highestVolume = $collection->unsorted_volumes()->orderby('volume_number', 'desc')->first()->id;
+			if ($collection->chapters()->count() > 0)
+			{
+				$newChapter = $collection->chapters()->orderby('chapter_number', 'desc')->first()->chapter_number + 1;
+			}
+			
+			return View('chapters.create', array('configurations' => $configurations, 'collection' => $collection, 'volumes' => $volumes, 'volumes_array' => $volumesArray, 'highestVolume' => $highestVolume, 'newChapter' => $newChapter, 'messages' => $this->messages));
 		}
     }
 
@@ -131,36 +142,28 @@ class ChapterController extends WebController
 				}
 			}
 			
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully create chapter $chapter->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully create chapter $chapter->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
 		$collection = $volume->collection;
-		$messages = self::BuildFlashedMessagesVariable(["Successfully created new chapter #$chapter->chapter_number on collection $collection->name."], null, null);
-		
-		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully created new chapter #$chapter->chapter_number on collection $collection->name.");
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 
     public function show(Request $request, Chapter $chapter, int $page = 0)
     {
-        $messages = self::GetFlashedMessages($request);
+        $this->GetFlashedMessages($request);
 		
 		if (is_int($page))
 		{
-			if ($page < 0)
-			{
-				$page = 0;
-			}
+			if ($page < 0) { $page = 0; }
 		}
 		else
-		{
-			$page = 0;
-		}
+			{ $page = 0; }
 		
-		$previousChapterID;
-		$nextChapterID;
-		$lastPageOfPreviousChapter;
+		$previousChapterID = $nextChapterID = $lastPageOfPreviousChapter = null;
 		
 		$collection = $chapter->collection()->first();
 	
@@ -170,47 +173,96 @@ class ChapterController extends WebController
 		{
 			$previousChapterID = $chapter->previous_chapter()->first()->id;
 		}
-		else
-		{
-			$previousChapterID = null;
-		}
 		
 		if(count($chapter->next_chapter()->first()))
 		{
 			$nextChapterID = $chapter->next_chapter()->first()->id;
-		}
-		else
-		{
-			$nextChapterID = null;
 		}
 		
 		if($previousChapterID != null)
 		{
 			$lastPageOfPreviousChapter = count(Chapter::where('id', '=', $previousChapterID)->first()->pages) - 1;
 		}
-		else
+		
+		$isFavourite = false;
+		if (Auth::check())
 		{
-			$lastPageOfPreviousChapter = null;
+			$favouriteCollection = Auth::user()->favourite_collections()->where('collection_id', '=', $collection->id)->first();
+			if ($favouriteCollection != null)
+			{
+				$isFavourite = true;
+			}
 		}
 		
-		return view('chapters.show', array('collection' => $collection, 'chapter' => $chapter, 'page_number' => $page, 'pages_array' => $pagesArray, 'previous_chapter_id' => $previousChapterID, 'next_chapter_id' => $nextChapterID, 'last_page_of_previous_chapter' => $lastPageOfPreviousChapter, 'messages' => $messages));
+		return view('chapters.show', array('collection' => $collection, 'chapter' => $chapter, 'page_number' => $page, 'pages_array' => $pagesArray, 'previous_chapter_id' => $previousChapterID, 'next_chapter_id' => $nextChapterID, 'last_page_of_previous_chapter' => $lastPageOfPreviousChapter, 'isFavourite' =>$isFavourite, 'messages' => $this->messages));
     }
+	
+	public function overview(Request $request, Chapter $chapter)
+	{
+		$this->GetFlashedMessages($request);
+		$previousChapterID = $nextChapterID = null;
+		$collection = $chapter->collection()->first();
+		
+		if (count($chapter->previous_chapter()->first()))
+		{
+			$previousChapterID = $chapter->previous_chapter()->first()->id;
+		}
+		
+		if(count($chapter->next_chapter()->first()))
+		{
+			$nextChapterID = $chapter->next_chapter()->first()->id;
+		}
+		
+		$isFavourite = false;
+		if (Auth::check())
+		{
+			$favouriteCollection = Auth::user()->favourite_collections()->where('collection_id', '=', $collection->id)->first();
+			if ($favouriteCollection != null)
+			{
+				$isFavourite = true;
+			}
+		}
+		
+		return view('chapters.overview', array('collection' => $collection, 'chapter' => $chapter, 'previous_chapter_id' => $previousChapterID, 'next_chapter_id' => $nextChapterID, 'isFavourite' =>$isFavourite, 'messages' => $this->messages));
+	}
 
     public function edit(Request $request, Chapter $chapter)
     {
 		$this->authorize($chapter);
 		
-        $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration();
+        $this->GetFlashedMessages($request);
+		$configurations = $this->GetConfiguration();
 		
-		$volumesArray = json_encode($chapter->volume->collection->volumes()->pluck('id'));
+		$collection = $chapter->collection;
+		$collection->load([
+		'volumes' => function ($query)
+			{ $query->orderBy('volume_number', 'asc'); },
+		'volumes.chapters' => function ($query)
+			{ $query->orderBy('chapter_number', 'asc'); },
+		'volumes.chapters.primary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); },
+		'volumes.chapters.secondary_scanalators' => function ($query)
+			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); }
+		]);
 		
-		$volumes = $chapter->volume->collection->volumes()->orderBy('volume_number', 'asc')->get()->pluck('volume_number', 'id')->map(function($item, $key)
+		$volumesArray = json_encode($collection->volumes->pluck('id'));
+		
+		$volumes = $collection->volumes->pluck('volume_number', 'id')->map(function($item, $key)
 		{
 			return "Volume $item";
 		});
 		
-        return View('chapters.edit', array('configurations' => $configurations, 'chapter' => $chapter, 'volumes' => $volumes, 'volumes_array' => $volumesArray, 'messages' => $messages));
+		$isFavourite = false;
+		if (Auth::check())
+		{
+			$favouriteCollection = Auth::user()->favourite_collections()->where('collection_id', '=', $chapter->collection->id)->first();
+			if ($favouriteCollection != null)
+			{
+				$isFavourite = true;
+			}
+		}
+		
+        return View('chapters.edit', array('configurations' => $configurations, 'chapter' => $chapter, 'volumes' => $volumes, 'volumes_array' => $volumesArray, 'isFavourite' =>$isFavourite, 'highestVolume' => null, 'newChapter' => 1, 'messages' => $this->messages));
     }
 
     
@@ -309,13 +361,13 @@ class ChapterController extends WebController
 				}
 			}
 			
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully update chapter $chapter->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully update chapter $chapter->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully updated chapter #$chapter->chapter_number on collection $collection->name."], null, null);
-		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully updated chapter #$chapter->chapter_number on collection $collection->name.");
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 
     public function destroy(Chapter $chapter)
@@ -340,14 +392,13 @@ class ChapterController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully delete chapter $chapterName."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully delete chapter $chapterName.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully purged chapter $chapterName from the collection."], null, null);
-		
-		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully purged chapter $chapterName from the collection.");
+		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 	
     public function export(Chapter $chapter)
@@ -369,25 +420,8 @@ class ChapterController extends WebController
 		else
 		{
 			//Return an error message saying that it couldn't create a chapter export
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to export zipped chapter file."]); 
-			
-			return Redirect::back()->with(["messages" => $messages]);
+			$this->AddWarningMessage("Unable to export zipped chapter file.");
+			return Redirect::back()->with(["messages" => $this->messages]);
 		}
-	}
-	
-	private static function GetConfiguration()
-	{
-		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', 'chapter%')->get();
-		
-		$keys = ['volume', 'number', 'name', 'scanalatorPrimary', 'scanalatorSecondary', 'source', 'images'];
-		$configurationsArray = [];
-		
-		foreach ($keys as $key)
-		{
-			$value = $configurations->where('key', '=', Config::get('constants.keys.placeholders.chapter.'.$key))->first();
-			$configurationsArray = array_merge($configurationsArray, [$key => $value]);
-		}
-		
-		return $configurationsArray;
 	}
 }

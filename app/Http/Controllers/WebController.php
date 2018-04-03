@@ -3,21 +3,54 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 
 class WebController extends Controller
 {
-	protected static function GetFlashedMessages(Request $request)
+	protected $paginationKey;
+	protected $placeholderStub;
+	protected $placeheldFields;
+	protected $messages;
+	
+	public function __construct()
 	{
-		$messages = $request->session()->get('messages');
-		$success = $messages['success'];
-		$data = $messages['data'];
-		$warning = $messages['warning'];
-		
-		return array('success' => $success, 'data' => $data, 'warning' => $warning);
+		$this->messages = ['success' => [], 'data' => [], 'warning' => []];
 	}
 	
-	protected static function BuildFlashedMessagesVariable($success, $data, $warning)
+	protected function GetConfiguration()
 	{
-		return array('success' => $success, 'data' => $data, 'warning' => $warning);
+		$configurations = Auth::user()->placeholder_configuration()->where('key', 'like', $this->placeholderStub.'%')->get();
+		$configurationsArray = [];
+		
+		foreach ($this->placeheldFields as $key)
+		{
+			$value = $configurations->where('key', '=', $this->placeholderStub.'_'.$key)->first();
+			$configurationsArray = array_merge($configurationsArray, [$key => $value]);
+		}
+		
+		return $configurationsArray;
+	}
+	
+	protected function GetFlashedMessages(Request $request)
+	{
+		$messagesFromRequest = $request->session()->get('messages');
+		$this->messages['success'] = $messagesFromRequest['success'];
+		$this->messages['data'] = $messagesFromRequest['data'];
+		$this->messages['warning'] = $messagesFromRequest['warning'];
+	}
+	
+	protected function AddSuccessMessage($message)
+	{
+		array_push($this->messages['success'], $message);
+	}
+	
+	protected function AddDataMessage($message)
+	{
+		array_push($this->messages['data'], $message);
+	}
+	
+	protected function AddWarningMessage($message)
+	{
+		array_push($this->messages['warning'], $message);
 	}
 }

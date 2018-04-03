@@ -23,6 +23,13 @@ class CharacterController extends TagObjectController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
+		$this->paginationKey = "pagination_characters_per_page_index";
+		$this->aliasesPaginationKey = "pagination_character_aliases_per_page_parent";
+		$this->placeholderStub = "character";
+		$this->placeheldFields = array('name', 'short_description', 'description', 'source', 'parent', 'child');
+		
 		$this->middleware('auth')->except(['index', 'show']);
 		$this->middleware('permission:Create Character')->only(['create', 'store']);
 		$this->middleware('permission:Edit Character')->only(['edit', 'update']);
@@ -32,15 +39,15 @@ class CharacterController extends TagObjectController
     public function index(Request $request)
     {
 		$characters = new Character();
-		return self::GetTagObjectIndex($request, $characters, 'charactersPerPageIndex', 'characters', 'character_collection', 'character_id');
+		return $this->GetTagObjectIndex($request, $characters, 'charactersPerPageIndex', 'characters', 'character_collection', 'character_id');
     }
 
     public function create(Request $request, Series $series = null)
     {
 		$this->authorize(Character::class);	
-        $messages = self::GetFlashedMessages($request);
-		$configurations = self::GetConfiguration('character');
-		return View('tagObjects.characters.create', array('configurations' => $configurations, 'series' => $series, 'messages' => $messages));
+        $this->GetFlashedMessages($request);
+		$configurations = $this->GetConfiguration();
+		return View('tagObjects.characters.create', array('configurations' => $configurations, 'series' => $series, 'messages' => $this->messages));
     }
 
     public function store(StoreCharacterRequest $request)
@@ -55,33 +62,33 @@ class CharacterController extends TagObjectController
 		$character = new Character();
 		$character->series_id = $parentSeries->id;
 		
-		return self::InsertOrUpdate($request, $character, 'created', 'create');
+		return $this->InsertOrUpdate($request, $character, 'created', 'create');
     }
 
     public function show(Request $request, Character $character)
     {
-        return self::GetCharacterToDisplay($request, $character, 'show');
+        return $this->GetCharacterToDisplay($request, $character, 'show');
     }
 
     public function edit(Request $request, Character $character)
     {
 		$this->authorize($character);
-		$configurations = self::GetConfiguration('character');
-        return self::GetCharacterToDisplay($request, $character, 'edit', $configurations);
+		$configurations = $this->GetConfiguration();
+        return $this->GetCharacterToDisplay($request, $character, 'edit', $configurations);
     }
 
     public function update(UpdateCharacterRequest $request, Character $character)
     {		
-		return self::InsertOrUpdate($request, $character, 'updated', 'update');
+		return $this->InsertOrUpdate($request, $character, 'updated', 'update');
     }
 
     public function destroy(Character $character)
     {
 		$this->authorize($character);
-		return self::DestroyTagObject($character, 'character');
+		return $this->DestroyTagObject($character, 'character');
     }
 	
-	private static function InsertOrUpdate($request, $character, $action, $errorAction)
+	private function InsertOrUpdate($request, $character, $action, $errorAction)
 	{
 		DB::beginTransaction();
 		try
@@ -99,8 +106,8 @@ class CharacterController extends TagObjectController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully $errorAction character $character->name."]);
-			return Redirect::back()->with(["messages" => $messages])->withInput();
+			$this->AddWarningMessage("Unable to successfully $errorAction character $character->name.");
+			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
@@ -111,34 +118,33 @@ class CharacterController extends TagObjectController
 			if (count($causedLoops) > 0)
 			{
 				$childCausingLoopsMessage = "The following characters (" . implode(", ", $causedLoops) . ") were not attached as children to " . $character->name . " as their addition would cause loops in tag implication.";
-				array_push($warnings, $childCausingLoopsMessage);
+				$this->AddWarningMessage($childCausingLoopsMessage);
 			}
 			
 			if (count($droppedChildren) > 0)
 			{
 				$droppedChildrenMessage = "The following characters (" . implode(", ", $droppedChildren) . ") were not attached as children to " . $character->name . " as they could not be found attached to " . $character->series->name . " or a child series of it.";
-				array_push($warnings, $droppedChildrenMessage);
+				$this->AddWarningMessage($droppedChildrenMessage);
 			}
 			
 			$seriesName = $character->series->name;
-			$messages = self::BuildFlashedMessagesVariable(null, ["Partially $action character $character->name under series $seriesName."], $warnings);
-			return redirect()->route('show_character', ['character' => $character])->with("messages", $messages);
+			$this->AddDataMessage("Partially $action character $character->name under series $seriesName.");
+			return redirect()->route('show_character', ['character' => $character])->with("messages", $this->messages);
 		}
 		else
 		{
 			$seriesName = $character->series->name;
-			$messages = self::BuildFlashedMessagesVariable(["Successfully $action character $character->name under series $seriesName."], null, null);
-			return redirect()->route('show_character', ['character' => $character])->with("messages", $messages);
+			$this->AddSuccessMessage("Successfully $action character $character->name under series $seriesName.");
+			return redirect()->route('show_character', ['character' => $character])->with("messages", $this->messages);
 		}
 	}
 	
-	private static function GetCharacterToDisplay($request, $character, $route, $configurations = null)
+	private function GetCharacterToDisplay($request, $character, $route, $configurations = null)
 	{
-		$messages = self::GetFlashedMessages($request);
-		$aliasOrdering = self::GetAliasShowOrdering($request);
+		$this->GetFlashedMessages($request);
+		$aliasOrdering = $this->GetAliasShowOrdering($request);
 		
-		$lookupKey = Config::get('constants.keys.pagination.characterAliasesPerPageParent');
-		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$paginationCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->aliasesPaginationKey)->value;
 		
 		$globalAliases = $character->aliases()->where('user_id', '=', null)->orderBy('alias', $aliasOrdering['global'])->paginate($paginationCount, ['*'], 'global_alias_page');
 		$globalAliases->appends(Input::except('global_alias_page'));
@@ -151,6 +157,6 @@ class CharacterController extends TagObjectController
 			$personalAliases->appends(Input::except('personal_alias_page'));
 		}
 		
-		return View('tagObjects.characters.'.$route, array('configurations' => $configurations, 'character' => $character, 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $globalAliases, 'personal_aliases' => $personalAliases, 'messages' => $messages));
+		return View('tagObjects.characters.'.$route, array('configurations' => $configurations, 'character' => $character, 'global_list_order' => $aliasOrdering['global'], 'personal_list_order' => $aliasOrdering['personal'], 'global_aliases' => $globalAliases, 'personal_aliases' => $personalAliases, 'messages' => $this->messages));
 	}
 }

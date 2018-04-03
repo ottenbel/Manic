@@ -20,6 +20,10 @@ class AdminUserController extends WebController
 {
 	public function __construct()
 	{
+		parent::__construct();
+		
+		$this->paginationKey = "pagination_users_per_page_index";
+		
 		$this->middleware('auth');
 		$this->middleware('permission:View User Index')->only('index');
 		$this->middleware('permission:View User')->only('show');
@@ -27,22 +31,21 @@ class AdminUserController extends WebController
 	
 	public function index(Request $request)
     {
-		$messages = self::GetFlashedMessages($request);
-		$lookupKey = Config::get('constants.keys.pagination.usersPerPageIndex');
-		$paginationUsersPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($lookupKey)->value;
+		$this->GetFlashedMessages($request);
+		$paginationUsersPerPageIndexCount = ConfigurationLookupHelper::LookupPaginationConfiguration($this->paginationKey)->value;
 			
 		$users = new User();
 		$users = $users->orderBy('name', 'asc')->paginate($paginationUsersPerPageIndexCount);
 		
-		return View('user.admin.user.index', array('users' => $users, 'messages' => $messages));
+		return View('user.admin.user.index', array('users' => $users, 'messages' => $this->messages));
 	}
 	
 	public function show(Request $request, User $user)
     {	
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		$roles = $user->roles;
 		$permissions = $user->permissions;
 		
-		return View ('user.admin.user.show', array('user' => $user, 'roles' => $roles, 'permissions' => $permissions, 'messages' => $messages));
+		return View ('user.admin.user.show', array('user' => $user, 'roles' => $roles, 'permissions' => $permissions, 'messages' => $this->messages));
 	}
 }

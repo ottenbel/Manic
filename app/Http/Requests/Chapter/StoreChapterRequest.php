@@ -55,7 +55,7 @@ class StoreChapterRequest extends FormRequest
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images' => 'required',
-			'images.*' => 'mimetypes:image/jpeg,image/bmp,image/png,zip'];
+			'images.*' => 'mimetypes:jpeg,bmp,png,gif,zip'];
 		}
 		else if ($lowerChapterLimit != 0)
 		{
@@ -72,7 +72,7 @@ class StoreChapterRequest extends FormRequest
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images' => 'required',
-			'images.*' => 'mimes:jpeg,bmp,png,zip'];
+			'images.*' => 'mimes:jpeg,bmp,png,gif,zip'];
 		}
 		else if ($upperChapterLimit != 0)
 		{
@@ -89,7 +89,7 @@ class StoreChapterRequest extends FormRequest
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images' => 'required',
-			'images.*' => 'mimes:jpeg,bmp,png,zip'];
+			'images.*' => 'mimes:jpeg,bmp,png,gif,zip'];
 		}
 		else
 		{
@@ -105,7 +105,7 @@ class StoreChapterRequest extends FormRequest
 			'scanalator_secondary' => 'regex:/^[^:-]+$/',
 			'source' => 'URL',
 			'images' => 'required',
-			'images.*' => 'mimes:jpeg,bmp,png,zip'];
+			'images.*' => 'mimes:jpeg,bmp,png,gif,zip'];
 		}
     }
 }

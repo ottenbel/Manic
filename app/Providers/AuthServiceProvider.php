@@ -16,6 +16,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\Collection' => 'App\Policies\CollectionPolicy',
 		'App\Models\Volume' => 'App\Policies\VolumePolicy',
 		'App\Models\Chapter' => 'App\Policies\ChapterPolicy',
+		'App\Models\Language' => 'App\Policies\LanguagePolicy',
 		'App\Models\TagObjects\Artist\Artist' => 'App\Policies\TagObjects\Artist\ArtistPolicy',
 		'App\Models\TagObjects\Character\Character' => 'App\Policies\TagObjects\Character\CharacterPolicy',
 		'App\Models\TagObjects\Scanalator\Scanalator' => 'App\Policies\TagObjects\Scanalator\ScanalatorPolicy',
@@ -30,7 +31,9 @@ class AuthServiceProvider extends ServiceProvider
 		'App\Models\Configuration\ConfigurationPlaceholder' => 'App\Policies\Configuration\ConfigurationPlaceholderPolicy',
 		'App\Models\Configuration\ConfigurationRatingRestriction' => 'App\Policies\Configuration\ConfigurationRatingRestrictionPolicy',
 		'Spatie\Permission\Models\Permission' => 'App\Policies\RolesAndPermissions\PermissionPolicy',
-		'Spatie\Permission\Models\Role' => 'App\Policies\RolesAndPermissions\RolePolicy'
+		'Spatie\Permission\Models\Role' => 'App\Policies\RolesAndPermissions\RolePolicy',
+		'App\Models\User\CollectionFavourite' => 'App\Policies\User\CollectionFavouritesPolicy',
+		'App\Models\User\CollectionBlacklist' => 'App\Policies\User\CollectionBlacklistPolicy'
     ];
 
     /**

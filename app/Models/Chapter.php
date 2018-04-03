@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use App\Models\BaseManicModel;
-use Auth;
-use Storage;
 
 class Chapter extends BaseManicModel
 {

@@ -6,12 +6,12 @@ use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
 use App\Models\TagObjects\Character\Character;
 use App\Models\TagObjects\Character\CharacterAlias;
+use App\Models\TagObjects\Scanalator\Scanalator;
+use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 use App\Models\TagObjects\Series\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
 use App\Models\TagObjects\Tag\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
-use App\Models\TagObjects\Scanalator\Scanalator;
-use App\Models\TagObjects\Scanalator\ScanalatorAlias;
 use Auth;
 use LookupHelper;
 
@@ -20,15 +20,15 @@ class MappingHelper
 	/*
 	 * Map artists and attach them to the corresponding collection.
 	 */
-	public static function MapArtists(&$collection, $artist_array, $isPrimary)
+	public static function MapArtists(&$collection, $artistArray, $isPrimary)
 	{
-		$artist_array = array_unique($artist_array);
+		$artistArray = array_unique($artistArray);
 		
-		foreach ($artist_array as $artist_name)
+		foreach ($artistArray as $artistName)
 		{
-			if (trim($artist_name) != "")
+			if (trim($artistName) != "")
 			{
-				$artist = LookupHelper::GetArtistByNameOrAlias($artist_name);
+				$artist = LookupHelper::GetArtistByNameOrAlias($artistName);
 				
 				if ($artist != null)
 				{
@@ -38,7 +38,7 @@ class MappingHelper
 				{
 					//Create a new artist
 					$artist = new Artist;
-					$artist->name = $artist_name;
+					$artist->name = $artistName;
 					$artist->save();
 					
 					$collection->artists()->attach($artist, ['primary' => $isPrimary]);
@@ -50,11 +50,11 @@ class MappingHelper
 	/*
 	 * Map characters and attach them to the corresponding collection.
 	 */
-	public static function MapCharacters(&$collection, $characters_array, $isPrimary)
+	public static function MapCharacters(&$collection, $charactersArray, $isPrimary)
 	{
-		$characters_array = array_unique($characters_array);
+		$charactersArray = array_unique($charactersArray);
 		
-		$missing_characters = array();
+		$missingCharacters = array();
 		
 		$fullInheritedSeriesCollection = $collection->series()->get();
 		
@@ -69,11 +69,11 @@ class MappingHelper
 			}
 		}
 		
-		foreach ($characters_array as $character_name)
+		foreach ($charactersArray as $characterName)
 		{
-			if (trim($character_name) != "")
+			if (trim($characterName) != "")
 			{
-				$character = LookupHelper::GetCharacterByNameOrAlias($character_name);
+				$character = LookupHelper::GetCharacterByNameOrAlias($characterName);
 				
 				if ($character != null)
 				{
@@ -84,30 +84,30 @@ class MappingHelper
 					}
 					else
 					{
-						array_push($missing_characters, trim($character_name));
+						array_push($missingCharacters, trim($characterName));
 					}
 				}
 				else
 				{
-					array_push($missing_characters, trim($character_name));
+					array_push($missingCharacters, trim($characterName));
 				}
 			}
 		}
-		return $missing_characters;
+		return $missingCharacters;
 	}
 	
 	/*
 	 * Map tags and attach them to the corresponding collection.
 	 */
-	 public static function MapTags(&$collection, $tags_array, $isPrimary)
+	 public static function MapTags(&$collection, $tagsArray, $isPrimary)
 	{
-		$tags_array = array_unique($tags_array);
+		$tagsArray = array_unique($tagsArray);
 		
-		foreach ($tags_array as $tag_name)
+		foreach ($tagsArray as $tagName)
 		{
-			if (trim($tag_name) != "")
+			if (trim($tagName) != "")
 			{
-				$tag = LookupHelper::GetTagByNameOrAlias($tag_name);
+				$tag = LookupHelper::GetTagByNameOrAlias($tagName);
 				
 				if ($tag != null)
 				{
@@ -117,7 +117,7 @@ class MappingHelper
 				{
 					//Create a new tag
 					$tag = new Tag;
-					$tag->name = $tag_name;
+					$tag->name = $tagName;
 					$tag->save();
 					
 					$collection->tags()->attach($tag, ['primary' => $isPrimary]);
@@ -129,15 +129,15 @@ class MappingHelper
 	/*
 	 * Map series and attach them to the corresponding collection.
 	 */
-	public static function MapSeries(&$collection, $series_array, $isPrimary)
+	public static function MapSeries(&$collection, $seriesArray, $isPrimary)
 	{
-		$series_array = array_unique($series_array);
+		$seriesArray = array_unique($seriesArray);
 		
-		foreach ($series_array as $series_name)
+		foreach ($seriesArray as $seriesName)
 		{
-			if (trim($series_name) != "")
+			if (trim($seriesName) != "")
 			{
-				$series = LookupHelper::GetSeriesByNameOrAlias($series_name);
+				$series = LookupHelper::GetSeriesByNameOrAlias($seriesName);
 			
 				if ($series != null)
 				{
@@ -147,7 +147,7 @@ class MappingHelper
 				{
 					//Create a new series
 					$series = new Series;
-					$series->name = $series_name;
+					$series->name = $seriesName;
 					$series->save();
 					
 					$collection->series()->attach($series, ['primary' => $isPrimary]);
@@ -159,15 +159,15 @@ class MappingHelper
 	/*
 	 * Map scanalators and attach them to the corresponding chapter.
 	 */
-    public static function MapScanalators(&$chapter, $scanalator_array, $isPrimary)
+    public static function MapScanalators(&$chapter, $scanalatorArray, $isPrimary)
 	{
-		$scanalator_array = array_unique($scanalator_array);
+		$scanalatorArray = array_unique($scanalatorArray);
 		
-		foreach ($scanalator_array as $scanalator_name)
+		foreach ($scanalatorArray as $scanalatorName)
 		{
-			if (trim($scanalator_name) != "")
+			if (trim($scanalatorName) != "")
 			{
-				$scanalator = LookupHelper::GetScanalatorByNameOrAlias($scanalator_name);
+				$scanalator = LookupHelper::GetScanalatorByNameOrAlias($scanalatorName);
 				
 				if ($scanalator != null)
 				{
@@ -177,7 +177,7 @@ class MappingHelper
 				{
 					//Create a new scanalator
 					$scanalator = new Scanalator;
-					$scanalator->name = $scanalator_name;
+					$scanalator->name = $scanalatorName;
 					$scanalator->save();
 					
 					$chapter->scanalators()->attach($scanalator, ['primary' => $isPrimary]);

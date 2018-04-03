@@ -17,6 +17,8 @@ class PlaceholderController extends WebController
 {
 	public function __construct()
     {
+		parent::__construct();
+		
 		$this->middleware('auth');
 	}
 	
@@ -41,20 +43,21 @@ class PlaceholderController extends WebController
 			$placeholderValues = ConfigurationPlaceholder::where('user_id', '=', null)->orderBy('priority')->get();
 		}
 		
-		$artists = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'artist');});
-		$characters = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'character');});
-		$scanalators = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'scanalator');});
-		$series = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'series');});
-		$tags = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'tag');});
-		$collections = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'collection');});
-		$volumes = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'volume');});
-		$chapters = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'chapter');});
-		$permissions = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'permission');});
-		$roles = $placeholderValues->filter(function ($item) {return false !== stristr($item->key, 'role');});
+		$artists = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'artist');});
+		$characters = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'character');});
+		$scanalators = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'scanalator');});
+		$series = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'series');});
+		$tags = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'tag');});
+		$collections = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'collection');});
+		$volumes = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'volume');});
+		$chapters = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'chapter');});
+		$permissions = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'permission');});
+		$roles = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'role');});
+		$languages = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'language');});
 		
-		$messages = self::GetFlashedMessages($request);
+		$this->GetFlashedMessages($request);
 		
-		return View('configuration.placeholder.edit', array('artists' => $artists, 'characters' => $characters, 'scanalators' => $scanalators, 'series' => $series, 'tags' => $tags, 'collections' => $collections, 'volumes' => $volumes, 'chapters' => $chapters, 'permissions' => $permissions, 'roles' => $roles, 'messages' => $messages));
+		return View('configuration.placeholder.edit', array('artists' => $artists, 'characters' => $characters, 'scanalators' => $scanalators, 'series' => $series, 'tags' => $tags, 'collections' => $collections, 'volumes' => $volumes, 'chapters' => $chapters, 'permissions' => $permissions, 'roles' => $roles, 'languages' => $languages, 'messages' => $this->messages));
     }
 
     /**
@@ -105,14 +108,14 @@ class PlaceholderController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully update placeholder configuration settings based on site configuration."]);
+			$this->AddWarningMessage("Unable to successfully update placeholder configuration settings based on site configuration.");
 			if (Route::is('user_update_configuration_placeholders'))
 			{
-				return redirect()->route('user_dashboard_configuration_placeholders')->with(["messages" => $messages])->withInput();
+				return redirect()->route('user_dashboard_configuration_placeholders')->with(["messages" => $this->messages])->withInput();
 			}
 			else if (Route::is('admin_update_configuration_placeholders'))
 			{
-				return redirect()->route('admin_dashboard_configuration_placeholders')->with(["messages" => $messages])->withInput();
+				return redirect()->route('admin_dashboard_configuration_placeholders')->with(["messages" => $this->messages])->withInput();
 			}
 		}
 		
@@ -120,13 +123,13 @@ class PlaceholderController extends WebController
 		
 		if (Route::is('user_update_configuration_placeholders'))
 		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully updated placeholder configuration settings for user."], null, null);
-			return redirect()->route('user_dashboard_configuration_placeholders')->with("messages", $messages);
+			$this->AddSuccessMessage("Successfully updated placeholder configuration settings for user.");
+			return redirect()->route('user_dashboard_configuration_placeholders')->with("messages", $this->messages);
 		}
 		else if (Route::is('admin_update_configuration_placeholders'))
 		{
-			$messages = self::BuildFlashedMessagesVariable(["Successfully updated placeholder configuration settings for site."], null, null);
-			return redirect()->route('admin_dashboard_configuration_placeholders')->with("messages", $messages);
+			$this->AddSuccessMessage("Successfully updated placeholder configuration settings for site.");
+			return redirect()->route('admin_dashboard_configuration_placeholders')->with("messages", $this->messages);
 		}
     }
 
@@ -163,13 +166,13 @@ class PlaceholderController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$messages = self::BuildFlashedMessagesVariable(null, null, ["Unable to successfully reset placeholder configuration settings based on site configuration."]);
-			return redirect()->route('user_dashboard_configuration_placeholders')->with(["messages" => $messages]);
+			$this->AddWarningMessage("Unable to successfully reset placeholder configuration settings based on site configuration.");
+			return redirect()->route('user_dashboard_configuration_placeholders')->with(["messages" => $this->messages]);
 		}
 		
 		DB::commit();
 		
-		$messages = self::BuildFlashedMessagesVariable(["Successfully reset placeholder configuration settings for user to site defaults."], null, null);
-		return redirect()->route('user_dashboard_configuration_placeholders')->with("messages", $messages);
+		$this->AddSuccessMessage("Successfully reset placeholder configuration settings for user to site defaults.");
+		return redirect()->route('user_dashboard_configuration_placeholders')->with("messages", $this->messages);
     }
 }

@@ -6,7 +6,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
-use Config;
 
 class User extends Authenticatable
 {
@@ -271,5 +270,18 @@ class User extends Authenticatable
 	public function rating_restriction_configuration()
 	{
 		return $this->hasMany('App\Models\Configuration\ConfigurationRatingRestriction');
+	}
+	
+	/*
+	 * Get all collection favorites associated with the user
+	 */
+	public function favourite_collections()
+	{
+		return $this->hasMany('App\Models\User\CollectionFavourite');
+	}
+	
+	public function blacklisted_collections()
+	{
+		return $this->hasMany('App\Models\User\CollectionBlacklist');
 	}
 }

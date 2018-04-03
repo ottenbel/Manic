@@ -59,22 +59,22 @@
 
 <div class="form-group">
 	{{ Form::label('artist_primary', 'Primary Artists') }}
-	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primaryArtists']->description}}"></i>
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primary_artists']->description}}"></i>
 	@if((!empty($collection)) && ($collection->primary_artists != null) && (Input::old('artist_primary') == null))
-		{{ Form::text('artist_primary', collect($collection->primary_artists->pluck('name'))->implode(", "), array('class' => 'form-control', 'placeholder' => $configurations['primaryArtists']->value)) }}
+		{{ Form::text('artist_primary', collect($collection->primary_artists->pluck('name'))->implode(", "), array('class' => 'form-control', 'placeholder' => $configurations['primary_artists']->value)) }}
 	@else
-		{{ Form::text('artist_primary', Input::old('artist_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primaryArtists']->value)) }}
+		{{ Form::text('artist_primary', Input::old('artist_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primary_artists']->value)) }}
 	@endif
 	@if($errors->has('artist_primary'))
 		<div class ="alert alert-danger" id="name_errors">{{$errors->first('artist_primary')}}</div>
 	@endif
 	
 	{{ Form::label('artist_secondary', 'Secondary Artists') }}
-	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondaryArtists']->description}}"></i>
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondary_artists']->description}}"></i>
 	@if((!empty($collection)) && ($collection->secondary_artists != null) && (Input::old('artist_secondary') == null))
-		{{ Form::text('artist_secondary', collect($collection->secondary_artists->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondaryArtists']->value)) }}
+		{{ Form::text('artist_secondary', collect($collection->secondary_artists->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondary_artists']->value)) }}
 	@else
-		{{ Form::text('artist_secondary', Input::old('artist_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondaryArtists']->value)) }}
+		{{ Form::text('artist_secondary', Input::old('artist_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondary_artists']->value)) }}
 	@endif
 	@if($errors->has('artist_secondary'))
 		<div class ="alert alert-danger" id="name_errors">{{$errors->first('artist_secondary')}}</div>
@@ -83,22 +83,22 @@
 
 <div class="form-group">
 	{{ Form::label('series_primary', 'Series Primary') }}
-	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primarySeries']->description}}"></i>
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primary_series']->description}}"></i>
 	@if((!empty($collection)) && ($collection->primary_series != null) && (Input::old('series_primary') == null))
-		{{ Form::text('series_primary', collect($collection->primary_series->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['primarySeries']->value)) }}
+		{{ Form::text('series_primary', collect($collection->primary_series->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['primary_series']->value)) }}
 	@else
-		{{ Form::text('series_primary', Input::old('series_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primarySeries']->value)) }}
+		{{ Form::text('series_primary', Input::old('series_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primary_series']->value)) }}
 	@endif
 	@if($errors->has('series_primary'))
 		<div class ="alert alert-danger" id="name_errors">{{$errors->first('series_primary')}}</div>
 	@endif
 	
 	{{ Form::label('series_secondary', 'Series Secondary') }}
-	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondarySeries']->description}}"></i>
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondary_series']->description}}"></i>
 	@if((!empty($collection)) && ($collection->secondary_series != null) && (Input::old('series_secondary') == null))
-		{{ Form::text('series_secondary', collect($collection->secondary_series->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondarySeries']->value)) }}
+		{{ Form::text('series_secondary', collect($collection->secondary_series->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondary_series']->value)) }}
 	@else
-		{{ Form::text('series_secondary', Input::old('series_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondarySeries']->value)) }}
+		{{ Form::text('series_secondary', Input::old('series_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondary_series']->value)) }}
 	@endif
 	@if($errors->has('series_secondary'))
 		<div class ="alert alert-danger" id="name_errors">{{$errors->first('series_secondary')}}</div>
@@ -107,11 +107,11 @@
 
 <div class="form-group">
 	{{ Form::label('character_primary', 'Characters Primary') }}
-	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primaryCharacters']->description}}"></i>
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primary_characters']->description}}"></i>
 	@if((!empty($collection)) && ($collection->primary_characters != null) && (Input::old('character_primary') == null))
-		{{ Form::text('character_primary', collect($collection->primary_characters->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['primaryCharacters']->value)) }}
+		{{ Form::text('character_primary', collect($collection->primary_characters->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['primary_characters']->value)) }}
 	@else
-		{{ Form::text('character_primary', Input::old('character_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primaryCharacters']->value)) }}
+		{{ Form::text('character_primary', Input::old('character_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primary_characters']->value)) }}
 	@endif
 	
 	@if($errors->has('character_primary'))
@@ -119,11 +119,11 @@
 	@endif
 	
 	{{ Form::label('character_secondary', 'Characters Secondary') }}
-	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondaryCharacters']->description}}"></i>
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondary_characters']->description}}"></i>
 	@if((!empty($collection)) && ($collection->secondary_characters != null) && (Input::old('character_secondary') == null))
-		{{ Form::text('character_secondary', collect($collection->secondary_characters->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondaryCharacters']->value)) }}
+		{{ Form::text('character_secondary', collect($collection->secondary_characters->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondary_characters']->value)) }}
 	@else
-		{{ Form::text('character_secondary', Input::old('character_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondaryCharacters']->value)) }}
+		{{ Form::text('character_secondary', Input::old('character_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondary_characters']->value)) }}
 	@endif
 	
 	@if($errors->has('character_secondary'))
@@ -133,22 +133,22 @@
 
 <div class="form-group">
 	{{ Form::label('tag_primary', 'Tags Primary') }}
-	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primaryTags']->description}}"></i>
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primary_tags']->description}}"></i>
 	@if((!empty($collection)) && ($collection->primary_tags != null) && (Input::old('tag_primary') == null))
-		{{ Form::text('tag_primary', collect($collection->primary_tags->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['primaryTags']->value)) }}
+		{{ Form::text('tag_primary', collect($collection->primary_tags->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['primary_tags']->value)) }}
 	@else
-		{{ Form::text('tag_primary', Input::old('tag_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primaryTags']->value)) }}
+		{{ Form::text('tag_primary', Input::old('tag_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primary_tags']->value)) }}
 	@endif
 	@if($errors->has('tag_primary'))
 		<div class ="alert alert-danger" id="character_secondary_errors">{{$errors->first('tag_primary')}}</div>
 	@endif
 	
 	{{ Form::label('tag_secondary', 'Tags Secondary') }}
-	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondaryTags']->description}}"></i>
+	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondary_tags']->description}}"></i>
 	@if((!empty($collection)) && ($collection->secondary_tags != null) && (Input::old('tag_secondary') == null))
-		{{ Form::text('tag_secondary', collect($collection->secondary_tags->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondaryTags']->value)) }}
+		{{ Form::text('tag_secondary', collect($collection->secondary_tags->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondary_tags']->value)) }}
 	@else
-		{{ Form::text('tag_secondary', Input::old('tag_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondaryTags']->value)) }}
+		{{ Form::text('tag_secondary', Input::old('tag_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondary_tags']->value)) }}
 	@endif
 	@if($errors->has('tag_secondary'))
 		<div class ="alert alert-danger" id="character_secondary_errors">{{$errors->first('tag_secondary')}}</div>

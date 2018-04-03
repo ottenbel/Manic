@@ -3,7 +3,8 @@
 	|| (Auth::user()->can('create', App\Models\TagObjects\Artist\Artist::class)) 
 	|| (Auth::user()->can('create', App\Models\TagObjects\Character\Character::class)) 
 	|| (Auth::user()->can('create', App\Models\TagObjects\Scanalator\Scanalator::class)) 
-	|| (Auth::user()->can('create', App\Models\TagObjects\Series\Series::class)))
+	|| (Auth::user()->can('create', App\Models\TagObjects\Series\Series::class))
+	|| (Auth::user()->can('create', App\Models\Language::class)))
 	<li class="dropdown">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Create <span class="caret"></span></a>
 		
@@ -41,6 +42,10 @@
 					<li><a href="{{route('create_tag')}}"><i class="fa fa-tags" aria-hidden="true"></i> Tag</a></li>
 				@endcan
 			@endif
+			
+			@can('create', App\Models\Language::class)
+				<li><a href="{{route('create_language')}}">Language</a></li>
+			@endcan
 		</ul>
 	</li>
 @endif

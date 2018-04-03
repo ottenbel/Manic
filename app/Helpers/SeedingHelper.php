@@ -45,6 +45,8 @@ class SeedingHelper
 		self::SeedPaginationRow($user, $seedUser, "pagination_permissions_per_page_index", 30, "The number of permisisons to be displayed per index page.", 17);
 		self::SeedPaginationRow($user, $seedUser, "pagination_roles_per_page_index", 30, "The number of roles to be displayed per index page.", 18);
 		self::SeedPaginationRow($user, $seedUser, "pagination_users_per_page_index", 30, "The number of users to be displayed per index page.", 19);
+		
+		self::SeedPaginationRow($user, $seedUser, "pagination_languages_per_page_index", 30, "The number of languages to be displayed per index page.", 19);
 	}
 	
 	/*
@@ -136,6 +138,11 @@ class SeedingHelper
 		
 		//Role
 		self::SeedPlaceholderRow($user, $seedUser, "role_name", "Role Name", "The name of the role to be created", 0);
+		
+		//Language
+		self::SeedPlaceholderRow($user, $seedUser, "language_name", "Some Language", "The name of the language to be created", 0);
+		self::SeedPlaceholderRow($user, $seedUser, "language_description", "A short description of the language.", "Additional information regarding the language (optional).", 1);
+		self::SeedPlaceholderRow($user, $seedUser, "language_url", "https://en.wikipedia.org/wiki/Language", "A link providing additional information about the language (optional).", 2);
 	}
 	
 	/*
