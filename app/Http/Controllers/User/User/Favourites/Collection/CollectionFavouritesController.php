@@ -59,12 +59,12 @@ class CollectionFavouritesController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully add collection to favourites.");
+			$this->AddWarningMessage("Unable to successfully add collection $collection->name to favourites.", ['collection' => $collection->id, 'error' => $e]);
 			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully added collection $collection->name to favourites.");
+		$this->AddSuccessMessage("Successfully added collection $collection->name to favourites.", ['collection' => $collection->id]);
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 	}
 	
@@ -83,12 +83,12 @@ class CollectionFavouritesController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully remove $collection->name from favourites.");
+			$this->AddWarningMessage("Unable to successfully remove $collection->name from favourites.", ['collection' => $collection->id, 'error' => $e]);
 			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully removed collection $collection->name from favourites.");
+		$this->AddSuccessMessage("Successfully removed collection $collection->name from favourites.", ['collection' => $collection->id]);
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 	}
 }

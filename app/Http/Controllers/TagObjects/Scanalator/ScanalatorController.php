@@ -93,7 +93,7 @@ class ScanalatorController extends TagObjectController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully $errorAction scanalator $scanalator->name.");
+			$this->AddWarningMessage("Unable to successfully $errorAction scanalator $scanalator->name.", ['scanalator' => $scanalator->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
@@ -102,14 +102,14 @@ class ScanalatorController extends TagObjectController
 		{	
 			$childCausingLoopsMessage = "The following scanalators (" . implode(", ", $causedLoops) . ") were not attached as children to " . $scanalator->name . " as their addition would cause loops in tag implication.";
 			
-			$this->AddWarningMessage($childCausingLoopsMessage);
-			$this->AddDataMessage("Partially $action scanalator $scanalator->name.");
+			$this->AddDataMessage($childCausingLoopsMessage, ['scanalator' => $scanalator->id]);
+			$this->AddDataMessage("Partially $action scanalator $scanalator->name.", ['scanalator' => $scanalator->id]);
 			
 			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $this->messages);
 		}
 		else
 		{
-			$this->AddSuccessMessage("Successfully $action scanalator $scanalator->name.");
+			$this->AddSuccessMessage("Successfully $action scanalator $scanalator->name.", ['scanalator' => $scanalator->id]);
 			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $this->messages);
 		}
 	}

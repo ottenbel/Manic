@@ -98,12 +98,12 @@ class LanguageController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully delete language $languageName.");
+			$this->AddWarningMessage("Unable to successfully delete language $languageName.", ['language' => $language->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully purged language $languageName from the database.");
+		$this->AddSuccessMessage("Successfully purged language $languageName from the database.", ['language' => $language->id]);
 		return redirect()->route('index_language')->with("messages", $this->messages);
     }
 	
@@ -118,12 +118,12 @@ class LanguageController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully $errorAction language $language->name.");
+			$this->AddWarningMessage("Unable to successfully $errorAction language $language->name.", ['language' => $language->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully $action language $language->name.");
+		$this->AddSuccessMessage("Successfully $action language $language->name.", ['language' => $language->id]);
 		return redirect()->route('show_language', ['language' => $language])->with("messages", $this->messages);
 	}
 }

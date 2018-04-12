@@ -69,10 +69,8 @@ class ChapterController extends WebController
 		
 		if ($collection->volumes->count() == 0)
 		{
-			//If collection doesn't have any associated volumes prompt the user to create a volume before they create a chapter.
-			$this->AddWarningMessage("Creating a chapter on a collection requires a volume for the chapter to belong to.  Create a volume to associate the chapter to before trying to create a chapter.");
-			
-			return View('volumes.create', array('collection' => $collection, 'volumes_array' => $volumesArray, 'highestVolume' => $highestVolume, 'newChapter' => $newChapter, 'messages' => $this->messages));
+			$this->AddDataMessage("Creating a chapter on a collection requires a volume for the chapter to belong to.", ['collection' => $collection->id]);
+			return Redirect()->route('create_volume', ['collection' => $collection])->with(['messages' => $this->messages]);
 		}
 		else
 		{
@@ -142,13 +140,13 @@ class ChapterController extends WebController
 				}
 			}
 			
-			$this->AddWarningMessage("Unable to successfully create chapter $chapter->name.");
+			$this->AddWarningMessage("Unable to successfully create chapter $chapter->name.", ['collection' => $collection->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
 		$collection = $volume->collection;
-		$this->AddSuccessMessage("Successfully created new chapter #$chapter->chapter_number on collection $collection->name.");
+		$this->AddSuccessMessage("Successfully created new chapter #$chapter->chapter_number on collection $collection->name.", ['collection' => $collection->id, 'chapter' => $chapter->id]);
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 
@@ -361,12 +359,12 @@ class ChapterController extends WebController
 				}
 			}
 			
-			$this->AddWarningMessage("Unable to successfully update chapter $chapter->name.");
+			$this->AddWarningMessage("Unable to successfully update chapter $chapter->name.", ['chapter' => $chapter->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully updated chapter #$chapter->chapter_number on collection $collection->name.");
+		$this->AddSuccessMessage("Successfully updated chapter #$chapter->chapter_number on collection $collection->name.", ['collection' => $collection->id, 'chapter' => $chapter->id]);
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 
@@ -392,12 +390,12 @@ class ChapterController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully delete chapter $chapterName.");
+			$this->AddWarningMessage("Unable to successfully delete chapter $chapterName.", ['chapter' => $chapter->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully purged chapter $chapterName from the collection.");
+		$this->AddSuccessMessage("Successfully purged chapter $chapterName from the collection.", ['chapter' => $chapter->id]);
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 	
@@ -420,7 +418,7 @@ class ChapterController extends WebController
 		else
 		{
 			//Return an error message saying that it couldn't create a chapter export
-			$this->AddWarningMessage("Unable to export zipped chapter file.");
+			$this->AddWarningMessage("Unable to export zipped chapter file.", ['chapter' => $chapter->id]);
 			return Redirect::back()->with(["messages" => $this->messages]);
 		}
 	}

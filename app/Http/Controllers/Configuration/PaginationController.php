@@ -96,7 +96,7 @@ class PaginationController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully update pagination configuration changes to the database.");
+			$this->AddWarningMessage("Unable to successfully update pagination configuration changes to the database.", ['error' => $e]);
 			if (Route::is('user_update_configuration_pagination'))
 			{
 				return redirect()->route('user_dashboard_configuration_pagination')->with(["messages" => $this->messages])->withInput();
@@ -155,7 +155,7 @@ class PaginationController extends WebController
 		{
 			DB::rollBack();
 			
-			$this->AddWarningMessage("Unable to successfully reset pagination configuration settings based on site configuration.");
+			$this->AddWarningMessage("Unable to successfully reset pagination configuration settings based on site configuration.", ['error' => $e]);
 			return redirect()->route('user_dashboard_configuration_pagination')->with(["messages" => $this->messages]);
 		}
 		

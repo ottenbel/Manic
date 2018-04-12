@@ -58,12 +58,12 @@ class TagObjectController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully purge $objectType $objectName from the database.");
+			$this->AddWarningMessage("Unable to successfully purge $objectType $objectName from the database.", ["$objectType" => $object->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully purged $objectType $objectName from the database.");
+		$this->AddSuccessMessage("Successfully purged $objectType $objectName from the database.", [$objectType => $object->id]);
 		return redirect()->route('index_collection')->with("messages", $this->messages);
 	}
 	

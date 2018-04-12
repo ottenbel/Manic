@@ -98,12 +98,12 @@ class VolumeController extends WebController
 				Storage::delete($cover->thumbnail);
 			}
 			
-			$this->AddWarningMessage("Unable to successfully create volume $volume->name.");
+			$this->AddWarningMessage("Unable to successfully create volume $volume->name.", ['collection' => $collection->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully created new volume #$volume->volume_number on collection $collection->name.");
+		$this->AddSuccessMessage("Successfully created new volume #$volume->volume_number on collection $collection->name.", ['volume' => $volume->id]);
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 
@@ -185,12 +185,12 @@ class VolumeController extends WebController
 				Storage::delete($cover->thumbnail);
 			}
 			
-			$this->AddWarningMessage("Unable to successfully update volume $volume->name.");
+			$this->AddWarningMessage("Unable to successfully update volume $volume->name.", ['volume' => $volume->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully updated volume #$volume->volume_number on collection $collection->name.");
+		$this->AddSuccessMessage("Successfully updated volume #$volume->volume_number on collection $collection->name.", ['volume' => $volume->id]);
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 
@@ -214,12 +214,12 @@ class VolumeController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully delete volume $volumeName.");
+			$this->AddWarningMessage("Unable to successfully delete volume $volumeName.", ['volume' => $volume->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully purged volume $volumeName from the collection.");
+		$this->AddSuccessMessage("Successfully purged volume $volumeName from the collection.", ['volume' => $volume->id]);
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 	

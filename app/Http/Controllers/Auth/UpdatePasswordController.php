@@ -48,7 +48,7 @@ class UpdatePasswordController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully update account password.");
+			$this->AddWarningMessage("Unable to successfully update account password.", ['exception' => $e]);
 			return redirect()->route('edit_password')->with(["messages" => $this->messages]);
 		}
 		DB::commit();

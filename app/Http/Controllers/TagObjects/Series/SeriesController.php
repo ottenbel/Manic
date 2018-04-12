@@ -189,7 +189,7 @@ class SeriesController extends TagObjectController
 		{
 			DB::rollBack();
 			
-			$this->AddWarningMessage("Unable to successfully $errorAction series $series->name.");
+			$this->AddWarningMessage("Unable to successfully $errorAction series $series->name.", ['series' => $series->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
@@ -198,13 +198,13 @@ class SeriesController extends TagObjectController
 		{	
 			$childCausingLoopsMessage = "The following series (" . implode(", ", $causedLoops) . ") were not attached as children to " . $series->name . " as their addition would cause loops in tag implication.";
 			
-			$this->AddWarningMessage($childCausingLoopsMessage);
-			$this->AddDataMessage("Partially $action series $series->name.");
+			$this->AddDataMessage($childCausingLoopsMessage, ['series' => $series->id]);
+			$this->AddDataMessage("Partially $action series $series->name.", ['series' => $series->id]);
 			return redirect()->route('show_series', ['series' => $series])->with("messages", $this->messages);
 		}
 		else
 		{	
-			$this->AddSuccessMessage("Successfully $action series $series->name.");
+			$this->AddSuccessMessage("Successfully $action series $series->name.", ['series' => $series->id]);
 			//Redirect to the series that was created
 			return redirect()->route('show_series', ['series' => $series])->with("messages", $this->messages);
 		}

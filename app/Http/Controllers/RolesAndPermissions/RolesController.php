@@ -70,7 +70,7 @@ class RolesController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully create role $roleName.");
+			$this->AddWarningMessage("Unable to successfully create role $roleName.", ['error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
@@ -92,11 +92,11 @@ class RolesController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully create role $roleName.");
+			$this->AddWarningMessage("Unable to successfully create role $roleName.", ['error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
-		$this->AddSuccessMessage("Successfully created new role $roleName.");
+		$this->AddSuccessMessage("Successfully created new role $roleName.", ['role' => $role->id]);
 		return redirect()->route('admin_show_role', ['role' => $role])->with("messages", $this->messages);
 	}
 	
@@ -155,12 +155,12 @@ class RolesController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully update role.");
+			$this->AddWarningMessage("Unable to successfully update role.", ['role' => $role->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully updated role.");
+		$this->AddSuccessMessage("Successfully updated role.", ['role' => $role->id]);
 		return redirect()->route('admin_show_role', ['role' => $role])->with("messages", $this->messages);
 	}
 	
@@ -175,12 +175,12 @@ class RolesController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully delete role $role->name.");
+			$this->AddWarningMessage("Unable to successfully delete role $role->name.", ['role' => $role->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully deleted role $role->name.");
+		$this->AddSuccessMessage("Successfully deleted role $role->name.", ['role' => $role->id]);
 		return redirect()->route('admin_index_role')->with("messages", $this->messages);
 	}
 }

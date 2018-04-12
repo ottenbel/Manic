@@ -94,7 +94,7 @@ class ArtistController extends TagObjectController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully $errorAction artist $artist->name.");
+			$this->AddWarningMessage("Unable to successfully $errorAction artist $artist->name.", ['artist' => $artist->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
@@ -103,13 +103,13 @@ class ArtistController extends TagObjectController
 		{	
 			$childCausingLoopsMessage = "The following artists (" . implode(", ", $causedLoops) . ") were not attached as children to " . $artist->name . " as their addition would cause loops in tag implication.";
 			
-			$this->AddDataMessage("Partially $action artist $artist->name.");
-			$this->AddWarningMessage($childCausingLoopsMessage);
+			$this->AddDataMessage("Partially $action artist $artist->name.", ['artist' => $artist->id]);
+			$this->AddDataMessage($childCausingLoopsMessage, ['artist' => $artist->id]);
 			return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $this->messages);
 		}
 		else
 		{
-			$this->AddSuccessMessage("Successfully $action artist $artist->name.");
+			$this->AddSuccessMessage("Successfully $action artist $artist->name.", ['artist' => $artist->id]);
 			return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $this->messages);
 		}
 	}

@@ -92,7 +92,7 @@ class UserRolesAndPermissionsController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully update roles and permissions for user $user->name.");
+			$this->AddWarningMessage("Unable to successfully update roles and permissions for user $user->name.", ['error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();

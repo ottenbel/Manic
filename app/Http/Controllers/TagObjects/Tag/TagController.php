@@ -97,7 +97,7 @@ class TagController extends TagObjectController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully $errorAction tag $tag->name.");
+			$this->AddWarningMessage("Unable to successfully $errorAction tag $tag->name.", ['tag' => $tag->id, 'error', $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
@@ -106,13 +106,13 @@ class TagController extends TagObjectController
 		{	
 			$childCausingLoopsMessage = "The following tags (" . implode(", ", $causedLoops) . ") were not attached as children to " . $tag->name . " as their addition would cause loops in tag implication.";
 			
-			$this->AddWarningMessage($childCausingLoopsMessage);
-			$this->AddDataMessage("Partially $action tag $tag->name.");
+			$this->AddDataMessage($childCausingLoopsMessage, ['tag' => $tag->id]);
+			$this->AddDataMessage("Partially $action tag $tag->name.", ['tag' => $tag->id]);
 			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $this->messages);
 		}
 		else
 		{
-			$this->AddSuccessMessage("Successfully $action tag $tag->name.");
+			$this->AddSuccessMessage("Successfully $action tag $tag->name.", ['tag' => $tag->id]);
 			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $this->messages);
 		}
 	}

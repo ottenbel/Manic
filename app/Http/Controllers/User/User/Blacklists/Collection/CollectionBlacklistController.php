@@ -59,12 +59,12 @@ class CollectionBlacklistController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully add collection to blacklist.");
+			$this->AddWarningMessage("Unable to successfully add collection to blacklist.", ['collection' => $collection->id, 'error' => $e]);
 			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully added collection $collection->name to blacklist.");
+		$this->AddSuccessMessage("Successfully added collection $collection->name to blacklist.", ['collection' => $collection->id]);
 		return redirect()->route('index_collection')->with("messages", $this->messages);
 	}
 	
@@ -83,12 +83,12 @@ class CollectionBlacklistController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully remove $collection->name from blacklist.");
+			$this->AddWarningMessage("Unable to successfully remove $collection->name from blacklist.", ['collection' => $collection->id, 'error' => $e]);
 			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully removed collection $collection->name from blacklist.");		
+		$this->AddSuccessMessage("Successfully removed collection $collection->name from blacklist.", ['collection' => $collection->id]);		
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 	}
 }

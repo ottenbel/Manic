@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -34,23 +35,52 @@ class WebController extends Controller
 	protected function GetFlashedMessages(Request $request)
 	{
 		$messagesFromRequest = $request->session()->get('messages');
-		$this->messages['success'] = $messagesFromRequest['success'];
-		$this->messages['data'] = $messagesFromRequest['data'];
-		$this->messages['warning'] = $messagesFromRequest['warning'];
+		if ($messagesFromRequest['success'] != null)
+			{ $this->messages['success'] = $messagesFromRequest['success']; }
+		else
+			{ $this->messages['success'] = []; }
+		
+		if ($messagesFromRequest['data'] != null)
+			{ $this->messages['data'] = $messagesFromRequest['data']; }
+		else
+			{ $this->messages['data'] = []; }
+		
+		if ($messagesFromRequest['warning'] != null)
+			{ $this->messages['warning'] = $messagesFromRequest['warning']; }
+		else 
+			{ $this->messages['warning'] = []; }
 	}
 	
-	protected function AddSuccessMessage($message)
+	protected function AddSuccessMessage($message, $contextualInformation = [])
 	{
+		$user = "Unknown";
+		if (Auth::check()) { $user = Auth::user()->id; }
+		
+		$contextualInformation = array_merge($contextualInformation, ['user' => $user, 'session' => session()->getId()]);
+		
 		array_push($this->messages['success'], $message);
+		Log::info($message, $contextualInformation);
 	}
 	
-	protected function AddDataMessage($message)
+	protected function AddDataMessage($message, $contextualInformation = [])
 	{
+		$user = "Unknown";
+		if (Auth::check()) { $user = Auth::user()->id; }
+		
+		$contextualInformation = array_merge($contextualInformation, ['user' => $user, 'session' => session()->getId()]);
+		
 		array_push($this->messages['data'], $message);
+		Log::warning($message, $contextualInformation);
 	}
 	
-	protected function AddWarningMessage($message)
+	protected function AddWarningMessage($message, $contextualInformation = [])
 	{
+		$user = "Unknown";
+		if (Auth::check()) { $user = Auth::user()->id; }
+		
+		$contextualInformation = array_merge($contextualInformation, ['user' => $user, 'session' => session()->getId()]);
+		
 		array_push($this->messages['warning'], $message);
+		Log::error($message, $contextualInformation);
 	}
 }

@@ -218,12 +218,12 @@ class CollectionController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully delete collection $collectionName.");
+			$this->AddWarningMessage("Unable to successfully delete collection $collectionName.", ['collection' => $collection->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully purged collection $collectionName from the database.");
+		$this->AddSuccessMessage("Successfully purged collection $collectionName from the database.", ['collection' => $collection]);
 		return redirect()->route('index_collection')->with("messages", $this->messages);
     }
 	
@@ -249,7 +249,7 @@ class CollectionController extends WebController
 		}
 		else
 		{
-			$this->AddWarningMessage("Unable to export zipped collection file.");
+			$this->AddWarningMessage("Unable to export zipped collection file.", ['collection' => $collection->id]);
 			//Return an error message saying that it couldn't create a collection export
 			return Redirect::back()->with(["messages" => $this->messages]);
 		}
@@ -329,7 +329,7 @@ class CollectionController extends WebController
 				Storage::delete($cover->thumbnail);
 			}
 			
-			$this->AddWarningMessage("Unable to successfully $errorAction collection $collection->name.");
+			$this->AddWarningMessage("Unable to successfully $errorAction collection $collection->name.", ['collection' => $collection->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
@@ -342,22 +342,22 @@ class CollectionController extends WebController
 				
 				$missingPrimaryCharacters_string = "Missing primary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missingPrimaryCharacters) . ".";
 				
-				$this->AddWarningMessage($missingPrimaryCharacters_string);
+				$this->AddDataMessage($missingPrimaryCharacters_string, ['collection' => $collection->id]);
 			}
 			
 			if (count($missingSecondaryCharacters))
 			{
 				$missingSecondaryCharacters_string = "Missing secondary characters were not attached to collection (appropriate series was not added to collection or character has not been defined): " . implode(", ", $missingSecondaryCharacters) . ".";
 				
-				$this->AddWarningMessage($missingSecondaryCharacters_string);
+				$this->AddDataMessage($missingSecondaryCharacters_string, ['collection' => $collection->id]);
 			}
 			
-			$this->AddDataMessage("Partially $action collection $collection->name.");
+			$this->AddDataMessage("Partially $action collection $collection->name.", ['collection' => $collection->id]);
 			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 		}
 		else
 		{
-			$this->AddSuccessMessage("Successfully $action collection $collection->name.");
+			$this->AddSuccessMessage("Successfully $action collection $collection->name.", ['collection' => $collection->id]);
 			return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 		}
 	}

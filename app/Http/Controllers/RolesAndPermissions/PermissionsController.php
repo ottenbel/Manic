@@ -64,7 +64,7 @@ class PermissionsController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully create permission $permissionName.");
+			$this->AddWarningMessage("Unable to successfully create permission $permissionName.", ['error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
@@ -96,12 +96,12 @@ class PermissionsController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully update permission.");
+			$this->AddWarningMessage("Unable to successfully update permission.", ['permission' => $permission->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully updated permission.");
+		$this->AddSuccessMessage("Successfully updated permission.", ['permission' => $permission->id]);
 		return redirect()->route('admin_index_permission')->with("messages", $this->messages);
 	}
 	
@@ -116,12 +116,12 @@ class PermissionsController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully delete permission $permission->name.");
+			$this->AddWarningMessage("Unable to successfully delete permission $permission->name.", ['permission' => $permission->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully deleted permission $permission->name.");
+		$this->AddSuccessMessage("Successfully deleted permission $permission->name.", ['permission' => $permission->id]);
 		return redirect()->route('admin_index_permission')->with("messages", $this->messages);
 	}
 }

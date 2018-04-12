@@ -106,7 +106,7 @@ class CharacterController extends TagObjectController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully $errorAction character $character->name.");
+			$this->AddWarningMessage("Unable to successfully $errorAction character $character->name.", ['character' => $character->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
@@ -118,23 +118,23 @@ class CharacterController extends TagObjectController
 			if (count($causedLoops) > 0)
 			{
 				$childCausingLoopsMessage = "The following characters (" . implode(", ", $causedLoops) . ") were not attached as children to " . $character->name . " as their addition would cause loops in tag implication.";
-				$this->AddWarningMessage($childCausingLoopsMessage);
+				$this->AddDataMessage($childCausingLoopsMessage, ['character' => $character->id]);
 			}
 			
 			if (count($droppedChildren) > 0)
 			{
 				$droppedChildrenMessage = "The following characters (" . implode(", ", $droppedChildren) . ") were not attached as children to " . $character->name . " as they could not be found attached to " . $character->series->name . " or a child series of it.";
-				$this->AddWarningMessage($droppedChildrenMessage);
+				$this->AddDataMessage($droppedChildrenMessage, ['character' => $character->id, 'series' => $character->series->id]);
 			}
 			
 			$seriesName = $character->series->name;
-			$this->AddDataMessage("Partially $action character $character->name under series $seriesName.");
+			$this->AddDataMessage("Partially $action character $character->name under series $seriesName.", ['character' => $character, 'series' => $character->series->id]);
 			return redirect()->route('show_character', ['character' => $character])->with("messages", $this->messages);
 		}
 		else
 		{
 			$seriesName = $character->series->name;
-			$this->AddSuccessMessage("Successfully $action character $character->name under series $seriesName.");
+			$this->AddSuccessMessage("Successfully $action character $character->name under series $seriesName.", ['character' => $character->id, 'series' => $character->series->id]);
 			return redirect()->route('show_character', ['character' => $character])->with("messages", $this->messages);
 		}
 	}

@@ -53,12 +53,12 @@ class TagObjectAliasController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully add alias to $objectType.");
+			$this->AddWarningMessage("Unable to successfully add alias to $objectType.", ['parent' => $parentObject->id, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully created alias $alias->alias on $objectType  $parentObject->name.");
+		$this->AddSuccessMessage("Successfully created alias $alias->alias on $objectType  $parentObject->name.", ['parent' => $parentObject->id, 'alias' => $alias->id]);
 		//Redirect to the object that the alias was created for
 		return redirect()->route($showRoute, [$objectType => $parentObject])->with("messages", $this->messages);
 	}
@@ -76,13 +76,13 @@ class TagObjectAliasController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully purge alias from $objectType.");
+			$this->AddWarningMessage("Unable to successfully purge alias from $objectType.", ['alias' => $alias->id, 'parent' => $alias->{$parentIDField}, 'error' => $e]);
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
 		
 		//redirect to the object that the alias existed for
-		$this->AddSuccessMessage("Successfully purged alias from $objectType.");
+		$this->AddSuccessMessage("Successfully purged alias from $objectType.", ['parent' => $alias->{$parentIDField}, 'alias' => $alias->id]);
 		return redirect()->route($showRoute, [$objectType => $object])->with("messages", $this->messages);
 	}
 	

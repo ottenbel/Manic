@@ -108,7 +108,7 @@ class PlaceholderController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully update placeholder configuration settings based on site configuration.");
+			$this->AddWarningMessage("Unable to successfully update placeholder configuration settings based on site configuration.", ['error' => $e]);
 			if (Route::is('user_update_configuration_placeholders'))
 			{
 				return redirect()->route('user_dashboard_configuration_placeholders')->with(["messages" => $this->messages])->withInput();
@@ -166,7 +166,7 @@ class PlaceholderController extends WebController
 		catch (\Exception $e)
 		{
 			DB::rollBack();
-			$this->AddWarningMessage("Unable to successfully reset placeholder configuration settings based on site configuration.");
+			$this->AddWarningMessage("Unable to successfully reset placeholder configuration settings based on site configuration.", ['error' => $e]);
 			return redirect()->route('user_dashboard_configuration_placeholders')->with(["messages" => $this->messages]);
 		}
 		
