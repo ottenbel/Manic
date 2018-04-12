@@ -47,6 +47,9 @@ use App\Observers\User\CollectionFavouritesObserver;
 use App\Models\User\CollectionBlacklist;
 use App\Observers\User\CollectionBlacklistObserver;
 
+use Auth;
+use Log;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -76,6 +79,22 @@ class AppServiceProvider extends ServiceProvider
 		ConfigurationRatingRestriction::observe(RatingRestrictionObserver::class);
 		CollectionFavourite::observe(CollectionFavouritesObserver::class);
 		CollectionBlacklist::observe(CollectionBlacklistObserver::class);
+
+		/**
+		 * Add additional context information to all logs.
+		 */
+		$monolog = Log::getLogger();
+		$monolog->pushProcessor(function ($record) 
+		{
+			$user = "Unknown";
+			if (Auth::check()) { $user = Auth::user()->id; }
+
+		    $record['extra']['user'] = $user;
+		    $record['extra']['session'] = session()->getId();
+		    $record['extra']['ip_address'] = request()->ip();
+
+		    return $record;
+		});
     }
 
     /**

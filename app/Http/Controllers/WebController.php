@@ -52,34 +52,19 @@ class WebController extends Controller
 	}
 	
 	protected function AddSuccessMessage($message, $contextualInformation = [])
-	{
-		$user = "Unknown";
-		if (Auth::check()) { $user = Auth::user()->id; }
-		
-		$contextualInformation = array_merge($contextualInformation, ['user' => $user, 'session' => session()->getId()]);
-		
+	{	
 		array_push($this->messages['success'], $message);
 		Log::info($message, $contextualInformation);
 	}
 	
 	protected function AddDataMessage($message, $contextualInformation = [])
 	{
-		$user = "Unknown";
-		if (Auth::check()) { $user = Auth::user()->id; }
-		
-		$contextualInformation = array_merge($contextualInformation, ['user' => $user, 'session' => session()->getId()]);
-		
 		array_push($this->messages['data'], $message);
 		Log::warning($message, $contextualInformation);
 	}
 	
 	protected function AddWarningMessage($message, $contextualInformation = [])
 	{
-		$user = "Unknown";
-		if (Auth::check()) { $user = Auth::user()->id; }
-		
-		$contextualInformation = array_merge($contextualInformation, ['user' => $user, 'session' => session()->getId()]);
-		
 		array_push($this->messages['warning'], $message);
 		Log::error($message, $contextualInformation);
 	}
