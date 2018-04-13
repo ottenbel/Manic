@@ -4,116 +4,137 @@ namespace App\Observers\TagObjects\Artist;
 
 use App\Models\TagObjects\Artist\Artist;
 use App\Observers\BaseManicModelObserver;
+use Log;
 
 class ArtistObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the artist creating event.
      *
-     * @param  $model
+     * @param  $artist
      * @return void
      */
-    public function creating($model)
+    public function creating($artist)
     {	
-		parent::creating($model);
+		parent::creating($artist);
+
+        Log::Debug("Creating artist", ['artist' => $artist->id]);
     }
 	
     /**
      * Listen to the artist created event.
      *
-     * @param  $model
+     * @param  $artist
      * @return void
      */
-    public function created($model)
+    public function created($artist)
     {
-        parent::created($model);
+        parent::created($artist);
+
+        Log::Info("Created artist", ['artist' => $artist->id]);
     }
 
 	/**
      * Listen to the artist updating event.
      *
-     * @param  $model
+     * @param  $artist
      * @return void
      */
-    public function updating($model)
+    public function updating($artist)
     {
-        parent::updating($model);
+        parent::updating($artist);
+
+        Log::Debug("Updating artist", ['artist' => $artist->id]);
     }
 	
     /**
      * Listen to the artist updated event.
      *
-     * @param  $model
+     * @param  $artist
      * @return void
      */
-    public function updated($model)
+    public function updated($artist)
     {
-        parent::updated($model);
+        parent::updated($artist);
+
+        Log::Info("Updated artist", ['artist' => $artist->id]);
     }
 	
 	/**
      * Listen to the artist saving event.
      *
-     * @param  $model
+     * @param  $artist
      * @return void
      */
-    public function saving($model)
+    public function saving($artist)
     {
-        parent::saving($model);
+        parent::saving($artist);
+
+        Log::Debug("Saving artist", ['artist' => $artist->id]);
     }
 	
     /**
      * Listen to the artist saved event.
      *
-     * @param  $model
+     * @param  $artist
      * @return void
      */
-    public function saved($model)
+    public function saved($artist)
     {
-        parent::saved($model);
+        parent::saved($artist);
+
+        Log::Info("Saved artist", ['artist' => $artist->id]);
     }
 	
     /**
      * Listen to the artist deleting event.
      *
-     * @param  $model
+     * @param  $artist
      * @return void
      */
-    public function deleting($model)
+    public function deleting($artist)
     {
-        parent::deleting($model);
+        parent::deleting($artist);
+
+        Log::Debug("Deleting artist", ['artist' => $artist->id]);
     }
 	
 	/**
      * Listen to the artist deleted event.
      *
-     * @param  $model
+     * @param  $artist
      * @return void
      */
-    public function deleted($model)
+    public function deleted($artist)
     {
-        parent::deleted($model);
+        parent::deleted($artist);
+
+        Log::Info("Deleted artist", ['artist' => $artist->id]);
     }
 	
 	/**
      * Listen to the artist restoring event.
      *
-     * @param  $model
+     * @param  $artist
      * @return void
      */
-    public function restoring($model)
+    public function restoring($artist)
     {
-        parent::restoring($model);
+        parent::restoring($artist);
+
+        Log::Debug("Restoring artist", ['artist' => $artist->id]);
     }
 	
 	/**
      * Listen to the artist restored event.
      *
-     * @param  artist  $model
+     * @param  artist  $artist
      * @return void
      */
-    public function restored($model)
+    public function restored($artist)
     {
-        parent::restored($model);
+        parent::restored($artist);
+
+        Log::Info("Restored artist", ['artist' => $artist->id]);
     }
 }

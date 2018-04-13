@@ -4,116 +4,137 @@ namespace App\Observers\Configuration\Placeholder;
 
 use App\Models\Configuration\ConfigurationPlaceholder;
 use App\Observers\BaseManicModelObserver;
+use Log;
 
 class PlaceholderObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the placeholder creating event.
      *
-     * @param  $model
+     * @param  $configurationPlaceholder
      * @return void
      */
-    public function creating($model)
+    public function creating($configurationPlaceholder)
     {	
-		parent::creating($model);
+		parent::creating($configurationPlaceholder);
+
+        Log::Debug("Creating placeholder configuration entry", ['placeholder_configuration' => $configurationPlaceholder->id]);
     }
 	
     /**
      * Listen to the placeholder created event.
      *
-     * @param  $model
+     * @param  $configurationPlaceholder
      * @return void
      */
-    public function created($model)
+    public function created($configurationPlaceholder)
     {
-        parent::created($model);
+        parent::created($configurationPlaceholder);
+
+        Log::Info("Created placeholder configuration entry", ['placeholder_configuration' => $configurationPlaceholder->id]);
     }
 
 	/**
      * Listen to the placeholder updating event.
      *
-     * @param  $model
+     * @param  $configurationPlaceholder
      * @return void
      */
-    public function updating($model)
+    public function updating($configurationPlaceholder)
     {
-        parent::updating($model);
+        parent::updating($configurationPlaceholder);
+
+        Log::Debug("Updating placeholder configuration entry", ['placeholder_configuration' => $configurationPlaceholder->id]);
     }
 	
     /**
      * Listen to the placeholder updated event.
      *
-     * @param  $model
+     * @param  $configurationPlaceholder
      * @return void
      */
-    public function updated($model)
+    public function updated($configurationPlaceholder)
     {
-        parent::updated($model);
+        parent::updated($configurationPlaceholder);
+
+        Log::Info("Updated placeholder configuration entry", ['placeholder_configuration' => $configurationPlaceholder->id]);
     }
 	
 	/**
      * Listen to the placeholder saving event.
      *
-     * @param  $model
+     * @param  $configurationPlaceholder
      * @return void
      */
-    public function saving($model)
+    public function saving($configurationPlaceholder)
     {
-        parent::saving($model);
+        parent::saving($configurationPlaceholder);
+
+        Log::Debug("Saving placeholder configuration entry", ['placeholder_configuration' => $configurationPlaceholder->id]);
     }
 	
     /**
      * Listen to the placeholder saved event.
      *
-     * @param  $model
+     * @param  $configurationPlaceholder
      * @return void
      */
-    public function saved($model)
+    public function saved($configurationPlaceholder)
     {
-        parent::saved($model);
+        parent::saved($configurationPlaceholder);
+
+        Log::Info("Saved placeholder configuration entry", ['placeholder_configuration' => $configurationPlaceholder->id]);
     }
 	
     /**
      * Listen to the placeholder deleting event.
      *
-     * @param  $model
+     * @param  $configurationPlaceholder
      * @return void
      */
-    public function deleting($model)
+    public function deleting($configurationPlaceholder)
     {
-        parent::deleting($model);
+        parent::deleting($configurationPlaceholder);
+
+        Log::Debug("Deleting placeholder configuration entry", ['placeholder_configuration' => $configurationPlaceholder->id]);
     }
 	
 	/**
      * Listen to the placeholder deleted event.
      *
-     * @param  $model
+     * @param  $configurationPlaceholder
      * @return void
      */
-    public function deleted($model)
+    public function deleted($configurationPlaceholder)
     {
-        parent::deleted($model);
+        parent::deleted($configurationPlaceholder);
+
+        Log::Info("Deleted placeholder configuration entry", ['placeholder_configuration' => $configurationPlaceholder->id]);
     }
 	
 	/**
      * Listen to the placeholder restoring event.
      *
-     * @param  $model
+     * @param  $configurationPlaceholder
      * @return void
      */
-    public function restoring($model)
+    public function restoring($configurationPlaceholder)
     {
-        parent::restoring($model);
+        parent::restoring($configurationPlaceholder);
+
+        Log::Debug("Restoring placeholder configuration entry", ['placeholder_configuration' => $configurationPlaceholder->id]);
     }
 	
 	/**
      * Listen to the placeholder restored event.
      *
-     * @param  placeholder  $model
+     * @param  placeholder  $configurationPlaceholder
      * @return void
      */
-    public function restored($model)
+    public function restored($configurationPlaceholder)
     {
-        parent::restored($model);
+        parent::restored($configurationPlaceholder);
+
+        Log::Info("Restored placeholder configuration entry", ['placeholder_configuration' => $configurationPlaceholder->id]);
     }
 }

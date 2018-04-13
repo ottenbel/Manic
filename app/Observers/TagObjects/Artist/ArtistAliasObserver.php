@@ -5,92 +5,110 @@ namespace App\Observers\TagObjects\Artist;
 use App\Models\TagObjects\Artist\ArtistAlias;
 use App\Observers\BaseManicModelObserver;
 use Auth;
+use Log;
 
 class ArtistAliasObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the artist alias creating event.
      *
-     * @param  $model
+     * @param  $artistAlias
      * @return void
      */
-    public function creating($model)
+    public function creating($artistAlias)
     {	
-		parent::creating($model);
-		
-		$artist = $model->artist()->first();
+		parent::creating($artistAlias);
+
+		$artist = $artistAlias->artist;
+
+        Log::Debug("Creating artist alias", ['artist alias' => $artistAlias->id, 'artist' => $artist->id]);
+
 		$artist->updated_by = Auth::user()->id;
 		$artist->save();
 		$artist->touch();
+
+        
     }
 	
     /**
      * Listen to the artist alias created event.
      *
-     * @param  $model
+     * @param  $artistAlias
      * @return void
      */
-    public function created($model)
+    public function created($artistAlias)
     {
-        parent::created($model);
+        parent::created($artistAlias);
+
+        Log::Info("Created artist alias", ['artist alias' => $artistAlias->id]);
     }
 
 	/**
      * Listen to the artist alias updating event.
      *
-     * @param  $model
+     * @param  $artistAlias
      * @return void
      */
-    public function updating($model)
+    public function updating($artistAlias)
     {
-        parent::updating($model);
+        parent::updating($artistAlias);
+
+        Log::Debug("Updating artist alias", ['artist alias' => $artistAlias->id]);
     }
 	
     /**
      * Listen to the artist alias updated event.
      *
-     * @param  $model
+     * @param  $artistAlias
      * @return void
      */
-    public function updated($model)
+    public function updated($artistAlias)
     {
-        parent::updated($model);
+        parent::updated($artistAlias);
+
+        Log::Info("Updated artist alias", ['artist alias' => $artistAlias->id]);
     }
 	
 	/**
      * Listen to the artist alias saving event.
      *
-     * @param  $model
+     * @param  $artistAlias
      * @return void
      */
-    public function saving($model)
+    public function saving($artistAlias)
     {
-        parent::saving($model);
+        parent::saving($artistAlias);
+
+        Log::Debug("Saving artist alias", ['artist alias' => $artistAlias->id]);
     }
 	
     /**
      * Listen to the artist alias saved event.
      *
-     * @param  $model
+     * @param  $artistAlias
      * @return void
      */
-    public function saved($model)
+    public function saved($artistAlias)
     {
-        parent::saved($model);
+        parent::saved($artistAlias);
+
+        Log::Info("Saved artist alias", ['artist alias' => $artistAlias->id]);
     }
 	
     /**
      * Listen to the artist alias deleting event.
      *
-     * @param  $model
+     * @param  $artistAlias
      * @return void
      */
-    public function deleting($model)
+    public function deleting($artistAlias)
     {
-        parent::deleting($model);
+        parent::deleting($artistAlias);
 		
-		$artist = $model->artist()->first();
-		$artist->updated_by = Auth::user()->id;
+        Log::Debug("Deleting artist alias", ['artist alias' => $artistAlias->id]);
+
+		$artist = $artistAlias->artist;
+        $artist->updated_by = Auth::user()->id;
 		$artist->save();
 		$artist->touch();
     }
@@ -98,33 +116,39 @@ class ArtistAliasObserver Extends BaseManicModelObserver
 	/**
      * Listen to the artist alias deleted event.
      *
-     * @param  $model
+     * @param  $artistAlias
      * @return void
      */
-    public function deleted($model)
+    public function deleted($artistAlias)
     {
-        parent::deleted($model);
+        parent::deleted($artistAlias);
+
+        Log::Info("Deleted artist alias", ['artist alias' => $artistAlias->id]);
     }
 	
 	/**
      * Listen to the artist alias restoring event.
      *
-     * @param  $model
+     * @param  $artistAlias
      * @return void
      */
-    public function restoring($model)
+    public function restoring($artistAlias)
     {
-        parent::restoring($model);
+        parent::restoring($artistAlias);
+
+        Log::Debug("Restoring artist alias", ['artist alias' => $artistAlias->id]);
     }
 	
 	/**
      * Listen to the artist alias restored event.
      *
-     * @param  artist alias  $model
+     * @param  artist alias  $artistAlias
      * @return void
      */
-    public function restored($model)
+    public function restored($artistAlias)
     {
-        parent::restored($model);
+        parent::restored($artistAlias);
+
+        Log::Info("Restored artist alias", ['artist alias' => $artistAlias->id]);
     }
 }

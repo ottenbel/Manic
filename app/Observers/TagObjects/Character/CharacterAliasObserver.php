@@ -5,20 +5,24 @@ namespace App\Observers\TagObjects\Character;
 use App\Models\TagObjects\Character\CharacterAlias;
 use App\Observers\BaseManicModelObserver;
 use Auth;
+use Log
 
 class CharacterAliasObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the character alias creating event.
      *
-     * @param  $model
+     * @param  $characterAlias
      * @return void
      */
-    public function creating($model)
+    public function creating($characterAlias)
     {	
-		parent::creating($model);
-		
-		$character = $model->character()->first();
+		parent::creating($characterAlias);
+
+		$character = $characterAlias->character;
+
+        Log::Debug("Creating character alias", ['character alias' => $characterAlias->id, 'character' => $character->id]);
+
 		$character->updated_by = Auth::user()->id;
 		$character->save();
 		$character->touch();
@@ -27,69 +31,81 @@ class CharacterAliasObserver Extends BaseManicModelObserver
     /**
      * Listen to the character alias created event.
      *
-     * @param  $model
+     * @param  $characterAlias
      * @return void
      */
-    public function created($model)
+    public function created($characterAlias)
     {
-        parent::created($model);
+        parent::created($characterAlias);
+
+        Log::Info("Created character alias", ['character alias' => $characterAlias->id]);
     }
 
 	/**
      * Listen to the character alias updating event.
      *
-     * @param  $model
+     * @param  $characterAlias
      * @return void
      */
-    public function updating($model)
+    public function updating($characterAlias)
     {
-        parent::updating($model);
+        parent::updating($characterAlias);
+
+        Log::Debug("Updating character alias", ['character alias' => $characterAlias->id]);
     }
 	
     /**
      * Listen to the character alias updated event.
      *
-     * @param  $model
+     * @param  $characterAlias
      * @return void
      */
-    public function updated($model)
+    public function updated($characterAlias)
     {
-        parent::updated($model);
+        parent::updated($characterAlias);
+
+        Log::Info("Updated character alias", ['character alias' => $characterAlias->id]);
     }
 	
 	/**
      * Listen to the character alias saving event.
      *
-     * @param  $model
+     * @param  $characterAlias
      * @return void
      */
-    public function saving($model)
+    public function saving($characterAlias)
     {
-        parent::saving($model);
+        parent::saving($characterAlias);
+
+        Log::Debug("Saving character alias", ['character alias' => $characterAlias->id]);
     }
 	
     /**
      * Listen to the character alias saved event.
      *
-     * @param  $model
+     * @param  $characterAlias
      * @return void
      */
-    public function saved($model)
+    public function saved($characterAlias)
     {
-        parent::saved($model);
+        parent::saved($characterAlias);
+
+        Log::Info("Saved character alias", ['character alias' => $characterAlias->id]);
     }
 	
     /**
      * Listen to the character alias deleting event.
      *
-     * @param  $model
+     * @param  $characterAlias
      * @return void
      */
-    public function deleting($model)
+    public function deleting($characterAlias)
     {
-        parent::deleting($model);
+        parent::deleting($characterAlias);
 		
-		$character = $model->character()->first();
+        Log::Debug("Deleting character alias", ['character alias' => $characterAlias->id]);
+
+		$character = $characterAlias->character;
 		$character->updated_by = Auth::user()->id;
 		$character->save();
 		$character->touch();
@@ -98,33 +114,39 @@ class CharacterAliasObserver Extends BaseManicModelObserver
 	/**
      * Listen to the character alias deleted event.
      *
-     * @param  $model
+     * @param  $characterAlias
      * @return void
      */
-    public function deleted($model)
+    public function deleted($characterAlias)
     {
-        parent::deleted($model);
+        parent::deleted($characterAlias);
+
+        Log::Info("Deleted character alias", ['character alias' => $characterAlias->id]);
     }
 	
 	/**
      * Listen to the character alias restoring event.
      *
-     * @param  $model
+     * @param  $characterAlias
      * @return void
      */
-    public function restoring($model)
+    public function restoring($characterAlias)
     {
-        parent::restoring($model);
+        parent::restoring($characterAlias);
+
+        Log::Debug("Restoring character alias", ['character alias' => $characterAlias->id]);
     }
 	
 	/**
      * Listen to the character alias restored event.
      *
-     * @param  character alias  $model
+     * @param  character alias  $characterAlias
      * @return void
      */
-    public function restored($model)
+    public function restored($characterAlias)
     {
-        parent::restored($model);
+        parent::restored($characterAlias);
+
+        Log::Info("Restored character alias", ['character alias' => $characterAlias->id]);
     }
 }

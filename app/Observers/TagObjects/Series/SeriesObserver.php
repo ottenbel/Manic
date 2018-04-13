@@ -5,116 +5,137 @@ namespace App\Observers\TagObjects\Series;
 use App\Models\TagObjects\Series\Series;
 use App\Observers\BaseManicModelObserver;
 use Auth;
+use Log;
 
 class SeriesObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the series creating event.
      *
-     * @param  $model
+     * @param  $series
      * @return void
      */
-    public function creating($model)
+    public function creating($series)
     {	
-		parent::creating($model);
+		parent::creating($series);
+
+        Log::Debug("Creating series", ['series' => $series->id]);
     }
 	
     /**
      * Listen to the series created event.
      *
-     * @param  $model
+     * @param  $series
      * @return void
      */
-    public function created($model)
+    public function created($series)
     {
-        parent::created($model);
+        parent::created($series);
+
+        Info::Debug("Created series", ['series' => $series->id]);
     }
 
 	/**
      * Listen to the series updating event.
      *
-     * @param  $model
+     * @param  $series
      * @return void
      */
-    public function updating($model)
+    public function updating($series)
     {
-        parent::updating($model);
+        parent::updating($series);
+
+        Log::Debug("Updating series", ['series' => $series->id]);
     }
 	
     /**
      * Listen to the series updated event.
      *
-     * @param  $model
+     * @param  $series
      * @return void
      */
-    public function updated($model)
+    public function updated($series)
     {
-        parent::updated($model);
+        parent::updated($series);
+
+        Info::Debug("Updated series", ['series' => $series->id]);
     }
 	
 	/**
      * Listen to the series saving event.
      *
-     * @param  $model
+     * @param  $series
      * @return void
      */
-    public function saving($model)
+    public function saving($series)
     {
-        parent::saving($model);
+        parent::saving($series);
+
+        Log::Debug("Saving series", ['series' => $series->id]);
     }
 	
     /**
      * Listen to the series saved event.
      *
-     * @param  $model
+     * @param  $series
      * @return void
      */
-    public function saved($model)
+    public function saved($series)
     {
-        parent::saved($model);
+        parent::saved($series);
+
+        Info::Debug("Saved series", ['series' => $series->id]);
     }
 	
     /**
      * Listen to the series deleting event.
      *
-     * @param  $model
+     * @param  $series
      * @return void
      */
-    public function deleting($model)
+    public function deleting($series)
     {
-        parent::deleting($model);
+        parent::deleting($series);
+
+        Log::Debug("Deleting series", ['series' => $series->id]);
     }
 	
 	/**
      * Listen to the series deleted event.
      *
-     * @param  $model
+     * @param  $series
      * @return void
      */
-    public function deleted($model)
+    public function deleted($series)
     {
-        parent::deleted($model);
+        parent::deleted($series);
+
+        Info::Debug("Deleted series", ['series' => $series->id]);
     }
 	
 	/**
      * Listen to the series restoring event.
      *
-     * @param  $model
+     * @param  $series
      * @return void
      */
-    public function restoring($model)
+    public function restoring($series)
     {
-        parent::restoring($model);
+        parent::restoring($series);
+
+        Log::Debug("Restoring series", ['series' => $series->id]);
     }
 	
 	/**
      * Listen to the series restored event.
      *
-     * @param  series  $model
+     * @param  series  $series
      * @return void
      */
-    public function restored($model)
+    public function restored($series)
     {
-        parent::restored($model);
+        parent::restored($series);
+
+        Info::Debug("Restored series", ['series' => $series->id]);
     }
 }

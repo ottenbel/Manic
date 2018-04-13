@@ -5,124 +5,145 @@ namespace App\Observers;
 use App\Models\Collection;
 use Auth;
 use Storage;
+use Log;
 
 class CollectionObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the collection creating event.
      *
-     * @param  $model
+     * @param  $collection
      * @return void
      */
-    public function creating($model)
+    public function creating($collection)
     {	
-		parent::creating($model);
+		parent::creating($collection);
+
+        Log::Debug("Creating collection", ['collection' => $collection->id]);
     }
 	
     /**
      * Listen to the collection created event.
      *
-     * @param  $model
+     * @param  $collection
      * @return void
      */
-    public function created($model)
+    public function created($collection)
     {
-        parent::created($model);
+        parent::created($collection);
+
+        Log::Info("Created collection", ['collection' => $collection->id]);
     }
 
 	/**
      * Listen to the collection updating event.
      *
-     * @param  $model
+     * @param  $collection
      * @return void
      */
-    public function updating($model)
+    public function updating($collection)
     {
-        parent::updating($model);
-			
+        parent::updating($collection);
+		
+        Log::Debug("Updating collection", ['collection' => $collection->id]);
+
 		//Delete the relevant file corresponding to the entry from the collection export table.
-		$export = $model->export;
+		$export = $collection->export;
 		if ($export != null)
 		{
 			Storage::Delete($export->path);
-			$model->export->forceDelete();
+			$collection->export->forceDelete();
 		}
     }
 	
     /**
      * Listen to the collection updated event.
      *
-     * @param  $model
+     * @param  $collection
      * @return void
      */
-    public function updated($model)
+    public function updated($collection)
     {
-        parent::updated($model);
+        parent::updated($collection);
+
+        Log::Info("Updated collection" ['collection' => $collection->id]);
     }
 	
 	/**
      * Listen to the collection saving event.
      *
-     * @param  $model
+     * @param  $collection
      * @return void
      */
-    public function saving($model)
+    public function saving($collection)
     {
-        parent::saving($model);
+        parent::saving($collection);
+
+        Log::Debug("Saving collection", ['collection' => $collection->id]);
     }
 	
     /**
      * Listen to the collection saved event.
      *
-     * @param  $model
+     * @param  $collection
      * @return void
      */
-    public function saved($model)
+    public function saved($collection)
     {
-        parent::saved($model);
+        parent::saved($collection);
+
+        Log::Info("Saved collection", ['collection' => $collection->id]);
     }
 	
     /**
      * Listen to the collection deleting event.
      *
-     * @param  $model
+     * @param  $collection
      * @return void
      */
-    public function deleting($model)
+    public function deleting($collection)
     {
-        parent::deleting($model);
+        parent::deleting($collection);
+
+        Log::Debug("Deleting collection", ['collection' => $collection->id]);
     }
 	
 	/**
      * Listen to the collection deleted event.
      *
-     * @param  $model
+     * @param  $collection
      * @return void
      */
-    public function deleted($model)
+    public function deleted($collection)
     {
-        parent::deleted($model);
+        parent::deleted($collection);
+
+        Log::Info("Deleted collection", ['collection' => $collection->id]);
     }
 	
 	/**
      * Listen to the collection restoring event.
      *
-     * @param  $model
+     * @param  $collection
      * @return void
      */
-    public function restoring($model)
+    public function restoring($collection)
     {
-        parent::restoring($model);
+        parent::restoring($collection);
+
+        Log::Debug("Restoring collection", ['collection' => $collection->id]);
     }
 	
 	/**
      * Listen to the collection restored event.
      *
-     * @param  $model
+     * @param  $collection
      * @return void
      */
-    public function restored($model)
+    public function restored($collection)
     {
-        parent::restored($model);
+        parent::restored($collection);
+
+        Log::Info("Restored collection", ['collection' => $collection->id]);
     }
 }

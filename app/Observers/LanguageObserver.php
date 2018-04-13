@@ -3,116 +3,137 @@
 namespace App\Observers;
 
 use App\Models\Language;
+use Log;
 
 class LanguageObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the language creating event.
      *
-     * @param  $model
+     * @param  $language
      * @return void
      */
-    public function creating($model)
+    public function creating($language)
     {	
-		parent::creating($model);
+		parent::creating($language);
+
+        Log::Debug("Creating language", ['language' => $language->id]);
     }
 	
     /**
      * Listen to the language created event.
      *
-     * @param  $model
+     * @param  $language
      * @return void
      */
-    public function created($model)
+    public function created($language)
     {
-        parent::created($model);
+        parent::created($language);
+
+        Log::Info("Created language", ['language' => $language->id]);
     }
 
 	/**
      * Listen to the language updating event.
      *
-     * @param  $model
+     * @param  $language
      * @return void
      */
-    public function updating($model)
+    public function updating($language)
     {
-        parent::updating($model);
+        parent::updating($language);
+
+        Log::Debug("Updating language", ['language' => $language->id]);
     }
 	
     /**
      * Listen to the language updated event.
      *
-     * @param  $model
+     * @param  $language
      * @return void
      */
-    public function updated($model)
+    public function updated($language)
     {
-        parent::updated($model);
+        parent::updated($language);
+
+        Log::Info("Updated language", ['language' => $language->id]);
     }
 	
 	/**
      * Listen to the language saving event.
      *
-     * @param  $model
+     * @param  $language
      * @return void
      */
-    public function saving($model)
+    public function saving($language)
     {
-        parent::saving($model);
+        parent::saving($language);
+
+        Log::Debug("Saving language", ['language' => $language->id]);
     }
 	
     /**
      * Listen to the language saved event.
      *
-     * @param  $model
+     * @param  $language
      * @return void
      */
-    public function saved($model)
+    public function saved($language)
     {
-        parent::saved($model);
+        parent::saved($language);
+
+        Log::Info("Saved language", ['language' => $language->id]);
     }
 	
     /**
      * Listen to the language deleting event.
      *
-     * @param  $model
+     * @param  $language
      * @return void
      */
-    public function deleting($model)
+    public function deleting($language)
     {
-        parent::deleting($model);
+        parent::deleting($language);
+
+        Log::Debug("Deleting language", ['language' => $language->id]);
     }
 	
 	/**
      * Listen to the language deleted event.
      *
-     * @param  $model
+     * @param  $language
      * @return void
      */
-    public function deleted($model)
+    public function deleted($language)
     {
-        parent::deleted($model);
+        parent::deleted($language);
+
+        Log::Info("Deleted language", ['language' => $language->id]);
     }
 	
 	/**
      * Listen to the language restoring event.
      *
-     * @param  $model
+     * @param  $language
      * @return void
      */
-    public function restoring($model)
+    public function restoring($language)
     {
-        parent::restoring($model);
+        parent::restoring($language);
+
+        Log::Debug("Restoring language", ['language' => $language->id]);
     }
 	
 	/**
      * Listen to the language restored event.
      *
-     * @param  language  $model
+     * @param  language  $language
      * @return void
      */
-    public function restored($model)
+    public function restored($language)
     {
-        parent::restored($model);
+        parent::restored($language);
+
+        Log::Info("Restored language", ['language' => $language->id]);
     }
 }

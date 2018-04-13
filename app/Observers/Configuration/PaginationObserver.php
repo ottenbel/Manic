@@ -4,116 +4,137 @@ namespace App\Observers\Configuration\Pagination;
 
 use App\Models\Configuration\ConfigurationPagination;
 use App\Observers\BaseManicModelObserver;
+use Log;
 
 class PaginationObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the pagination creating event.
      *
-     * @param  $model
+     * @param  $configurationPagination
      * @return void
      */
-    public function creating($model)
+    public function creating($configurationPagination)
     {	
-		parent::creating($model);
+		parent::creating($configurationPagination);
+
+        Log::Debug("Creating pagination configuration entry", ['pagination_configuration' => $configurationPagination]);
     }
 	
     /**
      * Listen to the pagination created event.
      *
-     * @param  $model
+     * @param  $configurationPagination
      * @return void
      */
-    public function created($model)
+    public function created($configurationPagination)
     {
-        parent::created($model);
+        parent::created($configurationPagination);
+
+        Log::Info("Created pagination configuration entry", ['pagination_configuration' => $configurationPagination]);
     }
 
 	/**
      * Listen to the pagination updating event.
      *
-     * @param  $model
+     * @param  $configurationPagination
      * @return void
      */
-    public function updating($model)
+    public function updating($configurationPagination)
     {
-        parent::updating($model);
+        parent::updating($configurationPagination);
+
+        Log::Debug("Updating pagination configuration entry", ['pagination_configuration' => $configurationPagination]);
     }
 	
     /**
      * Listen to the pagination updated event.
      *
-     * @param  $model
+     * @param  $configurationPagination
      * @return void
      */
-    public function updated($model)
+    public function updated($configurationPagination)
     {
-        parent::updated($model);
+        parent::updated($configurationPagination);
+
+        Log::Info("Updated pagination configuration entry", ['pagination_configuration' => $configurationPagination]);
     }
 	
 	/**
      * Listen to the pagination saving event.
      *
-     * @param  $model
+     * @param  $configurationPagination
      * @return void
      */
-    public function saving($model)
+    public function saving($configurationPagination)
     {
-        parent::saving($model);
+        parent::saving($configurationPagination);
+
+        Log::Debug("Saving pagination configuration entry", ['pagination_configuration' => $configurationPagination]);
     }
 	
     /**
      * Listen to the pagination saved event.
      *
-     * @param  $model
+     * @param  $configurationPagination
      * @return void
      */
-    public function saved($model)
+    public function saved($configurationPagination)
     {
-        parent::saved($model);
+        parent::saved($configurationPagination);
+
+        Log::Info("Saved pagination configuration entry", ['pagination_configuration' => $configurationPagination]);
     }
 	
     /**
      * Listen to the pagination deleting event.
      *
-     * @param  $model
+     * @param  $configurationPagination
      * @return void
      */
-    public function deleting($model)
+    public function deleting($configurationPagination)
     {
-        parent::deleting($model);
+        parent::deleting($configurationPagination);
+
+        Log::Debug("Deleting pagination configuration entry", ['pagination_configuration' => $configurationPagination]);
     }
 	
 	/**
      * Listen to the pagination deleted event.
      *
-     * @param  $model
+     * @param  $configurationPagination
      * @return void
      */
-    public function deleted($model)
+    public function deleted($configurationPagination)
     {
-        parent::deleted($model);
+        parent::deleted($configurationPagination);
+
+        Log::Info("Deleted pagination configuration entry", ['pagination_configuration' => $configurationPagination]);
     }
 	
 	/**
      * Listen to the pagination restoring event.
      *
-     * @param  $model
+     * @param  $configurationPagination
      * @return void
      */
-    public function restoring($model)
+    public function restoring($configurationPagination)
     {
-        parent::restoring($model);
+        parent::restoring($configurationPagination);
+
+        Log::Debug("Restoring pagination configuration entry", ['pagination_configuration' => $configurationPagination]);
     }
 	
 	/**
      * Listen to the pagination restored event.
      *
-     * @param  pagination  $model
+     * @param  pagination  $configurationPagination
      * @return void
      */
-    public function restored($model)
+    public function restored($configurationPagination)
     {
-        parent::restored($model);
+        parent::restored($configurationPagination);
+
+        Log::Info("Created pagination configuration entry", ['pagination_configuration' => $configurationPagination]);
     }
 }

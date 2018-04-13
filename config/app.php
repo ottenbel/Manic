@@ -165,6 +165,15 @@ return [
         App\Providers\RouteServiceProvider::class,
 		Collective\Html\HtmlServiceProvider::class,
 
+        /*
+         * Custom Manic Service Providers...
+         */
+        App\Providers\Custom\CollectionServiceProvider::class,
+        App\Providers\Custom\VolumeServiceProvider::class,
+        App\Providers\Custom\ChapterServiceProvider::class,
+        App\Providers\Custom\LanguageServiceProvider::class,
+        App\Providers\Custom\TagObjectsServiceProvider::class,
+        App\Providers\Custom\UserConfigurationServiceProvider::class,
     ],
 
     /*

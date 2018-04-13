@@ -5,20 +5,24 @@ namespace App\Observers\TagObjects\Series;
 use App\Models\TagObjects\Series\SeriesAlias;
 use App\Observers\BaseManicModelObserver;
 use Auth;
+use Log;
 
 class SeriesAliasObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the series alias creating event.
      *
-     * @param  $model
+     * @param  $seriesAlias
      * @return void
      */
-    public function creating($model)
+    public function creating($seriesAlias)
     {	
-		parent::creating($model);
+		parent::creating($seriesAlias);
 		
-		$series = $model->series()->first();
+		$series = $seriesAlias->series;
+
+        Log::Debug("Creating series alias", ['series alias' => $seriesAlias->id, 'series' => $series->id]);
+
 		$series->updated_by = Auth::user()->id;
 		$series->save();
 		$series->touch();
@@ -27,69 +31,81 @@ class SeriesAliasObserver Extends BaseManicModelObserver
     /**
      * Listen to the series alias created event.
      *
-     * @param  $model
+     * @param  $seriesAlias
      * @return void
      */
-    public function created($model)
+    public function created($seriesAlias)
     {
-        parent::created($model);
+        parent::created($seriesAlias);
+
+        Log::Info("Created series alias", ['series alias' => $seriesAlias->id]);
     }
 
 	/**
      * Listen to the series alias updating event.
      *
-     * @param  $model
+     * @param  $seriesAlias
      * @return void
      */
-    public function updating($model)
+    public function updating($seriesAlias)
     {
-        parent::updating($model);
+        parent::updating($seriesAlias);
+
+        Log::Debug("Updating series alias", ['series alias' => $seriesAlias->id]);
     }
 	
     /**
      * Listen to the series alias updated event.
      *
-     * @param  $model
+     * @param  $seriesAlias
      * @return void
      */
-    public function updated($model)
+    public function updated($seriesAlias)
     {
-        parent::updated($model);
+        parent::updated($seriesAlias);
+
+        Log::Info("Updated series alias", ['series alias' => $seriesAlias->id]);
     }
 	
 	/**
      * Listen to the series alias saving event.
      *
-     * @param  $model
+     * @param  $seriesAlias
      * @return void
      */
-    public function saving($model)
+    public function saving($seriesAlias)
     {
-        parent::saving($model);
+        parent::saving($seriesAlias);
+
+        Log::Debug("Saving series alias", ['series alias' => $seriesAlias->id]);
     }
 	
     /**
      * Listen to the series alias saved event.
      *
-     * @param  $model
+     * @param  $seriesAlias
      * @return void
      */
-    public function saved($model)
+    public function saved($seriesAlias)
     {
-        parent::saved($model);
+        parent::saved($seriesAlias);
+
+        Log::Info("Saved series alias", ['series alias' => $seriesAlias->id]);
     }
 	
     /**
      * Listen to the series alias deleting event.
      *
-     * @param  $model
+     * @param  $seriesAlias
      * @return void
      */
-    public function deleting($model)
+    public function deleting($seriesAlias)
     {
-        parent::deleting($model);
+        parent::deleting($seriesAlias);
 		
-		$series = $model->series()->first();
+        Log::Debug("Deleting series alias", ['series alias' => $seriesAlias->id]);
+
+		$series = $seriesAlias->series;
 		$series->updated_by = Auth::user()->id;
 		$series->save();
 		$series->touch();
@@ -98,33 +114,39 @@ class SeriesAliasObserver Extends BaseManicModelObserver
 	/**
      * Listen to the series alias deleted event.
      *
-     * @param  $model
+     * @param  $seriesAlias
      * @return void
      */
-    public function deleted($model)
+    public function deleted($seriesAlias)
     {
-        parent::deleted($model);
+        parent::deleted($seriesAlias);
+
+        Log::Info("Deleted series alias", ['series alias' => $seriesAlias->id]);
     }
 	
 	/**
      * Listen to the series alias restoring event.
      *
-     * @param  $model
+     * @param  $seriesAlias
      * @return void
      */
-    public function restoring($model)
+    public function restoring($seriesAlias)
     {
-        parent::restoring($model);
+        parent::restoring($seriesAlias);
+
+        Log::Debug("Restoring series alias", ['series alias' => $seriesAlias->id]);
     }
 	
 	/**
      * Listen to the series alias restored event.
      *
-     * @param  series alias  $model
+     * @param  series alias  $seriesAlias
      * @return void
      */
-    public function restored($model)
+    public function restored($seriesAlias)
     {
-        parent::restored($model);
+        parent::restored($seriesAlias);
+
+        Log::Info("Restored series alias", ['series alias' => $seriesAlias->id]);
     }
 }

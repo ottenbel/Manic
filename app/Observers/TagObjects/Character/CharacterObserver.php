@@ -5,20 +5,24 @@ namespace App\Observers\TagObjects\Character;
 use App\Models\TagObjects\Character\Character;
 use App\Observers\BaseManicModelObserver;
 use Auth;
+use Log;
 
 class CharacterObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the character creating event.
      *
-     * @param  $model
+     * @param  $character
      * @return void
      */
-    public function creating($model)
+    public function creating($character)
     {	
-		parent::creating($model);
-		
-		$series = $model->series()->first();
+		parent::creating($character);
+
+		$series = $character->series;
+
+        Log::Debug("Creating character", ['character' => $character->id, 'series' => $series->id]);
+
 		$series->updated_by = Auth::user()->id;
 		$series->save();
 		$series->touch();
@@ -27,69 +31,81 @@ class CharacterObserver Extends BaseManicModelObserver
     /**
      * Listen to the character created event.
      *
-     * @param  $model
+     * @param  $character
      * @return void
      */
-    public function created($model)
+    public function created($character)
     {
-        parent::created($model);
+        parent::created($character);
+
+        Log::Info("Created character", ['character' => $character->id]);
     }
 
 	/**
      * Listen to the character updating event.
      *
-     * @param  $model
+     * @param  $character
      * @return void
      */
-    public function updating($model)
+    public function updating($character)
     {
-        parent::updating($model);
+        parent::updating($character);
+
+        Log::Debug("Updating character", ['character' => $character->id]);
     }
 	
     /**
      * Listen to the character updated event.
      *
-     * @param  $model
+     * @param  $character
      * @return void
      */
-    public function updated($model)
+    public function updated($character)
     {
-        parent::updated($model);
+        parent::updated($character);
+
+        Log::Info("Updated character", ['character' => $character->id]);
     }
 	
 	/**
      * Listen to the character saving event.
      *
-     * @param  $model
+     * @param  $character
      * @return void
      */
-    public function saving($model)
+    public function saving($character)
     {
-        parent::saving($model);
+        parent::saving($character);
+
+        Log::Debug("Saving character", ['character' => $character->id]);
     }
 	
     /**
      * Listen to the character saved event.
      *
-     * @param  $model
+     * @param  $character
      * @return void
      */
-    public function saved($model)
+    public function saved($character)
     {
-        parent::saved($model);
+        parent::saved($character);
+
+        Log::Info("Saved character", ['character' => $character->id]);
     }
 	
     /**
      * Listen to the character deleting event.
      *
-     * @param  $model
+     * @param  $character
      * @return void
      */
-    public function deleting($model)
+    public function deleting($character)
     {
-        parent::deleting($model);
+        parent::deleting($character);
 		
-		$series = $model->series()->first();
+        Log::Debug("Deleting character", ['character' => $character->id]);
+
+		$series = $character->series;
 		$series->updated_by = Auth::user()->id;
 		$series->save();
 		$series->touch();
@@ -98,33 +114,39 @@ class CharacterObserver Extends BaseManicModelObserver
 	/**
      * Listen to the character deleted event.
      *
-     * @param  $model
+     * @param  $character
      * @return void
      */
-    public function deleted($model)
+    public function deleted($character)
     {
-        parent::deleted($model);
+        parent::deleted($character);
+
+        Log::Info("Deleted character", ['character' => $character->id]);
     }
 	
 	/**
      * Listen to the character restoring event.
      *
-     * @param  $model
+     * @param  $character
      * @return void
      */
-    public function restoring($model)
+    public function restoring($character)
     {
-        parent::restoring($model);
+        parent::restoring($character);
+
+        Log::Debug("Restoring character", ['character' => $character->id]);
     }
 	
 	/**
      * Listen to the character restored event.
      *
-     * @param  character  $model
+     * @param  character  $character
      * @return void
      */
-    public function restored($model)
+    public function restored($character)
     {
-        parent::restored($model);
+        parent::restored($character);
+
+        Log::Info("Restored character", ['character' => $character->id]);
     }
 }

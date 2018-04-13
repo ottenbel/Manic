@@ -5,116 +5,137 @@ namespace App\Observers\TagObjects\Scanalator;
 use App\Models\TagObjects\Scanalator\Scanalator;
 use App\Observers\BaseManicModelObserver;
 use Auth;
+use Log;
 
 class ScanalatorObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the scanalator creating event.
      *
-     * @param  $model
+     * @param  $scanalator
      * @return void
      */
-    public function creating($model)
+    public function creating($scanalator)
     {	
-		parent::creating($model);
+		parent::creating($scanalator);
+
+        Log::Debug("Creating scanalator", ['scanalator' => $scanalator->id]);
     }
 	
     /**
      * Listen to the scanalator created event.
      *
-     * @param  $model
+     * @param  $scanalator
      * @return void
      */
-    public function created($model)
+    public function created($scanalator)
     {
-        parent::created($model);
+        parent::created($scanalator);
+
+        Log::Info("Created scanalator", ['scanalator' => $scanalator->id]);
     }
 
 	/**
      * Listen to the scanalator updating event.
      *
-     * @param  $model
+     * @param  $scanalator
      * @return void
      */
-    public function updating($model)
+    public function updating($scanalator)
     {
-        parent::updating($model);
+        parent::updating($scanalator);
+
+        Log::Debug("Updating scanalator", ['scanalator' => $scanalator->id]);
     }
 	
     /**
      * Listen to the scanalator updated event.
      *
-     * @param  $model
+     * @param  $scanalator
      * @return void
      */
-    public function updated($model)
+    public function updated($scanalator)
     {
-        parent::updated($model);
+        parent::updated($scanalator);
+
+        Log::Info("Updated scanalator", ['scanalator' => $scanalator->id]);
     }
 	
 	/**
      * Listen to the scanalator saving event.
      *
-     * @param  $model
+     * @param  $scanalator
      * @return void
      */
-    public function saving($model)
+    public function saving($scanalator)
     {
-        parent::saving($model);
+        parent::saving($scanalator);
+
+        Log::Debug("Saving scanalator", ['scanalator' => $scanalator->id]);
     }
 	
     /**
      * Listen to the scanalator saved event.
      *
-     * @param  $model
+     * @param  $scanalator
      * @return void
      */
-    public function saved($model)
+    public function saved($scanalator)
     {
-        parent::saved($model);
+        parent::saved($scanalator);
+
+        Log::Info("Saved scanalator", ['scanalator' => $scanalator->id]);
     }
 	
     /**
      * Listen to the scanalator deleting event.
      *
-     * @param  $model
+     * @param  $scanalator
      * @return void
      */
-    public function deleting($model)
+    public function deleting($scanalator)
     {
-        parent::deleting($model);
+        parent::deleting($scanalator);
+
+        Log::Debug("Deleting scanalator", ['scanalator' => $scanalator->id]);
     }
 	
 	/**
      * Listen to the scanalator deleted event.
      *
-     * @param  $model
+     * @param  $scanalator
      * @return void
      */
-    public function deleted($model)
+    public function deleted($scanalator)
     {
-        parent::deleted($model);
+        parent::deleted($scanalator);
+
+        Log::Info("Deleted scanalator", ['scanalator' => $scanalator->id]);
     }
 	
 	/**
      * Listen to the scanalator restoring event.
      *
-     * @param  $model
+     * @param  $scanalator
      * @return void
      */
-    public function restoring($model)
+    public function restoring($scanalator)
     {
-        parent::restoring($model);
+        parent::restoring($scanalator);
+
+        Log::Debug("Restoring scanalator", ['scanalator' => $scanalator->id]);
     }
 	
 	/**
      * Listen to the scanalator restored event.
      *
-     * @param  scanalator  $model
+     * @param  scanalator  $scanalator
      * @return void
      */
-    public function restored($model)
+    public function restored($scanalator)
     {
-        parent::restored($model);
+        parent::restored($scanalator);
+
+        Log::Info("Restored scanalator", ['scanalator' => $scanalator->id]);
     }
 }

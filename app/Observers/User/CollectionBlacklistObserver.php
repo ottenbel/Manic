@@ -4,116 +4,139 @@ namespace App\Observers\User;
 
 use App\Models\User\CollectionBlacklist;
 use App\Observers\BaseManicModelObserver;
+use Log;
 
 class CollectionBlacklistObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the collection creating event.
      *
-     * @param  $model
+     * @param  $collectionBlacklist
      * @return void
      */
-    public function creating($model)
+    public function creating($collectionBlacklist)
     {	
-		parent::creating($model);
+		parent::creating($collectionBlacklist);
+
+        $collection = $collectionBlacklist->collection;
+
+        Log::Debug("Creating collection blacklist entry", ['collection blacklist' => $collectionBlacklist->id, 'collection' => $collection->id]);
     }
 	
     /**
      * Listen to the collection created event.
      *
-     * @param  $model
+     * @param  $collectionBlacklist
      * @return void
      */
-    public function created($model)
+    public function created($collectionBlacklist)
     {
-        parent::created($model);
+        parent::created($collectionBlacklist);
+
+        Log::Info("Created collection blacklist entry", ['collection blacklist' => $collectionBlacklist->id]);
     }
 
 	/**
      * Listen to the collection updating event.
      *
-     * @param  $model
+     * @param  $collectionBlacklist
      * @return void
      */
-    public function updating($model)
+    public function updating($collectionBlacklist)
     {
-        parent::updating($model);
+        parent::updating($collectionBlacklist);
+
+        Log::Debug("Updating collection blacklist entry", ['collection blacklist' => $collectionBlacklist->id]);
     }
 	
     /**
      * Listen to the collection updated event.
      *
-     * @param  $model
+     * @param  $collectionBlacklist
      * @return void
      */
-    public function updated($model)
+    public function updated($collectionBlacklist)
     {
-        parent::updated($model);
+        parent::updated($collectionBlacklist);
+
+        Log::Info("Updated collection blacklist entry", ['collection blacklist' => $collectionBlacklist->id]);
     }
 	
 	/**
      * Listen to the collection saving event.
      *
-     * @param  $model
+     * @param  $collectionBlacklist
      * @return void
      */
-    public function saving($model)
+    public function saving($collectionBlacklist)
     {
-        parent::saving($model);
+        parent::saving($collectionBlacklist);
+
+        Log::Debug("Saving collection blacklist entry", ['collection blacklist' => $collectionBlacklist->id]);
     }
 	
     /**
      * Listen to the collection saved event.
      *
-     * @param  $model
+     * @param  $collectionBlacklist
      * @return void
      */
-    public function saved($model)
+    public function saved($collectionBlacklist)
     {
-        parent::saved($model);
+        parent::saved($collectionBlacklist);
+
+        Log::Info("Saved collection blacklist entry", ['collection blacklist' => $collectionBlacklist->id]);
     }
 	
     /**
      * Listen to the collection deleting event.
      *
-     * @param  $model
+     * @param  $collectionBlacklist
      * @return void
      */
-    public function deleting($model)
+    public function deleting($collectionBlacklist)
     {
-        parent::deleting($model);
+        parent::deleting($collectionBlacklist);
+
+        Log::Debug("Deleting collection blacklist entry", ['collection blacklist' => $collectionBlacklist->id]);
     }
 	
 	/**
      * Listen to the collection deleted event.
      *
-     * @param  $model
+     * @param  $collectionBlacklist
      * @return void
      */
-    public function deleted($model)
+    public function deleted($collectionBlacklist)
     {
-        parent::deleted($model);
+        parent::deleted($collectionBlacklist);
+
+        Log::Info("Deleted collection blacklist entry", ['collection blacklist' => $collectionBlacklist->id]);
     }
 	
 	/**
      * Listen to the collection restoring event.
      *
-     * @param  $model
+     * @param  $collectionBlacklist
      * @return void
      */
-    public function restoring($model)
+    public function restoring($collectionBlacklist)
     {
-        parent::restoring($model);
+        parent::restoring($collectionBlacklist);
+
+        Log::Debug("Restoring collection blacklist entry", ['collection blacklist' => $collectionBlacklist->id]);
     }
 	
 	/**
      * Listen to the collection restored event.
      *
-     * @param  $model
+     * @param  $collectionBlacklist
      * @return void
      */
-    public function restored($model)
+    public function restored($collectionBlacklist)
     {
-        parent::restored($model);
+        parent::restored($collectionBlacklist);
+
+        Log::Info("Restored collection blacklist entry", ['collection blacklist' => $collectionBlacklist->id]);
     }
 }

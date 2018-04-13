@@ -4,116 +4,137 @@ namespace App\Observers\Configuration\RatingRestriction;
 
 use App\Models\Configuration\ConfigurationRatingRestriction;
 use App\Observers\BaseManicModelObserver;
+use Log;
 
 class RatingRestrictionObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the rating restriction creating event.
      *
-     * @param  $model
+     * @param  $configurationRatingRestriction
      * @return void
      */
-    public function creating($model)
+    public function creating($configurationRatingRestriction)
     {	
-		parent::creating($model);
+		parent::creating($configurationRatingRestriction);
+
+        Log::Debug("Creating rating restriction configuration entry", ['placeholder_configuration' => $configurationRatingRestriction->id]);
     }
 	
     /**
      * Listen to the rating restriction created event.
      *
-     * @param  $model
+     * @param  $configurationRatingRestriction
      * @return void
      */
-    public function created($model)
+    public function created($configurationRatingRestriction)
     {
-        parent::created($model);
+        parent::created($configurationRatingRestriction);
+
+        Log::Info("Created rating restriction configuration entry", ['placeholder_configuration' => $configurationRatingRestriction->id]);
     }
 
 	/**
      * Listen to the rating restriction updating event.
      *
-     * @param  $model
+     * @param  $configurationRatingRestriction
      * @return void
      */
-    public function updating($model)
+    public function updating($configurationRatingRestriction)
     {
-        parent::updating($model);
+        parent::updating($configurationRatingRestriction);
+
+        Log::Debug("Updating rating restriction configuration entry", ['placeholder_configuration' => $configurationRatingRestriction->id]);
     }
 	
     /**
      * Listen to the rating restriction updated event.
      *
-     * @param  $model
+     * @param  $configurationRatingRestriction
      * @return void
      */
-    public function updated($model)
+    public function updated($configurationRatingRestriction)
     {
-        parent::updated($model);
+        parent::updated($configurationRatingRestriction);
+
+        Log::Info("Updated rating restriction configuration entry", ['placeholder_configuration' => $configurationRatingRestriction->id]);
     }
 	
 	/**
      * Listen to the rating restriction saving event.
      *
-     * @param  $model
+     * @param  $configurationRatingRestriction
      * @return void
      */
-    public function saving($model)
+    public function saving($configurationRatingRestriction)
     {
-        parent::saving($model);
+        parent::saving($configurationRatingRestriction);
+
+        Log::Debug("Saving rating restriction configuration entry", ['placeholder_configuration' => $configurationRatingRestriction->id]);
     }
 	
     /**
      * Listen to the rating restriction saved event.
      *
-     * @param  $model
+     * @param  $configurationRatingRestriction
      * @return void
      */
-    public function saved($model)
+    public function saved($configurationRatingRestriction)
     {
-        parent::saved($model);
+        parent::saved($configurationRatingRestriction);
+
+        Log::Info("Saved rating restriction configuration entry", ['placeholder_configuration' => $configurationRatingRestriction->id]);
     }
 	
     /**
      * Listen to the rating restriction deleting event.
      *
-     * @param  $model
+     * @param  $configurationRatingRestriction
      * @return void
      */
-    public function deleting($model)
+    public function deleting($configurationRatingRestriction)
     {
-        parent::deleting($model);
+        parent::deleting($configurationRatingRestriction);
+
+        Log::Debug("Deleting rating restriction configuration entry", ['placeholder_configuration' => $configurationRatingRestriction->id]);
     }
 	
 	/**
      * Listen to the rating restriction deleted event.
      *
-     * @param  $model
+     * @param  $configurationRatingRestriction
      * @return void
      */
-    public function deleted($model)
+    public function deleted($configurationRatingRestriction)
     {
-        parent::deleted($model);
+        parent::deleted($configurationRatingRestriction);
+
+        Log::Info("Deleted rating restriction configuration entry", ['placeholder_configuration' => $configurationRatingRestriction->id]);
     }
 	
 	/**
      * Listen to the rating restriction restoring event.
      *
-     * @param  $model
+     * @param  $configurationRatingRestriction
      * @return void
      */
-    public function restoring($model)
+    public function restoring($configurationRatingRestriction)
     {
-        parent::restoring($model);
+        parent::restoring($configurationRatingRestriction);
+
+        Log::Debug("Restoring rating restriction configuration entry", ['placeholder_configuration' => $configurationRatingRestriction->id]);
     }
 	
 	/**
      * Listen to the rating restriction restored event.
      *
-     * @param  rating restriction  $model
+     * @param  rating restriction  $configurationRatingRestriction
      * @return void
      */
-    public function restored($model)
+    public function restored($configurationRatingRestriction)
     {
-        parent::restored($model);
+        parent::restored($configurationRatingRestriction);
+
+        Log::Info("Restored rating restriction configuration entry", ['placeholder_configuration' => $configurationRatingRestriction->id]);
     }
 }

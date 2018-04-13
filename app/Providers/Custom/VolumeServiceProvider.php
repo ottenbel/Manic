@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Providers;
+namespace App\Providers\Custom;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider
+use App\Models\Volume;
+use App\Observers\VolumeObserver;
+
+class VolumeServiceProvider extends ServiceProvider
 {
     /**
      * The policy mappings for the application.
      *
      * @var array
      */
-    protected $policies = [
-		'Spatie\Permission\Models\Permission' => 'App\Policies\RolesAndPermissions\PermissionPolicy',
-		'Spatie\Permission\Models\Role' => 'App\Policies\RolesAndPermissions\RolePolicy'
-    ];
+    protected $policies = ['App\Models\Volume' => 'App\Policies\VolumePolicy'];
 
     /**
      * Register any authentication / authorization services.
@@ -26,6 +26,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Volume::observe(VolumeObserver::class);
     }
 }

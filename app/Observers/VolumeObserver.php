@@ -5,20 +5,24 @@ namespace App\Observers;
 use App\Models\Volume;
 use Auth;
 use Storage;
+use Log;
 
 class VolumeObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the volume creating event.
      *
-     * @param  $model
+     * @param  $volume
      * @return void
      */
-    public function creating($model)
+    public function creating($volume)
     {	
-		parent::creating($model);
+		parent::creating($volume);
 			
-		$collection = $model->collection()->first();
+		$collection = $volume->collection;
+
+        Log::Debug("Creating volume", ['Volume' => $volume->id, 'collection' => $collection->id]);        
+
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		$collection->touch();
@@ -27,33 +31,37 @@ class VolumeObserver Extends BaseManicModelObserver
     /**
      * Listen to the volume created event.
      *
-     * @param  $model
+     * @param  $volume
      * @return void
      */
-    public function created($model)
+    public function created($volume)
     {
-        parent::created($model);
+        parent::created($volume);
+
+        Log::Info("Created volume", ['Volume' => $volume->id]);
     }
 
 	/**
      * Listen to the volume updating event.
      *
-     * @param  $model
+     * @param  $volume
      * @return void
      */
-    public function updating($model)
+    public function updating($volume)
     {
-        parent::updating($model);
-			
+        parent::updating($volume);
+		
+        Log::Debug("Updating volume", ['Volume' => $volume->id]);
+
 		//Delete the relevant file corresponding to the entry from the volume export table.
-		$export = $model->export;
+		$export = $volume->export;
 		if ($export != null)
 		{
 			Storage::Delete($export->path);
-			$model->export->forceDelete();
+			$volume->export->forceDelete();
 		}
 		
-		$collection = $model->collection()->first();
+		$collection = $volume->collection;
 		$collectionExport = $collection->export;
 		
 		if ($collectionExport != null)
@@ -66,47 +74,55 @@ class VolumeObserver Extends BaseManicModelObserver
     /**
      * Listen to the volume updated event.
      *
-     * @param  $model
+     * @param  $volume
      * @return void
      */
-    public function updated($model)
+    public function updated($volume)
     {
-        parent::updated($model);
+        parent::updated($volume);
+
+        Log::Info("Updated volume", ['Volume' => $volume->id]);
     }
 	
 	/**
      * Listen to the volume saving event.
      *
-     * @param  $model
+     * @param  $volume
      * @return void
      */
-    public function saving($model)
+    public function saving($volume)
     {
-        parent::saving($model);
+        parent::saving($volume);
+
+        Log::Debug("Saving volume", ['Volume' => $volume->id]);
     }
 	
     /**
      * Listen to the volume saved event.
      *
-     * @param  $model
+     * @param  $volume
      * @return void
      */
-    public function saved($model)
+    public function saved($volume)
     {
-        parent::saved($model);
+        parent::saved($volume);
+
+        Log::Info("Saved volume", ['Volume' => $volume->id]);
     }
 	
     /**
      * Listen to the volume deleting event.
      *
-     * @param  $model
+     * @param  $volume
      * @return void
      */
-    public function deleting($model)
+    public function deleting($volume)
     {
-        parent::deleting($model);
-			
-		$collection = $model->collection()->first();
+        parent::deleting($volume);
+		
+        Log::Debug("Deleting volume", ['Volume' => $volume->id]);
+
+		$collection = $volume->collection;
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		$collection->touch();
@@ -115,33 +131,39 @@ class VolumeObserver Extends BaseManicModelObserver
 	/**
      * Listen to the volume deleted event.
      *
-     * @param  $model
+     * @param  $volume
      * @return void
      */
-    public function deleted($model)
+    public function deleted($volume)
     {
-        parent::deleted($model);
+        parent::deleted($volume);
+
+        Log::Info("Deleted volume", ['Volume' => $volume->id]);
     }
 	
 	/**
      * Listen to the volume restoring event.
      *
-     * @param  $model
+     * @param  $volume
      * @return void
      */
-    public function restoring($model)
+    public function restoring($volume)
     {
-        parent::restoring($model);
+        parent::restoring($volume);
+
+        Log::Debug("Restoring volume", ['Volume' => $volume->id]);
     }
 	
 	/**
      * Listen to the volume restored event.
      *
-     * @param  volume  $model
+     * @param  volume  $volume
      * @return void
      */
-    public function restored($model)
+    public function restored($volume)
     {
-        parent::restored($model);
+        parent::restored($volume);
+
+        Log::Info("Restored volume", ['Volume' => $volume->id]);
     }
 }

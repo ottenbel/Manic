@@ -5,20 +5,24 @@ namespace App\Observers\TagObjects\Tag;
 use App\Models\TagObjects\Tag\TagAlias;
 use App\Observers\BaseManicModelObserver;
 use Auth;
+use Log;
 
 class TagAliasObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the tag alias creating event.
      *
-     * @param  $model
+     * @param  $tagAlias
      * @return void
      */
-    public function creating($model)
+    public function creating($tagAlias)
     {	
-		parent::creating($model);
+		parent::creating($tagAlias);
 		
-		$tag = $model->tag()->first();
+		$tag = $tagAlias->tag;
+
+        Log::Debug("Creating tag alias", ['tag alias' => $tagAlias->id, 'tag' => $tag->id]);
+
 		$tag->updated_by = Auth::user()->id;
 		$tag->save();
 		$tag->touch();
@@ -27,69 +31,81 @@ class TagAliasObserver Extends BaseManicModelObserver
     /**
      * Listen to the tag alias created event.
      *
-     * @param  $model
+     * @param  $tagAlias
      * @return void
      */
-    public function created($model)
+    public function created($tagAlias)
     {
-        parent::created($model);
+        parent::created($tagAlias);
+
+        Log::Info("Created tag alias", ['tag alias' => $tagAlias->id]);
     }
 
 	/**
      * Listen to the tag alias updating event.
      *
-     * @param  $model
+     * @param  $tagAlias
      * @return void
      */
-    public function updating($model)
+    public function updating($tagAlias)
     {
-        parent::updating($model);
+        parent::updating($tagAlias);
+
+        Log::Debug("Updating tag alias", ['tag alias' => $tagAlias->id]);
     }
 	
     /**
      * Listen to the tag alias updated event.
      *
-     * @param  $model
+     * @param  $tagAlias
      * @return void
      */
-    public function updated($model)
+    public function updated($tagAlias)
     {
-        parent::updated($model);
+        parent::updated($tagAlias);
+
+        Log::Info("Updated tag alias", ['tag alias' => $tagAlias->id]);
     }
 	
 	/**
      * Listen to the tag alias saving event.
      *
-     * @param  $model
+     * @param  $tagAlias
      * @return void
      */
-    public function saving($model)
+    public function saving($tagAlias)
     {
-        parent::saving($model);
+        parent::saving($tagAlias);
+
+        Log::Debug("Saving tag alias", ['tag alias' => $tagAlias->id]);
     }
 	
     /**
      * Listen to the tag alias saved event.
      *
-     * @param  $model
+     * @param  $tagAlias
      * @return void
      */
-    public function saved($model)
+    public function saved($tagAlias)
     {
-        parent::saved($model);
+        parent::saved($tagAlias);
+
+        Log::Saved("Created tag alias", ['tag alias' => $tagAlias->id]);
     }
 	
     /**
      * Listen to the tag alias deleting event.
      *
-     * @param  $model
+     * @param  $tagAlias
      * @return void
      */
-    public function deleting($model)
+    public function deleting($tagAlias)
     {
-        parent::deleting($model);
+        parent::deleting($tagAlias);
 		
-		$tag = $model->tag()->first();
+        Log::Debug("Deleting tag alias", ['tag alias' => $tagAlias->id]);
+
+		$tag = $tagAlias->tag;
 		$tag->updated_by = Auth::user()->id;
 		$tag->save();
 		$tag->touch();
@@ -98,33 +114,39 @@ class TagAliasObserver Extends BaseManicModelObserver
 	/**
      * Listen to the tag alias deleted event.
      *
-     * @param  $model
+     * @param  $tagAlias
      * @return void
      */
-    public function deleted($model)
+    public function deleted($tagAlias)
     {
-        parent::deleted($model);
+        parent::deleted($tagAlias);
+
+        Log::Info("Deleted tag alias", ['tag alias' => $tagAlias->id]);
     }
 	
 	/**
      * Listen to the tag alias restoring event.
      *
-     * @param  $model
+     * @param  $tagAlias
      * @return void
      */
-    public function restoring($model)
+    public function restoring($tagAlias)
     {
-        parent::restoring($model);
+        parent::restoring($tagAlias);
+
+        Log::Debug("Restoring tag alias", ['tag alias' => $tagAlias->id]);
     }
 	
 	/**
      * Listen to the tag alias restored event.
      *
-     * @param  tag alias  $model
+     * @param  tag alias  $tagAlias
      * @return void
      */
-    public function restored($model)
+    public function restored($tagAlias)
     {
-        parent::restored($model);
+        parent::restored($tagAlias);
+
+        Log::Info("Restored tag alias", ['tag alias' => $tagAlias->id]);
     }
 }

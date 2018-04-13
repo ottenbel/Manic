@@ -5,116 +5,137 @@ namespace App\Observers\TagObjects\Tag;
 use App\Models\TagObjects\Tag\Tag;
 use App\Observers\BaseManicModelObserver;
 use Auth;
+use Log;
 
 class TagObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the tag creating event.
      *
-     * @param  $model
+     * @param  $tag
      * @return void
      */
-    public function creating($model)
+    public function creating($tag)
     {	
-		parent::creating($model);
+		parent::creating($tag);
+
+        Log::Debug("Creating tag", ['tag' => $tag->id]);
     }
 	
     /**
      * Listen to the tag created event.
      *
-     * @param  $model
+     * @param  $tag
      * @return void
      */
-    public function created($model)
+    public function created($tag)
     {
-        parent::created($model);
+        parent::created($tag);
+
+        Log::Info("Created tag", ['tag' => $tag->id]);
     }
 
 	/**
      * Listen to the tag updating event.
      *
-     * @param  $model
+     * @param  $tag
      * @return void
      */
-    public function updating($model)
+    public function updating($tag)
     {
-        parent::updating($model);
+        parent::updating($tag);
+
+        Log::Debug("Updating tag", ['tag' => $tag->id]);
     }
 	
     /**
      * Listen to the tag updated event.
      *
-     * @param  $model
+     * @param  $tag
      * @return void
      */
-    public function updated($model)
+    public function updated($tag)
     {
-        parent::updated($model);
+        parent::updated($tag);
+
+        Log::Info("Updated tag", ['tag' => $tag->id]);
     }
 	
 	/**
      * Listen to the tag saving event.
      *
-     * @param  $model
+     * @param  $tag
      * @return void
      */
-    public function saving($model)
+    public function saving($tag)
     {
-        parent::saving($model);
+        parent::saving($tag);
+
+        Log::Debug("Saving tag", ['tag' => $tag->id]);
     }
 	
     /**
      * Listen to the tag saved event.
      *
-     * @param  $model
+     * @param  $tag
      * @return void
      */
-    public function saved($model)
+    public function saved($tag)
     {
-        parent::saved($model);
+        parent::saved($tag);
+
+        Log::Info("Saved tag", ['tag' => $tag->id]);
     }
 	
     /**
      * Listen to the tag deleting event.
      *
-     * @param  $model
+     * @param  $tag
      * @return void
      */
-    public function deleting($model)
+    public function deleting($tag)
     {
-        parent::deleting($model);
+        parent::deleting($tag);
+
+        Log::Debug("Deleting tag", ['tag' => $tag->id]);
     }
 	
 	/**
      * Listen to the tag deleted event.
      *
-     * @param  $model
+     * @param  $tag
      * @return void
      */
-    public function deleted($model)
+    public function deleted($tag)
     {
-        parent::deleted($model);
+        parent::deleted($tag);
+
+        Log::Info("Deleted tag", ['tag' => $tag->id]);
     }
 	
 	/**
      * Listen to the tag restoring event.
      *
-     * @param  $model
+     * @param  $tag
      * @return void
      */
-    public function restoring($model)
+    public function restoring($tag)
     {
-        parent::restoring($model);
+        parent::restoring($tag);
+
+        Log::Debug("Restoring tag", ['tag' => $tag->id]);
     }
 	
 	/**
      * Listen to the tag restored event.
      *
-     * @param  tag  $model
+     * @param  tag  $tag
      * @return void
      */
-    public function restored($model)
+    public function restored($tag)
     {
-        parent::restored($model);
+        parent::restored($tag);
+
+        Log::Info("Restored tag", ['tag' => $tag->id]);
     }
 }

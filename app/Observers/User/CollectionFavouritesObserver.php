@@ -4,116 +4,139 @@ namespace App\Observers\User;
 
 use App\Models\User\CollectionFavourite;
 use App\Observers\BaseManicModelObserver;
+use Log;
 
 class CollectionFavouritesObserver Extends BaseManicModelObserver
 {
 	/**
      * Listen to the collection creating event.
      *
-     * @param  $model
+     * @param  $collectionFavourite
      * @return void
      */
-    public function creating($model)
+    public function creating($collectionFavourite)
     {	
-		parent::creating($model);
+		parent::creating($collectionFavourite);
+
+        $collection = $collectionFavourite->collection;
+
+        Log::Debug("Creating collection favourite entry", ['collection favourite' => $collectionFavourite->id, 'collection' => $collection->id]);
     }
 	
     /**
      * Listen to the collection created event.
      *
-     * @param  $model
+     * @param  $collectionFavourite
      * @return void
      */
-    public function created($model)
+    public function created($collectionFavourite)
     {
-        parent::created($model);
+        parent::created($collectionFavourite);
+
+        Log::Info("Created collection favourite entry", ['collection favourite' => $collectionFavourite->id]);
     }
 
 	/**
      * Listen to the collection updating event.
      *
-     * @param  $model
+     * @param  $collectionFavourite
      * @return void
      */
-    public function updating($model)
+    public function updating($collectionFavourite)
     {
-        parent::updating($model);
+        parent::updating($collectionFavourite);
+
+        Log::Debug("Updating collection favourite entry", ['collection favourite' => $collectionFavourite->id]);
     }
 	
     /**
      * Listen to the collection updated event.
      *
-     * @param  $model
+     * @param  $collectionFavourite
      * @return void
      */
-    public function updated($model)
+    public function updated($collectionFavourite)
     {
-        parent::updated($model);
+        parent::updated($collectionFavourite);
+
+        Log::Info("Updated collection favourite entry", ['collection favourite' => $collectionFavourite->id]);
     }
 	
 	/**
      * Listen to the collection saving event.
      *
-     * @param  $model
+     * @param  $collectionFavourite
      * @return void
      */
-    public function saving($model)
+    public function saving($collectionFavourite)
     {
-        parent::saving($model);
+        parent::saving($collectionFavourite);
+
+        Log::Debug("Saving collection favourite entry", ['collection favourite' => $collectionFavourite->id]);
     }
 	
     /**
      * Listen to the collection saved event.
      *
-     * @param  $model
+     * @param  $collectionFavourite
      * @return void
      */
-    public function saved($model)
+    public function saved($collectionFavourite)
     {
-        parent::saved($model);
+        parent::saved($collectionFavourite);
+
+        Log::Info("Saved collection favourite entry", ['collection favourite' => $collectionFavourite->id]);
     }
 	
     /**
      * Listen to the collection deleting event.
      *
-     * @param  $model
+     * @param  $collectionFavourite
      * @return void
      */
-    public function deleting($model)
+    public function deleting($collectionFavourite)
     {
-        parent::deleting($model);
+        parent::deleting($collectionFavourite);
+
+        Log::Debug("Deleting collection favourite entry", ['collection favourite' => $collectionFavourite->id]);
     }
 	
 	/**
      * Listen to the collection deleted event.
      *
-     * @param  $model
+     * @param  $collectionFavourite
      * @return void
      */
-    public function deleted($model)
+    public function deleted($collectionFavourite)
     {
-        parent::deleted($model);
+        parent::deleted($collectionFavourite);
+
+        Log::Info("Deleted collection favourite entry", ['collection favourite' => $collectionFavourite->id]);
     }
 	
 	/**
      * Listen to the collection restoring event.
      *
-     * @param  $model
+     * @param  $collectionFavourite
      * @return void
      */
-    public function restoring($model)
+    public function restoring($collectionFavourite)
     {
-        parent::restoring($model);
+        parent::restoring($collectionFavourite);
+
+        Log::Debug("Restoring collection favourite entry", ['collection favourite' => $collectionFavourite->id]);
     }
 	
 	/**
      * Listen to the collection restored event.
      *
-     * @param  $model
+     * @param  $collectionFavourite
      * @return void
      */
-    public function restored($model)
+    public function restored($collectionFavourite)
     {
-        parent::restored($model);
+        parent::restored($collectionFavourite);
+
+        Log::Info("Restored collection favourite entry", ['collection favourite' => $collectionFavourite->id]);
     }
 }
