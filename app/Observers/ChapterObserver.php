@@ -121,7 +121,7 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::saved($chapter);
 
-        Log::Info("Saved chapter", ['chapter' => $chapter->id]);
+        Log::Debug("Saved chapter", ['chapter' => $chapter->id]);
     }
 	
     /**

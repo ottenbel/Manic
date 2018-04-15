@@ -83,7 +83,7 @@ class PlaceholderObserver Extends BaseManicModelObserver
     {
         parent::saved($configurationPlaceholder);
 
-        Log::Info("Saved placeholder configuration entry", ['placeholder_configuration' => $configurationPlaceholder->id]);
+        Log::Debug("Saved placeholder configuration entry", ['placeholder_configuration' => $configurationPlaceholder->id]);
     }
 	
     /**

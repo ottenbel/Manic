@@ -90,7 +90,7 @@ class CharacterObserver Extends BaseManicModelObserver
     {
         parent::saved($character);
 
-        Log::Info("Saved character", ['character' => $character->id]);
+        Log::Debug("Saved character", ['character' => $character->id]);
     }
 	
     /**

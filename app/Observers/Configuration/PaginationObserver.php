@@ -83,7 +83,7 @@ class PaginationObserver Extends BaseManicModelObserver
     {
         parent::saved($configurationPagination);
 
-        Log::Info("Saved pagination configuration entry", ['pagination_configuration' => $configurationPagination]);
+        Log::Debug("Saved pagination configuration entry", ['pagination_configuration' => $configurationPagination]);
     }
 	
     /**

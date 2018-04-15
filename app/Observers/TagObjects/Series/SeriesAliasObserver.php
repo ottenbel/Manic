@@ -90,7 +90,7 @@ class SeriesAliasObserver Extends BaseManicModelObserver
     {
         parent::saved($seriesAlias);
 
-        Log::Info("Saved series alias", ['series alias' => $seriesAlias->id]);
+        Log::Debug("Saved series alias", ['series alias' => $seriesAlias->id]);
     }
 	
     /**

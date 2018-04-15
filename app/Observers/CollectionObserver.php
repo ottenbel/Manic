@@ -66,7 +66,7 @@ class CollectionObserver Extends BaseManicModelObserver
     {
         parent::updated($collection);
 
-        Log::Info("Updated collection" ['collection' => $collection->id]);
+        Log::Info("Updated collection", ['collection' => $collection->id]);
     }
 	
 	/**
@@ -92,7 +92,7 @@ class CollectionObserver Extends BaseManicModelObserver
     {
         parent::saved($collection);
 
-        Log::Info("Saved collection", ['collection' => $collection->id]);
+        Log::Debug("Saved collection", ['collection' => $collection->id]);
     }
 	
     /**

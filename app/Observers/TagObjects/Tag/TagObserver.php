@@ -84,7 +84,7 @@ class TagObserver Extends BaseManicModelObserver
     {
         parent::saved($tag);
 
-        Log::Info("Saved tag", ['tag' => $tag->id]);
+        Log::Debug("Saved tag", ['tag' => $tag->id]);
     }
 	
     /**

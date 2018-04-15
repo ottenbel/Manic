@@ -107,7 +107,7 @@ class VolumeObserver Extends BaseManicModelObserver
     {
         parent::saved($volume);
 
-        Log::Info("Saved volume", ['Volume' => $volume->id]);
+        Log::Debug("Saved volume", ['Volume' => $volume->id]);
     }
 	
     /**

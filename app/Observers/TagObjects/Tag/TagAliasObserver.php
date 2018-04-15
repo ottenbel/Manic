@@ -90,7 +90,7 @@ class TagAliasObserver Extends BaseManicModelObserver
     {
         parent::saved($tagAlias);
 
-        Log::Saved("Created tag alias", ['tag alias' => $tagAlias->id]);
+        Log::Debug("Saved tag alias", ['tag alias' => $tagAlias->id]);
     }
 	
     /**

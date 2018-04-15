@@ -85,7 +85,7 @@ class CollectionFavouritesObserver Extends BaseManicModelObserver
     {
         parent::saved($collectionFavourite);
 
-        Log::Info("Saved collection favourite entry", ['collection favourite' => $collectionFavourite->id]);
+        Log::Debug("Saved collection favourite entry", ['collection favourite' => $collectionFavourite->id]);
     }
 	
     /**

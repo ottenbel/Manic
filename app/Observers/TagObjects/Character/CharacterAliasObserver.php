@@ -5,7 +5,7 @@ namespace App\Observers\TagObjects\Character;
 use App\Models\TagObjects\Character\CharacterAlias;
 use App\Observers\BaseManicModelObserver;
 use Auth;
-use Log
+use Log;
 
 class CharacterAliasObserver Extends BaseManicModelObserver
 {
@@ -90,7 +90,7 @@ class CharacterAliasObserver Extends BaseManicModelObserver
     {
         parent::saved($characterAlias);
 
-        Log::Info("Saved character alias", ['character alias' => $characterAlias->id]);
+        Log::Debug("Saved character alias", ['character alias' => $characterAlias->id]);
     }
 	
     /**

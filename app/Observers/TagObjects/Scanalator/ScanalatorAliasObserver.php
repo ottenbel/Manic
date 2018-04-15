@@ -90,7 +90,7 @@ class ScanalatorAliasObserver Extends BaseManicModelObserver
     {
         parent::saved($scanalatorAlias);
 
-        Log::Info("Saved scanalator alias", ['scanalator alias' => $scanalatorAlias->id]);
+        Log::Debug("Saved scanalator alias", ['scanalator alias' => $scanalatorAlias->id]);
     }
 	
     /**

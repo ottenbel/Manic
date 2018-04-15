@@ -92,7 +92,7 @@ class ArtistAliasObserver Extends BaseManicModelObserver
     {
         parent::saved($artistAlias);
 
-        Log::Info("Saved artist alias", ['artist alias' => $artistAlias->id]);
+        Log::Debug("Saved artist alias", ['artist alias' => $artistAlias->id]);
     }
 	
     /**

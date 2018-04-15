@@ -84,7 +84,7 @@ class ScanalatorObserver Extends BaseManicModelObserver
     {
         parent::saved($scanalator);
 
-        Log::Info("Saved scanalator", ['scanalator' => $scanalator->id]);
+        Log::Debug("Saved scanalator", ['scanalator' => $scanalator->id]);
     }
 	
     /**

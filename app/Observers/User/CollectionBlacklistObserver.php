@@ -85,7 +85,7 @@ class CollectionBlacklistObserver Extends BaseManicModelObserver
     {
         parent::saved($collectionBlacklist);
 
-        Log::Info("Saved collection blacklist entry", ['collection blacklist' => $collectionBlacklist->id]);
+        Log::Debug("Saved collection blacklist entry", ['collection blacklist' => $collectionBlacklist->id]);
     }
 	
     /**

@@ -83,7 +83,7 @@ class RatingRestrictionObserver Extends BaseManicModelObserver
     {
         parent::saved($configurationRatingRestriction);
 
-        Log::Info("Saved rating restriction configuration entry", ['placeholder_configuration' => $configurationRatingRestriction->id]);
+        Log::Debug("Saved rating restriction configuration entry", ['placeholder_configuration' => $configurationRatingRestriction->id]);
     }
 	
     /**

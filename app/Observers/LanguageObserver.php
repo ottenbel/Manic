@@ -82,7 +82,7 @@ class LanguageObserver Extends BaseManicModelObserver
     {
         parent::saved($language);
 
-        Log::Info("Saved language", ['language' => $language->id]);
+        Log::Debug("Saved language", ['language' => $language->id]);
     }
 	
     /**

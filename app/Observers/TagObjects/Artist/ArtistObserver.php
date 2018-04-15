@@ -83,7 +83,7 @@ class ArtistObserver Extends BaseManicModelObserver
     {
         parent::saved($artist);
 
-        Log::Info("Saved artist", ['artist' => $artist->id]);
+        Log::Debug("Saved artist", ['artist' => $artist->id]);
     }
 	
     /**
