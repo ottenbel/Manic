@@ -19,9 +19,9 @@ class ArtistAliasObserver Extends BaseManicModelObserver
     {	
 		parent::creating($artistAlias);
 
-		$artist = $artistAlias->artist;
+        Log::Debug("Creating artist alias", ['artist alias' => $artistAlias->id, 'artist' => $artistAlias->artist->id]);
 
-        Log::Debug("Creating artist alias", ['artist alias' => $artistAlias->id, 'artist' => $artist->id]);
+        $artist = $artistAlias->artist;
 
 		$artist->updated_by = Auth::user()->id;
 		$artist->save();
@@ -40,7 +40,7 @@ class ArtistAliasObserver Extends BaseManicModelObserver
     {
         parent::created($artistAlias);
 
-        Log::Info("Created artist alias", ['artist alias' => $artistAlias->id]);
+        Log::Info("Created artist alias", ['artist alias' => $artistAlias->id, 'artist' => $artist->alias->id]);
     }
 
 	/**
@@ -53,7 +53,7 @@ class ArtistAliasObserver Extends BaseManicModelObserver
     {
         parent::updating($artistAlias);
 
-        Log::Debug("Updating artist alias", ['artist alias' => $artistAlias->id]);
+        Log::Debug("Updating artist alias", ['artist alias' => $artistAlias->id, 'artist' => $artist->alias->id]);
     }
 	
     /**
@@ -66,7 +66,7 @@ class ArtistAliasObserver Extends BaseManicModelObserver
     {
         parent::updated($artistAlias);
 
-        Log::Info("Updated artist alias", ['artist alias' => $artistAlias->id]);
+        Log::Info("Updated artist alias", ['artist alias' => $artistAlias->id, 'artist' => $artist->alias->id]);
     }
 	
 	/**
@@ -79,7 +79,7 @@ class ArtistAliasObserver Extends BaseManicModelObserver
     {
         parent::saving($artistAlias);
 
-        Log::Debug("Saving artist alias", ['artist alias' => $artistAlias->id]);
+        Log::Debug("Saving artist alias", ['artist alias' => $artistAlias->id, 'artist' => $artist->alias->id]);
     }
 	
     /**
@@ -92,7 +92,7 @@ class ArtistAliasObserver Extends BaseManicModelObserver
     {
         parent::saved($artistAlias);
 
-        Log::Debug("Saved artist alias", ['artist alias' => $artistAlias->id]);
+        Log::Debug("Saved artist alias", ['artist alias' => $artistAlias->id, 'artist' => $artist->alias->id]);
     }
 	
     /**
@@ -105,7 +105,7 @@ class ArtistAliasObserver Extends BaseManicModelObserver
     {
         parent::deleting($artistAlias);
 		
-        Log::Debug("Deleting artist alias", ['artist alias' => $artistAlias->id]);
+        Log::Debug("Deleting artist alias", ['artist alias' => $artistAlias->id, 'artist' => $artist->alias->id]);
 
 		$artist = $artistAlias->artist;
         $artist->updated_by = Auth::user()->id;
@@ -123,7 +123,7 @@ class ArtistAliasObserver Extends BaseManicModelObserver
     {
         parent::deleted($artistAlias);
 
-        Log::Info("Deleted artist alias", ['artist alias' => $artistAlias->id]);
+        Log::Info("Deleted artist alias", ['artist alias' => $artistAlias->id, 'artist' => $artist->alias->id]);
     }
 	
 	/**
@@ -136,7 +136,7 @@ class ArtistAliasObserver Extends BaseManicModelObserver
     {
         parent::restoring($artistAlias);
 
-        Log::Debug("Restoring artist alias", ['artist alias' => $artistAlias->id]);
+        Log::Debug("Restoring artist alias", ['artist alias' => $artistAlias->id, 'artist' => $artist->alias->id]);
     }
 	
 	/**
@@ -149,6 +149,6 @@ class ArtistAliasObserver Extends BaseManicModelObserver
     {
         parent::restored($artistAlias);
 
-        Log::Info("Restored artist alias", ['artist alias' => $artistAlias->id]);
+        Log::Info("Restored artist alias", ['artist alias' => $artistAlias->id, 'artist' => $artist->alias->id]);
     }
 }

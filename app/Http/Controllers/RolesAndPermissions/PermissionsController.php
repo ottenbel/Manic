@@ -69,7 +69,7 @@ class PermissionsController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully created new permission $permissionName.");
+		$this->AddSuccessMessage("Successfully created new permission $permissionName.", true);
 		return redirect()->route('admin_index_permission')->with("messages", $this->messages);
 	}
 	
@@ -101,7 +101,7 @@ class PermissionsController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully updated permission.", ['permission' => $permission->id]);
+		$this->AddSuccessMessage("Successfully updated permission.", true, ['permission' => $permission->id]);
 		return redirect()->route('admin_index_permission')->with("messages", $this->messages);
 	}
 	
@@ -121,7 +121,7 @@ class PermissionsController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully deleted permission $permission->name.", ['permission' => $permission->id]);
+		$this->AddSuccessMessage("Successfully deleted permission $permission->name.", true, ['permission' => $permission->id]);
 		return redirect()->route('admin_index_permission')->with("messages", $this->messages);
 	}
 }

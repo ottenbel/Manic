@@ -64,7 +64,7 @@ class CollectionFavouritesController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully added collection $collection->name to favourites.", ['collection' => $collection->id]);
+		$this->AddSuccessMessage("Successfully added collection $collection->name to favourites.");
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 	}
 	
@@ -88,7 +88,7 @@ class CollectionFavouritesController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully removed collection $collection->name from favourites.", ['collection' => $collection->id]);
+		$this->AddSuccessMessage("Successfully removed collection $collection->name from favourites.");
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 	}
 }

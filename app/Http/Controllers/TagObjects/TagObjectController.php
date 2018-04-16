@@ -63,7 +63,7 @@ class TagObjectController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully purged $objectType $objectName from the database.", [$objectType => $object->id]);
+		$this->AddSuccessMessage("Successfully purged $objectType $objectName from the database.");
 		return redirect()->route('index_collection')->with("messages", $this->messages);
 	}
 	

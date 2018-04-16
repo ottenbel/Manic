@@ -18,11 +18,10 @@ class SeriesAliasObserver Extends BaseManicModelObserver
     public function creating($seriesAlias)
     {	
 		parent::creating($seriesAlias);
-		
-		$series = $seriesAlias->series;
 
-        Log::Debug("Creating series alias", ['series alias' => $seriesAlias->id, 'series' => $series->id]);
+        Log::Debug("Creating series alias", ['series alias' => $seriesAlias->id, 'series' => $seriesAlias->series->id]);
 
+        $series = $seriesAlias->series;
 		$series->updated_by = Auth::user()->id;
 		$series->save();
 		$series->touch();
@@ -38,7 +37,7 @@ class SeriesAliasObserver Extends BaseManicModelObserver
     {
         parent::created($seriesAlias);
 
-        Log::Info("Created series alias", ['series alias' => $seriesAlias->id]);
+        Log::Info("Created series alias", ['series alias' => $seriesAlias->id, 'series' => $seriesAlias->series->id]);
     }
 
 	/**
@@ -51,7 +50,7 @@ class SeriesAliasObserver Extends BaseManicModelObserver
     {
         parent::updating($seriesAlias);
 
-        Log::Debug("Updating series alias", ['series alias' => $seriesAlias->id]);
+        Log::Debug("Updating series alias", ['series alias' => $seriesAlias->id, 'series' => $seriesAlias->series->id]);
     }
 	
     /**
@@ -64,7 +63,7 @@ class SeriesAliasObserver Extends BaseManicModelObserver
     {
         parent::updated($seriesAlias);
 
-        Log::Info("Updated series alias", ['series alias' => $seriesAlias->id]);
+        Log::Info("Updated series alias", ['series alias' => $seriesAlias->id, 'series' => $seriesAlias->series->id]);
     }
 	
 	/**
@@ -77,7 +76,7 @@ class SeriesAliasObserver Extends BaseManicModelObserver
     {
         parent::saving($seriesAlias);
 
-        Log::Debug("Saving series alias", ['series alias' => $seriesAlias->id]);
+        Log::Debug("Saving series alias", ['series alias' => $seriesAlias->id, 'series' => $seriesAlias->series->id]);
     }
 	
     /**
@@ -90,7 +89,7 @@ class SeriesAliasObserver Extends BaseManicModelObserver
     {
         parent::saved($seriesAlias);
 
-        Log::Debug("Saved series alias", ['series alias' => $seriesAlias->id]);
+        Log::Debug("Saved series alias", ['series alias' => $seriesAlias->id, 'series' => $seriesAlias->series->id]);
     }
 	
     /**
@@ -103,7 +102,7 @@ class SeriesAliasObserver Extends BaseManicModelObserver
     {
         parent::deleting($seriesAlias);
 		
-        Log::Debug("Deleting series alias", ['series alias' => $seriesAlias->id]);
+        Log::Debug("Deleting series alias", ['series alias' => $seriesAlias->id, 'series' => $seriesAlias->series->id]);
 
 		$series = $seriesAlias->series;
 		$series->updated_by = Auth::user()->id;
@@ -121,7 +120,7 @@ class SeriesAliasObserver Extends BaseManicModelObserver
     {
         parent::deleted($seriesAlias);
 
-        Log::Info("Deleted series alias", ['series alias' => $seriesAlias->id]);
+        Log::Info("Deleted series alias", ['series alias' => $seriesAlias->id, 'series' => $seriesAlias->series->id]);
     }
 	
 	/**
@@ -134,7 +133,7 @@ class SeriesAliasObserver Extends BaseManicModelObserver
     {
         parent::restoring($seriesAlias);
 
-        Log::Debug("Restoring series alias", ['series alias' => $seriesAlias->id]);
+        Log::Debug("Restoring series alias", ['series alias' => $seriesAlias->id, 'series' => $seriesAlias->series->id]);
     }
 	
 	/**
@@ -147,6 +146,6 @@ class SeriesAliasObserver Extends BaseManicModelObserver
     {
         parent::restored($seriesAlias);
 
-        Log::Info("Restored series alias", ['series alias' => $seriesAlias->id]);
+        Log::Info("Restored series alias", ['series alias' => $seriesAlias->id, 'series' => $seriesAlias->series->id]);
     }
 }

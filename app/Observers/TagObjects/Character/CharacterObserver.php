@@ -19,10 +19,9 @@ class CharacterObserver Extends BaseManicModelObserver
     {	
 		parent::creating($character);
 
-		$series = $character->series;
+        Log::Debug("Creating character", ['character' => $character->id, 'series' => $character->series->id]);
 
-        Log::Debug("Creating character", ['character' => $character->id, 'series' => $series->id]);
-
+        $series = $character->series;
 		$series->updated_by = Auth::user()->id;
 		$series->save();
 		$series->touch();
@@ -38,7 +37,7 @@ class CharacterObserver Extends BaseManicModelObserver
     {
         parent::created($character);
 
-        Log::Info("Created character", ['character' => $character->id]);
+        Log::Info("Created character", ['character' => $character->id, 'series' => $character->series->id]);
     }
 
 	/**
@@ -51,7 +50,7 @@ class CharacterObserver Extends BaseManicModelObserver
     {
         parent::updating($character);
 
-        Log::Debug("Updating character", ['character' => $character->id]);
+        Log::Debug("Updating character", ['character' => $character->id, 'series' => $character->series->id]);
     }
 	
     /**
@@ -64,7 +63,7 @@ class CharacterObserver Extends BaseManicModelObserver
     {
         parent::updated($character);
 
-        Log::Info("Updated character", ['character' => $character->id]);
+        Log::Info("Updated character", ['character' => $character->id, 'series' => $character->series->id]);
     }
 	
 	/**
@@ -77,7 +76,7 @@ class CharacterObserver Extends BaseManicModelObserver
     {
         parent::saving($character);
 
-        Log::Debug("Saving character", ['character' => $character->id]);
+        Log::Debug("Saving character", ['character' => $character->id, 'series' => $character->series->id]);
     }
 	
     /**
@@ -90,7 +89,7 @@ class CharacterObserver Extends BaseManicModelObserver
     {
         parent::saved($character);
 
-        Log::Debug("Saved character", ['character' => $character->id]);
+        Log::Debug("Saved character", ['character' => $character->id, 'series' => $character->series->id]);
     }
 	
     /**
@@ -103,7 +102,7 @@ class CharacterObserver Extends BaseManicModelObserver
     {
         parent::deleting($character);
 		
-        Log::Debug("Deleting character", ['character' => $character->id]);
+        Log::Debug("Deleting character", ['character' => $character->id, 'series' => $character->series->id]);
 
 		$series = $character->series;
 		$series->updated_by = Auth::user()->id;
@@ -121,7 +120,7 @@ class CharacterObserver Extends BaseManicModelObserver
     {
         parent::deleted($character);
 
-        Log::Info("Deleted character", ['character' => $character->id]);
+        Log::Info("Deleted character", ['character' => $character->id, 'series' => $character->series->id]);
     }
 	
 	/**
@@ -134,7 +133,7 @@ class CharacterObserver Extends BaseManicModelObserver
     {
         parent::restoring($character);
 
-        Log::Debug("Restoring character", ['character' => $character->id]);
+        Log::Debug("Restoring character", ['character' => $character->id, 'series' => $character->series->id]);
     }
 	
 	/**
@@ -147,6 +146,6 @@ class CharacterObserver Extends BaseManicModelObserver
     {
         parent::restored($character);
 
-        Log::Info("Restored character", ['character' => $character->id]);
+        Log::Info("Restored character", ['character' => $character->id, 'series' => $character->series->id]);
     }
 }

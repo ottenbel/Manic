@@ -198,13 +198,13 @@ class SeriesController extends TagObjectController
 		{	
 			$childCausingLoopsMessage = "The following series (" . implode(", ", $causedLoops) . ") were not attached as children to " . $series->name . " as their addition would cause loops in tag implication.";
 			
-			$this->AddDataMessage($childCausingLoopsMessage, ['series' => $series->id]);
-			$this->AddDataMessage("Partially $action series $series->name.", ['series' => $series->id]);
+			$this->AddDataMessage($childCausingLoopsMessage);
+			$this->AddDataMessage("Partially $action series $series->name.");
 			return redirect()->route('show_series', ['series' => $series])->with("messages", $this->messages);
 		}
 		else
 		{	
-			$this->AddSuccessMessage("Successfully $action series $series->name.", ['series' => $series->id]);
+			$this->AddSuccessMessage("Successfully $action series $series->name.");
 			//Redirect to the series that was created
 			return redirect()->route('show_series', ['series' => $series])->with("messages", $this->messages);
 		}

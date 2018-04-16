@@ -102,14 +102,14 @@ class ScanalatorController extends TagObjectController
 		{	
 			$childCausingLoopsMessage = "The following scanalators (" . implode(", ", $causedLoops) . ") were not attached as children to " . $scanalator->name . " as their addition would cause loops in tag implication.";
 			
-			$this->AddDataMessage($childCausingLoopsMessage, ['scanalator' => $scanalator->id]);
-			$this->AddDataMessage("Partially $action scanalator $scanalator->name.", ['scanalator' => $scanalator->id]);
+			$this->AddDataMessage($childCausingLoopsMessage);
+			$this->AddDataMessage("Partially $action scanalator $scanalator->name.");
 			
 			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $this->messages);
 		}
 		else
 		{
-			$this->AddSuccessMessage("Successfully $action scanalator $scanalator->name.", ['scanalator' => $scanalator->id]);
+			$this->AddSuccessMessage("Successfully $action scanalator $scanalator->name.");
 			return redirect()->route('show_scanalator', ['scanalator' => $scanalator])->with("messages", $this->messages);
 		}
 	}

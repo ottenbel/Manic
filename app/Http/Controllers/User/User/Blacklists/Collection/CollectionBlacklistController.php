@@ -64,7 +64,7 @@ class CollectionBlacklistController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully added collection $collection->name to blacklist.", ['collection' => $collection->id]);
+		$this->AddSuccessMessage("Successfully added collection $collection->name to blacklist.");
 		return redirect()->route('index_collection')->with("messages", $this->messages);
 	}
 	
@@ -88,7 +88,7 @@ class CollectionBlacklistController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully removed collection $collection->name from blacklist.", ['collection' => $collection->id]);		
+		$this->AddSuccessMessage("Successfully removed collection $collection->name from blacklist.");		
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
 	}
 }

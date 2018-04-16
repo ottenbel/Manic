@@ -32,7 +32,7 @@ class SeriesObserver Extends BaseManicModelObserver
     {
         parent::created($series);
 
-        Info::Debug("Created series", ['series' => $series->id]);
+        Log::Info("Created series", ['series' => $series->id]);
     }
 
 	/**
@@ -58,7 +58,7 @@ class SeriesObserver Extends BaseManicModelObserver
     {
         parent::updated($series);
 
-        Info::Debug("Updated series", ['series' => $series->id]);
+        Log::Info("Updated series", ['series' => $series->id]);
     }
 	
 	/**
@@ -84,7 +84,7 @@ class SeriesObserver Extends BaseManicModelObserver
     {
         parent::saved($series);
 
-        Info::Debug("Saved series", ['series' => $series->id]);
+        Log::Debug("Saved series", ['series' => $series->id]);
     }
 	
     /**
@@ -110,7 +110,7 @@ class SeriesObserver Extends BaseManicModelObserver
     {
         parent::deleted($series);
 
-        Info::Debug("Deleted series", ['series' => $series->id]);
+        Log::Info("Deleted series", ['series' => $series->id]);
     }
 	
 	/**
@@ -136,6 +136,6 @@ class SeriesObserver Extends BaseManicModelObserver
     {
         parent::restored($series);
 
-        Info::Debug("Restored series", ['series' => $series->id]);
+        Log::Info("Restored series", ['series' => $series->id]);
     }
 }

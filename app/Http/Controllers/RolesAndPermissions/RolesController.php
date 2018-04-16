@@ -96,7 +96,7 @@ class RolesController extends WebController
 			return Redirect::back()->with(["messages" => $this->messages])->withInput();
 		}
 		DB::commit();
-		$this->AddSuccessMessage("Successfully created new role $roleName.", ['role' => $role->id]);
+		$this->AddSuccessMessage("Successfully created new role $roleName.", true, ['role' => $role->id]);
 		return redirect()->route('admin_show_role', ['role' => $role])->with("messages", $this->messages);
 	}
 	
@@ -160,7 +160,7 @@ class RolesController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully updated role.", ['role' => $role->id]);
+		$this->AddSuccessMessage("Successfully updated role.", true, ['role' => $role->id]);
 		return redirect()->route('admin_show_role', ['role' => $role])->with("messages", $this->messages);
 	}
 	
@@ -180,7 +180,7 @@ class RolesController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully deleted role $role->name.", ['role' => $role->id]);
+		$this->AddSuccessMessage("Successfully deleted role $role->name.", true, ['role' => $role->id]);
 		return redirect()->route('admin_index_role')->with("messages", $this->messages);
 	}
 }

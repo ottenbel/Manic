@@ -18,10 +18,10 @@ class VolumeObserver Extends BaseManicModelObserver
     public function creating($volume)
     {	
 		parent::creating($volume);
-			
-		$collection = $volume->collection;
 
-        Log::Debug("Creating volume", ['Volume' => $volume->id, 'collection' => $collection->id]);        
+        Log::Debug("Creating volume", ['volume' => $volume->id, 'collection' => $volume->collection->id]);        
+
+        $collection = $volume->collection;
 
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
@@ -38,7 +38,7 @@ class VolumeObserver Extends BaseManicModelObserver
     {
         parent::created($volume);
 
-        Log::Info("Created volume", ['Volume' => $volume->id]);
+        Log::Info("Created volume", ['volume' => $volume->id, 'collection' => $volume->collection->id]);
     }
 
 	/**
@@ -51,7 +51,7 @@ class VolumeObserver Extends BaseManicModelObserver
     {
         parent::updating($volume);
 		
-        Log::Debug("Updating volume", ['Volume' => $volume->id]);
+        Log::Debug("Updating volume", ['volume' => $volume->id, 'collection' => $volume->collection->id]);
 
 		//Delete the relevant file corresponding to the entry from the volume export table.
 		$export = $volume->export;
@@ -81,7 +81,7 @@ class VolumeObserver Extends BaseManicModelObserver
     {
         parent::updated($volume);
 
-        Log::Info("Updated volume", ['Volume' => $volume->id]);
+        Log::Info("Updated volume", ['volume' => $volume->id, 'collection' => $volume->collection->id]);
     }
 	
 	/**
@@ -94,7 +94,7 @@ class VolumeObserver Extends BaseManicModelObserver
     {
         parent::saving($volume);
 
-        Log::Debug("Saving volume", ['Volume' => $volume->id]);
+        Log::Debug("Saving volume", ['volume' => $volume->id, 'vollection' => $volume->collection->id]);
     }
 	
     /**
@@ -107,7 +107,7 @@ class VolumeObserver Extends BaseManicModelObserver
     {
         parent::saved($volume);
 
-        Log::Debug("Saved volume", ['Volume' => $volume->id]);
+        Log::Debug("Saved volume", ['volume' => $volume->id, 'collection' => $volume->collection->id]);
     }
 	
     /**
@@ -120,7 +120,7 @@ class VolumeObserver Extends BaseManicModelObserver
     {
         parent::deleting($volume);
 		
-        Log::Debug("Deleting volume", ['Volume' => $volume->id]);
+        Log::Debug("Deleting volume", ['volume' => $volume->id, 'collection' => $volume->collection->id]);
 
 		$collection = $volume->collection;
 		$collection->updated_by = Auth::user()->id;
@@ -138,7 +138,7 @@ class VolumeObserver Extends BaseManicModelObserver
     {
         parent::deleted($volume);
 
-        Log::Info("Deleted volume", ['Volume' => $volume->id]);
+        Log::Info("Deleted volume", ['volume' => $volume->id, 'collection' => $volume->collection->id]);
     }
 	
 	/**
@@ -151,7 +151,7 @@ class VolumeObserver Extends BaseManicModelObserver
     {
         parent::restoring($volume);
 
-        Log::Debug("Restoring volume", ['Volume' => $volume->id]);
+        Log::Debug("Restoring volume", ['volume' => $volume->id, 'collection' => $volume->collection->id]);
     }
 	
 	/**
@@ -164,6 +164,6 @@ class VolumeObserver Extends BaseManicModelObserver
     {
         parent::restored($volume);
 
-        Log::Info("Restored volume", ['Volume' => $volume->id]);
+        Log::Info("Restored volume", ['volume' => $volume->id, 'collection' => $volume->collection->id]);
     }
 }

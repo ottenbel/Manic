@@ -97,7 +97,7 @@ class UserRolesAndPermissionsController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully updated user roles and permissions.");
+		$this->AddSuccessMessage("Successfully updated user roles and permissions.", true);
 		return redirect()->route('admin_show_user', ['user' => $user])->with("messages", $this->messages);
 	}
 }

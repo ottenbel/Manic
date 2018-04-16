@@ -103,7 +103,7 @@ class VolumeController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully created new volume #$volume->volume_number on collection $collection->name.", ['volume' => $volume->id]);
+		$this->AddSuccessMessage("Successfully created new volume #$volume->volume_number on collection $collection->name.");
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 
@@ -190,7 +190,7 @@ class VolumeController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully updated volume #$volume->volume_number on collection $collection->name.", ['volume' => $volume->id]);
+		$this->AddSuccessMessage("Successfully updated volume #$volume->volume_number on collection $collection->name.");
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 
@@ -219,7 +219,7 @@ class VolumeController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully purged volume $volumeName from the collection.", ['volume' => $volume->id]);
+		$this->AddSuccessMessage("Successfully purged volume $volumeName from the collection.");
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 	

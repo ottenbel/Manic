@@ -19,10 +19,9 @@ class CharacterAliasObserver Extends BaseManicModelObserver
     {	
 		parent::creating($characterAlias);
 
-		$character = $characterAlias->character;
+        Log::Debug("Creating character alias", ['character alias' => $characterAlias->id, 'character' => $characterAlias->character->id]);
 
-        Log::Debug("Creating character alias", ['character alias' => $characterAlias->id, 'character' => $character->id]);
-
+        $character = $characterAlias->character;
 		$character->updated_by = Auth::user()->id;
 		$character->save();
 		$character->touch();
@@ -38,7 +37,7 @@ class CharacterAliasObserver Extends BaseManicModelObserver
     {
         parent::created($characterAlias);
 
-        Log::Info("Created character alias", ['character alias' => $characterAlias->id]);
+        Log::Info("Created character alias", ['character alias' => $characterAlias->id, 'character' => $characterAlias->character->id]);
     }
 
 	/**
@@ -51,7 +50,7 @@ class CharacterAliasObserver Extends BaseManicModelObserver
     {
         parent::updating($characterAlias);
 
-        Log::Debug("Updating character alias", ['character alias' => $characterAlias->id]);
+        Log::Debug("Updating character alias", ['character alias' => $characterAlias->id, 'character' => $characterAlias->character->id]);
     }
 	
     /**
@@ -64,7 +63,7 @@ class CharacterAliasObserver Extends BaseManicModelObserver
     {
         parent::updated($characterAlias);
 
-        Log::Info("Updated character alias", ['character alias' => $characterAlias->id]);
+        Log::Info("Updated character alias", ['character alias' => $characterAlias->id, 'character' => $characterAlias->character->id]);
     }
 	
 	/**
@@ -77,7 +76,7 @@ class CharacterAliasObserver Extends BaseManicModelObserver
     {
         parent::saving($characterAlias);
 
-        Log::Debug("Saving character alias", ['character alias' => $characterAlias->id]);
+        Log::Debug("Saving character alias", ['character alias' => $characterAlias->id, 'character' => $characterAlias->character->id]);
     }
 	
     /**
@@ -90,7 +89,7 @@ class CharacterAliasObserver Extends BaseManicModelObserver
     {
         parent::saved($characterAlias);
 
-        Log::Debug("Saved character alias", ['character alias' => $characterAlias->id]);
+        Log::Debug("Saved character alias", ['character alias' => $characterAlias->id, 'character' => $characterAlias->character->id]);
     }
 	
     /**
@@ -103,7 +102,7 @@ class CharacterAliasObserver Extends BaseManicModelObserver
     {
         parent::deleting($characterAlias);
 		
-        Log::Debug("Deleting character alias", ['character alias' => $characterAlias->id]);
+        Log::Debug("Deleting character alias", ['character alias' => $characterAlias->id, 'character' => $characterAlias->character->id]);
 
 		$character = $characterAlias->character;
 		$character->updated_by = Auth::user()->id;
@@ -121,7 +120,7 @@ class CharacterAliasObserver Extends BaseManicModelObserver
     {
         parent::deleted($characterAlias);
 
-        Log::Info("Deleted character alias", ['character alias' => $characterAlias->id]);
+        Log::Info("Deleted character alias", ['character alias' => $characterAlias->id, 'character' => $characterAlias->character->id]);
     }
 	
 	/**
@@ -134,7 +133,7 @@ class CharacterAliasObserver Extends BaseManicModelObserver
     {
         parent::restoring($characterAlias);
 
-        Log::Debug("Restoring character alias", ['character alias' => $characterAlias->id]);
+        Log::Debug("Restoring character alias", ['character alias' => $characterAlias->id, 'character' => $characterAlias->character->id]);
     }
 	
 	/**
@@ -147,6 +146,6 @@ class CharacterAliasObserver Extends BaseManicModelObserver
     {
         parent::restored($characterAlias);
 
-        Log::Info("Restored character alias", ['character alias' => $characterAlias->id]);
+        Log::Info("Restored character alias", ['character alias' => $characterAlias->id, 'character' => $characterAlias->character->id]);
     }
 }

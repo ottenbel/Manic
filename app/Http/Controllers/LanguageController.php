@@ -103,7 +103,7 @@ class LanguageController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully purged language $languageName from the database.", ['language' => $language->id]);
+		$this->AddSuccessMessage("Successfully purged language $languageName from the database.");
 		return redirect()->route('index_language')->with("messages", $this->messages);
     }
 	
@@ -123,7 +123,7 @@ class LanguageController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully $action language $language->name.", ['language' => $language->id]);
+		$this->AddSuccessMessage("Successfully $action language $language->name.");
 		return redirect()->route('show_language', ['language' => $language])->with("messages", $this->messages);
 	}
 }

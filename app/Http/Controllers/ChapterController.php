@@ -69,7 +69,7 @@ class ChapterController extends WebController
 		
 		if ($collection->volumes->count() == 0)
 		{
-			$this->AddDataMessage("Creating a chapter on a collection requires a volume for the chapter to belong to.", ['collection' => $collection->id]);
+			$this->AddDataMessage("Creating a chapter on a collection requires a volume for the chapter to belong to.");
 			return Redirect()->route('create_volume', ['collection' => $collection])->with(['messages' => $this->messages]);
 		}
 		else
@@ -146,7 +146,7 @@ class ChapterController extends WebController
 		DB::commit();
 		
 		$collection = $volume->collection;
-		$this->AddSuccessMessage("Successfully created new chapter #$chapter->chapter_number on collection $collection->name.", ['collection' => $collection->id, 'chapter' => $chapter->id]);
+		$this->AddSuccessMessage("Successfully created new chapter #$chapter->chapter_number on collection $collection->name.");
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 
@@ -364,7 +364,7 @@ class ChapterController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully updated chapter #$chapter->chapter_number on collection $collection->name.", ['collection' => $collection->id, 'chapter' => $chapter->id]);
+		$this->AddSuccessMessage("Successfully updated chapter #$chapter->chapter_number on collection $collection->name.");
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 
@@ -395,7 +395,7 @@ class ChapterController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully purged chapter $chapterName from the collection.", ['chapter' => $chapter->id]);
+		$this->AddSuccessMessage("Successfully purged chapter $chapterName from the collection.");
 		return redirect()->route('show_collection', ['collection' => $collection])->with("messages", $this->messages);
     }
 	

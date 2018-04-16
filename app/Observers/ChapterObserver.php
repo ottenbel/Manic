@@ -18,16 +18,15 @@ class ChapterObserver Extends BaseManicModelObserver
     public function creating($chapter)
     {
         parent::creating($chapter);
-		
-		$volume = $chapter->volume;
-		$collection = $volume->collection;
 
-        Log::Debug("Creating chapter", ['chapter' => $chapter->id, 'volume' => $volume->id, 'collection' => $collection->id]);
+        Log::Debug("Creating chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $chapter->collection->id]);
 
+        $volume = $chapter->volume;
         $volume->updated_by = Auth::user()->id;
 		$volume->save();
 		$volume->touch();
 		
+        $collection = $volume->collection;
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		$collection->touch();
@@ -43,7 +42,7 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::created($chapter);
 
-        Log::Info("Successfully created chapter", ['chapter' => $chapter->id]);
+        Log::Info("Successfully created chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $chapter->collection->id]);
     }
 
 	/**
@@ -56,7 +55,7 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::updating($chapter);
 		
-        Log::Debug("Updating chapter", ['chapter' => $chapter->id]);
+        Log::Debug("Updating chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $chapter->collection->id]);
 
 		//Delete the relevant file corresponding to the entry from the chapter export table.
 		$export = $chapter->export;
@@ -95,7 +94,7 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::updated($chapter);
 
-        Log::Info("Updated chapter", ['chapter' => $chapter->id]);
+        Log::Info("Updated chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $chapter->collection->id]);
     }
 	
 	/**
@@ -108,7 +107,7 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::saving($chapter);
 
-        Log::Debug("Saving chapter", ['chapter' => $chapter->id]);
+        Log::Debug("Saving chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $chapter->collection->id]);
     }
 	
     /**
@@ -121,7 +120,7 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::saved($chapter);
 
-        Log::Debug("Saved chapter", ['chapter' => $chapter->id]);
+        Log::Debug("Saved chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $chapter->collection->id]);
     }
 	
     /**
@@ -134,7 +133,7 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::deleting($chapter);
 		
-        Log::Debug("Deleting chapter", ['chapter' => $chapter->id]);
+        Log::Debug("Deleting chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $chapter->collection->id]);
 
 		$volume = $chapter->volume;
 		$volume->updated_by = Auth::user()->id;
@@ -164,7 +163,7 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::deleted($chapter);
 
-        Log::Info("Deleted chapter", ['chapter' => $chapter->id]);
+        Log::Info("Deleted chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $volume->collection->id]);
     }
 	
 	/**
@@ -177,7 +176,7 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::restoring($chapter);
 
-        Log::Debug("Restoring chapter", ['chapter' => $chapter->id]);
+        Log::Debug("Restoring chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $volume->collection->id]);
     }
 	
 	/**
@@ -190,6 +189,6 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::restored($chapter);
 
-        Log::Info("Restored chapter", ['chapter' => $chapter->id]);
+        Log::Info("Restored chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $volume->collection->id]);
     }
 }

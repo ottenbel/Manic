@@ -51,16 +51,22 @@ class WebController extends Controller
 			{ $this->messages['warning'] = []; }
 	}
 	
-	protected function AddSuccessMessage($message, $contextualInformation = [])
+	protected function AddSuccessMessage($message, $writeToLog = false, $contextualInformation = [])
 	{	
 		array_push($this->messages['success'], $message);
-		Log::info($message, $contextualInformation);
+		if ($writeToLog)
+		{
+			Log::info($message, $contextualInformation);
+		}
 	}
 	
-	protected function AddDataMessage($message, $contextualInformation = [])
+	protected function AddDataMessage($message, $writeToLog = false, $contextualInformation = [])
 	{
 		array_push($this->messages['data'], $message);
-		Log::warning($message, $contextualInformation);
+		if ($writeToLog)
+		{
+			Log::warning($message, $contextualInformation);
+		}
 	}
 	
 	protected function AddWarningMessage($message, $contextualInformation = [])

@@ -58,7 +58,7 @@ class TagObjectAliasController extends WebController
 		}
 		DB::commit();
 		
-		$this->AddSuccessMessage("Successfully created alias $alias->alias on $objectType  $parentObject->name.", ['parent' => $parentObject->id, 'alias' => $alias->id]);
+		$this->AddSuccessMessage("Successfully created alias $alias->alias on $objectType $parentObject->name.");
 		//Redirect to the object that the alias was created for
 		return redirect()->route($showRoute, [$objectType => $parentObject])->with("messages", $this->messages);
 	}
@@ -82,7 +82,7 @@ class TagObjectAliasController extends WebController
 		DB::commit();
 		
 		//redirect to the object that the alias existed for
-		$this->AddSuccessMessage("Successfully purged alias from $objectType.", ['parent' => $alias->{$parentIDField}, 'alias' => $alias->id]);
+		$this->AddSuccessMessage("Successfully purged alias from $objectType.");
 		return redirect()->route($showRoute, [$objectType => $object])->with("messages", $this->messages);
 	}
 	

@@ -103,13 +103,13 @@ class ArtistController extends TagObjectController
 		{	
 			$childCausingLoopsMessage = "The following artists (" . implode(", ", $causedLoops) . ") were not attached as children to " . $artist->name . " as their addition would cause loops in tag implication.";
 			
-			$this->AddDataMessage("Partially $action artist $artist->name.", ['artist' => $artist->id]);
-			$this->AddDataMessage($childCausingLoopsMessage, ['artist' => $artist->id]);
+			$this->AddDataMessage("Partially $action artist $artist->name.");
+			$this->AddDataMessage($childCausingLoopsMessage);
 			return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $this->messages);
 		}
 		else
 		{
-			$this->AddSuccessMessage("Successfully $action artist $artist->name.", ['artist' => $artist->id]);
+			$this->AddSuccessMessage("Successfully $action artist $artist->name.");
 			return redirect()->route('show_artist', ['artist' => $artist])->with("messages", $this->messages);
 		}
 	}

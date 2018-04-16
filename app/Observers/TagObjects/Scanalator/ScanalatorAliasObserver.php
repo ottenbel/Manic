@@ -19,10 +19,9 @@ class ScanalatorAliasObserver Extends BaseManicModelObserver
     {	
 		parent::creating($scanalatorAlias);
 		
-		$scanalator = $scanalatorAlias->scanalator;
+        Log::Debug("Creating scanalator alias", ['scanalator alias' => $scanalatorAlias->id, 'scanalator' => $scanalatorAlias->scanalator->id]);
 
-        Log::Debug("Creating scanalator alias", ['scanalator alias' => $scanalatorAlias->id, 'scanalator' => $scanalator->id]);
-
+        $scanalator = $scanalatorAlias->scanalator;
 		$scanalator->updated_by = Auth::user()->id;
 		$scanalator->save();
 		$scanalator->touch();
@@ -38,7 +37,7 @@ class ScanalatorAliasObserver Extends BaseManicModelObserver
     {
         parent::created($scanalatorAlias);
 
-        Log::Info("Created scanalator alias", ['scanalator alias' => $scanalatorAlias->id]);
+        Log::Info("Created scanalator alias", ['scanalator alias' => $scanalatorAlias->id, 'scanalator' => $scanalatorAlias->scanalator->id]);
     }
 
 	/**
@@ -51,7 +50,7 @@ class ScanalatorAliasObserver Extends BaseManicModelObserver
     {
         parent::updating($scanalatorAlias);
 
-        Log::Debug("Updating scanalator alias", ['scanalator alias' => $scanalatorAlias->id]);
+        Log::Debug("Updating scanalator alias", ['scanalator alias' => $scanalatorAlias->id, 'scanalator' => $scanalatorAlias->scanalator->id]);
     }
 	
     /**
@@ -64,7 +63,7 @@ class ScanalatorAliasObserver Extends BaseManicModelObserver
     {
         parent::updated($scanalatorAlias);
 
-        Log::Info("Updated scanalator alias", ['scanalator alias' => $scanalatorAlias->id]);
+        Log::Info("Updated scanalator alias", ['scanalator alias' => $scanalatorAlias->id, 'scanalator' => $scanalatorAlias->scanalator->id]);
     }
 	
 	/**
@@ -77,7 +76,7 @@ class ScanalatorAliasObserver Extends BaseManicModelObserver
     {
         parent::saving($scanalatorAlias);
 
-        Log::Debug("Saving scanalator alias", ['scanalator alias' => $scanalatorAlias->id]);
+        Log::Debug("Saving scanalator alias", ['scanalator alias' => $scanalatorAlias->id, 'scanalator' => $scanalatorAlias->scanalator->id]);
     }
 	
     /**
@@ -90,7 +89,7 @@ class ScanalatorAliasObserver Extends BaseManicModelObserver
     {
         parent::saved($scanalatorAlias);
 
-        Log::Debug("Saved scanalator alias", ['scanalator alias' => $scanalatorAlias->id]);
+        Log::Debug("Saved scanalator alias", ['scanalator alias' => $scanalatorAlias->id, 'scanalator' => $scanalatorAlias->scanalator->id]);
     }
 	
     /**
@@ -103,7 +102,7 @@ class ScanalatorAliasObserver Extends BaseManicModelObserver
     {
         parent::deleting($scanalatorAlias);
 		
-        Log::Debug("Deleting scanalator alias", ['scanalator alias' => $scanalatorAlias->id]);
+        Log::Debug("Deleting scanalator alias", ['scanalator alias' => $scanalatorAlias->id, 'scanalator' => $scanalatorAlias->scanalator->id]);
 
 		$scanalator = $scanalatorAlias->scanalator;
 		$scanalator->updated_by = Auth::user()->id;
@@ -121,7 +120,7 @@ class ScanalatorAliasObserver Extends BaseManicModelObserver
     {
         parent::deleted($scanalatorAlias);
 
-        Log::Info("Deleted scanalator alias", ['scanalator alias' => $scanalatorAlias->id]);
+        Log::Info("Deleted scanalator alias", ['scanalator alias' => $scanalatorAlias->id, 'scanalator' => $scanalatorAlias->scanalator->id]);
     }
 	
 	/**
@@ -134,7 +133,7 @@ class ScanalatorAliasObserver Extends BaseManicModelObserver
     {
         parent::restoring($scanalatorAlias);
 
-        Log::Debug("Restoring scanalator alias", ['scanalator alias' => $scanalatorAlias->id]);
+        Log::Debug("Restoring scanalator alias", ['scanalator alias' => $scanalatorAlias->id, 'scanalator' => $scanalatorAlias->scanalator->id]);
     }
 	
 	/**
@@ -147,6 +146,6 @@ class ScanalatorAliasObserver Extends BaseManicModelObserver
     {
         parent::restored($scanalatorAlias);
 
-        Log::Info("Restored scanalator alias", ['scanalator alias' => $scanalatorAlias->id]);
+        Log::Info("Restored scanalator alias", ['scanalator alias' => $scanalatorAlias->id, 'scanalator' => $scanalatorAlias->scanalator->id]);
     }
 }

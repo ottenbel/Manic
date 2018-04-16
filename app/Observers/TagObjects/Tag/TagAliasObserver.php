@@ -18,11 +18,10 @@ class TagAliasObserver Extends BaseManicModelObserver
     public function creating($tagAlias)
     {	
 		parent::creating($tagAlias);
-		
-		$tag = $tagAlias->tag;
 
-        Log::Debug("Creating tag alias", ['tag alias' => $tagAlias->id, 'tag' => $tag->id]);
+        Log::Debug("Creating tag alias", ['tag alias' => $tagAlias->id, 'tag' => $tagAlias->tag->id]);
 
+        $tag = $tagAlias->tag;
 		$tag->updated_by = Auth::user()->id;
 		$tag->save();
 		$tag->touch();
@@ -38,7 +37,7 @@ class TagAliasObserver Extends BaseManicModelObserver
     {
         parent::created($tagAlias);
 
-        Log::Info("Created tag alias", ['tag alias' => $tagAlias->id]);
+        Log::Info("Created tag alias", ['tag alias' => $tagAlias->id, 'tag' => $tagAlias->tag->id]);
     }
 
 	/**
@@ -51,7 +50,7 @@ class TagAliasObserver Extends BaseManicModelObserver
     {
         parent::updating($tagAlias);
 
-        Log::Debug("Updating tag alias", ['tag alias' => $tagAlias->id]);
+        Log::Debug("Updating tag alias", ['tag alias' => $tagAlias->id, 'tag' => $tagAlias->tag->id]);
     }
 	
     /**
@@ -64,7 +63,7 @@ class TagAliasObserver Extends BaseManicModelObserver
     {
         parent::updated($tagAlias);
 
-        Log::Info("Updated tag alias", ['tag alias' => $tagAlias->id]);
+        Log::Info("Updated tag alias", ['tag alias' => $tagAlias->id, 'tag' => $tagAlias->tag->id]);
     }
 	
 	/**
@@ -77,7 +76,7 @@ class TagAliasObserver Extends BaseManicModelObserver
     {
         parent::saving($tagAlias);
 
-        Log::Debug("Saving tag alias", ['tag alias' => $tagAlias->id]);
+        Log::Debug("Saving tag alias", ['tag alias' => $tagAlias->id, 'tag' => $tagAlias->tag->id]);
     }
 	
     /**
@@ -90,7 +89,7 @@ class TagAliasObserver Extends BaseManicModelObserver
     {
         parent::saved($tagAlias);
 
-        Log::Debug("Saved tag alias", ['tag alias' => $tagAlias->id]);
+        Log::Debug("Saved tag alias", ['tag alias' => $tagAlias->id, 'tag' => $tagAlias->tag->id]);
     }
 	
     /**
@@ -103,7 +102,7 @@ class TagAliasObserver Extends BaseManicModelObserver
     {
         parent::deleting($tagAlias);
 		
-        Log::Debug("Deleting tag alias", ['tag alias' => $tagAlias->id]);
+        Log::Debug("Deleting tag alias", ['tag alias' => $tagAlias->id, 'tag' => $tagAlias->tag->id]);
 
 		$tag = $tagAlias->tag;
 		$tag->updated_by = Auth::user()->id;
@@ -121,7 +120,7 @@ class TagAliasObserver Extends BaseManicModelObserver
     {
         parent::deleted($tagAlias);
 
-        Log::Info("Deleted tag alias", ['tag alias' => $tagAlias->id]);
+        Log::Info("Deleted tag alias", ['tag alias' => $tagAlias->id, 'tag' => $tagAlias->tag->id]);
     }
 	
 	/**
@@ -134,7 +133,7 @@ class TagAliasObserver Extends BaseManicModelObserver
     {
         parent::restoring($tagAlias);
 
-        Log::Debug("Restoring tag alias", ['tag alias' => $tagAlias->id]);
+        Log::Debug("Restoring tag alias", ['tag alias' => $tagAlias->id, 'tag' => $tagAlias->tag->id]);
     }
 	
 	/**
@@ -147,6 +146,6 @@ class TagAliasObserver Extends BaseManicModelObserver
     {
         parent::restored($tagAlias);
 
-        Log::Info("Restored tag alias", ['tag alias' => $tagAlias->id]);
+        Log::Info("Restored tag alias", ['tag alias' => $tagAlias->id, 'tag' => $tagAlias->tag->id]);
     }
 }

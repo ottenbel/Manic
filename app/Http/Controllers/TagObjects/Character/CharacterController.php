@@ -118,23 +118,23 @@ class CharacterController extends TagObjectController
 			if (count($causedLoops) > 0)
 			{
 				$childCausingLoopsMessage = "The following characters (" . implode(", ", $causedLoops) . ") were not attached as children to " . $character->name . " as their addition would cause loops in tag implication.";
-				$this->AddDataMessage($childCausingLoopsMessage, ['character' => $character->id]);
+				$this->AddDataMessage($childCausingLoopsMessage);
 			}
 			
 			if (count($droppedChildren) > 0)
 			{
 				$droppedChildrenMessage = "The following characters (" . implode(", ", $droppedChildren) . ") were not attached as children to " . $character->name . " as they could not be found attached to " . $character->series->name . " or a child series of it.";
-				$this->AddDataMessage($droppedChildrenMessage, ['character' => $character->id, 'series' => $character->series->id]);
+				$this->AddDataMessage($droppedChildrenMessage);
 			}
 			
 			$seriesName = $character->series->name;
-			$this->AddDataMessage("Partially $action character $character->name under series $seriesName.", ['character' => $character, 'series' => $character->series->id]);
+			$this->AddDataMessage("Partially $action character $character->name under series $seriesName.");
 			return redirect()->route('show_character', ['character' => $character])->with("messages", $this->messages);
 		}
 		else
 		{
 			$seriesName = $character->series->name;
-			$this->AddSuccessMessage("Successfully $action character $character->name under series $seriesName.", ['character' => $character->id, 'series' => $character->series->id]);
+			$this->AddSuccessMessage("Successfully $action character $character->name under series $seriesName.");
 			return redirect()->route('show_character', ['character' => $character])->with("messages", $this->messages);
 		}
 	}

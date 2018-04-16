@@ -106,13 +106,13 @@ class TagController extends TagObjectController
 		{	
 			$childCausingLoopsMessage = "The following tags (" . implode(", ", $causedLoops) . ") were not attached as children to " . $tag->name . " as their addition would cause loops in tag implication.";
 			
-			$this->AddDataMessage($childCausingLoopsMessage, ['tag' => $tag->id]);
-			$this->AddDataMessage("Partially $action tag $tag->name.", ['tag' => $tag->id]);
+			$this->AddDataMessage($childCausingLoopsMessage);
+			$this->AddDataMessage("Partially $action tag $tag->name.");
 			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $this->messages);
 		}
 		else
 		{
-			$this->AddSuccessMessage("Successfully $action tag $tag->name.", ['tag' => $tag->id]);
+			$this->AddSuccessMessage("Successfully $action tag $tag->name.");
 			return redirect()->route('show_tag', ['tag' => $tag])->with("messages", $this->messages);
 		}
 	}

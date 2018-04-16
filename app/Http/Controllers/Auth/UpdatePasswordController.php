@@ -54,7 +54,7 @@ class UpdatePasswordController extends WebController
 		DB::commit();
 		
 		//Write success message and return to user page
-		$this->AddSuccessMessage("Successfully updated account password.");
+		$this->AddSuccessMessage("Successfully updated account password.", true);
 		return redirect()->route('edit_password')->with(["messages" => $this->messages]);
 	}
 }
