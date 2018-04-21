@@ -148,6 +148,7 @@ return [
 		Laravel\Tinker\TinkerServiceProvider::class,
 		Intervention\Image\ImageServiceProvider::class,
 		Chumper\Zipper\ZipperServiceProvider::class,
+		Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
 
         /*
          * Package Service Providers...

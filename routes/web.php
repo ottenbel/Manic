@@ -238,6 +238,10 @@ Route::namespace('Configuration')->prefix('admin/configuration')->group(function
 	//End site rating restriction settings
 });
 
+Route::group(['middleware' => 'permission:View Error Log'], function(){
+	Route::get('/admin/log/', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('admin_log');
+});
+
 Route::namespace('RolesAndPermissions')->group(function () {
 	//Permissions
 		Route::prefix('user/permission')->group(function () {

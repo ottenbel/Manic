@@ -34,6 +34,12 @@
 					<li><a href="{{route('admin_update_configuration_rating_restriction')}}">Rating Restrictions</a></li>
 				@endcan
 			@endif
+			@if(Auth::user()->can('View Error Log'))
+				<h6 class="dropdown-header">Other</h6>
+				@can('View Error Log')
+					<li><a href="{{route('admin_log')}}">Error Log</a></li>
+				@endcan
+			@endif
 		</ul>
 	</li>
 @elseif(Auth::check())

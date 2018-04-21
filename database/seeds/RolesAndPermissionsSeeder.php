@@ -89,6 +89,7 @@ class RolesAndPermissionsSeeder extends Seeder
 		self::SeedPermissionRow('Edit Permission');
 		self::SeedPermissionRow('Delete Permission');
 		self::SeedPermissionRow('Edit User Roles and Permissions');
+		self::SeedPermissionRow('View Error Log');
 		
         // create roles and assign existing permissions
 		self::SeedRoleAndPermissions('user', 
@@ -120,7 +121,7 @@ class RolesAndPermissionsSeeder extends Seeder
 		self::SeedRoleAndPermissions('owner', 
 		[
 			'Create Role', 'Edit Role', 'Delete Role', 'Create Permission', 'Edit Permission', 'Delete Permission', 
-			'Edit User Roles and Permissions'
+			'Edit User Roles and Permissions', 'View Error Log'
 		]);
     }
 	
