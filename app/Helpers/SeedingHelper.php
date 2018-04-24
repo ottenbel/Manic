@@ -47,6 +47,8 @@ class SeedingHelper
 		self::SeedPaginationRow($user, $seedUser, "pagination_users_per_page_index", 30, "The number of users to be displayed per index page.", 19);
 		
 		self::SeedPaginationRow($user, $seedUser, "pagination_languages_per_page_index", 30, "The number of languages to be displayed per index page.", 19);
+
+		self::SeedPaginationRow($user, $seedUser, "pagination_status_per_page_index", 30, "The number of languages to be displayed per index page.", 19);
 	}
 	
 	/*
@@ -143,6 +145,10 @@ class SeedingHelper
 		self::SeedPlaceholderRow($user, $seedUser, "language_name", "Some Language", "The name of the language to be created", 0);
 		self::SeedPlaceholderRow($user, $seedUser, "language_description", "A short description of the language.", "Additional information regarding the language (optional).", 1);
 		self::SeedPlaceholderRow($user, $seedUser, "language_url", "https://en.wikipedia.org/wiki/Language", "A link providing additional information about the language (optional).", 2);
+
+		//Statuses
+		self::SeedPlaceholderRow($user, $seedUser, "status_name", "Some Status", "The name of the status to be created", 0);
+		self::SeedPlaceholderRow($user, $seedUser, "status_priority", "1", "The priority of the status", 1);
 	}
 	
 	/*

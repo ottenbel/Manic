@@ -60,6 +60,18 @@
 	});
 //End Language controller routes
 
+//Status controller routes
+	Route::prefix('status')->group(function () {
+		Route::get('/', 'StatusController@index')->Name('index_status');
+		Route::get('/create', 'StatusController@create')->Name('create_status');
+		Route::post('/', 'StatusController@store')->Name('store_status');
+		Route::get('/{status}/edit', 'StatusController@edit')->Name('edit_status');
+		Route::patch('/{status}', 'StatusController@update')->Name('update_status');
+		Route::delete('/{status}', 'StatusController@destroy')->Name('delete_status');
+		Route::get('/{status}', 'StatusController@show')->Name('show_status');
+	});
+//End Status controller routes
+
 Route::namespace('TagObjects\Tag')->group(function () {
 	//Tag controller routes
 		Route::prefix('tag')->group(function () {

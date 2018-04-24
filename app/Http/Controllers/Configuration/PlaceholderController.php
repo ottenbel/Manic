@@ -54,10 +54,24 @@ class PlaceholderController extends WebController
 		$permissions = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'permission');});
 		$roles = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'role');});
 		$languages = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'language');});
+		$statuses = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'status');});
 		
 		$this->GetFlashedMessages($request);
 		
-		return View('configuration.placeholder.edit', array('artists' => $artists, 'characters' => $characters, 'scanalators' => $scanalators, 'series' => $series, 'tags' => $tags, 'collections' => $collections, 'volumes' => $volumes, 'chapters' => $chapters, 'permissions' => $permissions, 'roles' => $roles, 'languages' => $languages, 'messages' => $this->messages));
+		return View('configuration.placeholder.edit', 
+			array(
+				'artists' => $artists, 
+				'characters' => $characters, 
+				'scanalators' => $scanalators, 
+				'series' => $series, 
+				'tags' => $tags, 
+				'collections' => $collections, 
+				'volumes' => $volumes, 'chapters' => $chapters, 
+				'permissions' => $permissions, 
+				'roles' => $roles, 
+				'languages' => $languages, 
+				'statuses' => $statuses, 
+				'messages' => $this->messages));
     }
 
     /**

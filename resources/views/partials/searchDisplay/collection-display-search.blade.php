@@ -234,10 +234,12 @@
 								@foreach($search_statues_array as $status)
 									@include('partials.searchDisplay.collection-display-search-generic-component', 
 											['componentTagObject' => $status['status'],
-												'componentNot' => $status['not'],
+												'componentNot' => $language['not'],
 												'componentSpanClass' => 'status_tag',
 												'notComponentSpanClass' => 'not_status_tag',
-												'componentToken' => 'status'])
+												'componentToken' => 'status',
+												'componentRouteName' => 'show_status',
+												'componentObjectName' => 'status'])
 								@endforeach
 							</div>
 						</div>
