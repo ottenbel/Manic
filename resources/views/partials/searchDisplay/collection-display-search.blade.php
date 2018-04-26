@@ -234,7 +234,7 @@
 								@foreach($search_statues_array as $status)
 									@include('partials.searchDisplay.collection-display-search-generic-component', 
 											['componentTagObject' => $status['status'],
-												'componentNot' => $language['not'],
+												'componentNot' => $status['not'],
 												'componentSpanClass' => 'status_tag',
 												'notComponentSpanClass' => 'not_status_tag',
 												'componentToken' => 'status',
