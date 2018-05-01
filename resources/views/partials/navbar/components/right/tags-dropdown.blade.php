@@ -15,6 +15,7 @@
  Tag</a></li>
 		<li><a href="{{route('index_language')}}">Language</a></li>
 		<li><a href="{{route('index_status')}}">Status</a></li>
+		<li><a href="{{route('index_rating')}}">Rating</a></li>
 		<h6 class="dropdown-header">Aliases</h6>
 		<li><a href="{{ route('index_artist_alias') }}"><i class="fa fa-paint-brush" aria-hidden="true"></i>
  Artist Aliases</a></li>

@@ -45,10 +45,9 @@ class SeedingHelper
 		self::SeedPaginationRow($user, $seedUser, "pagination_permissions_per_page_index", 30, "The number of permisisons to be displayed per index page.", 17);
 		self::SeedPaginationRow($user, $seedUser, "pagination_roles_per_page_index", 30, "The number of roles to be displayed per index page.", 18);
 		self::SeedPaginationRow($user, $seedUser, "pagination_users_per_page_index", 30, "The number of users to be displayed per index page.", 19);
-		
-		self::SeedPaginationRow($user, $seedUser, "pagination_languages_per_page_index", 30, "The number of languages to be displayed per index page.", 19);
-
-		self::SeedPaginationRow($user, $seedUser, "pagination_status_per_page_index", 30, "The number of languages to be displayed per index page.", 19);
+		self::SeedPaginationRow($user, $seedUser, "pagination_languages_per_page_index", 30, "The number of languages to be displayed per index page.", 20);
+		self::SeedPaginationRow($user, $seedUser, "pagination_status_per_page_index", 30, "The number of statuses to be displayed per index page.", 21);
+		self::SeedPaginationRow($user, $seedUser, "pagination_rating_per_page_index", 30, "The number of ratings to be displayed per index page.", 22);
 	}
 	
 	/*
@@ -149,6 +148,10 @@ class SeedingHelper
 		//Statuses
 		self::SeedPlaceholderRow($user, $seedUser, "status_name", "Some Status", "The name of the status to be created", 0);
 		self::SeedPlaceholderRow($user, $seedUser, "status_priority", "1", "The priority of the status", 1);
+
+		//Ratings
+		self::SeedPlaceholderRow($user, $seedUser, "rating_name", "Some Rating", "The name of the rating to be created", 0);
+		self::SeedPlaceholderRow($user, $seedUser, "rating_priority", "1", "The priority of the rating", 1);
 	}
 	
 	/*
@@ -231,7 +234,7 @@ class SeedingHelper
 	/*
 	 * The private function used to seed a rating restriction row for a given user.
 	 */
-	 private static function SeedRatingRestrictionRow($user, $seedUser, $rating_id, $display, $priority)
+	 public static function SeedRatingRestrictionRow($user, $seedUser, $rating_id, $display, $priority)
 	 {
 		$userID = null;
 		if (!is_null($seedUser))

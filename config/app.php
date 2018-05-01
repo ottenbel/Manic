@@ -174,6 +174,7 @@ return [
         App\Providers\Custom\ChapterServiceProvider::class,
         App\Providers\Custom\LanguageServiceProvider::class,
         App\Providers\Custom\StatusServiceProvider::class,
+        App\Providers\Custom\RatingServiceProvider::class,
         App\Providers\Custom\TagObjectsServiceProvider::class,
         App\Providers\Custom\UserConfigurationServiceProvider::class,
     ],

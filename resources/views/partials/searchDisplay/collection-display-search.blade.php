@@ -217,7 +217,9 @@
 												'componentNot' => $rating['not'],
 												'componentSpanClass' => 'rating_tag',
 												'notComponentSpanClass' => 'not_rating_tag',
-												'componentToken' => 'rating'])
+												'componentToken' => 'rating',
+												'componentRouteName' => 'show_rating',
+												'componentObjectName' => 'rating'])
 								@endforeach
 							</div>
 						</div>

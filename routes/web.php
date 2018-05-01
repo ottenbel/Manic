@@ -72,6 +72,18 @@
 	});
 //End Status controller routes
 
+//Rating controller routes
+	Route::prefix('rating')->group(function () {
+		Route::get('/', 'RatingController@index')->Name('index_rating');
+		Route::get('/create', 'RatingController@create')->Name('create_rating');
+		Route::post('/', 'RatingController@store')->Name('store_rating');
+		Route::get('/{rating}/edit', 'RatingController@edit')->Name('edit_rating');
+		Route::patch('/{rating}', 'RatingController@update')->Name('update_rating');
+		Route::delete('/{rating}', 'RatingController@destroy')->Name('delete_rating');
+		Route::get('/{rating}', 'RatingController@show')->Name('show_rating');
+	});
+//End Rating controller routes
+
 Route::namespace('TagObjects\Tag')->group(function () {
 	//Tag controller routes
 		Route::prefix('tag')->group(function () {

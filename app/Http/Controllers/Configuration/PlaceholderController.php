@@ -55,6 +55,7 @@ class PlaceholderController extends WebController
 		$roles = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'role');});
 		$languages = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'language');});
 		$statuses = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'status');});
+		$ratings = $placeholderValues->filter(function ($item) {return false !== starts_with($item->key, 'rating');});
 		
 		$this->GetFlashedMessages($request);
 		
@@ -70,7 +71,8 @@ class PlaceholderController extends WebController
 				'permissions' => $permissions, 
 				'roles' => $roles, 
 				'languages' => $languages, 
-				'statuses' => $statuses, 
+				'statuses' => $statuses,
+				'ratings' => $ratings, 
 				'messages' => $this->messages));
     }
 

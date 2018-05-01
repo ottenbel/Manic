@@ -52,6 +52,7 @@
 			@include('partials.configuration.placeholder.input', array('section' => 'Role', 'items' => $roles))
 			@include('partials.configuration.placeholder.input', array('section' => 'Language', 'items' => $languages))
 			@include('partials.configuration.placeholder.input', array('section' => 'Statuses', 'items' => $statuses))
+			@include('partials.configuration.placeholder.input', array('section' => 'Ratings', 'items' => $ratings))
 			
 			<br/>
 			<div class="text-right">

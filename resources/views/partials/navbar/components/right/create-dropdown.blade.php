@@ -5,7 +5,8 @@
 	|| (Auth::user()->can('create', App\Models\TagObjects\Scanalator\Scanalator::class)) 
 	|| (Auth::user()->can('create', App\Models\TagObjects\Series\Series::class))
 	|| (Auth::user()->can('create', App\Models\Language::class))
-	|| (Auth::user()->can('create', App\Models\Status::class)))
+	|| (Auth::user()->can('create', App\Models\Status::class))
+	|| (Auth::user()->can('create', App\Models\Rating::class)))
 	<li class="dropdown">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Create <span class="caret"></span></a>
 		
@@ -50,6 +51,10 @@
 
 			@can('create', App\Models\Status::class)
 				<li><a href="{{route('create_status')}}">Status</a></li>
+			@endcan
+
+			@can('create', App\Models\Rating::class)
+				<li><a href="{{route('create_rating')}}">Rating</a></li>
 			@endcan
 		</ul>
 	</li>
