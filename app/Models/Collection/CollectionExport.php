@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Collection;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,6 +30,6 @@ class CollectionExport extends Model
 	 */
 	public function collection()
 	{
-		return $this->belongsTo('App\Models\Collection');
+		return $this->belongsTo('App\Models\Collection\Collection');
 	}
 }

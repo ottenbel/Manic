@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User\User\Blacklists\Collection;
 
 use App\Http\Controllers\WebController;
 use App\Http\Requests\User\User\Blacklists\Collection\StoreCollectionBlacklistRequest;
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 use App\Models\User\CollectionBlacklist;
 use Auth;
 use Config;

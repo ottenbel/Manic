@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Auth;
 use Input;
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 use App\Models\Image;
 use App\Models\Volume;
 

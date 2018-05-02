@@ -1,10 +1,10 @@
 @if($collections->count() == 0)
-	@can('create', App\Models\Collection::class)
+	@can('create', App\Models\Collection\Collection::class)
 		<div class="text-center">
 			No collections have been found in the database. Add a new collection <a href = "{{route('create_collection')}}">here.</a>
 		</div>
 	@endcan
-	@cannot('create', App\Models\Collection::class)
+	@cannot('create', App\Models\Collection\Collection::class)
 		<div class="text-center">
 			No collections have been found in the database.
 		</div>

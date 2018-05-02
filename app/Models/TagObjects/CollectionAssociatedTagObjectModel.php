@@ -16,7 +16,7 @@ class CollectionAssociatedTagObjectModel extends BaseManicModel
 	 */
 	public function collections()
 	{
-		return $this->belongsToMany('App\Models\Collection')->withTimestamps()->withPivot('primary');
+		return $this->belongsToMany('App\Models\Collection\Collection')->withTimestamps()->withPivot('primary');
 	}
 	
 	/*

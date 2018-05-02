@@ -7,7 +7,7 @@ use Storage;
 use App\Models\Image;
 use App\Models\ChapterExport;
 use App\Models\VolumeExport;
-use App\Models\CollectionExport;
+use App\Models\Collection\CollectionExport;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 

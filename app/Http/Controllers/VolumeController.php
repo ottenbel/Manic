@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Http\Requests\Volume\StoreVolumeRequest;
 use App\Http\Requests\Volume\UpdateVolumeRequest;
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 use App\Models\Image;
 use App\Models\Volume;
 use Config;

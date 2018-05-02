@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Collection;
 
 use App\Models\BaseManicModel;
 
@@ -49,7 +49,7 @@ class Collection extends BaseManicModel
 	 */
 	public function parent_collection()
 	{
-		 return $this->belongsTo('App\Models\Collection', 'parent_id');
+		 return $this->belongsTo('App\Models\Collection\Collection', 'parent_id');
 	}
 	 
 	/*
@@ -57,7 +57,7 @@ class Collection extends BaseManicModel
 	 */
 	public function child_collections()
 	{
-		return $this->hasMany('App\Models\Collection', 'parent_id');
+		return $this->hasMany('App\Models\Collection\Collection', 'parent_id');
 	}
 	
 	/*
@@ -185,7 +185,7 @@ class Collection extends BaseManicModel
 	 */
 	public function export()
 	{
-		return $this->hasOne('App\Models\CollectionExport');
+		return $this->hasOne('App\Models\Collection\CollectionExport');
 	}
 	
 	/*

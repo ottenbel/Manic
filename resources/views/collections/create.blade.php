@@ -14,7 +14,7 @@ Create a New Collection
 
 @section('content')
 <div class="container">
-	@can('create', App\Models\Collection::class)
+	@can('create', App\Models\Collection\Collection::class)
 		<h1>Create a New Collection</h1>
 		
 		<form method="POST" action="{{route('store_collection')}}" enctype="multipart/form-data">
@@ -26,7 +26,7 @@ Create a New Collection
 		</form>
 	@endcan
 	
-	@cannot('create', App\Models\Collection::class)
+	@cannot('create', App\Models\Collection\Collection::class)
 		<h1>Error</h1>
 		<div class="alert alert-danger" role="alert">
 			User does not have the correct permissions in order to create a new collection.

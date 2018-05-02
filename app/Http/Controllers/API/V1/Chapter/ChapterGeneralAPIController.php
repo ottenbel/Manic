@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Redirect;
 use Auth;
 use Input;
 use App\Models\Chapter;
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 use App\Models\Image;
 use App\Models\Page;
 use App\Models\Scanalator;

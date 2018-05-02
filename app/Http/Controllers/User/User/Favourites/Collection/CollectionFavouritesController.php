@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User\User\Favourites\Collection;
 
 use App\Http\Controllers\WebController;
 use App\Http\Requests\User\User\Favourites\Collection\StoreCollectionFavouriteRequest;
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 use App\Models\User\CollectionFavourite;
 use Auth;
 use Config;

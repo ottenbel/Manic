@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Collection;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 
 class StoreCollectionRequest extends FormRequest
 {

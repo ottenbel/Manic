@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CollectionPolicy

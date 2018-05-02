@@ -5,7 +5,7 @@ namespace App\Providers\Custom;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 use App\Observers\CollectionObserver;
 
 class CollectionServiceProvider extends ServiceProvider
@@ -15,7 +15,7 @@ class CollectionServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = ['App\Models\Collection' => 'App\Policies\CollectionPolicy'];
+    protected $policies = ['App\Models\Collection\Collection' => 'App\Policies\CollectionPolicy'];
 
     /**
      * Register any authentication / authorization services.

@@ -77,7 +77,7 @@ class User extends Authenticatable
 	 */
 	public function collections_created()
 	{
-		return $this->hasMany('App\Models\Collection', 'created_by');
+		return $this->hasMany('App\Models\Collection\Collection', 'created_by');
 	}
 	
 	/*

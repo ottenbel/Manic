@@ -20,6 +20,6 @@ class Language extends BaseManicModel
 	 */
 	public function collections()
 	{
-		return $this->hasMany('App\Models\Collection');
+		return $this->hasMany('App\Models\Collection\Collection');
 	}
 }

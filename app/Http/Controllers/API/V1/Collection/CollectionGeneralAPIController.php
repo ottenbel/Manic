@@ -9,7 +9,7 @@ use Auth;
 use Input;
 use App\Models\TagObjects\Artist\Artist;
 use App\Models\TagObjects\Character\Character;
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 use App\Models\Image;
 use App\Models\Language;
 use App\Models\Rating;

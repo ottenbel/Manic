@@ -1,4 +1,4 @@
-@if ((Auth::user()->can('create', App\Models\Collection::class)) 
+@if ((Auth::user()->can('create', App\Models\Collection\Collection::class)) 
 	|| (Auth::user()->can('create', App\Models\TagObjects\Tag\Tag::class)) 
 	|| (Auth::user()->can('create', App\Models\TagObjects\Artist\Artist::class)) 
 	|| (Auth::user()->can('create', App\Models\TagObjects\Character\Character::class)) 
@@ -11,7 +11,7 @@
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Create <span class="caret"></span></a>
 		
 		<ul class="dropdown-menu" role="menu">
-			@can('create', App\Models\Collection::class)
+			@can('create', App\Models\Collection\Collection::class)
 				<li><a href="{{route('create_collection')}}"><i class="fa fa-archive" aria-hidden="true"></i> Collection</a></li>
 			@endcan
 			

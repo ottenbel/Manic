@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chapter;
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 use App\Models\Image;
 use App\Models\Volume;
 use App\Http\Requests\Chapter\StoreChapterRequest;

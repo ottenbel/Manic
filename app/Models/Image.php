@@ -19,7 +19,7 @@ class Image extends BaseManicModel
 	 */
 	 public function collections()
 	 {
-		return $this->hasMany('App\Models\Collection', 'cover'); 
+		return $this->hasMany('App\Models\Collection\Collection', 'cover'); 
 	 }
 	 
 	/*

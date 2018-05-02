@@ -15,7 +15,7 @@ use ImageUploadHelper;
 use FileExportHelper;
 use LookupHelper;
 use ConfigurationLookupHelper;
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 use App\Models\Image;
 use App\Models\Language;
 use App\Models\Rating;

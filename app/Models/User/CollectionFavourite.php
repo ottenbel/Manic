@@ -19,7 +19,7 @@ class CollectionFavourite extends BaseManicModel
 	 */
 	public function collection()
 	{
-		return $this->belongsTo('App\Models\Collection');
+		return $this->belongsTo('App\Models\Collection\Collection');
 	}
 	
 	/*

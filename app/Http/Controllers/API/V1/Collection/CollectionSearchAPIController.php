@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API\V1\Collection;
 
 use App\Http\Controllers\Controller;
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 use Illuminate\Http\Request;
 use Input;
 

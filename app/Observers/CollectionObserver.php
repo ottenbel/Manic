@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Collection;
+use App\Models\Collection\Collection;
 use Auth;
 use Storage;
 use Log;
