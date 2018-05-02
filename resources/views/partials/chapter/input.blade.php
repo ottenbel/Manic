@@ -51,7 +51,7 @@
 	{{ Form::label('scanalator_primary', 'Primary Scanalators') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primary_scanalators']->description}}"></i>
 	@if((!empty($chapter)) && ($chapter->primary_scanalators != null) && (Input::old('scanalator_primary') == null))
-		{{ Form::text('scanalator_primary', collect($chapter->primary_scanalators->pluck('name'))->implode(", "), array('class' => 'form-control', 'placeholder' => $configurations['primary_scanalators']->value)) }}
+		{{ Form::text('scanalator_primary', $chapter->PrimaryScanalatorsToString(), array('class' => 'form-control', 'placeholder' => $configurations['primary_scanalators']->value)) }}
 	@else
 		{{ Form::text('scanalator_primary', Input::old('scanalator_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primary_scanalators']->value)) }}
 	@endif
@@ -62,7 +62,7 @@
 	{{ Form::label('scanalator_secondary', 'Secondary Scanalators') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondary_scanalators']->description}}"></i>
 	@if((!empty($chapter)) && ($chapter->secondary_scanalators != null) && (Input::old('scanalator_secondary') == null))
-		{{ Form::text('scanalator_secondary', collect($chapter->secondary_scanalators->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondary_scanalators']->value)) }}
+		{{ Form::text('scanalator_secondary', $chapter->SecondaryScanalatorsToString(), array('class' => 'form-control', 'placeholder' => $configurations['secondary_scanalators']->value)) }}
 	@else
 		{{ Form::text('scanalator_secondary', Input::old('scanalator_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondary_scanalators']->value)) }}
 	@endif

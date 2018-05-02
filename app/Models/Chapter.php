@@ -86,4 +86,14 @@ class Chapter extends BaseManicModel
 	{
 		return $this->hasOne('App\Models\ChapterExport');
 	}
+
+	public function PrimaryScanalatorsToString()
+	{
+		return collect($this->primary_scanalators()->pluck('name'))->implode(", ");
+	}
+
+	public function SecondaryScanalatorsToString()
+	{
+		return collect($this->secondary_scanalators()->pluck('name'))->implode(", ");
+	}
 }
