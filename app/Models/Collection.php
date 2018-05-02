@@ -203,4 +203,45 @@ class Collection extends BaseManicModel
 	{
 		return $this->hasMany('App\Models\User\CollectionBlacklist');
 	}
+
+	//Transform the tag objects on the collection into a string 
+	public function PrimaryArtistsToString()
+	{
+		return collect($this->primary_artists()->pluck('name'))->implode(", ");
+	}
+
+	public function SecondaryArtistsToString()
+	{
+		return collect($this->secondary_artists()->pluck('name'))->implode(", ");
+	}
+
+	public function PrimarySeriesToString()
+	{
+		return collect($this->primary_series()->pluck('name'))->implode(", ");
+	}
+
+	public function SecondarySeriesToString()
+	{
+		return collect($this->secondary_series()->pluck('name'))->implode(", ");
+	}
+
+	public function PrimaryCharactersToString()
+	{
+		return collect($this->primary_characters()->pluck('name'))->implode(", ");
+	}
+
+	public function SecondaryCharactersToString()
+	{
+		return collect($this->secondary_characters()->pluck('name'))->implode(", ");
+	}
+
+	public function PrimaryTagsToString()
+	{
+		return collect($this->primary_tags()->pluck('name'))->implode(", ");
+	}
+
+	public function SecondaryTagsToString()
+	{
+		return collect($this->secondary_tags()->pluck('name'))->implode(", ");
+	}
 }

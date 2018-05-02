@@ -61,7 +61,7 @@
 	{{ Form::label('artist_primary', 'Primary Artists') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primary_artists']->description}}"></i>
 	@if((!empty($collection)) && ($collection->primary_artists != null) && (Input::old('artist_primary') == null))
-		{{ Form::text('artist_primary', collect($collection->primary_artists->pluck('name'))->implode(", "), array('class' => 'form-control', 'placeholder' => $configurations['primary_artists']->value)) }}
+		{{ Form::text('artist_primary', $collection->PrimaryArtistsToString(), array('class' => 'form-control', 'placeholder' => $configurations['primary_artists']->value)) }}
 	@else
 		{{ Form::text('artist_primary', Input::old('artist_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primary_artists']->value)) }}
 	@endif
@@ -72,7 +72,7 @@
 	{{ Form::label('artist_secondary', 'Secondary Artists') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondary_artists']->description}}"></i>
 	@if((!empty($collection)) && ($collection->secondary_artists != null) && (Input::old('artist_secondary') == null))
-		{{ Form::text('artist_secondary', collect($collection->secondary_artists->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondary_artists']->value)) }}
+		{{ Form::text('artist_secondary', $collection->SecondaryArtistsToString(), array('class' => 'form-control', 'placeholder' => $configurations['secondary_artists']->value)) }}
 	@else
 		{{ Form::text('artist_secondary', Input::old('artist_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondary_artists']->value)) }}
 	@endif
@@ -85,7 +85,7 @@
 	{{ Form::label('series_primary', 'Series Primary') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primary_series']->description}}"></i>
 	@if((!empty($collection)) && ($collection->primary_series != null) && (Input::old('series_primary') == null))
-		{{ Form::text('series_primary', collect($collection->primary_series->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['primary_series']->value)) }}
+		{{ Form::text('series_primary', $collection->PrimarySeriesToString(), array('class' => 'form-control', 'placeholder' => $configurations['primary_series']->value)) }}
 	@else
 		{{ Form::text('series_primary', Input::old('series_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primary_series']->value)) }}
 	@endif
@@ -96,7 +96,7 @@
 	{{ Form::label('series_secondary', 'Series Secondary') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondary_series']->description}}"></i>
 	@if((!empty($collection)) && ($collection->secondary_series != null) && (Input::old('series_secondary') == null))
-		{{ Form::text('series_secondary', collect($collection->secondary_series->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondary_series']->value)) }}
+		{{ Form::text('series_secondary', $collection->SecondarySeriesToString(), array('class' => 'form-control', 'placeholder' => $configurations['secondary_series']->value)) }}
 	@else
 		{{ Form::text('series_secondary', Input::old('series_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondary_series']->value)) }}
 	@endif
@@ -109,7 +109,7 @@
 	{{ Form::label('character_primary', 'Characters Primary') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primary_characters']->description}}"></i>
 	@if((!empty($collection)) && ($collection->primary_characters != null) && (Input::old('character_primary') == null))
-		{{ Form::text('character_primary', collect($collection->primary_characters->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['primary_characters']->value)) }}
+		{{ Form::text('character_primary', $collection->PrimaryCharactersToString(), array('class' => 'form-control', 'placeholder' => $configurations['primary_characters']->value)) }}
 	@else
 		{{ Form::text('character_primary', Input::old('character_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primary_characters']->value)) }}
 	@endif
@@ -121,7 +121,7 @@
 	{{ Form::label('character_secondary', 'Characters Secondary') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondary_characters']->description}}"></i>
 	@if((!empty($collection)) && ($collection->secondary_characters != null) && (Input::old('character_secondary') == null))
-		{{ Form::text('character_secondary', collect($collection->secondary_characters->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondary_characters']->value)) }}
+		{{ Form::text('character_secondary', $collection->SecondaryCharactersToString(), array('class' => 'form-control', 'placeholder' => $configurations['secondary_characters']->value)) }}
 	@else
 		{{ Form::text('character_secondary', Input::old('character_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondary_characters']->value)) }}
 	@endif
@@ -135,7 +135,7 @@
 	{{ Form::label('tag_primary', 'Tags Primary') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['primary_tags']->description}}"></i>
 	@if((!empty($collection)) && ($collection->primary_tags != null) && (Input::old('tag_primary') == null))
-		{{ Form::text('tag_primary', collect($collection->primary_tags->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['primary_tags']->value)) }}
+		{{ Form::text('tag_primary', $collection->PrimaryTagsToString(), array('class' => 'form-control', 'placeholder' => $configurations['primary_tags']->value)) }}
 	@else
 		{{ Form::text('tag_primary', Input::old('tag_primary'), array('class' => 'form-control', 'placeholder' => $configurations['primary_tags']->value)) }}
 	@endif
@@ -146,7 +146,7 @@
 	{{ Form::label('tag_secondary', 'Tags Secondary') }}
 	<i class="fa fa-question-circle" aria-hidden="true" title="{{$configurations['secondary_tags']->description}}"></i>
 	@if((!empty($collection)) && ($collection->secondary_tags != null) && (Input::old('tag_secondary') == null))
-		{{ Form::text('tag_secondary', collect($collection->secondary_tags->pluck('name'))->implode(', '), array('class' => 'form-control', 'placeholder' => $configurations['secondary_tags']->value)) }}
+		{{ Form::text('tag_secondary', $collection->SecondaryTagsToString(), array('class' => 'form-control', 'placeholder' => $configurations['secondary_tags']->value)) }}
 	@else
 		{{ Form::text('tag_secondary', Input::old('tag_secondary'), array('class' => 'form-control', 'placeholder' => $configurations['secondary_tags']->value)) }}
 	@endif
