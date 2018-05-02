@@ -11,7 +11,7 @@ class CollectionBlacklistPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can add favourite collections.
+     * Determine whether the user can add blacklisted collections.
      *
      * @param  \App\User  $user
      * @return mixed
@@ -22,14 +22,14 @@ class CollectionBlacklistPolicy
     }
 
     /**
-     * Determine whether the user can delete a given favourite collections.
+     * Determine whether the user can delete a given blacklisted collection.
      *
      * @param  \App\User  $user
      * @param  \App\Chapter  $chapter
      * @return mixed
      */
-    public function delete(User $user, CollectionFavourite $collectionFavourite)
+    public function delete(User $user, CollectionBlacklist $CollectionBlacklist)
     {
-        return (($user->hasPermissionTo('Delete Blacklisted Collection')) && ($collectionFavourite->user->id == $user->id));
+        return (($user->hasPermissionTo('Delete Blacklisted Collection')) && ($CollectionBlacklist->user->id == $user->id));
     }
 }

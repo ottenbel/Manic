@@ -177,6 +177,7 @@ return [
         App\Providers\Custom\RatingServiceProvider::class,
         App\Providers\Custom\TagObjectsServiceProvider::class,
         App\Providers\Custom\UserConfigurationServiceProvider::class,
+        App\Providers\Custom\UserFavouriteBlacklistServiceProvider::class,
     ],
 
     /*

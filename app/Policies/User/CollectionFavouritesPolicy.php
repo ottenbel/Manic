@@ -22,7 +22,7 @@ class CollectionFavouritesPolicy
     }
 
     /**
-     * Determine whether the user can delete a given favourite collections.
+     * Determine whether the user can delete a given favourite collection.
      *
      * @param  \App\User  $user
      * @param  \App\Chapter  $chapter
