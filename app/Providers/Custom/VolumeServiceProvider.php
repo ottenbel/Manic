@@ -5,7 +5,7 @@ namespace App\Providers\Custom;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-use App\Models\Volume;
+use App\Models\Volume\Volume;
 use App\Observers\VolumeObserver;
 
 class VolumeServiceProvider extends ServiceProvider
@@ -15,7 +15,7 @@ class VolumeServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $policies = ['App\Models\Volume' => 'App\Policies\VolumePolicy'];
+    protected $policies = ['App\Models\Volume\Volume' => 'App\Policies\VolumePolicy'];
 
     /**
      * Register any authentication / authorization services.

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Volume;
 
 use App\Models\BaseManicModel;
 
@@ -76,6 +76,6 @@ class Volume extends BaseManicModel
 	 */
 	public function export()
 	{
-		return $this->hasOne('App\Models\VolumeExport');
+		return $this->hasOne('App\Models\Volume\VolumeExport');
 	}
 }

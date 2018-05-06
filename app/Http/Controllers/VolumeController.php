@@ -7,7 +7,7 @@ use App\Http\Requests\Volume\StoreVolumeRequest;
 use App\Http\Requests\Volume\UpdateVolumeRequest;
 use App\Models\Collection\Collection;
 use App\Models\Image;
-use App\Models\Volume;
+use App\Models\Volume\Volume;
 use Config;
 use DB;
 use FileExportHelper;

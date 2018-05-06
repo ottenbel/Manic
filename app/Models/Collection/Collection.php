@@ -20,12 +20,12 @@ class Collection extends BaseManicModel
 	 */
     public function volumes()
 	{
-		return $this->hasMany('App\Models\Volume')->orderBy('volume_number');
+		return $this->hasMany('App\Models\Volume\Volume')->orderBy('volume_number');
 	}
 	
 	public function unsorted_volumes()
 	{
-		return $this->hasMany('App\Models\Volume');
+		return $this->hasMany('App\Models\Volume\Volume');
 	}
 	
 	/*
@@ -33,7 +33,7 @@ class Collection extends BaseManicModel
 	 */
 	public function chapters()
 	{
-		return $this->hasManyThrough('App\Models\Chapter', 'App\Models\Volume');
+		return $this->hasManyThrough('App\Models\Chapter', 'App\Models\Volume\Volume');
 	}
 	
 	/*

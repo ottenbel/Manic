@@ -13,7 +13,7 @@ use App\Models\Collection\Collection;
 use App\Models\Image;
 use App\Models\Page;
 use App\Models\Scanalator;
-use App\Models\Volume;
+use App\Models\Volume\Volume;
 
 class ChapterGeneralAPIController extends Controller
 {

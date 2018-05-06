@@ -4,7 +4,7 @@ namespace App\Http\Requests\Volume;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Models\Volume;
+use App\Models\Volume\Volume;
 
 class StoreVolumeRequest extends FormRequest
 {

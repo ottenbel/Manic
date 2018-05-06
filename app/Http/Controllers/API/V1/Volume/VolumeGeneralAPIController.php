@@ -9,7 +9,7 @@ use Auth;
 use Input;
 use App\Models\Collection\Collection;
 use App\Models\Image;
-use App\Models\Volume;
+use App\Models\Volume\Volume;
 
 class VolumeGeneralAPIController extends Controller
 {

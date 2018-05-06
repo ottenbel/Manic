@@ -5,7 +5,7 @@ namespace App\Http\Requests\Chapter;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Models\Chapter;
-use App\Models\Volume;
+use App\Models\Volume\Volume;
 
 class StoreChapterRequest extends FormRequest
 {

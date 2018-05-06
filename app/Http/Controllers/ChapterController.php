@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chapter;
 use App\Models\Collection\Collection;
 use App\Models\Image;
-use App\Models\Volume;
+use App\Models\Volume\Volume;
 use App\Http\Requests\Chapter\StoreChapterRequest;
 use App\Http\Requests\Chapter\UpdateChapterRequest;
 use Auth;

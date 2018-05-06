@@ -28,7 +28,7 @@ class Chapter extends BaseManicModel
 	 */
 	public function volume()
 	{
-		return $this->belongsTo('App\Models\Volume');
+		return $this->belongsTo('App\Models\Volume\Volume');
 	}
 	
 	/*

@@ -3,6 +3,7 @@
 namespace App\Models\Collection;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Uuids;
 
 class CollectionExport extends Model
 {	

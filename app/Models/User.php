@@ -157,7 +157,7 @@ class User extends Authenticatable
 	 */
 	public function volumes_created()
 	{
-		return $this->hasMany('App\Models\Volume', 'created_by');
+		return $this->hasMany('App\Models\Volume\Volume', 'created_by');
 	}
 	
 	/*
@@ -165,7 +165,7 @@ class User extends Authenticatable
 	 */
 	public function volumes_last_updated()
 	{
-		return $this->hasMany('App\Models\Volume', 'updated_by');
+		return $this->hasMany('App\Models\Volume\Volume', 'updated_by');
 	}
 	
 	/*

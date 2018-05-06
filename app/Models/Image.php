@@ -27,7 +27,7 @@ class Image extends BaseManicModel
 	 */
 	 public function volumes ()
 	 {
-		return $this->hasMany('App\Models\Volume', 'cover');
+		return $this->hasMany('App\Models\Volume\Volume', 'cover');
 	 }	 
 	 
 	 /*

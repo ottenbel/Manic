@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 
 use App\Models\ChapterExport;
-use App\Models\VolumeExport;
+use App\Models\Volume\VolumeExport;
 use App\Models\Collection\CollectionExport;
 use DateTime;
 use Storage;

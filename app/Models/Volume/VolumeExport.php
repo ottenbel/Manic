@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Volume;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Uuids;
 
 class VolumeExport extends Model
 {	
@@ -30,6 +31,6 @@ class VolumeExport extends Model
 	 */
 	public function volume()
 	{
-		return $this->belongsTo('App\Models\Volume');
+		return $this->belongsTo('App\Models\Volume\Volume');
 	}
 }

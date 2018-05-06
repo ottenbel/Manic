@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Volume;
+use App\Models\Volume\Volume;
 use Auth;
 use Storage;
 use Log;

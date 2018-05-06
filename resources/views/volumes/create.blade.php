@@ -10,7 +10,7 @@ Create a New Volume
 
 @section('content')
 <div class="container">
-	@can('create', App\Models\Volume::class)
+	@can('create', App\Models\Volume\Volume::class)
 		<h1>Create a New Volume</h1>
 		<h2>On <a href="{{route('show_collection', ['collection' => $collection])}}">{{{$collection->name}}}</a></h2>
 		
@@ -28,7 +28,7 @@ Create a New Volume
 		</form>
 	@endcan
 	
-	@cannot('create', App\Models\Volume::class)
+	@cannot('create', App\Models\Volume\Volume::class)
 		<h1>Error</h1>
 		<div class="alert alert-danger" role="alert">
 			User does not have the correct permissions in order to create a new volume.

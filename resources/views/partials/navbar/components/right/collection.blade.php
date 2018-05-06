@@ -1,5 +1,5 @@
 @if((Route::is('show_collection')) && (!empty($collection)) && ((Auth::User()->can('create', App\Models\Chapter::class)) 
-	|| (Auth::User()->can('create', App\Models\Volume::class)) || (Auth::User()->can('update', $collection)) ))
+	|| (Auth::User()->can('create', App\Models\Volume\Volume::class)) || (Auth::User()->can('update', $collection)) ))
 	<li class="dropdown">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 			Collection <span class="caret"></span>
@@ -10,7 +10,7 @@
 					<li><a href="{{route('create_chapter', ['collection' => $collection])}}"><i class="fa fa-file" aria-hidden="true"></i> Add Chapter</a></li>
 				@endcan
 			@endif
-			@can('create', App\Models\Volume::class)
+			@can('create', App\Models\Volume\Volume::class)
 				<li><a href="{{route('create_volume', ['collection' => $collection])}}"><i class="fa fa-folder" aria-hidden="true"></i> Add Volume</a></li>
 			@endcan
 			@if((!empty($collection)))
@@ -32,7 +32,7 @@
 					<li><a href="{{route('create_chapter', ['collection' => $collection])}}"><i class="fa fa-file" aria-hidden="true"></i> Add Chapter</a></li>
 				@endcan
 			@endif
-			@can('create', App\Models\Volume::class)
+			@can('create', App\Models\Volume\Volume::class)
 				<li><a href="{{route('create_volume', ['collection' => $collection])}}"><i class="fa fa-folder" aria-hidden="true"></i> Add Volume</a></li>
 			@endcan
 		</ul>
