@@ -13,7 +13,7 @@
  Series</a></li>
 		<li><a href="{{ route('index_tag') }}"><i class="fa fa-tags" aria-hidden="true"></i>
  Tag</a></li>
-		<li><a href="{{route('index_language')}}">Language</a></li>
+		<li><a href="{{route('index_language')}}"><i class="fa fa-language" aria-hidden="true"></i> Language</a></li>
 		<li><a href="{{route('index_status')}}">Status</a></li>
 		<li><a href="{{route('index_rating')}}">Rating</a></li>
 		<h6 class="dropdown-header">Aliases</h6>

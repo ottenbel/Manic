@@ -46,7 +46,7 @@
 			@endif
 			
 			@can('create', App\Models\Language::class)
-				<li><a href="{{route('create_language')}}">Language</a></li>
+				<li><a href="{{route('create_language')}}"><i class="fa fa-language" aria-hidden="true"></i> Language</a></li>
 			@endcan
 
 			@can('create', App\Models\Status::class)
