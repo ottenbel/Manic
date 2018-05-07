@@ -35,6 +35,6 @@ class Image extends BaseManicModel
 	  */
 	 public function chapters()
 	 {
-		 return $this->belongsToMany('App\Models\Chapter')->withTimestamps()->withPivot('page_number');
+		 return $this->belongsToMany('App\Models\Chapter\Chapter')->withTimestamps()->withPivot('page_number');
 	 }
 }

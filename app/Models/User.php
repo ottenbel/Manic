@@ -61,7 +61,7 @@ class User extends Authenticatable
 	 */
 	public function chapters_created()
 	{
-		return $this->hasMany('App\Models\Chapter', 'created_by');
+		return $this->hasMany('App\Models\Chapter\Chapter', 'created_by');
 	}
 	
 	/*
@@ -69,7 +69,7 @@ class User extends Authenticatable
 	 */
 	public function chapters_last_updated()
 	{
-		return $this->hasMany('App\Models\Chapter', 'updated_by');
+		return $this->hasMany('App\Models\Chapter\Chapter', 'updated_by');
 	}
 	
 	/*
@@ -85,7 +85,7 @@ class User extends Authenticatable
 	 */
 	public function collections_last_updated()
 	{
-		return $this->hasMany('App\Models\Chapter', 'updated_by');
+		return $this->hasMany('App\Models\Chapter\Chapter', 'updated_by');
 	}
 	
 	/*

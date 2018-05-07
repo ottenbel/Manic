@@ -5,7 +5,7 @@ namespace App\Console;
 use DateTime;
 use Storage;
 use App\Models\Image;
-use App\Models\ChapterExport;
+use App\Models\Chapter\ChapterExport;
 use App\Models\Volume\VolumeExport;
 use App\Models\Collection\CollectionExport;
 use Illuminate\Console\Scheduling\Schedule;

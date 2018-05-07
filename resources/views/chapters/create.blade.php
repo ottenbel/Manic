@@ -15,7 +15,7 @@ Create a New Chapter
 
 @section('content')
 <div class="container">
-	@can('create', App\Models\Chapter::class)
+	@can('create', App\Models\Chapter\Chapter::class)
 		<h1>Create a New Chapter</h1>
 		<h2>On <a href="{{route('show_collection', ['collection' => $collection])}}">{{{$collection->name}}}</a></h2>
 		
@@ -28,7 +28,7 @@ Create a New Chapter
 		</form>
 	@endcan
 	
-	@cannot('create', App\Models\Chapter::class)
+	@cannot('create', App\Models\Chapter\Chapter::class)
 		<h1>Error</h1>
 		<div class="alert alert-danger" role="alert">
 			User does not have the correct permissions in order to create a new chapter.

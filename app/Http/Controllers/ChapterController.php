@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Chapter;
+use App\Models\Chapter\Chapter;
 use App\Models\Collection\Collection;
 use App\Models\Image;
 use App\Models\Volume\Volume;

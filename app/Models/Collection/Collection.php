@@ -33,7 +33,7 @@ class Collection extends BaseManicModel
 	 */
 	public function chapters()
 	{
-		return $this->hasManyThrough('App\Models\Chapter', 'App\Models\Volume\Volume');
+		return $this->hasManyThrough('App\Models\Chapter\Chapter', 'App\Models\Volume\Volume');
 	}
 	
 	/*

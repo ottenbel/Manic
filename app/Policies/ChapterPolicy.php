@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\Chapter;
+use App\Models\Chapter\Chapter;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ChapterPolicy

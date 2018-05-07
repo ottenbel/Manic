@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 
-use App\Models\ChapterExport;
+use App\Models\Chapter\ChapterExport;
 use App\Models\Volume\VolumeExport;
 use App\Models\Collection\CollectionExport;
 use DateTime;

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Chapter;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Uuids;
 
 class ChapterExport extends Model
 {	
@@ -30,6 +31,6 @@ class ChapterExport extends Model
 	 */
 	public function chapter()
 	{
-		return $this->belongsTo('App\Models\Chapter');
+		return $this->belongsTo('App\Models\Chapter\Chapter');
 	}
 }

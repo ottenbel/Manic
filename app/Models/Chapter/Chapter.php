@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Chapter;
 
 use App\Models\BaseManicModel;
 
@@ -84,7 +84,7 @@ class Chapter extends BaseManicModel
 	 */
 	public function export()
 	{
-		return $this->hasOne('App\Models\ChapterExport');
+		return $this->hasOne('App\Models\Chapter\ChapterExport');
 	}
 
 	public function PrimaryScanalatorsToString()

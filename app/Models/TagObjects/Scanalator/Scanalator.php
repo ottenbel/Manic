@@ -20,7 +20,7 @@ class Scanalator extends BaseManicModel
 	 */
 	public function chapters()
 	{
-		return $this->belongsToMany('App\Models\Chapter')->withTimestamps()->withPivot('primary');
+		return $this->belongsToMany('App\Models\Chapter\Chapter')->withTimestamps()->withPivot('primary');
 	}
 	
 	/*

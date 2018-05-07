@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Models\Chapter;
+use App\Models\Chapter\Chapter;
 use Auth;
 use Storage;
 use Log;
@@ -163,7 +163,7 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::deleted($chapter);
 
-        Log::Info("Deleted chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $volume->collection->id]);
+        Log::Info("Deleted chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $chapter->collection->id]);
     }
 	
 	/**
@@ -176,7 +176,7 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::restoring($chapter);
 
-        Log::Debug("Restoring chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $volume->collection->id]);
+        Log::Debug("Restoring chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $chapter->collection->id]);
     }
 	
 	/**
@@ -189,6 +189,6 @@ class ChapterObserver Extends BaseManicModelObserver
     {
         parent::restored($chapter);
 
-        Log::Info("Restored chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $volume->collection->id]);
+        Log::Info("Restored chapter", ['chapter' => $chapter->id, 'volume' => $chapter->volume->id, 'collection' => $chapter->collection->id]);
     }
 }
