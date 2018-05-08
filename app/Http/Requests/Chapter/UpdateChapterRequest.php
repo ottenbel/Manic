@@ -32,13 +32,13 @@ class UpdateChapterRequest extends FormRequest
 		$lowerChapterLimit = 0;
 		$upperChapterLimit = 0;
 		
-		if (($volume->previous_volume()->first() != null) && ($volume->previous_volume()->first()->last_chapter()->first() != null))
+		if (($volume->previous_volume() != null) && ($volume->previous_volume()->last_chapter() != null))
 		{
-			$lowerChapterLimit = $volume->previous_volume()->first()->last_chapter()->first()->chapter_number;
+			$lowerChapterLimit = $volume->previous_volume()->last_chapter()->chapter_number;
 		}
-		if (($volume->next_volume()->first() != null) && ($volume->next_volume()->first()->first_chapter()->first() != null))
+		if (($volume->next_volume() != null) && ($volume->next_volume()->first_chapter() != null))
 		{
-			$upperChapterLimit = $volume->next_volume()->first()->first_chapter()->first()->chapter_number;
+			$upperChapterLimit = $volume->next_volume()->first_chapter()->chapter_number;
 		}
 		
 		if (($lowerChapterLimit != 0) && ($upperChapterLimit != 0))

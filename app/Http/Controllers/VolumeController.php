@@ -137,16 +137,16 @@ class VolumeController extends WebController
 		
 			if ($volume->chapters()->count() > 0)
 			{			
-				if (($volume->next_volume()->first() != null) && ($volume->next_volume()->first()->chapters()->count() > 0) && ($volumeNumber > $volume->next_volume()->first()->volume_number))
+				if (($volume->next_volume() != null) && ($volume->next_volume()->chapters()->count() > 0) && ($volumeNumber > $volume->next_volume()->volume_number))
 				{
 					$nextVolumeNumber = $volume->next_volume()->first()->volume_number;
 					
 					return Redirect::back()->withErrors(['volume_number' => "Volume number must be less than $nextVolumeNumber"])->withInput();
 				}
 				
-				else if (($volume->previous_volume()->first() != null) && ($volume->previous_volume()->first()->chapters()->count() > 0) && ($volumeNumber < $volume->previous_volume()->first()->volume_number))
+				else if (($volume->previous_volume() != null) && ($volume->previous_volume()->chapters()->count() > 0) && ($volumeNumber < $volume->previous_volume()->volume_number))
 				{
-					$previousVolumeNumber = $volume->previous_volume()->first()->volume_number;
+					$previousVolumeNumber = $volume->previous_volume()->volume_number;
 					
 					return Redirect::back()->withErrors(['volume_number' => "Volume number must be greater than $previousVolumeNumber"])->withInput();
 				}
