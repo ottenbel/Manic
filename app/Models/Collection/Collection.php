@@ -27,6 +27,11 @@ class Collection extends BaseManicModel
 	{
 		return $this->hasMany('App\Models\Volume\Volume');
 	}
+
+	public function first_volume()
+	{
+		return $this->unsorted_volumes()->orderBy('volume_number', 'asc')->first();
+	}
 	
 	/*
 	 * Get all chapters associated with the collection.

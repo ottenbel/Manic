@@ -14,7 +14,11 @@
 	<div id="collection_summary" class="row">
 		@if($collection->cover_image != null)
 		<div id="cover" class="col-md-3">
-			<img src="{{asset($collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Collection Cover" height="100%" width="100%">
+			@if($collection->first_volume() != null && $collection->first_volume()->first_chapter() != null)
+				<a href="{{route('show_chapter', ['chapter' => $collection->first_volume()->first_chapter()->id])}}"><img src="{{asset($collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Collection Cover" height="100%" width="100%"></a>
+			@else
+				<img src="{{asset($collection->cover_image->name)}}" class="img-responsive img-rounded" alt="Collection Cover" height="100%" width="100%">
+			@endif
 		</div>
 		@endif
 	
