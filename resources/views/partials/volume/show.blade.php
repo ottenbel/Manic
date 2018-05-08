@@ -20,8 +20,8 @@
 <div id="{{$volume->id}}_panel" class="volume_panel">
 	@if(($volume->cover_image != null) && ($chapterOnly != true))
 		<div id="cover" class="col-md-2">
-			@if((Auth::check()) && (($editVolume && Auth::user()->can('Edit Volume')) || (Auth::user()->can('Edit Volume') && Auth::user()->cannot('Edit Collection'))))
-				<a href="{{route('edit_volume', ['volume' => $volume])}}"><img src="{{asset($volume->cover_image->thumbnail)}}" class="img-responsive img-rounded" alt="Volume Cover" height="100%" width="100%"</a>
+			@if($volume->first_chapter() != null)
+				<a href="{{route('show_chapter', ['chapter' => $volume->first_chapter()->id])}}"><img src="{{asset($volume->cover_image->thumbnail)}}" class="img-responsive img-rounded" alt="Volume Cover" height="100%" width="100%"></a>
 			@else
 				<img src="{{asset($volume->cover_image->thumbnail)}}" class="img-responsive img-rounded" alt="Volume Cover" height="100%" width="100%">
 			@endif
