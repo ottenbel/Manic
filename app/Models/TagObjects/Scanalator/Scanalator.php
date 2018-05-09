@@ -3,6 +3,7 @@
 namespace App\Models\TagObjects\Scanalator;
 
 use App\Models\BaseManicModel;
+use Illuminate\Support\Facades\Cache;
 
 class Scanalator extends BaseManicModel
 {
@@ -29,6 +30,15 @@ class Scanalator extends BaseManicModel
 	public function usage_count()
 	{
 		return $this->chapters()->count();
+	}
+
+	public function cached_usage_count()
+	{
+		$count = Cache::remember($this->id ."usage_count", 60, function () {
+		    return $this->chapters()->count();
+		});
+
+		return $count;
 	}
 	
 	/*

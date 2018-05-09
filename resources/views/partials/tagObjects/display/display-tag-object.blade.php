@@ -17,7 +17,7 @@
 		@endif
 		 {{{$tagObjectComponent->name}}} 
 		<span class="{{$tagObjectCountClassComponent}}">
-			({{$tagObjectComponent->usage_count()}})
+			({{$tagObjectComponent->cached_usage_count()}})
 		</span>
 	</a>
 </span>

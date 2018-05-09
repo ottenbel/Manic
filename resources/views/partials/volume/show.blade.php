@@ -95,9 +95,9 @@
 												'componentToken' => 'scanalator'])
 									@else
 										@if(($scanalatorLinkRoute == 'edit_scanalator') && (Auth::check()) && (Auth::user()->can('Edit Scanalator')))
-											<span class="primary_scanalators"><a href="{{route('edit_scanalator', ['scanalator' => $scanalator])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+											<span class="primary_scanalators"><a href="{{route('edit_scanalator', ['scanalator' => $scanalator])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->cached_usage_count()}})</span></a></span>
 										@else
-											<span class="primary_scanalators"><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->usage_count()}})</span></a></span>
+											<span class="primary_scanalators"><a href="{{route('show_scanalator', ['scanalator' => $scanalator])}}">{{{$scanalator->name}}} <span class="scanalator_count"> ({{$scanalator->cached_usage_count()}})</span></a></span>
 										@endif
 										
 									@endif
@@ -112,9 +112,9 @@
 												'componentToken' => 'scanalator'])
 									@else
 										@if(($scanalatorLinkRoute == 'edit_scanalator') && (Auth::check()) && (Auth::user()->can('Edit Scanalator')))
-											<span class="secondary_scanalators"><a href="{{route('edit_scanalator', ['scanalator' => $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+											<span class="secondary_scanalators"><a href="{{route('edit_scanalator', ['scanalator' => $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->cached_usage_count()}})</span></a></span>
 										@else
-											<span class="secondary_scanalators"><a href="{{route('show_scanalator', ['scanalator' => $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->usage_count()}})</span></a></span>
+											<span class="secondary_scanalators"><a href="{{route('show_scanalator', ['scanalator' => $scanalator->name])}}">{{{$scanalator->name}}} <span class="scanalator_count">({{$scanalator->cached_usage_count()}})</span></a></span>
 										@endif
 										
 									@endif

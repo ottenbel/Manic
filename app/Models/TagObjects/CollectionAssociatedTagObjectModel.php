@@ -3,6 +3,7 @@
 namespace App\Models\TagObjects;
 
 use App\Models\BaseManicModel;
+use Illuminate\Support\Facades\Cache;
 
 class CollectionAssociatedTagObjectModel extends BaseManicModel
 {
@@ -25,6 +26,15 @@ class CollectionAssociatedTagObjectModel extends BaseManicModel
 	public function usage_count()
 	{
 		return $this->collections()->count();
+	}
+
+	public function cached_usage_count()
+	{
+		$count = Cache::remember($this->id ."usage_count", 60, function () {
+		    return $this->collections()->count();
+		});
+
+		return $count;
 	}
 	
 	/*

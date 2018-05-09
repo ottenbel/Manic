@@ -17,7 +17,7 @@
 		@endif
 		 {{{$tagObject->name}}} 
 		<span class="tagObjectCountClass">
-			({{$tagObject->usage_count()}})
+			({{$tagObject->cached_usage_count()}})
 		</span>
 	</a>
 </span>
