@@ -8,7 +8,7 @@ class Volume extends BaseManicModel
 {
     //Manually set the table name as we are extending a custom model instead of the eloquent one
     protected $table = 'volumes';
-    
+    public $with = ['cover_image'];
 	
 	public static function boot()
     {
