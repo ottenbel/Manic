@@ -68,7 +68,8 @@ class Chapter extends BaseManicModel
 	 */
 	public function next_chapter()
 	{
-		return $this->volume->collection->chapters()->where('chapter_number', '>', $this->chapter_number)->orderBy('chapter_number', 'asc')->take(1);
+		
+		return $this->volume->collection->chapters()->where('chapter_number', '>', $this->chapter_number)->orderBy('chapter_number', 'asc')->first();
 	}
 	
 	/*
@@ -76,7 +77,7 @@ class Chapter extends BaseManicModel
 	 */
 	public function previous_chapter()
 	{
-		return $this->volume->collection->chapters()->where('chapter_number', '<', $this->chapter_number)->orderBy('chapter_number', 'desc')->take(1);
+		return $this->volume->collection->chapters()->where('chapter_number', '<', $this->chapter_number)->orderBy('chapter_number', 'desc')->first();
 	}
 	
 	/*

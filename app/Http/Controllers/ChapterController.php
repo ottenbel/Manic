@@ -167,14 +167,14 @@ class ChapterController extends WebController
 	
 		$pagesArray = json_encode($chapter->pages()->pluck('name'));
 		
-		if (count($chapter->previous_chapter()->first()))
+		if ($chapter->previous_chapter() != null)
 		{
-			$previousChapterID = $chapter->previous_chapter()->first()->id;
+			$previousChapterID = $chapter->previous_chapter()->id;
 		}
 		
-		if(count($chapter->next_chapter()->first()))
+		if($chapter->next_chapter() != null)
 		{
-			$nextChapterID = $chapter->next_chapter()->first()->id;
+			$nextChapterID = $chapter->next_chapter()->id;
 		}
 		
 		if($previousChapterID != null)
@@ -201,14 +201,14 @@ class ChapterController extends WebController
 		$previousChapterID = $nextChapterID = null;
 		$collection = $chapter->collection()->first();
 		
-		if (count($chapter->previous_chapter()->first()))
+		if ($chapter->previous_chapter() != null)
 		{
-			$previousChapterID = $chapter->previous_chapter()->first()->id;
+			$previousChapterID = $chapter->previous_chapter()->id;
 		}
 		
-		if(count($chapter->next_chapter()->first()))
+		if($chapter->next_chapter() != null)
 		{
-			$nextChapterID = $chapter->next_chapter()->first()->id;
+			$nextChapterID = $chapter->next_chapter()->id;
 		}
 		
 		$isFavourite = false;

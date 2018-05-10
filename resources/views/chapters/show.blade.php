@@ -118,9 +118,9 @@
 	
 	<div class="container" align="center">
 		<ul class="pagination">
-			@if(count($chapter->previous_chapter()->first()))
+			@if($chapter->previous_chapter() != null)
 				<li id="previous_chapter_link_container">
-					<a id="previous_chapter_link" href="{{route('show_chapter', ['chapter' => $chapter->previous_chapter()->first()])}}"><i class="fa fa-chevron-left" aria-hidden="true"></i><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+					<a id="previous_chapter_link" href="{{route('show_chapter', ['chapter' => $chapter->previous_chapter()])}}"><i class="fa fa-chevron-left" aria-hidden="true"></i><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
 				</li>
 			@endif
 			  
@@ -128,9 +128,9 @@
 				<li id="previous_page_link_container">
 					<a id="previous_page_link" href="{{route('show_chapter', ['chapter' => $chapter, 'page' => ($page_number - 1)])}}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
 				</li>
-			@elseif(count($chapter->previous_chapter()->first()))
+			@elseif($chapter->previous_chapter() != null)
 				<li id="previous_page_link_container">
-					<a id="previous_page_link" href="{{route('show_chapter', ['chapter' => $chapter->previous_chapter()->first(), 'page' => (count($chapter->previous_chapter()->first()->pages) -1)])}}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+					<a id="previous_page_link" href="{{route('show_chapter', ['chapter' => $chapter->previous_chapter(), 'page' => (count($chapter->previous_chapter()->pages) -1)])}}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
 				</li>
 			@else
 				<li id="previous_page_link_container" style="display: none;">
@@ -148,9 +148,9 @@
 				</li>
 			@endif
 			
-			@if(count($chapter->next_chapter()->first()))
+			@if($chapter->next_chapter() != null)
 				<li id="next_chapter_link_container">
-					<a id="next_chapter_link" href="{{route('show_chapter', ['chapter' => $chapter->next_chapter()->first(), 'page' => 0])}}"><i class="fa fa-chevron-right" aria-hidden="true"></i><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+					<a id="next_chapter_link" href="{{route('show_chapter', ['chapter' => $chapter->next_chapter(), 'page' => 0])}}"><i class="fa fa-chevron-right" aria-hidden="true"></i><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 				</li>
 			@endif
 			
@@ -166,18 +166,18 @@
 			You can add pages to the chapter <a href="{{route('edit_chapter', ['chapter' => $chapter])}}" class="alert-link">here</a>.
 		@endcan
 		
-		@if(count($chapter->previous_chapter()->first()) || count($chapter->next_chapter()->first()))
+		@if(($chapter->previous_chapter() != null) || ($chapter->next_chapter() != null))
 			<br/>
 			<div class="row">
-				@if(count($chapter->previous_chapter()->first()))
+				@if($chapter->previous_chapter() != null)
 					<div class="col-md-6">
-						<a href="{{route('show_chapter', ['chapter' => $chapter->previous_chapter()->first(), 'page' => 0])}}">Previous Chapter</a> 
+						<a href="{{route('show_chapter', ['chapter' => $chapter->previous_chapter(), 'page' => 0])}}">Previous Chapter</a> 
 					</div>
 				@endif
 				
-				@if(count($chapter->next_chapter()->first()))
+				@if($chapter->next_chapter() != null)
 					<div class="col-md-6">
-					<a href="{{route('show_chapter', ['chapter' => $chapter->next_chapter->first(), 'page' => 0])}}">Next Chapter</a> 
+					<a href="{{route('show_chapter', ['chapter' => $chapter->next_chapter(), 'page' => 0])}}">Next Chapter</a> 
 					</div>
 				@endif
 			</div>
