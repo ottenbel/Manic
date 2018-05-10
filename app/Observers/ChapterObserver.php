@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Chapter\Chapter;
+use Illuminate\Support\Facades\Cache;
 use Auth;
 use Storage;
 use Log;
@@ -26,6 +27,9 @@ class ChapterObserver Extends BaseManicModelObserver
 		$volume->save();
 		$volume->touch();
 		
+        Cache::forget($volume->id ."first_chapter");
+        Cache::forget($volume->id ."last_chapter");
+
         $collection = $volume->collection;
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
@@ -68,6 +72,9 @@ class ChapterObserver Extends BaseManicModelObserver
 		$volume = $chapter->volume;
 		$volumeExport = $volume->export;
 		
+        Cache::forget($volume->id ."first_chapter");
+        Cache::forget($volume->id ."last_chapter");
+
 		if ($volumeExport != null)
 		{
 			Storage::Delete($volumeExport->path);
@@ -140,6 +147,9 @@ class ChapterObserver Extends BaseManicModelObserver
 		$volume->save();
 		$volume->touch();
 		
+        Cache::forget($volume->id ."first_chapter");
+        Cache::forget($volume->id ."last_chapter");
+        
 		$collection = $volume->collection;
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();

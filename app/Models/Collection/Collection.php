@@ -3,6 +3,7 @@
 namespace App\Models\Collection;
 
 use App\Models\BaseManicModel;
+use Illuminate\Support\Facades\Cache;
 
 class Collection extends BaseManicModel
 {
@@ -31,7 +32,11 @@ class Collection extends BaseManicModel
 
 	public function first_volume()
 	{
-		return $this->unsorted_volumes()->orderBy('volume_number', 'asc')->first();
+		$firstVolume = Cache::rememberForever($this->id ."first_volume", function () {
+			return $this->unsorted_volumes()->orderBy('volume_number', 'asc')->first();
+		});
+
+		return $firstVolume;
 	}
 	
 	/*

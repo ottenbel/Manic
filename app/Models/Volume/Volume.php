@@ -3,6 +3,7 @@
 namespace App\Models\Volume;
 
 use App\Models\BaseManicModel;
+use Illuminate\Support\Facades\Cache;
 
 class Volume extends BaseManicModel
 {
@@ -60,7 +61,11 @@ class Volume extends BaseManicModel
 	 */
 	public function first_chapter()
 	{
-		return $this->chapters()->orderBy('chapter_number', 'asc')->first();
+		$firstChapter = Cache::rememberForever($this->id ."first_chapter", function () {
+			return $this->chapters()->orderBy('chapter_number', 'asc')->first();
+		});
+
+		return $firstChapter;
 	}
 	
 	/*
@@ -68,7 +73,9 @@ class Volume extends BaseManicModel
 	 */
 	public function last_chapter()
 	{
-		return $this->chapters()->orderBy('chapter_number', 'desc')->first();
+		$lastChapter = Cache::rememberForever($this->id ."last_chapter", function () {
+			return $this->chapters()->orderBy('chapter_number', 'desc')->first();
+		});
 	}
 	
 	/*

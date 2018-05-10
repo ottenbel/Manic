@@ -6,6 +6,7 @@ use App\Models\Volume\Volume;
 use Auth;
 use Storage;
 use Log;
+use Illuminate\Support\Facades\Cache;
 
 class VolumeObserver Extends BaseManicModelObserver
 {
@@ -22,6 +23,8 @@ class VolumeObserver Extends BaseManicModelObserver
         Log::Debug("Creating volume", ['volume' => $volume->id, 'collection' => $volume->collection->id]);        
 
         $collection = $volume->collection;
+
+        Cache::forget($collection->id ."first_volume");
 
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
@@ -64,6 +67,8 @@ class VolumeObserver Extends BaseManicModelObserver
 		$collection = $volume->collection;
 		$collectionExport = $collection->export;
 		
+        Cache::forget($collection->id ."first_volume");
+
 		if ($collectionExport != null)
 		{
 			Storage::Delete($collectionExport->path);
@@ -123,6 +128,9 @@ class VolumeObserver Extends BaseManicModelObserver
         Log::Debug("Deleting volume", ['volume' => $volume->id, 'collection' => $volume->collection->id]);
 
 		$collection = $volume->collection;
+
+        Cache::forget($collection->id ."first_volume");
+
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		$collection->touch();
