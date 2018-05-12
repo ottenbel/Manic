@@ -31,6 +31,10 @@ class ChapterObserver Extends BaseManicModelObserver
         Cache::forget($volume->id ."last_chapter");
 
         $collection = $volume->collection;
+
+        Cache::tags([$collection->id . "previous_chapter"])->flush();
+        Cache::tags([$collection->id . "next_chapter"])->flush();
+
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		$collection->touch();
@@ -84,6 +88,9 @@ class ChapterObserver Extends BaseManicModelObserver
 		$collection = $chapter->collection;
 		$collectionExport = $collection->export;
 		
+        Cache::tags([$collection->id . "previous_chapter"])->flush();
+        Cache::tags([$collection->id . "next_chapter"])->flush();
+
 		if ($collectionExport != null)
 		{
 			Storage::Delete($collectionExport->path);
@@ -151,6 +158,10 @@ class ChapterObserver Extends BaseManicModelObserver
         Cache::forget($volume->id ."last_chapter");
         
 		$collection = $volume->collection;
+
+        Cache::tags([$collection->id . "previous_chapter"])->flush();
+        Cache::tags([$collection->id . "next_chapter"])->flush();
+        
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
 		$collection->touch();

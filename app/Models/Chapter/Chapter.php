@@ -3,6 +3,7 @@
 namespace App\Models\Chapter;
 
 use App\Models\BaseManicModel;
+use Illuminate\Support\Facades\Cache;
 
 class Chapter extends BaseManicModel
 {
@@ -68,8 +69,11 @@ class Chapter extends BaseManicModel
 	 */
 	public function next_chapter()
 	{
-		
-		return $this->volume->collection->chapters()->where('chapter_number', '>', $this->chapter_number)->orderBy('chapter_number', 'asc')->first();
+		$nextChapter = Cache::tags([ $this->volume->collection->id . 'previous_chapter'])->rememberForever($this->id . "next_chapter", function () {
+			return $this->volume->collection->chapters()->where('chapter_number', '>', $this->chapter_number)->orderBy('chapter_number', 'asc')->first();
+		});
+
+		return $nextChapter;
 	}
 	
 	/*
@@ -77,7 +81,11 @@ class Chapter extends BaseManicModel
 	 */
 	public function previous_chapter()
 	{
-		return $this->volume->collection->chapters()->where('chapter_number', '<', $this->chapter_number)->orderBy('chapter_number', 'desc')->first();
+		$previousChapter = Cache::tags([ $this->volume->collection->id . 'next_chapter'])->rememberForever($this->id . "next_chapter", function () {
+			return $this->volume->collection->chapters()->where('chapter_number', '<', $this->chapter_number)->orderBy('chapter_number', 'desc')->first();
+		});
+
+		return $previousChapter;
 	}
 	
 	/*
