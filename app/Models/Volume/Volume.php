@@ -45,7 +45,11 @@ class Volume extends BaseManicModel
 	 */
 	public function next_volume()
 	{
-		return $this->collection->volumes()->where('volume_number', '>', $this->volume_number)->orderBy('volume_number', 'asc')->first();
+		$next_volume = Cache::tags([ $this->collection->id . 'next_volume'])->rememberForever($this->id . "next_volume", function () {
+			return $this->collection->volumes()->where('volume_number', '>', $this->volume_number)->orderBy('volume_number', 'asc')->first();
+		});
+
+		return $next_volume;
 	}
 	
 	/*
@@ -53,7 +57,11 @@ class Volume extends BaseManicModel
 	 */
 	public function previous_volume()
 	{
-		return $this->collection->volumes()->where('volume_number', '<', $this->volume_number)->orderBy('volume_number', 'desc')->first();
+		$previous_volume = Cache::tags([ $this->collection->id . 'previous_volume'])->rememberForever($this->id . "previous_volume", function () {
+				return $this->collection->volumes()->where('volume_number', '<', $this->volume_number)->orderBy('volume_number', 'desc')->first();
+		});
+
+		return $previous_volume;
 	}
 	
 	/*
@@ -76,6 +84,8 @@ class Volume extends BaseManicModel
 		$lastChapter = Cache::rememberForever($this->id ."last_chapter", function () {
 			return $this->chapters()->orderBy('chapter_number', 'desc')->first();
 		});
+
+		return $lastChapter;
 	}
 	
 	/*

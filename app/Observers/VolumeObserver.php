@@ -25,6 +25,8 @@ class VolumeObserver Extends BaseManicModelObserver
         $collection = $volume->collection;
 
         Cache::forget($collection->id ."first_volume");
+        Cache::tags([$collection->id . "previous_volume"])->flush();
+        Cache::tags([$collection->id . "next_volume"])->flush();
 
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
@@ -68,6 +70,8 @@ class VolumeObserver Extends BaseManicModelObserver
 		$collectionExport = $collection->export;
 		
         Cache::forget($collection->id ."first_volume");
+        Cache::tags([$collection->id . "previous_volume"])->flush();
+        Cache::tags([$collection->id . "next_volume"])->flush();
 
 		if ($collectionExport != null)
 		{
@@ -130,6 +134,8 @@ class VolumeObserver Extends BaseManicModelObserver
 		$collection = $volume->collection;
 
         Cache::forget($collection->id ."first_volume");
+        Cache::tags([$collection->id . "previous_volume"])->flush();
+        Cache::tags([$collection->id . "next_volume"])->flush();
 
 		$collection->updated_by = Auth::user()->id;
 		$collection->save();
