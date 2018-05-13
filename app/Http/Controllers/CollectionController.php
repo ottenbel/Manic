@@ -136,7 +136,7 @@ class CollectionController extends WebController
 			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); },
 		'volumes.chapters.secondary_scanalators' => function ($query)
 			{ $query->withCount('chapters')->orderBy('chapters_count', 'desc')->orderBy('name', 'asc'); }, 
-		'rating', 'status', 'language',  'parent_collection', 'child_collections']);
+		'rating', 'status', 'language',  'parent_collection', 'child_collections', 'created_by_user', 'updated_by_user']);
 		
 		if($collection->parent_collection != null)
 		{
