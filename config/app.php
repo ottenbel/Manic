@@ -237,6 +237,7 @@ return [
 		'ConfigurationLookupHelper' => App\Helpers\ConfigurationLookupHelper::class,
 		'InterventionImage' => Intervention\Image\Facades\Image::class,
 		'FileExportHelper' => App\Helpers\FileExportHelper::class,
+        'CollectionHelper' => App\Helpers\CollectionHelper::class,
 		'Zipper' => Chumper\Zipper\Zipper::class,
     ],
 

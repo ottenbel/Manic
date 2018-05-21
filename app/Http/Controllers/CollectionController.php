@@ -15,6 +15,7 @@ use ImageUploadHelper;
 use FileExportHelper;
 use LookupHelper;
 use ConfigurationLookupHelper;
+use CollectionHelper;
 use App\Models\Collection\Collection;
 use App\Models\Image;
 use App\Models\Language;
@@ -34,8 +35,8 @@ class CollectionController extends WebController
 		$this->placeholderStub = "collection";
 		$this->placeheldFields = array('cover', 'name', 'description', 'parent', 'primary_artists', 'secondary_artists', 'primary_series', 'secondary_series', 'primary_characters', 'secondary_characters', 'primary_tags', 'secondary_tags', 'canonical', 'language', 'rating', 'status');
 		
-		$this->middleware('auth')->except(['index', 'show']);
-		$this->middleware('canInteractWithCollection')->except(['index', 'create', 'store']);
+		$this->middleware('auth')->except(['index', 'show', 'random']);
+		$this->middleware('canInteractWithCollection')->except(['index', 'create', 'store', 'random']);
 		$this->middleware('permission:Create Collection')->only(['create', 'store']);
 		$this->middleware('permission:Edit Collection')->only(['edit', 'update']);
 		$this->middleware('permission:Delete Collection')->only('destroy');
@@ -54,23 +55,7 @@ class CollectionController extends WebController
 		
 		$collections = $searchArtists = $searchCharacters = $searchScanalators = $searchSeries = $searchTags = $searchLanguages = $searchRatings = $searchStatuses = $searchCanonicity = $searchFavourites = $invalid_tokens = null; 
 		
-		$collections = new Collection();
-		
-		$ratingRestrictions = null;
-		if(Auth::check())
-		{
-			//Remove all entries from the blacklist
-			$blacklist = Auth::user()->blacklisted_collections()->pluck('collection_id')->toArray();
-			$collections = $collections->whereNotIn('id', $blacklist);
-			
-			$ratingRestrictions = Auth::user()->rating_restriction_configuration->where('display', '=', false)->pluck('rating_id')->toArray();
-		}
-		else
-		{
-			$ratingRestrictions = ConfigurationRatingRestriction::where('user_id', '=', null)->where('display', '=', false)->pluck('rating_id')->toArray();
-		}
-		
-		$collections = $collections->whereNotIn('rating_id', $ratingRestrictions);
+		$collections = CollectionHelper::FilteredCollections();
 		
 		//No search is conducted
 		if ($search_string ==  "")
@@ -252,6 +237,23 @@ class CollectionController extends WebController
 			$this->AddWarningMessage("Unable to export zipped collection file.", ['collection' => $collection->id]);
 			//Return an error message saying that it couldn't create a collection export
 			return Redirect::back()->with(["messages" => $this->messages]);
+		}
+	}
+
+	public function random(Request $request)
+	{
+		$this->GetFlashedMessages($request);
+
+		$collections = CollectionHelper::FilteredCollections();
+		if ($collections->count() > 0)
+		{
+			$collection = $collections->inRandomOrder()->first();
+			return redirect()->route('show_collection', ['collection' => $collection])->with(["messages" => $this->messages]);
+		}
+		else
+		{
+			$this->AddWarningMessage("Unable to retrieve random collection.");
+			return redirect()->route('index_collection')->with(["messages" => $this->messages]);
 		}
 	}
 	

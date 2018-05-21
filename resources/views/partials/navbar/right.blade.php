@@ -1,8 +1,12 @@
 <!-- search -->
 <li>
-<form method="POST" action="{{route('process_search')}}" enctype="multipart/form-data">
-	{{ Form::text('query_string', "", array('id' => 'search', 'class' => 'form-control', 'placeholder' => 'Search...', 'style' => 'margin-top: 8px')) }}
-</form>
+	<form method="POST" action="{{route('process_search')}}" enctype="multipart/form-data">
+		{{ Form::text('query_string', "", array('id' => 'search', 'class' => 'form-control', 'placeholder' => 'Search...', 'style' => 'margin-top: 8px')) }}
+	</form>
+</li>
+<!-- random -->
+<li>
+	<a href="{{route('random_collection')}}"><i class="fa fa-random" aria-hidden="true"></i> Random</a>
 </li>
 
 @include('partials.navbar.components.right.tags-dropdown')

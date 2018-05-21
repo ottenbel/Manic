@@ -20,6 +20,7 @@
 		Route::patch('/{collection}', 'CollectionController@update')->Name('update_collection');
 		Route::delete('/{collection}', 'CollectionController@destroy')->Name('delete_collection');
 		Route::get('/{collection}/export', 'CollectionController@export')->Name('export_collection');
+		Route::get('/random', 'CollectionController@random')->Name('random_collection');
 		Route::get('/{collection}', 'CollectionController@show')->Name('show_collection');
 	});
 //End Collection controller routes
