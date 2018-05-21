@@ -1,7 +1,7 @@
 <table class="table table-striped">
 	@foreach($permissions as $permission)
 		<tr>
-			@if(((Auth::user()->can('update', $permission)) || (Auth::user()->can('delete', $permission) && (Auth::user()->cannot('update', $permission)))) && Route::is('admin_*'))
+			@if((Auth::user()->can('update', $permission)) || (Auth::user()->can('delete', $permission) && (Auth::user()->cannot('update', $permission))))
 			<td class="col-xs-12">
 				{{$permission->name}}
 			
