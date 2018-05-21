@@ -7,12 +7,12 @@
 		<li>
 			<a href="{{route('user_dashboard_main')}}"><i class="fa fa-user-circle-o" aria-hidden="true"></i> User Dashboard</a>
 		</li>
-		@if((Auth::user()->hasAnyPermission(Spatie\Permission\Models\Role::findByName('administrator')->permissions->pluck('name')->toArray())) 
+		{{--@if((Auth::user()->hasAnyPermission(Spatie\Permission\Models\Role::findByName('administrator')->permissions->pluck('name')->toArray())) 
 			|| (Auth::user()->hasAnyPermission(Spatie\Permission\Models\Role::findByName('owner')->permissions->pluck('name')->toArray())))
 			<li>
 				<a href="{{route('admin_dashboard_main')}}"><i class="fa fa-user-circle" aria-hidden="true"></i> Admin Dashboard</a>
 			</li>	
-		@endif
+		@endif--}}
 		<li>
 			<a href="{{ url('/logout') }}"
 				onclick="event.preventDefault();
