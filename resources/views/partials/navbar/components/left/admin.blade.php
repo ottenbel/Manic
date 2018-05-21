@@ -6,9 +6,6 @@
 			Admin <span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu" role="menu">
-			@can('View User Index')
-				<li><a href="{{route('admin_index_user')}}"><i class="fa fa-user" aria-hidden="true"></i> Users</a></li>
-			@endcan
 			@if(Auth::user()->can('Create Role') || Auth::user()->can('Edit Role') || Auth::user()->can('Delete Role') || Auth::user()->can('Create Permission') || Auth::user()->can('Edit Permission') || Auth::user()->can('Delete Permission'))
 				<h6 class="dropdown-header">Permissions & Roles</h6>
 				@if(Auth::user()->can('Create Permission') || Auth::user()->can('Edit Permission') || Auth::user()->can('Delete Permission'))
@@ -36,11 +33,14 @@
 					<li><a href="{{route('admin_update_configuration_rating_restriction')}}">Rating Restrictions</a></li>
 				@endcan
 			@endif
-			@if(Auth::user()->can('View Error Log'))
+			@if(Auth::user()->can('View Error Log') || Auth::user()->can('View User Index'))
 				<h6 class="dropdown-header">Other</h6>
 				@can('View Error Log')
 					<li><a href="{{route('admin_log')}}">Error Log</a></li>
 				@endcan
+				@can('View User Index')
+				<li><a href="{{route('admin_index_user')}}"><i class="fa fa-user" aria-hidden="true"></i> Users</a></li>
+			@endcan
 			@endif
 		</ul>
 	</li>
