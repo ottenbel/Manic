@@ -36,7 +36,7 @@
 			@if(Auth::user()->can('View Error Log') || Auth::user()->can('View User Index'))
 				<h6 class="dropdown-header">Other</h6>
 				@can('View Error Log')
-					<li><a href="{{route('admin_log')}}">Error Log</a></li>
+					<li><a href="{{route('admin_log')}}"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Error Log</a></li>
 				@endcan
 				@can('View User Index')
 				<li><a href="{{route('admin_index_user')}}"><i class="fa fa-user" aria-hidden="true"></i> Users</a></li>
