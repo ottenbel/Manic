@@ -31,3 +31,7 @@ Manic is an open source project for hosting and sharing comics/manga/etc. It was
 	yarn run dev
 	```
 5. Set up a cron job to call the Laravel scheduler.
+
+## Sources
+* [GitLab](https://gitlab.com/ottenbel/Manic) (Primary Repository)
+* [GitHub](https://github.com/ottenbel/Manic) (Repository Mirror)
